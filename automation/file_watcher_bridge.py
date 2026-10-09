@@ -64,17 +64,72 @@ CORS(app)
 CONFIG_FILE = "automation/output/file_watcher_config.json"
 os.makedirs("automation/output", exist_ok=True)
 
-# ── Default config ────────────────────────────────────────────────────────────
-# Auto-detect the current user's home directory so anyone can run this
-# without editing paths. Falls back to KishorMarri if detection fails.
-_HOME = os.path.expanduser("~")                        # e.g. C:\Users\JohnSmith
-_BOB  = os.path.join(_HOME, ".bob")                    # C:\Users\JohnSmith\.bob
+# ── Path resolution — SharePoint sync OR local .bob fallback ─────────────────
+#
+#  Priority order for each cycle:
+#   1. SharePoint synced via OneDrive  (set SHAREPOINT_ROOT env var, or auto-detect)
+#   2. Local .bob folder               (always works on your own machine)
+#
+#  SharePoint URL being mapped:
+#   https://sempra.sharepoint.com/sites/OdysseyInternal/...
+#   /Data Migration/Dashboard_file_reader/DM1 | DM2 | DM3
+#
+#  When OneDrive syncs that SharePoint library it lands at:
+#   C:\Users\<user>\OneDrive - Sempra\Odyssey Internal - General\
+#     05-Odyssey Phase 1 (Official)\02- Explore\
+#     02- Technical Workstreams\Data Migration\Dashboard_file_reader\
+#       DM1\  DM2\  DM3\
+#
+#  To override: set env var  DASHBOARD_DATA_ROOT=<path to Dashboard_file_reader folder>
+# ─────────────────────────────────────────────────────────────────────────────
+
+_HOME = os.path.expanduser("~")
+_BOB  = os.path.join(_HOME, ".bob")
+
+# ── Auto-detect SharePoint sync root ─────────────────────────────────────────
+def _find_sharepoint_root():
+    """
+    Walk known OneDrive - Sempra sync locations looking for the
+    Dashboard_file_reader folder that contains DM1, DM2, DM3 subfolders.
+    Returns the path if found, else None.
+    """
+    # 1. Explicit env var override (set by user or CI)
+    env = os.environ.get("DASHBOARD_DATA_ROOT", "").strip()
+    if env and os.path.isdir(env):
+        log.info(f"Using DASHBOARD_DATA_ROOT env var: {env}")
+        return env
+
+    # 2. Scan OneDrive - Sempra for the synced folder
+    onedrive_sempra = os.path.join(_HOME, "OneDrive - Sempra")
+    if os.path.isdir(onedrive_sempra):
+        for root, dirs, _ in os.walk(onedrive_sempra):
+            if os.path.basename(root) == "Dashboard_file_reader":
+                # Verify it has at least one of DM1/DM2/DM3
+                if any(os.path.isdir(os.path.join(root, d)) for d in ["DM1","DM2","DM3"]):
+                    log.info(f"SharePoint sync found: {root}")
+                    return root
+            # Don't recurse into very deep or hidden folders to stay fast
+            dirs[:] = [d for d in dirs if not d.startswith(".") and d != "archive"]
+
+    return None
+
+_SP_ROOT = _find_sharepoint_root()
+
+def _cycle_path(cycle: str) -> str:
+    """Return best available base path for a cycle (SharePoint > .bob fallback)."""
+    if _SP_ROOT:
+        sp = os.path.join(_SP_ROOT, cycle)
+        if os.path.isdir(sp):
+            return sp
+    return os.path.join(_BOB, cycle)
 
 DEFAULT_CONFIG = {
-    "DM1": {"ref_path": os.path.join(_BOB, "DM1"), "exp_path": os.path.join(_BOB, "DM1"), "ref_pattern": "*.*", "exp_pattern": "*.*"},
-    "DM2": {"ref_path": os.path.join(_BOB, "DM2"), "exp_path": os.path.join(_BOB, "DM2"), "ref_pattern": "*.*", "exp_pattern": "*.*"},
-    "DM3": {"ref_path": os.path.join(_BOB, "DM3"), "exp_path": os.path.join(_BOB, "DM3"), "ref_pattern": "*.*", "exp_pattern": "*.*"},
+    "DM1": {"ref_path": _cycle_path("DM1"), "exp_path": _cycle_path("DM1"), "ref_pattern": "*.*", "exp_pattern": "*.*"},
+    "DM2": {"ref_path": _cycle_path("DM2"), "exp_path": _cycle_path("DM2"), "ref_pattern": "*.*", "exp_pattern": "*.*"},
+    "DM3": {"ref_path": _cycle_path("DM3"), "exp_path": _cycle_path("DM3"), "ref_pattern": "*.*", "exp_pattern": "*.*"},
 }
+
+log.info(f"Data source: {'SharePoint: ' + _SP_ROOT if _SP_ROOT else 'Local .bob: ' + _BOB}")
 
 # ── In-memory file cache ───────────────────────────────────────────────────────
 # Structure: _cache[(cycle, type)] = {path, mtime, data_gz, etag, size_kb, filename}
@@ -212,11 +267,37 @@ def ping():
     with _cache_lock:
         cached = list(_cache.keys())
     return jsonify({
-        "status":  "ok",
-        "service": "file_watcher",
-        "ts":      datetime.now().isoformat(),
-        "cached":  [f"{c}/{t}" for c, t in cached],
+        "status":       "ok",
+        "service":      "file_watcher",
+        "ts":           datetime.now().isoformat(),
+        "cached":       [f"{c}/{t}" for c, t in cached],
+        "data_source":  "sharepoint" if _SP_ROOT else "local",
+        "data_root":    _SP_ROOT if _SP_ROOT else _BOB,
     })
+
+
+@app.route("/paths", methods=["GET"])
+def paths():
+    """Show exactly which files the bridge will serve for each cycle."""
+    cfg = _load_config()
+    result = {
+        "data_source": "sharepoint" if _SP_ROOT else "local_.bob",
+        "data_root":   _SP_ROOT if _SP_ROOT else _BOB,
+        "cycles": {}
+    }
+    for cycle in ["DM1", "DM2", "DM3"]:
+        c = cfg.get(cycle, {})
+        ref_file = _latest_file(c.get("ref_path",""), c.get("ref_pattern","*.*"), "ref")
+        exp_file = _latest_file(c.get("exp_path",""), c.get("exp_pattern","*.*"), "exp")
+        result["cycles"][cycle] = {
+            "ref_path":    c.get("ref_path",""),
+            "exp_path":    c.get("exp_path",""),
+            "ref_file":    os.path.basename(ref_file) if ref_file else None,
+            "exp_file":    os.path.basename(exp_file) if exp_file else None,
+            "ref_ok":      ref_file is not None,
+            "exp_ok":      exp_file is not None,
+        }
+    return jsonify(result)
 
 
 @app.route("/config", methods=["GET"])

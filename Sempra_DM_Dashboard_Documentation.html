@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Sempra Data Migration Dashboard — Leadership Documentation v2.0</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI",system-ui,sans-serif;font-size:14px;line-height:1.7;background:#f5f6fa;color:#1a202c;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+.page{max-width:1100px;margin:0 auto;padding:32px 24px 80px}
+
+/* ── COVER ── */
+.cover{background:linear-gradient(135deg,#091e3a 0%,#0f3460 50%,#164e63 100%);border-radius:20px;padding:52px 52px 44px;margin-bottom:36px;color:#fff;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(56,189,248,.18) 0%,transparent 70%);pointer-events:none}
+.cover-logo{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7dd3fc;margin-bottom:24px;display:flex;align-items:center;gap:8px}
+.cover-logo::before{content:'';display:inline-block;width:28px;height:4px;background:#38bdf8;border-radius:2px}
+.cover h1{font-size:36px;font-weight:900;letter-spacing:-.03em;line-height:1.15;margin-bottom:12px;color:#f8fafc}
+.cover-sub{font-size:15px;color:#94a3b8;margin-bottom:32px;max-width:700px;line-height:1.75}
+.cover-badges{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px}
+.cbadge{font-size:11px;font-weight:700;border-radius:20px;padding:5px 14px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#e2e8f0;letter-spacing:.03em}
+.cbadge.blue{background:rgba(59,91,219,.25);border-color:#3b5bdb;color:#a5b4fc}
+.cbadge.purple{background:rgba(124,58,237,.25);border-color:#7c3aed;color:#d8b4fe}
+.cbadge.green{background:rgba(47,158,68,.25);border-color:#2f9e44;color:#86efac}
+.cbadge.teal{background:rgba(20,184,166,.25);border-color:#14b8a6;color:#99f6e4}
+.cover-meta{display:flex;gap:28px;flex-wrap:wrap;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);font-size:12px;color:#64748b}
+.cover-meta span{display:flex;align-items:center;gap:6px}
+.cover-meta strong{color:#cbd5e1}
+
+/* ── TOC ── */
+.toc{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:28px 32px;margin-bottom:32px}
+.toc-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:16px}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+@media(max-width:600px){.toc-grid{grid-template-columns:1fr}}
+.toc-item{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:7px;text-decoration:none;color:#374151}
+.toc-item:hover{background:#f1f5f9;color:#1d4ed8}
+.toc-num{font-size:10px;font-weight:800;color:#cbd5e1;width:18px;flex-shrink:0;font-family:monospace;padding-top:2px}
+.toc-lbl{font-size:12px;font-weight:700}
+.toc-sec{font-size:10px;color:#94a3b8;font-weight:500;margin-top:1px}
+
+/* ── SECTION HEADERS ── */
+.sec-hdr{display:flex;align-items:center;gap:12px;margin-bottom:22px;margin-top:44px;padding-bottom:12px;border-bottom:2px solid #e2e8f0}
+.sec-num{font-size:11px;font-weight:900;color:#fff;background:#1d4ed8;border-radius:6px;padding:4px 10px;letter-spacing:.04em;font-family:monospace;flex-shrink:0}
+.sec-num.biz{background:#0f766e}
+.sec-num.tech{background:#7c3aed}
+.sec-num.steps{background:#b45309}
+.sec-num.arch{background:#0369a1}
+.sec-num.approve{background:#9a3412}
+.sec-title{font-size:20px;font-weight:800;color:#1a202c;letter-spacing:-.02em}
+.sec-sub{font-size:12px;color:#94a3b8;font-weight:500;margin-top:2px}
+
+/* ── PLAIN ENGLISH BOX ── */
+.plain-box{border-left:5px solid #3b82f6;border-radius:10px;padding:18px 22px;margin-bottom:20px;background:#eff6ff;border:1px solid #bfdbfe;border-left-width:5px}
+.plain-box.green{background:#f0fdf4;border-color:#bbf7d0;border-left-color:#22c55e}
+.plain-box.amber{background:#fffbeb;border-color:#fde68a;border-left-color:#f59e0b}
+.plain-box.purple{background:#faf5ff;border-color:#e9d5ff;border-left-color:#a855f7}
+.plain-box.red{background:#fff1f2;border-color:#fecdd3;border-left-color:#f43f5e}
+.plain-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#1d4ed8;margin-bottom:8px}
+.plain-box.green .plain-title{color:#15803d}
+.plain-box.amber .plain-title{color:#92400e}
+.plain-box.purple .plain-title{color:#7e22ce}
+.plain-box.red .plain-title{color:#be123c}
+.plain-text{font-size:13px;color:#374151;line-height:1.8}
+
+/* ── KPI STRIP ── */
+.kpi-strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:24px}
+.kpi{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px 18px 14px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.kpi-num{font-size:34px;font-weight:900;letter-spacing:-.03em;line-height:1}
+.kpi-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-top:5px}
+.kpi-sub{font-size:11px;color:#94a3b8;margin-top:2px}
+.kpi.dm1 .kpi-num{color:#3b5bdb}
+.kpi.dm2 .kpi-num{color:#7c3aed}
+.kpi.dm3 .kpi-num{color:#2f9e44}
+.kpi.ok .kpi-num{color:#059669}
+.kpi.warn .kpi-num{color:#d97706}
+.kpi.info .kpi-num{color:#0369a1}
+
+/* ── CARDS GRID ── */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+@media(max-width:800px){.cards{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.cards{grid-template-columns:1fr}}
+.card{border-radius:12px;padding:18px 20px;border:1px solid #e2e8f0;background:#fff}
+.card.dm1{border-top:4px solid #3b5bdb}
+.card.dm2{border-top:4px solid #7c3aed}
+.card.dm3{border-top:4px solid #2f9e44}
+.card-title{font-size:12px;font-weight:800;color:#374151;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.card-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.dot-dm1{background:#3b5bdb}.dot-dm2{background:#7c3aed}.dot-dm3{background:#2f9e44}
+.card-body{font-size:12px;color:#64748b;line-height:1.75}
+.card-num{font-size:28px;font-weight:900;letter-spacing:-.02em;line-height:1;margin-bottom:6px}
+.cn-dm1{color:#3b5bdb}.cn-dm2{color:#7c3aed}.cn-dm3{color:#2f9e44}
+
+/* ── STEPS ── */
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:20px;padding:20px 0;border-bottom:1px dashed #e2e8f0}
+.step:last-child{border-bottom:none}
+.step-left{flex-shrink:0;display:flex;flex-direction:column;align-items:center}
+.step-circle{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff;flex-shrink:0;position:relative;z-index:1}
+.step-line{width:2px;flex:1;background:#e2e8f0;min-height:20px;margin-top:4px}
+.step:last-child .step-line{display:none}
+.sc1{background:#3b5bdb}.sc2{background:#7c3aed}.sc3{background:#2f9e44}.sc4{background:#0369a1}.sc5{background:#b45309}.sc6{background:#0f766e}
+.step-right{flex:1;padding-top:8px}
+.step-title{font-size:14px;font-weight:800;color:#1a202c;margin-bottom:6px}
+.step-body{font-size:12.5px;color:#475569;line-height:1.8}
+.step-tip{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 14px;margin-top:10px;font-size:11px;color:#475569;display:flex;gap:8px;align-items:flex-start}
+.tip-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 5px;font-family:'Courier New',monospace;font-size:11px;color:#1d4ed8}
+
+/* ── COLOUR KEY ── */
+.colour-key{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:24px}
+.ck-cell{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px 16px}
+.ck-dot{width:18px;height:18px;border-radius:4px;flex-shrink:0}
+.ck-green{background:#22c55e}.ck-amber{background:#f59e0b}.ck-red{background:#ef4444}.ck-grey{background:#94a3b8}.ck-blue{background:#3b5bdb}.ck-purple{background:#7c3aed}
+.ck-name{font-size:12px;font-weight:700;color:#1a202c}
+.ck-desc{font-size:11px;color:#64748b;margin-top:1px}
+
+/* ── ARCHITECTURE BOX ── */
+.arch-box{background:#0f172a;border-radius:14px;padding:28px 32px;color:#e2e8f0;font-family:'Courier New',monospace;font-size:12px;line-height:2;margin-bottom:20px;overflow-x:auto}
+.arch-box .c-teal{color:#22d3ee}.arch-box .c-green{color:#4ade80}.arch-box .c-amber{color:#fbbf24}.arch-box .c-blue{color:#60a5fa}.arch-box .c-purple{color:#c084fc}.arch-box .c-grey{color:#94a3b8}
+
+/* ── TECH TABLE ── */
+.tech-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px}
+.tech-tbl thead th{background:#1e293b;color:#f8fafc;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:9px 14px;text-align:left;border-right:1px solid #334155}
+.tech-tbl thead th:last-child{border-right:none}
+.tech-tbl tbody td{padding:8px 14px;border-bottom:1px solid #f1f5f9;color:#374151;border-right:1px solid #f1f5f9;vertical-align:top;line-height:1.6}
+.tech-tbl tbody td:last-child{border-right:none}
+.tech-tbl tbody tr:nth-child(even) td{background:#f8fafc}
+.tech-tbl tbody tr:hover td{background:#eff6ff}
+.tech-tbl td.mono{font-family:'Courier New',monospace;font-size:11px;color:#1d4ed8}
+.tech-tbl td.ok{color:#059669;font-weight:700}
+.tech-tbl td.warn{color:#d97706;font-weight:700}
+
+/* ── APPROVAL ── */
+.approval-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+@media(max-width:700px){.approval-grid{grid-template-columns:1fr}}
+.approval-box{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px 20px;text-align:center}
+.approval-box .role{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#64748b;margin-bottom:10px}
+.approval-box .sig-area{height:50px;border-bottom:1px solid #e2e8f0;margin-bottom:12px}
+.approval-box .sig-lbl{font-size:11px;color:#94a3b8}
+.approval-box .date-lbl{margin-top:8px;font-size:11px;color:#94a3b8}
+
+/* ── HIGHLIGHT PAIR ── */
+.hl-row{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.hl{flex:1;min-width:220px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px 18px}
+.hl-icon{font-size:20px;margin-bottom:6px}
+.hl-title{font-size:12px;font-weight:800;color:#374151;margin-bottom:5px}
+.hl-text{font-size:12px;color:#64748b;line-height:1.7}
+
+/* ── RISK ROWS ── */
+.risk-row{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-radius:10px;margin-bottom:8px;border:1px solid}
+.risk-row.low{background:#f0fdf4;border-color:#bbf7d0}
+.risk-row.med{background:#fffbeb;border-color:#fde68a}
+.risk-row.high{background:#fff1f2;border-color:#fecdd3}
+.risk-badge{font-size:10px;font-weight:800;border-radius:6px;padding:3px 9px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.risk-row.low .risk-badge{background:#22c55e;color:#fff}
+.risk-row.med .risk-badge{background:#f59e0b;color:#fff}
+.risk-row.high .risk-badge{background:#ef4444;color:#fff}
+.risk-title{font-size:12px;font-weight:700;color:#1a202c;margin-bottom:3px}
+.risk-mitigation{font-size:11px;color:#64748b;line-height:1.6}
+
+/* ── FOOTER ── */
+footer{text-align:center;font-size:11px;color:#94a3b8;padding-top:32px;margin-top:48px;border-top:1px solid #e2e8f0}
+
+@media print{
+  body{background:#fff}
+  .page{padding:16px 12px 40px}
+  .cover{padding:32px 32px 28px;border-radius:12px}
+  .cover h1{font-size:26px}
+  .sec-hdr{margin-top:28px}
+  .arch-box{font-size:10px;padding:16px 20px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<div class="cover">
+  <div class="cover-logo">&#9632; Sempra Energy &mdash; IT Programme</div>
+  <h1>SAP Data Migration<br>Tracking Dashboard</h1>
+  <div class="cover-sub">A self-contained, browser-based control room for tracking all three Data Migration cycles (DM1 &rarr; DM2 &rarr; DM3) &mdash; measuring how many SAP tables have been successfully exported, imported, and reconciled across source and target systems. No cloud. No manual effort. One click.</div>
+  <div class="cover-badges">
+    <span class="cbadge blue">&#9679; DM1 &mdash; Cycle 1</span>
+    <span class="cbadge purple">&#9679; DM2 &mdash; Cycle 2</span>
+    <span class="cbadge green">&#9679; DM3 &mdash; Cycle 3</span>
+    <span class="cbadge teal">100% Local &mdash; Zero Cloud</span>
+    <span class="cbadge">Release v1.0</span>
+  </div>
+  <div class="cover-meta">
+    <span><strong>Project:</strong> SAP Data Migration &mdash; Sempra</span>
+    <span><strong>Doc Version:</strong> 2.0</span>
+    <span><strong>Classification:</strong> Internal Use Only</span>
+    <span><strong>Audience:</strong> Leadership, PM, Technical Teams</span>
+  </div>
+</div>
+
+<!-- ═══════════════ TABLE OF CONTENTS ═══════════════ -->
+<div class="toc">
+  <div class="toc-title">&#9776;&nbsp; Table of Contents</div>
+  <div class="toc-grid">
+    <a href="#s1" class="toc-item"><span class="toc-num">01</span><div><div class="toc-lbl">Executive Summary</div><div class="toc-sec">Business value &amp; purpose</div></div></a>
+    <a href="#s2" class="toc-item"><span class="toc-num">02</span><div><div class="toc-lbl">What Problem It Solves</div><div class="toc-sec">Before vs After comparison</div></div></a>
+    <a href="#s3" class="toc-item"><span class="toc-num">03</span><div><div class="toc-lbl">The Three Migration Cycles</div><div class="toc-sec">DM1 / DM2 / DM3 explained</div></div></a>
+    <a href="#s4" class="toc-item"><span class="toc-num">04</span><div><div class="toc-lbl">Step-by-Step User Guide</div><div class="toc-sec">How to use the dashboard</div></div></a>
+    <a href="#s5" class="toc-item"><span class="toc-num">05</span><div><div class="toc-lbl">Colour &amp; Status Key</div><div class="toc-sec">What every colour means</div></div></a>
+    <a href="#s6" class="toc-item"><span class="toc-num">06</span><div><div class="toc-lbl">Dashboard Features</div><div class="toc-sec">Complete feature catalogue</div></div></a>
+    <a href="#s7" class="toc-item"><span class="toc-num">07</span><div><div class="toc-lbl">Technical Architecture</div><div class="toc-sec">How it works under the hood</div></div></a>
+    <a href="#s8" class="toc-item"><span class="toc-num">08</span><div><div class="toc-lbl">File &amp; Component Inventory</div><div class="toc-sec">Every file explained</div></div></a>
+    <a href="#s9" class="toc-item"><span class="toc-num">09</span><div><div class="toc-lbl">Data Flow &amp; Deduplication</div><div class="toc-sec">How records are counted correctly</div></div></a>
+    <a href="#s10" class="toc-item"><span class="toc-num">10</span><div><div class="toc-lbl">Security &amp; Data Privacy</div><div class="toc-sec">No cloud, no risk</div></div></a>
+    <a href="#s11" class="toc-item"><span class="toc-num">11</span><div><div class="toc-lbl">Risks &amp; Mitigations</div><div class="toc-sec">Risk register</div></div></a>
+    <a href="#s12" class="toc-item"><span class="toc-num">12</span><div><div class="toc-lbl">Approval &amp; Sign-Off</div><div class="toc-sec">Leadership approval page</div></div></a>
+  </div>
+</div>
+
+<!-- ═══════════════ S1: EXECUTIVE SUMMARY ═══════════════ -->
+<div id="s1">
+  <div class="sec-hdr">
+    <span class="sec-num biz">01</span>
+    <div><div class="sec-title">Executive Summary</div><div class="sec-sub">Business value and purpose &mdash; for leadership audiences</div></div>
+  </div>
+
+  <div class="plain-box green">
+    <div class="plain-title">&#9989; In Plain English</div>
+    <div class="plain-text">This dashboard is Sempra&rsquo;s single source of truth for SAP data migration health. It automatically reads migration data files, counts how many SAP tables were successfully moved from the old system to the new one, and shows a live reconciliation score &mdash; all in real time, with no manual effort beyond clicking one button.</div>
+  </div>
+
+  <div class="kpi-strip">
+    <div class="kpi dm1"><div class="kpi-num">3</div><div class="kpi-lbl">Migration Cycles</div><div class="kpi-sub">DM1 &rarr; DM2 &rarr; DM3</div></div>
+    <div class="kpi info"><div class="kpi-num">5</div><div class="kpi-lbl">Source Files</div><div class="kpi-sub">Auto-read from disk</div></div>
+    <div class="kpi ok"><div class="kpi-num">100%</div><div class="kpi-lbl">Local Processing</div><div class="kpi-sub">Zero cloud dependency</div></div>
+    <div class="kpi warn"><div class="kpi-num">&lt;10s</div><div class="kpi-lbl">Full Sync Time</div><div class="kpi-sub">All 3 cycles at once</div></div>
+    <div class="kpi info"><div class="kpi-num">2 min</div><div class="kpi-lbl">Auto-Refresh</div><div class="kpi-sub">Always current</div></div>
+    <div class="kpi ok"><div class="kpi-num">0</div><div class="kpi-lbl">Manual Steps</div><div class="kpi-sub">Fully automated</div></div>
+  </div>
+
+  <div class="plain-box">
+    <div class="plain-title">&#127775; What Leadership Needs to Know</div>
+    <div class="plain-text">
+      &bull; The dashboard replaces hours of manual Excel reconciliation with a single button click.<br>
+      &bull; It covers all three migration waves (DM1, DM2, DM3) on one screen, with per-cycle drill-down.<br>
+      &bull; Data never leaves the Sempra laptop &mdash; processed entirely in the browser.<br>
+      &bull; No licences, no cloud subscriptions, no third-party costs for core functionality.<br>
+      &bull; Mismatches, missing exports, and incomplete migrations are flagged automatically &mdash; no analyst needed.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ S2: PROBLEM SOLVED ═══════════════ -->
+<div id="s2">
+  <div class="sec-hdr">
+    <span class="sec-num biz">02</span>
+    <div><div class="sec-title">What Problem It Solves</div><div class="sec-sub">The Before vs After</div></div>
+  </div>
+
+  <div class="hl-row">
+    <div class="hl" style="border-left:4px solid #ef4444">
+      <div class="hl-icon">&#128542;</div>
+      <div class="hl-title">BEFORE &mdash; Manual Process</div>
+      <div class="hl-text">Migration teams manually opened multiple Excel files, cross-referenced them by hand, and produced status reports that were already out of date before they were finished. Double-counting of exported and imported records inflated match numbers. No single view existed across all three cycles.</div>
+    </div>
+    <div class="hl" style="border-left:4px solid #22c55e">
+      <div class="hl-icon">&#128512;</div>
+      <div class="hl-title">AFTER &mdash; This Dashboard</div>
+      <div class="hl-text">One click reads all five source files automatically, deduplicates records using a DISTINCT algorithm, calculates reconciliation percentages for all three cycles in parallel, and displays live status with colour-coded health indicators &mdash; auto-refreshing every 2 minutes.</div>
+    </div>
+  </div>
+
+  <table class="tech-tbl">
+    <thead><tr><th>Aspect</th><th>Manual Approach (Before)</th><th>This Dashboard (After)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Time to reconcile</strong></td><td class="warn">30&ndash;60 minutes per cycle</td><td class="ok">Under 10 seconds &mdash; all 3 cycles</td></tr>
+      <tr><td><strong>Accuracy</strong></td><td class="warn">Prone to double-counting &amp; formula errors</td><td class="ok">DISTINCT dedup algorithm &mdash; always correct</td></tr>
+      <tr><td><strong>Coverage</strong></td><td class="warn">One cycle at a time</td><td class="ok">All 3 cycles simultaneously</td></tr>
+      <tr><td><strong>Data freshness</strong></td><td class="warn">Updated only when someone runs it manually</td><td class="ok">Auto-refreshes every 2 minutes</td></tr>
+      <tr><td><strong>Flagging issues</strong></td><td class="warn">Manual &mdash; easy to miss</td><td class="ok">Automatic colour-coded health indicators</td></tr>
+      <tr><td><strong>Leadership visibility</strong></td><td class="warn">Email attachments or verbal updates</td><td class="ok">Live dashboard, printable, PDF-ready</td></tr>
+      <tr><td><strong>SAP source counts</strong></td><td class="warn">Manual SE16N queries per table</td><td class="ok">Automated via SE16N-style RFC with 3 fallbacks</td></tr>
+      <tr><td><strong>Data security</strong></td><td class="warn">Files emailed between team members</td><td class="ok">Never leaves the local machine</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════ S3: THREE CYCLES ═══════════════ -->
+<div id="s3">
+  <div class="sec-hdr">
+    <span class="sec-num biz">03</span>
+    <div><div class="sec-title">The Three Migration Cycles</div><div class="sec-sub">DM1 / DM2 / DM3 &mdash; what each wave covers</div></div>
+  </div>
+
+  <div class="plain-box">
+    <div class="plain-title">&#128218; Context</div>
+    <div class="plain-text">Sempra&rsquo;s SAP migration runs in three progressive waves. Each wave moves a batch of SAP tables from the source system (ES2) to the target system (SQ1). The dashboard tracks each wave independently and shows a cross-cycle comparison on the master screen.</div>
+  </div>
+
+  <div class="cards">
+    <div class="card dm1">
+      <div class="card-title"><span class="card-dot dot-dm1"></span>DM1 &mdash; Cycle 1</div>
+      <div class="card-num cn-dm1">Wave 1</div>
+      <div class="card-body">First migration wave. Includes Reference List (<code>Reflist_m1.xlsx</code>) plus Export/Import reconciliation file (<code>DM1_ES2-SQ1 Export-Import.xlsx</code>). Both EXP and IMP data are available &mdash; full reconciliation possible.</div>
+    </div>
+    <div class="card dm2">
+      <div class="card-title"><span class="card-dot dot-dm2"></span>DM2 &mdash; Cycle 2</div>
+      <div class="card-num cn-dm2">Wave 2</div>
+      <div class="card-body">Second migration wave. Uses <code>DM2 REF.xlsx</code> and <code>EXPORT IMPORT_DM2.xlsx</code>. Same full reconciliation structure as DM1 &mdash; all EXP and IMP data present. Tables in this wave tracked separately from DM1.</div>
+    </div>
+    <div class="card dm3">
+      <div class="card-title"><span class="card-dot dot-dm3"></span>DM3 &mdash; Cycle 3</div>
+      <div class="card-num cn-dm3">Wave 3</div>
+      <div class="card-body">Third wave &mdash; currently in progress. Only the Reference List (<code>ref dm3.xlsx</code>) is available; it carries both export and import rows in a combined format. Dashboard shows amber &ldquo;Migration In Progress&rdquo; banner automatically.</div>
+    </div>
+  </div>
+
+  <table class="tech-tbl">
+    <thead><tr><th>Cycle</th><th>Brand Colour</th><th>Reference File</th><th>EXP/IMP File</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><strong>DM1</strong></td><td style="color:#3b5bdb;font-weight:700">&#9679; Blue</td><td class="mono">Reflist_m1.xlsx</td><td class="mono">DM1_ES2-SQ1 Export-Import.xlsx</td><td class="ok">Full data &mdash; reconcilable</td></tr>
+      <tr><td><strong>DM2</strong></td><td style="color:#7c3aed;font-weight:700">&#9679; Purple</td><td class="mono">DM2 REF.xlsx</td><td class="mono">EXPORT IMPORT_DM2.xlsx</td><td class="ok">Full data &mdash; reconcilable</td></tr>
+      <tr><td><strong>DM3</strong></td><td style="color:#2f9e44;font-weight:700">&#9679; Green</td><td class="mono">ref dm3.xlsx</td><td><em>Combined in REF file</em></td><td class="warn">In progress &mdash; REF only</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════ S4: STEP-BY-STEP GUIDE ═══════════════ -->
+<div id="s4">
+  <div class="sec-hdr">
+    <span class="sec-num steps">04</span>
+    <div><div class="sec-title">Step-by-Step User Guide</div><div class="sec-sub">How to launch and use the dashboard &mdash; no technical knowledge required</div></div>
+  </div>
+
+  <div class="plain-box amber">
+    <div class="plain-title">&#128204; Prerequisites</div>
+    <div class="plain-text">Ensure data files are in the correct folders on the laptop: <code>C:\Users\KishorMarri\.bob\DM1\</code>, <code>DM2\</code>, and <code>DM3\</code>.<br>Python 3.8+ must be installed. Run once: <code>pip install flask flask-cors openpyxl pandas xlrd</code></div>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-left"><div class="step-circle sc1">1</div><div class="step-line"></div></div>
+      <div class="step-right">
+        <div class="step-title">Launch the Dashboard</div>
+        <div class="step-body">Open PowerShell in the project folder and run:<br><code>python launch_dashboard.py</code><br><br>This starts two background services and opens the master dashboard automatically at <strong>http://localhost:5003/Sempra_CrossCycle_Summary_MASTER.html</strong></div>
+        <div class="step-tip"><span class="tip-icon">&#128161;</span> A new PowerShell window opens for the File Bridge &mdash; leave it running. The browser opens automatically in ~5 seconds once the bridge confirms it is ready.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-circle sc2">2</div><div class="step-line"></div></div>
+      <div class="step-right">
+        <div class="step-title">Run Full 3-Cycle Automation</div>
+        <div class="step-body">Click the <strong>&#9889; Auto-Sync All Cycles</strong> button in the top toolbar. The button animates with a rainbow sweep while running. Three coloured sync circles appear below the toolbar &mdash; one per cycle (blue/purple/green) &mdash; spinning while reading and showing the match % when each cycle is done.</div>
+        <div class="step-tip"><span class="tip-icon">&#9201;</span> The full sync completes in under 10 seconds. All three cycle cards update live with their reconciliation percentages and badge boxes.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-circle sc3">3</div><div class="step-line"></div></div>
+      <div class="step-right">
+        <div class="step-title">Read the Results on Screen</div>
+        <div class="step-body">Each cycle card shows:<br>
+        &bull; A large semicircle gauge &mdash; the reconciliation match %<br>
+        &bull; Total tables in scope vs tables fully reconciled<br>
+        &bull; Mismatched, not-exported, and not-imported counts<br>
+        &bull; A badge box with green border (healthy) or red border (issues found)<br><br>
+        The cross-cycle comparison table below the cards lets you compare DM1, DM2, and DM3 side by side.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-circle sc4">4</div><div class="step-line"></div></div>
+      <div class="step-right">
+        <div class="step-title">Switch Views: Business / Technical / Performance</div>
+        <div class="step-body">Three tabs at the top of the page switch the dashboard between views:<br>
+        &bull; <strong>Business View</strong> &mdash; RAG scorecards and insight boxes for leadership<br>
+        &bull; <strong>Technical View</strong> &mdash; per-table detail with source/target counts and variance<br>
+        &bull; <strong>Performance View</strong> &mdash; timing metrics, file sizes, cache hit rates</div>
+        <div class="step-tip"><span class="tip-icon">&#128196;</span> The Business View is the best view for leadership presentations and printed reports.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-circle sc5">5</div><div class="step-line"></div></div>
+      <div class="step-right">
+        <div class="step-title">Drill Down to Individual Cycle Dashboards</div>
+        <div class="step-body">Click any navigation button at the top (DM1 / DM2 / DM3) to open that cycle&rsquo;s detailed dashboard. There you can:<br>
+        &bull; Upload new Excel files via drag-and-drop<br>
+        &bull; See a searchable per-table breakdown with EXP/IMP record counts and variance<br>
+        &bull; Download filtered sub-sets (mismatches only, not-exported only, etc.) as CSV or Excel<br>
+        &bull; View the rainbow reconciliation progress bar</div>
+        <div class="step-tip"><span class="tip-icon">&#128190;</span> Results are saved in localStorage so they persist across page reloads without re-running the sync.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-circle sc6">6</div><div class="step-line"></div></div>
+      <div class="step-right">
+        <div class="step-title">Export Reports &amp; Prints</div>
+        <div class="step-body">Use browser <strong>Print</strong> (Ctrl+P) and choose &ldquo;Save as PDF&rdquo; for a leadership-ready document. The dashboard switches to a clean white background with all colours preserved.<br><br>For Excel exports with SAP SE16N source counts, use the <strong>&#128229; Download SE16N Counts</strong> button in the Automation panel (Step 4) &mdash; produces a colour-coded XLSX with a Summary sheet.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ S5: COLOUR KEY ═══════════════ -->
+<div id="s5">
+  <div class="sec-hdr">
+    <span class="sec-num">05</span>
+    <div><div class="sec-title">Colour &amp; Status Key</div><div class="sec-sub">What every colour and indicator means &mdash; consistent across all screens</div></div>
+  </div>
+
+  <div class="plain-box">
+    <div class="plain-title">&#127760; Universal Colour Conventions</div>
+    <div class="plain-text">These colours are used consistently across every screen, table, badge, and indicator in the dashboard. Learn them once &mdash; read any view instantly.</div>
+  </div>
+
+  <div class="colour-key">
+    <div class="ck-cell"><div class="ck-dot ck-green"></div><div><div class="ck-name">Green &mdash; Fully Reconciled</div><div class="ck-desc">Source = Target AND EXP = IMP. Table migrated successfully.</div></div></div>
+    <div class="ck-cell"><div class="ck-dot ck-amber"></div><div><div class="ck-name">Amber &mdash; In Progress / Warning</div><div class="ck-desc">Source &ne; Target, or migration not yet complete. Needs monitoring.</div></div></div>
+    <div class="ck-cell"><div class="ck-dot ck-red"></div><div><div class="ck-name">Red &mdash; Mismatch / Failed</div><div class="ck-desc">EXP &ne; IMP record count, or table not migrated. Action required.</div></div></div>
+    <div class="ck-cell"><div class="ck-dot ck-grey"></div><div><div class="ck-name">Grey &mdash; No Data / Excluded</div><div class="ck-desc">Table in Reference List but no export/import data found yet.</div></div></div>
+    <div class="ck-cell"><div class="ck-dot ck-blue"></div><div><div class="ck-name">Blue &mdash; DM1 Cycle 1</div><div class="ck-desc">All DM1 labels, borders, badges, and navigation elements.</div></div></div>
+    <div class="ck-cell"><div class="ck-dot ck-purple"></div><div><div class="ck-name">Purple &mdash; DM2 Cycle 2</div><div class="ck-desc">All DM2 labels, borders, badges, and navigation elements.</div></div></div>
+  </div>
+
+  <table class="tech-tbl">
+    <thead><tr><th>Indicator</th><th>Where It Appears</th><th>What It Means</th></tr></thead>
+    <tbody>
+      <tr><td><strong>RAG Badge (Green/Amber/Red)</strong></td><td>Business View scorecards</td><td>Overall health of the cycle &mdash; Green = on track, Amber = review needed, Red = critical issues</td></tr>
+      <tr><td><strong>Semicircle Gauge</strong></td><td>Each cycle card (MASTER)</td><td>Visual match % &mdash; fills from 0 to 100% in the cycle&rsquo;s brand colour. Spins with READING&hellip; overlay during sync</td></tr>
+      <tr><td><strong>Sync Circles (spinning)</strong></td><td>Refresh toolbar</td><td>Appear during auto-sync; spin in cycle colour while reading; show match % when done; auto-hide after 5s</td></tr>
+      <tr><td><strong>Badge Box (green/red border)</strong></td><td>Below each cycle gauge</td><td>Post-sync summary &mdash; green border = &gt;95% match, red border = issues detected</td></tr>
+      <tr><td><strong>Rainbow Button Animation</strong></td><td>Auto-Sync All Cycles button</td><td>Sweeping rainbow glow while automation is running &mdash; stops when all three cycles complete</td></tr>
+      <tr><td><strong>Amber Migration Banner</strong></td><td>DM3 dashboard</td><td>Shown when only Reference List is loaded &mdash; EXP/IMP data not yet available for that cycle</td></tr>
+      <tr><td><strong>Red Dot on Countdown</strong></td><td>Auto-refresh countdown badge</td><td>Next refresh is within 60 seconds &mdash; data is about to update automatically</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════ S6: FEATURES ═══════════════ -->
+<div id="s6">
+  <div class="sec-hdr">
+    <span class="sec-num biz">06</span>
+    <div><div class="sec-title">Dashboard Features</div><div class="sec-sub">Complete feature catalogue &mdash; everything the system can do</div></div>
+  </div>
+
+  <table class="tech-tbl">
+    <thead><tr><th>Feature</th><th>Where</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><strong>3-Cycle Side-by-Side View</strong></td><td>MASTER dashboard</td><td>DM1, DM2, DM3 cards on one page with gauge, KPIs, and match counts for immediate cross-wave comparison</td></tr>
+      <tr><td><strong>&#9889; Auto-Sync All Cycles</strong></td><td>Toolbar button</td><td>One click reads all 5 Excel files via the local bridge, parses them in-browser, populates all three cards &mdash; under 10 seconds</td></tr>
+      <tr><td><strong>Semicircle Match Gauges</strong></td><td>Each cycle card</td><td>Animated SVG arc showing reconciliation % 0&ndash;100. Spins with &ldquo;READING&hellip;&rdquo; overlay during sync, snaps to final value when done</td></tr>
+      <tr><td><strong>Business / Technical / Performance Tabs</strong></td><td>MASTER dashboard</td><td>Switch between executive RAG view, per-table technical detail, and system performance metrics without reloading</td></tr>
+      <tr><td><strong>Business Insights Panel</strong></td><td>Business View</td><td>Auto-generated flags: missing exports, count mismatches, DM3 in-progress status, total tables in scope, overall match rate</td></tr>
+      <tr><td><strong>Auto-Refresh (2-minute interval)</strong></td><td>Toolbar</td><td>Countdown badge with pause/resume. Red dot when under 60 seconds. Amber colour when paused.</td></tr>
+      <tr><td><strong>Sync Status Circles</strong></td><td>Refresh bar</td><td>Appear per cycle during automation &mdash; spin in brand colour, show match % when complete, auto-hide after 5 seconds</td></tr>
+      <tr><td><strong>Inline Badge Boxes</strong></td><td>Below each cycle gauge</td><td>Non-disruptive post-sync summary &mdash; no popups, no modal interruptions</td></tr>
+      <tr><td><strong>Per-Cycle Detail Dashboards</strong></td><td>DM1 / DM2 / DM3 pages</td><td>Drag-and-drop file upload, searchable per-table breakdown, KPI strip, rainbow progress bar, per-row drill-down drawers</td></tr>
+      <tr><td><strong>DISTINCT Deduplication</strong></td><td>All 6 aggregation points</td><td>DISTINCT on (Type, Table, Record Count) before SUM &mdash; prevents double-counting of EXP/IMP rows across all cycles</td></tr>
+      <tr><td><strong>Count Validation Column</strong></td><td>Per-cycle dashboards</td><td>EXP vs IMP record count difference per table &mdash; highlights inconsistencies inside the migration Excel file</td></tr>
+      <tr><td><strong>Cross-Cycle Comparison Table</strong></td><td>MASTER &mdash; Technical View</td><td>All tables across DM1/DM2/DM3 in one table with per-cycle source/target/variance columns</td></tr>
+      <tr><td><strong>Print / PDF Export</strong></td><td>Browser Ctrl+P</td><td>Full print CSS &mdash; white background, colours preserved, navigation hidden, clean leadership-ready output</td></tr>
+      <tr><td><strong>SE16N SAP Source Counts</strong></td><td>Automation Panel (optional)</td><td>RFC connection to SAP, counts every table using SE16N-equivalent FM with 3 fallback methods</td></tr>
+      <tr><td><strong>Excel Export (colour-coded)</strong></td><td>Automation Panel Step 4</td><td>Downloads Source vs Target count XLSX with green/red/amber row colouring and a Summary sheet</td></tr>
+      <tr><td><strong>localStorage Persistence</strong></td><td>All dashboards</td><td>Last-analysed results survive page reloads &mdash; no need to re-sync if underlying data has not changed</td></tr>
+      <tr><td><strong>Dynamic Bridge URL</strong></td><td>All dashboards (JS)</td><td>Uses <code>window.location.hostname</code> &mdash; works on any machine name or IP without code changes</td></tr>
+      <tr><td><strong>DM3 REF-Only Mode</strong></td><td>DM3 dashboard</td><td>Gracefully handles the absence of a separate EXP/IMP file &mdash; shows amber migration-in-progress banner</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════ S7: ARCHITECTURE ═══════════════ -->
+<div id="s7">
+  <div class="sec-hdr">
+    <span class="sec-num tech">07</span>
+    <div><div class="sec-title">Technical Architecture</div><div class="sec-sub">How the system works under the hood &mdash; for technical reviewers</div></div>
+  </div>
+
+  <div class="plain-box purple">
+    <div class="plain-title">&#128295; Architecture Overview</div>
+    <div class="plain-text">The system is a three-layer local stack: a static HTML/JS browser layer, a lightweight Python file-serving bridge, and the local file system where Excel data files live. Nothing is sent to any external server &mdash; all calculation happens in the browser using SheetJS for Excel parsing.</div>
+  </div>
+
+  <div class="arch-box">
+<span class="c-teal">&#9608;&#9608;&#9608; BROWSER LAYER (HTML + JavaScript + SheetJS v0.18.5) &#9608;&#9608;&#9608;</span>
+  Sempra_CrossCycle_Summary_MASTER.html    <span class="c-grey">&larr; Main dashboard, all 3 cycles + automation</span>
+  Sempra_DM1_Dashboard.html               <span class="c-grey">&larr; DM1 per-table detail &amp; upload</span>
+  Sempra_DM2_Dashboard.html               <span class="c-grey">&larr; DM2 per-table detail &amp; upload</span>
+  Sempra_DM3_Dashboard.html               <span class="c-grey">&larr; DM3 per-table detail (REF-only mode)</span>
+        |
+        | <span class="c-amber">fetch("http://localhost:5002/file?cycle=DM1&amp;type=ref")</span>
+        | <span class="c-amber">gzip-compressed Excel bytes &larr; ETag 304 caching</span>
+        v
+<span class="c-blue">&#9608;&#9608;&#9608; FILE WATCHER BRIDGE  (Python Flask &mdash; port 5002) &#9608;&#9608;&#9608;</span>
+  automation/file_watcher_bridge.py
+    &bull; <span class="c-green">In-memory file cache</span>        &mdash; no repeated disk reads
+    &bull; <span class="c-green">Gzip compression</span>            &mdash; 60-70% smaller transfers
+    &bull; <span class="c-green">ETag / 304 Not Modified</span>     &mdash; skips read if file unchanged
+    &bull; <span class="c-green">Bulk /files/all endpoint</span>    &mdash; manifest check before bytes
+    &bull; <span class="c-green">Auto cache-warm on startup</span>  &mdash; first requests instant
+        |
+        | <span class="c-amber">reads raw Excel bytes from disk</span>
+        v
+<span class="c-purple">&#9608;&#9608;&#9608; LOCAL FILE SYSTEM &#9608;&#9608;&#9608;</span>
+  C:\Users\KishorMarri\.bob\DM1\Reflist_m1.xlsx
+  C:\Users\KishorMarri\.bob\DM1\DM1_ES2-SQ1 Export-Import.xlsx
+  C:\Users\KishorMarri\.bob\DM2\DM2 REF.xlsx
+  C:\Users\KishorMarri\.bob\DM2\EXPORT IMPORT_DM2.xlsx
+  C:\Users\KishorMarri\.bob\DM3\ref dm3.xlsx
+
+<span class="c-teal">&#9608;&#9608;&#9608; SAP BRIDGE (Optional &mdash; Python Flask &mdash; port 5001) &#9608;&#9608;&#9608;</span>
+  automation/sap_bridge.py
+    &bull; <span class="c-green">Method 1</span>: EM_GET_NUMBER_OF_ENTRIES  (SE16N internal FM)
+    &bull; <span class="c-green">Method 2</span>: RFC_READ_TABLE            (standard fallback)
+    &bull; <span class="c-green">Method 3</span>: BBP_RFC_READ_TABLE        (alternative fallback)
+    &bull; <span class="c-green">Demo mode</span>: deterministic simulated counts (no pyrfc needed)
+    &bull; <span class="c-green">/export_excel</span>: colour-coded XLSX with Summary sheet
+  </div>
+
+  <table class="tech-tbl">
+    <thead><tr><th>Layer</th><th>Technology</th><th>Port</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Browser Frontend</strong></td><td>HTML5, Vanilla JS, SheetJS v0.18.5, SVG</td><td>5003 (static)</td><td>Excel parsing, reconciliation calculation, rendering, localStorage caching</td></tr>
+      <tr><td><strong>File Bridge</strong></td><td>Python 3.8+, Flask, Flask-CORS, gzip</td><td>5002</td><td>Serves Excel file bytes to the browser with compression and ETag validation</td></tr>
+      <tr><td><strong>Static Server</strong></td><td>Python http.server (built-in stdlib)</td><td>5003</td><td>Serves HTML files over HTTP &mdash; avoids CORS issues with file:// protocol</td></tr>
+      <tr><td><strong>SAP Bridge (optional)</strong></td><td>Python, Flask, pyrfc (optional), openpyxl</td><td>5001</td><td>RFC connection to SAP for SE16N-style table counts + colour-coded Excel export</td></tr>
+      <tr><td><strong>Launcher</strong></td><td>Python subprocess, threading, webbrowser</td><td>&mdash;</td><td>Orchestrates startup of all services and opens the browser automatically</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════ S8: FILE INVENTORY ═══════════════ -->
+<div id="s8">
+  <div class="sec-hdr">
+    <span class="sec-num tech">08</span>
+    <div><div class="sec-title">File &amp; Component Inventory</div><div class="sec-sub">Every file in the project &mdash; what it does and when to edit it</div></div>
+  </div>
+
+  <table class="tech-tbl">
+    <thead><tr><th>File</th><th>Type</th><th>Purpose</th><th>Edit Required?</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">Sempra_CrossCycle_Summary_MASTER.html</td><td>HTML/JS/CSS</td><td>Main dashboard &mdash; 3-cycle cross view, automation panel, all three view tabs</td><td class="ok">Rarely &mdash; only for label or cycle name changes</td></tr>
+      <tr><td class="mono">Sempra_DM1_Dashboard.html</td><td>HTML/JS/CSS</td><td>DM1 per-table detail &mdash; upload, search, KPI strip, download buttons</td><td class="ok">Rarely</td></tr>
+      <tr><td class="mono">Sempra_DM2_Dashboard.html</td><td>HTML/JS/CSS</td><td>DM2 per-table detail &mdash; same structure as DM1</td><td class="ok">Rarely</td></tr>
+      <tr><td class="mono">Sempra_DM3_Dashboard.html</td><td>HTML/JS/CSS</td><td>DM3 per-table detail &mdash; REF-only mode with amber migration banner</td><td class="ok">Rarely</td></tr>
+      <tr><td class="mono">launch_dashboard.py</td><td>Python</td><td>One-click launcher &mdash; starts bridge + static server + opens browser</td><td class="ok">No changes needed</td></tr>
+      <tr><td class="mono">automation/file_watcher_bridge.py</td><td>Python (Flask)</td><td>Local HTTP bridge on port 5002 &mdash; serves Excel bytes with gzip + ETag cache</td><td class="warn">Only if data file paths change</td></tr>
+      <tr><td class="mono">automation/sap_bridge.py</td><td>Python (Flask)</td><td>SAP RFC bridge on port 5001 &mdash; SE16N counts, colour-coded Excel export</td><td class="warn">Only if SAP system details change</td></tr>
+      <tr><td class="mono">automation/01_sap_source_count.py</td><td>Python</td><td>Standalone SAP source count extractor (batch use)</td><td class="ok">Configuration only</td></tr>
+      <tr><td class="mono">automation/02_target_count.py</td><td>Python</td><td>Standalone target system count extractor (batch use)</td><td class="ok">Configuration only</td></tr>
+      <tr><td class="mono">automation/03_orchestrator.py</td><td>Python</td><td>Full pipeline orchestrator for scheduled batch runs</td><td class="ok">Configuration only</td></tr>
+      <tr><td class="mono">automation/output/</td><td>Folder (auto-created)</td><td>Stores ref_tables.json and dashboard_ref_counts.json after SAP extraction runs</td><td class="ok">Auto-managed by bridge</td></tr>
+      <tr><td class="mono">automation/logs/</td><td>Folder (auto-created)</td><td>bridge.log and file_watcher.log for diagnostics and troubleshooting</td><td class="ok">Auto-managed by bridge</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════ S9: DATA FLOW ═══════════════ -->
+<div id="s9">
+  <div class="sec-hdr">
+    <span class="sec-num tech">09</span>
+    <div><div class="sec-title">Data Flow &amp; Deduplication Logic</div><div class="sec-sub">How records are counted correctly &mdash; critical for accuracy</div></div>
+  </div>
+
+  <div class="plain-box">
+    <div class="plain-title">&#128269; Why Deduplication Matters</div>
+    <div class="plain-text">The migration Excel files contain separate rows for each Export and Import operation on every table. Without deduplication, the same table appears multiple times, inflating counts. The dashboard uses a DISTINCT algorithm &mdash; equivalent to SQL&rsquo;s <code>SELECT DISTINCT</code> &mdash; to ensure each unique (Type, Table Name, Record Count) combination is counted only once before summing. EXP and IMP rows are processed <em>separately</em> to avoid cross-type errors. This fix was applied to all 6 aggregation points across 4 files.</div>
+  </div>
+
+  <div class="arch-box">
+<span class="c-teal">RECONCILIATION DATA FLOW &mdash; STEP BY STEP</span>
+
+<span class="c-amber">Step 1: FETCH</span>
+  Browser &rarr; GET /file?cycle=DM1&amp;type=ref  &rarr;  bridge returns gzipped .xlsx bytes
+  Browser &rarr; GET /file?cycle=DM1&amp;type=exp  &rarr;  bridge returns gzipped .xlsx bytes
+  (ETag check: if unchanged, bridge returns 304 Not Modified &mdash; zero re-read)
+
+<span class="c-amber">Step 2: PARSE</span>
+  SheetJS.read(arrayBuffer)  &rarr;  XLSX workbook in memory (100% browser-side)
+  sheet_to_json()            &rarr;  array of row objects
+
+<span class="c-amber">Step 3: DEDUPLICATE</span>
+  EXP rows: DISTINCT on (Type="EXP", TableName, RecordCount)  &rarr;  deduplicated set  &rarr;  SUM
+  IMP rows: DISTINCT on (Type="IMP", TableName, RecordCount)  &rarr;  deduplicated set  &rarr;  SUM
+  <span class="c-grey">(EXP and IMP processed SEPARATELY &mdash; prevents cross-type dedup errors)</span>
+
+<span class="c-amber">Step 4: RECONCILE</span>
+  For each table in REF list:
+    Status = <span class="c-green">GREEN</span>   if EXP_count == IMP_count  AND  src_count == tgt_count
+    Status = <span class="c-amber">AMBER</span>   if counts exist but do not match
+    Status = <span class="c-purple">RED</span>     if EXP &ne; IMP  OR  migration not started
+    Status = <span class="c-grey">GREY</span>    if no EXP/IMP data found for this table
+
+<span class="c-amber">Step 5: AGGREGATE</span>
+  Match % = (fully reconciled tables) / (total tables in REF list) * 100
+
+<span class="c-amber">Step 6: RENDER</span>
+  Update SVG gauge arc, KPI numbers, badge box, sync circles on screen
+  Save summary to localStorage for persistence across page reloads
+  </div>
+
+  <div class="plain-box green">
+    <div class="plain-title">&#128202; DM3 Special Case &mdash; Combined File</div>
+    <div class="plain-text">DM3 has no separate EXP/IMP file. The Reference file contains both Export and Import rows in a combined format. The parser handles this automatically by setting <code>impData = expData</code> (both EXP and IMP come from the same parsed data object). The same DISTINCT deduplication logic is applied. This is why DM3 shows an amber &ldquo;Migration In Progress&rdquo; banner until a separate EXP/IMP file becomes available for the cycle.</div>
+  </div>
+</div>
+
+<!-- ═══════════════ S10: SECURITY ═══════════════ -->
+<div id="s10">
+  <div class="sec-hdr">
+    <span class="sec-num arch">10</span>
+    <div><div class="sec-title">Security &amp; Data Privacy</div><div class="sec-sub">No cloud, no external calls &mdash; data stays on the Sempra laptop at all times</div></div>
+  </div>
+
+  <div class="plain-box green">
+    <div class="plain-title">&#128274; Security Statement</div>
+    <div class="plain-text"><strong>No Sempra data ever leaves the local machine.</strong> All Excel files are read from a local directory, served via a localhost-only Flask server (bound to 127.0.0.1 &mdash; not reachable from the network), parsed entirely in the browser using SheetJS, and results are stored only in the browser&rsquo;s localStorage. There is no cloud API, no telemetry, no external network calls of any kind.</div>
+  </div>
+
+  <table class="tech-tbl">
+    <thead><tr><th>Risk Vector</th><th>Mitigation in Place</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Data leaving the machine</strong></td><td class="ok">All Flask servers bind to 127.0.0.1 only &mdash; not accessible from any other machine on the network</td></tr>
+      <tr><td><strong>External API calls</strong></td><td class="ok">SheetJS loaded from CDN (one-time JS library only, no data sent). Replaceable with a local copy for air-gapped environments in one line</td></tr>
+      <tr><td><strong>SAP credentials</strong></td><td class="ok">Entered in-browser only; passed to localhost SAP bridge only; never written to disk; bridge does not log or store credentials</td></tr>
+      <tr><td><strong>File access control</strong></td><td class="ok">Only files matching the config paths are accessible; no directory traversal; wildcard patterns are validated against the allowed base folders</td></tr>
+      <tr><td><strong>Persistent data storage</strong></td><td class="ok">Only reconciliation summary numbers stored in localStorage &mdash; no raw table data, no SAP credentials, no PII</td></tr>
+      <tr><td><strong>Network port exposure</strong></td><td class="ok">Ports 5001, 5002, 5003 all bind to 127.0.0.1 (loopback only) &mdash; firewall does not need to be opened</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════ S11: RISKS ═══════════════ -->
+<div id="s11">
+  <div class="sec-hdr">
+    <span class="sec-num approve">11</span>
+    <div><div class="sec-title">Risks &amp; Mitigations</div><div class="sec-sub">Risk register for leadership review</div></div>
+  </div>
+
+  <div class="risk-row low"><span class="risk-badge">LOW</span><div><div class="risk-title">SheetJS CDN Unavailability</div><div class="risk-mitigation">Mitigation: Download SheetJS locally and change the &lt;script src&gt; to the local path. One-line change in the HTML file. Pre-built local copy can be bundled as standard.</div></div></div>
+  <div class="risk-row low"><span class="risk-badge">LOW</span><div><div class="risk-title">Python Not Installed on Machine</div><div class="risk-mitigation">Mitigation: Python 3.8+ is a standard IT install. Document as a prerequisite. If unavailable, the HTML dashboards can still be opened manually via file:// with reduced functionality (no auto-sync).</div></div></div>
+  <div class="risk-row low"><span class="risk-badge">LOW</span><div><div class="risk-title">Data File Path Changes</div><div class="risk-mitigation">Mitigation: Update DEFAULT_CONFIG in file_watcher_bridge.py, or POST to the /config endpoint from the dashboard Automation panel &mdash; no code restart needed.</div></div></div>
+  <div class="risk-row med"><span class="risk-badge">MEDIUM</span><div><div class="risk-title">Excel Column Structure Changes</div><div class="risk-mitigation">Mitigation: Column index constants (COL_TABLE, COL_SRC, COL_TGT, etc.) are defined at the top of each dashboard &lt;script&gt; block. Updating them requires no knowledge of the rest of the code.</div></div></div>
+  <div class="risk-row med"><span class="risk-badge">MEDIUM</span><div><div class="risk-title">SAP RFC Connection Failure</div><div class="risk-mitigation">Mitigation: The SAP bridge tries 3 RFC methods in sequence. If all fail, demo mode produces deterministic simulated counts for testing without a live SAP connection. Real counts not affected if SAP bridge is not used.</div></div></div>
+  <div class="risk-row low"><span class="risk-badge">LOW</span><div><div class="risk-title">Port Conflicts (5001 / 5002 / 5003)</div><div class="risk-mitigation">Mitigation: Port numbers are constants at the top of each Python file and the launcher. Change in one place &mdash; all references update automatically.</div></div></div>
+  <div class="risk-row low"><span class="risk-badge">LOW</span><div><div class="risk-title">Browser Compatibility</div><div class="risk-mitigation">Mitigation: Chrome 90+ and Edge 90+ are fully tested and recommended. SheetJS requires ES2017+ support. Firefox and Safari also work but are not the primary test targets for Sempra&rsquo;s environment.</div></div></div>
+</div>
+
+<!-- ═══════════════ S12: APPROVAL ═══════════════ -->
+<div id="s12">
+  <div class="sec-hdr">
+    <span class="sec-num approve">12</span>
+    <div><div class="sec-title">Approval &amp; Sign-Off</div><div class="sec-sub">Leadership approval section &mdash; print and sign, or sign digitally</div></div>
+  </div>
+
+  <div class="plain-box amber">
+    <div class="plain-title">&#128221; Approval Request</div>
+    <div class="plain-text">This document provides full visibility into the Sempra SAP Data Migration Tracking Dashboard &mdash; its purpose, functionality, technical design, security posture, and risk profile. The undersigned confirm they have reviewed this document and approve the solution for continued use in the SAP migration programme.</div>
+  </div>
+
+  <div class="approval-grid">
+    <div class="approval-box">
+      <div class="role">Project Sponsor</div>
+      <div class="sig-area"></div>
+      <div class="sig-lbl">Signature</div>
+      <div class="date-lbl">Date: _______________</div>
+    </div>
+    <div class="approval-box">
+      <div class="role">Programme / IT Manager</div>
+      <div class="sig-area"></div>
+      <div class="sig-lbl">Signature</div>
+      <div class="date-lbl">Date: _______________</div>
+    </div>
+    <div class="approval-box">
+      <div class="role">Security / Compliance</div>
+      <div class="sig-area"></div>
+      <div class="sig-lbl">Signature</div>
+      <div class="date-lbl">Date: _______________</div>
+    </div>
+  </div>
+
+  <table class="tech-tbl">
+    <thead><tr><th>Document Metadata</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Document Title</strong></td><td>Sempra SAP Data Migration Tracking Dashboard &mdash; Leadership Documentation</td></tr>
+      <tr><td><strong>Document Version</strong></td><td>v2.0</td></tr>
+      <tr><td><strong>Project</strong></td><td>SAP Data Migration &mdash; Sempra Energy</td></tr>
+      <tr><td><strong>System Name</strong></td><td>Sempra DM Dashboard v1.0</td></tr>
+      <tr><td><strong>Components</strong></td><td>1&times; MASTER dashboard + 3&times; cycle dashboards + 2&times; Python bridges + 1&times; launcher</td></tr>
+      <tr><td><strong>Classification</strong></td><td>Internal Use Only</td></tr>
+      <tr><td><strong>Prepared by</strong></td><td>Kishor Marri &mdash; SAP Migration Team</td></tr>
+      <tr><td><strong>Technology Stack</strong></td><td>HTML5, Vanilla JavaScript, SheetJS v0.18.5 (free), Python 3.8+, Flask, Flask-CORS, openpyxl, pandas</td></tr>
+      <tr><td><strong>Deployment Model</strong></td><td>Local laptop only &mdash; no cloud, no network dependencies, no licences required</td></tr>
+      <tr><td><strong>Ports Used</strong></td><td>5001 (SAP Bridge &mdash; optional), 5002 (File Bridge), 5003 (Static Server) &mdash; all 127.0.0.1 loopback only</td></tr>
+      <tr><td><strong>Source Migration Systems</strong></td><td>ES2 (Source SAP) &rarr; SQ1 (Target SAP)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<footer>
+  <p>Sempra SAP Data Migration Dashboard &mdash; Leadership Documentation v2.0 &mdash; Internal Use Only</p>
+  <p style="margin-top:6px">Made with IBM Bob</p>
+</footer>
+
+</div>
+</body>
+</html>

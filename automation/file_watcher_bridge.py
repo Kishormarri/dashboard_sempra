@@ -65,10 +65,15 @@ CONFIG_FILE = "automation/output/file_watcher_config.json"
 os.makedirs("automation/output", exist_ok=True)
 
 # ── Default config ────────────────────────────────────────────────────────────
+# Auto-detect the current user's home directory so anyone can run this
+# without editing paths. Falls back to KishorMarri if detection fails.
+_HOME = os.path.expanduser("~")                        # e.g. C:\Users\JohnSmith
+_BOB  = os.path.join(_HOME, ".bob")                    # C:\Users\JohnSmith\.bob
+
 DEFAULT_CONFIG = {
-    "DM1": {"ref_path": "C:\\Users\\KishorMarri\\.bob\\DM1", "exp_path": "C:\\Users\\KishorMarri\\.bob\\DM1", "ref_pattern": "*.*", "exp_pattern": "*.*"},
-    "DM2": {"ref_path": "C:\\Users\\KishorMarri\\.bob\\DM2", "exp_path": "C:\\Users\\KishorMarri\\.bob\\DM2", "ref_pattern": "*.*", "exp_pattern": "*.*"},
-    "DM3": {"ref_path": "C:\\Users\\KishorMarri\\.bob\\DM3", "exp_path": "C:\\Users\\KishorMarri\\.bob\\DM3", "ref_pattern": "*.*", "exp_pattern": "*.*"},
+    "DM1": {"ref_path": os.path.join(_BOB, "DM1"), "exp_path": os.path.join(_BOB, "DM1"), "ref_pattern": "*.*", "exp_pattern": "*.*"},
+    "DM2": {"ref_path": os.path.join(_BOB, "DM2"), "exp_path": os.path.join(_BOB, "DM2"), "ref_pattern": "*.*", "exp_pattern": "*.*"},
+    "DM3": {"ref_path": os.path.join(_BOB, "DM3"), "exp_path": os.path.join(_BOB, "DM3"), "ref_pattern": "*.*", "exp_pattern": "*.*"},
 }
 
 # ── In-memory file cache ───────────────────────────────────────────────────────

@@ -2803,9 +2803,9 @@ function getSrcTgtDiffInfo(src,tgt){
   if(diff===0){
     return {diff:0,diffText:'0',status:'Matching',badgeCls:'badge-match',badgeText:'✔ Matching'};
   } else if(diff<0){ // Source < Target
-    return {diff:diff,diffText:diff.toLocaleString(),status:'Target is more',badgeCls:'badge-tgt',badgeText:'▼ Target is more'};
+    return {diff:diff,diffText:diff.toLocaleString(),status:'Source is less (Target is more)',badgeCls:'badge-tgt',badgeText:'▼ Source is less'};
   } else { // Source > Target
-    return {diff:diff,diffText:'+'+diff.toLocaleString(),status:'Source is more',badgeCls:'badge-src',badgeText:'▲ Source is more'};
+    return {diff:diff,diffText:'+'+diff.toLocaleString(),status:'Source is more (Target is less)',badgeCls:'badge-src',badgeText:'▲ Source is more'};
   }
 }
 
@@ -3347,8 +3347,8 @@ function drillDownloadXLS(){
   var hdr=_drillCycleLabel+' — '+secLbl+(q?' [search: '+q+']':'');
   var isRefAll=_drillSection==='refAll';
   var hdrRow=isRefAll
-    ?['#','Table Name','Source','Target','Diff (Source - Target)','Status','Export','Import','In EXP','In IMP']
-    :['#','Table Name','Source','Target','Diff (Source - Target)','Status','Export','Import','In REF'];
+    ?['#','Table Name','Source','Target','Diff (Source - Target)','Source vs Target Status','Export','Import','In EXP','In IMP']
+    :['#','Table Name','Source','Target','Export','Import','In REF'];
   var aoa=[[hdr],[''],hdrRow];
   _drillRows.forEach(function(r,i){
     var stInfo=getSrcTgtDiffInfo(r[2],r[3]);
@@ -3403,8 +3403,8 @@ function dlSecTableCSV(dmLabel,section){
   if(!rows){dlSecCSV(dmLabel,section);return;}
   var isRefAll2=section==='refAll';
   var lines=['"'+c.name+' — '+secLbl+'"','',isRefAll2
-    ?'"#","Table Name","Source","Target","Diff (Source - Target)","Status","Export","Import","In EXP","In IMP"'
-    :'"#","Table Name","Source","Target","Diff (Source - Target)","Status","Export","Import","In REF"'];
+    ?'"#","Table Name","Source","Target","Diff (Source - Target)","Source vs Target Status","Export","Import","In EXP","In IMP"'
+    :'"#","Table Name","Source","Target","Export","Import","In REF"'];
   rows.forEach(function(r,i){
     var stInfo=getSrcTgtDiffInfo(r[2],r[3]);
     var base=[
@@ -3434,8 +3434,8 @@ function dlSecTableXLS(dmLabel,section){
   }
   var isRefAll3=section==='refAll';
   var hdrRow=isRefAll3
-    ?['#','Table Name','Source','Target','Diff (Source - Target)','Status','Export','Import','In EXP','In IMP']
-    :['#','Table Name','Source','Target','Diff (Source - Target)','Status','Export','Import','In REF'];
+    ?['#','Table Name','Source','Target','Diff (Source - Target)','Source vs Target Status','Export','Import','In EXP','In IMP']
+    :['#','Table Name','Source','Target','Export','Import','In REF'];
   var aoa=[[c.name+' — '+secLbl],[''],hdrRow];
   rows.forEach(function(r,i){
     var stInfo=getSrcTgtDiffInfo(r[2],r[3]);

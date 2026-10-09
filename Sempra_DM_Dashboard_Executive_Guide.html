@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sempra Data Migration — Executive Showcase & User Guide</title>
+  <style>
+    :root {
+      --navy: #0f2744;
+      --blue: #1d4ed8;
+      --light-blue: #eff6ff;
+      --border-blue: #bfdbfe;
+      --green: #15803d;
+      --green-bg: #dcfce7;
+      --amber: #b45309;
+      --amber-bg: #fef3c7;
+      --surface: #f8fafc;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --muted: #64748b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #f1f5f9; color: var(--text); padding: 32px 16px; line-height: 1.6; }
+    .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.06); border: 1px solid var(--border); overflow: hidden; }
+    
+    .header { background: linear-gradient(135deg, #0f2744 0%, #1e3a5f 100%); color: #fff; padding: 36px 32px; }
+    .badge { display: inline-block; background: rgba(56,189,248,0.2); color: #7dd3fc; border: 1px solid rgba(56,189,248,0.4); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 20px; margin-bottom: 12px; }
+    .title { font-size: 26px; font-weight: 900; line-height: 1.2; margin-bottom: 8px; }
+    .subtitle { font-size: 14px; color: #bae6fd; max-width: 680px; }
+    
+    .content { padding: 32px; }
+    h2 { font-size: 18px; font-weight: 800; color: var(--navy); margin-top: 28px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px; }
+    h2:first-of-type { margin-top: 0; }
+    p { font-size: 14px; color: #334155; margin-bottom: 12px; }
+    
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 20px 0; }
+    .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
+    .kpi-num { font-size: 24px; font-weight: 900; color: var(--blue); }
+    .kpi-lbl { font-size: 12px; font-weight: 700; color: var(--muted); margin-top: 4px; }
+    
+    .scenario-box { border-radius: 12px; border: 1px solid; margin: 16px 0; overflow: hidden; }
+    .scenario-box.blue { border-color: var(--border-blue); background: #fff; }
+    .scenario-box.blue .sc-hdr { background: var(--light-blue); color: var(--navy); }
+    .scenario-box.amber { border-color: #fde68a; background: #fff; }
+    .scenario-box.amber .sc-hdr { background: var(--amber-bg); color: #78350f; }
+    .sc-hdr { padding: 12px 18px; font-weight: 800; font-size: 13px; }
+    .sc-body { padding: 16px 18px; font-size: 13px; color: #334155; }
+    
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    th { background: var(--surface); text-align: left; padding: 10px 14px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border); }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafc; }
+    
+    .step-list { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+    .step-item { display: flex; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--blue); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; }
+    .step-content h3 { font-size: 14px; font-weight: 800; color: var(--navy); margin-bottom: 2px; }
+    .step-content p { font-size: 12px; color: var(--muted); margin-bottom: 0; }
+    
+    .btn-bar { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; font-size: 13px; font-weight: 700; border-radius: 8px; text-decoration: none; cursor: pointer; border: none; }
+    .btn-prim { background: var(--blue); color: #fff; }
+    .btn-sec { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .btn:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <span class="badge">Sempra Energy · Executive Showcase</span>
+      <h1 class="title">Data Migration Executive Showcase &amp; User Guide</h1>
+      <p class="subtitle">A visual, non-technical overview of 3-cycle migration reconciliation, automated validation, and leadership decision-making.</p>
+    </div>
+    
+    <div class="content">
+      <h2>📊 1. Executive Summary — What This Platform Solves</h2>
+      <p>During SAP data migration, management requires complete confidence that <strong>100% of legacy records have been successfully extracted, transformed, and loaded into SAP without record loss</strong>.</p>
+      <p>This platform replaces manual, error-prone spreadsheets with an <strong>instant, automated executive dashboard</strong> that monitors <strong>DM1 (Mock 1), DM2 (Mock 2), and DM3 (Cutover/Dry Run)</strong> simultaneously.</p>
+      
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-num">⚡ &lt;10s</div>
+          <div class="kpi-lbl">Sync Time for All 3 Cycles (Was 3+ Hours)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-num">🎯 7,700+</div>
+          <div class="kpi-lbl">Tables Reconciled per Cycle</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-num">✔ 100%</div>
+          <div class="kpi-lbl">Automated Error-Free Calculations</div>
+        </div>
+      </div>
+
+      <h2>💡 2. Real-World Business Examples</h2>
+      
+      <div class="scenario-box blue">
+        <div class="sc-hdr">Scenario A: Morning Status Update in 3 Clicks</div>
+        <div class="sc-body">
+          <strong>The Challenge:</strong> Leadership needs a status update on whether migration data files have been refreshed.<br/>
+          <strong>The Dashboard Solution:</strong> Click <strong>"⚡ Auto-Sync All Cycles"</strong>. All reference and export logs are scanned, reconciled, and updated across DM1, DM2, and DM3 with color-coded health indicators in under 10 seconds.
+        </div>
+      </div>
+
+      <div class="scenario-box amber">
+        <div class="sc-hdr">Scenario B: Spotting Record Count Gaps Instantly (Source vs. Target)</div>
+        <div class="sc-body">
+          <strong>Example Table:</strong> <code>/1CADMC/00000239</code> (Customer Master Extension)<br/>
+          • <strong>Source System:</strong> 12,098,214 records<br/>
+          • <strong>Target SAP System:</strong> 12,098,148 records<br/>
+          • <strong>Result:</strong> Tagged automatically as <strong>"▲ Source is more (+66 records)"</strong> with an amber badge.<br/>
+          • <strong>Action:</strong> The manager clicks the row to inspect or exports a clean Excel list with pre-calculated variance for the ETL lead.
+        </div>
+      </div>
+
+      <h2>🎯 3. Visual Health Indicators &amp; Pivot View</h2>
+      <p>When reviewing any cycle, leadership can switch to the <strong>"🎯 Src vs Tgt Pivot / Circle"</strong> tab to view a visual breakdown:</p>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Status Category</th>
+            <th>Color Indicator</th>
+            <th>Business Meaning</th>
+            <th>Management Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>✔ Matching</strong></td>
+            <td><strong style="color:var(--green)">Green</strong></td>
+            <td>Source and Target counts match 100% (Diff = 0).</td>
+            <td>Ready for sign-off.</td>
+          </tr>
+          <tr>
+            <td><strong>▲ Source is More</strong></td>
+            <td><strong style="color:var(--amber)">Amber</strong></td>
+            <td>Source has extra records not yet in Target.</td>
+            <td>Filter and assign to ETL lead.</td>
+          </tr>
+          <tr>
+            <td><strong>▼ Source is Less</strong></td>
+            <td><strong style="color:#0284c7">Blue</strong></td>
+            <td>Target contains additional generated records.</td>
+            <td>Verify target initialization data.</td>
+          </tr>
+          <tr>
+            <td><strong>— N/A / Missing</strong></td>
+            <td><strong style="color:var(--muted)">Grey</strong></td>
+            <td>Table not in current cycle scope.</td>
+            <td>No action required.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>🚀 4. How to Use in 3 Simple Steps</h2>
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Open Dashboard</h3>
+            <p>Launch <code>Sempra_CrossCycle_Summary_MASTER.html</code> in Chrome or Edge.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Click Auto-Sync</h3>
+            <p>Click "⚡ Auto-Sync All Cycles" at the top-left to automatically ingest the latest files.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Review &amp; Export</h3>
+            <p>Inspect visual health gauges, drill down into tables with 1 click, or export audit-ready Excel reports.</p>
+          </div>
+        </div>
+      </div>
+
+      <h2>🏆 5. Leadership Benefits</h2>
+      <p>• <strong>Cross-Cycle Progress:</strong> Observe migration improvements directly across DM1 → DM2 → DM3.<br/>
+         • <strong>Audit-Ready Deliverables:</strong> Downloadable PDF and Excel reports for steering committees.<br/>
+         • <strong>Zero Cloud/Licensing Costs:</strong> Runs 100% locally on Sempra's secure workstations.</p>
+
+      <div class="btn-bar">
+        <a href="Sempra_CrossCycle_Summary_MASTER.html" class="btn btn-prim">🚀 Open Master Dashboard</a>
+        <a href="Sempra_DM_Dashboard_Executive_Guide.pdf" class="btn btn-sec">📄 Download Executive PDF</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

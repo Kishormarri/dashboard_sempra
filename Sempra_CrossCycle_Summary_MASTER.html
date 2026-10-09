@@ -1290,7 +1290,7 @@ function printPanel(panelId){
    BACKGROUND 3-CYCLE AUTOMATION — direct in-page analysis, no iframe
    ══════════════════════════════════════════════════════════════════ */
 var _bgAuto = { running: false, startTs: 0 };
-var _BG_BRIDGE = 'http://' + window.location.hostname + ':5002';
+var _BG_BRIDGE = 'http://' + (window.location.hostname || 'localhost') + ':5002';
 var _bgStepTs = {1:0,2:0,3:0};
 var _bgElapsedTimers = {};
 var _bgTotalTimer = null;
@@ -3852,7 +3852,7 @@ _arUpdateDisplay();
               apPingBridge, apPollProgress
    ════════════════════════════════════════════════ */
 
-var _AP_BRIDGE = 'http://' + window.location.hostname + ':5001';
+var _AP_BRIDGE = 'http://' + (window.location.hostname || 'localhost') + ':5001';
 var _apPollTimer = null;
 var _apSourceDone = false;
 var _apTargetDone = false;

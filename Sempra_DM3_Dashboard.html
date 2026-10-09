@@ -2261,7 +2261,7 @@ restoreSession();
 /* ════════════════════════════════════════════════════════
    AUTO-LOAD — File Watcher Bridge (http://localhost:5002)
    ════════════════════════════════════════════════════════ */
-var _AL_BRIDGE = 'http://localhost:5002';
+var _AL_BRIDGE = 'http://' + (window.location.hostname || 'localhost') + ':5002';
 var _AL_CYCLE  = 'DM3';
 var _AL_CFG_KEY = 'al_paths_DM3';
 

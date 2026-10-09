@@ -396,6 +396,16 @@ footer{margin-top:50px;padding-top:14px;border-top:1px solid #e2e8f0;text-align:
 /* visual panel */
 .drill-visual{flex:1;overflow-y:auto;padding:24px;display:none;background:#f8fafc}
 .drill-visual.visible{display:block}
+.pivot-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:20px}
+.pivot-card{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.05);transition:transform .15s,box-shadow .15s;cursor:pointer}
+.pivot-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.pivot-tbl{width:100%;border-collapse:collapse;margin-top:20px;font-size:11px;background:#fff;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0}
+.pivot-tbl th{background:#f8fafc;padding:9px 12px;text-align:left;font-weight:700;color:#475569;border-bottom:2px solid #e2e8f0}
+.pivot-tbl th.r{text-align:right}
+.pivot-tbl td{padding:8px 12px;border-bottom:1px solid #f1f5f9;color:#334155}
+.pivot-tbl td.r{text-align:right;font-family:'Courier New',monospace}
+.pivot-tbl tr:last-child td{border-bottom:none}
+.pivot-tbl tr:hover td{background:#f0f9ff}
 .dv-grid{display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;max-width:800px;margin:0 auto}
 @media(max-width:600px){.dv-grid{grid-template-columns:1fr}}
 .dv-donut-wrap{position:relative;width:200px;height:200px;flex-shrink:0}
@@ -654,6 +664,7 @@ document.addEventListener('click', function(e) {
     <div class="drill-tabs">
       <button class="drill-tab active" id="drillTabTable" onclick="drillSwitchTab('table')">&#x1F4CB; Table View</button>
       <button class="drill-tab" id="drillTabVisual" onclick="drillSwitchTab('visual')">&#x1F4CA; Visual Summary</button>
+      <button class="drill-tab" id="drillTabSrcTgt" onclick="drillSwitchTab('srctgt')">&#x1F3AF; Src vs Tgt Pivot / Circle</button>
     </div>
     <div id="drillTablePanel" style="display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0">
       <div class="drill-toolbar">
@@ -667,6 +678,7 @@ document.addEventListener('click', function(e) {
       </div>
     </div>
     <div class="drill-visual" id="drillVisualPanel"></div>
+    <div class="drill-visual" id="drillSrcTgtPanel"></div>
   </div>
 </div>
 
@@ -2980,20 +2992,242 @@ function drillLoadMore(){drillRender();}
 function drillSwitchTab(tab){
   var tbl=document.getElementById('drillTablePanel');
   var vis=document.getElementById('drillVisualPanel');
+  var stp=document.getElementById('drillSrcTgtPanel');
   var tabT=document.getElementById('drillTabTable');
   var tabV=document.getElementById('drillTabVisual');
+  var tabS=document.getElementById('drillTabSrcTgt');
   if(tab==='visual'){
     tbl.style.display='none';
+    if(stp) stp.classList.remove('visible');
     vis.classList.add('visible');
     tabT.classList.remove('active');
+    if(tabS) tabS.classList.remove('active');
     tabV.classList.add('active');
     drillRenderVisual();
+  } else if(tab==='srctgt'){
+    tbl.style.display='none';
+    vis.classList.remove('visible');
+    if(stp) stp.classList.add('visible');
+    tabT.classList.remove('active');
+    tabV.classList.remove('active');
+    if(tabS) tabS.classList.add('active');
+    drillRenderSrcTgt();
   } else {
     tbl.style.display='flex';
     vis.classList.remove('visible');
+    if(stp) stp.classList.remove('visible');
     tabT.classList.add('active');
     tabV.classList.remove('active');
+    if(tabS) tabS.classList.remove('active');
   }
+}
+
+function drillQuickFilter(val){
+  drillSwitchTab('table');
+  var el=document.getElementById('drillSearch');
+  if(el){el.value=val;drillApplySearch();}
+}
+
+function drillFilterByStatus(stType){
+  drillSwitchTab('table');
+  var fn=null;
+  if(stType==='matching'){
+    fn=function(r){var s=getSrcTgtDiffInfo(r[2],r[3]);return s.diff===0;};
+  } else if(stType==='srcMore'){
+    fn=function(r){var s=getSrcTgtDiffInfo(r[2],r[3]);return s.diff>0;};
+  } else if(stType==='srcLess'){
+    fn=function(r){var s=getSrcTgtDiffInfo(r[2],r[3]);return s.diff!==null&&s.diff<0;};
+  } else if(stType==='na'){
+    fn=function(r){var s=getSrcTgtDiffInfo(r[2],r[3]);return s.diff===null;};
+  }
+  var base=_drillAllRows||[];
+  _drillRows=fn?base.filter(fn):base;
+  _drillShown=0;
+  var el=document.getElementById('drillSearch');
+  if(el) el.value='';
+  drillRender();
+}
+
+function drillRenderSrcTgt(){
+  var pnl=document.getElementById('drillSrcTgtPanel');
+  if(!pnl) return;
+  var rows=_drillRows||[];
+  var total=rows.length;
+  if(!total){
+    pnl.innerHTML='<div class="drill-nodata">No table data available for Source vs Target breakdown.</div>';
+    return;
+  }
+
+  var countMatch=0, countSrcMore=0, countSrcLess=0, countNA=0;
+  var sumSrcMatch=0, sumTgtMatch=0;
+  var sumSrcMore=0, sumTgtMore=0, sumDiffMore=0;
+  var sumSrcLess=0, sumTgtLess=0, sumDiffLess=0;
+  var topVariance=[];
+
+  rows.forEach(function(r){
+    var name=r[0], s=r[2], t=r[3];
+    var st=getSrcTgtDiffInfo(s,t);
+    if(st.diff===null){
+      countNA++;
+    } else if(st.diff===0){
+      countMatch++;
+      sumSrcMatch+=(Number(s)||0);
+      sumTgtMatch+=(Number(t)||0);
+    } else if(st.diff>0){
+      countSrcMore++;
+      var dv=st.diff;
+      sumDiffMore+=dv;
+      sumSrcMore+=(Number(s)||0);
+      sumTgtMore+=(Number(t)||0);
+      topVariance.push({name:name,diff:dv,abs:Math.abs(dv),status:'Source is more',col:'#d97706',sign:'+',src:s,tgt:t});
+    } else {
+      countSrcLess++;
+      var dv2=st.diff;
+      sumDiffLess+=dv2;
+      sumSrcLess+=(Number(s)||0);
+      sumTgtLess+=(Number(t)||0);
+      topVariance.push({name:name,diff:dv2,abs:Math.abs(dv2),status:'Source is less',col:'#0284c7',sign:'',src:s,tgt:t});
+    }
+  });
+
+  var pctMatch=Math.round((countMatch/total)*100);
+  var pctSrcMore=Math.round((countSrcMore/total)*100);
+  var pctSrcLess=Math.round((countSrcLess/total)*100);
+  var pctNA=Math.max(0,100-(pctMatch+pctSrcMore+pctSrcLess));
+
+  /* SVG Donut */
+  var r=80,cx=100,cy=100,stroke=28;
+  var circ=2*Math.PI*r;
+  var lenMatch=circ*(countMatch/total);
+  var lenSrcMore=circ*(countSrcMore/total);
+  var lenSrcLess=circ*(countSrcLess/total);
+  var lenNA=circ*(countNA/total);
+
+  var offsetMatch=circ*0.25;
+  var offsetSrcMore=offsetMatch-lenMatch;
+  var offsetSrcLess=offsetSrcMore-lenSrcMore;
+  var offsetNA=offsetSrcLess-lenSrcLess;
+
+  function arcSeg(len,color,offset){
+    if(len<=0.01) return '';
+    return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+color+'" stroke-width="'+stroke+'" '
+      +'stroke-dasharray="'+len.toFixed(2)+' '+(circ-len).toFixed(2)+'" '
+      +'stroke-dashoffset="'+offset.toFixed(2)+'" />';
+  }
+
+  var donutSvg='<svg viewBox="0 0 200 200">'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="#f1f5f9" stroke-width="'+stroke+'"/>'
+    +arcSeg(lenMatch,'#059669',offsetMatch)
+    +arcSeg(lenSrcMore,'#d97706',offsetSrcMore)
+    +arcSeg(lenSrcLess,'#0284c7',offsetSrcLess)
+    +arcSeg(lenNA,'#94a3b8',offsetNA)
+    +'</svg>';
+
+  topVariance.sort(function(a,b){return b.abs-a.abs;});
+  var top10=topVariance.slice(0,10);
+  var maxAbs=top10.length?(top10[0].abs||1):1;
+  var varRowsHtml='';
+  top10.forEach(function(t){
+    var pctW=Math.round((t.abs/maxAbs)*100);
+    varRowsHtml+='<div class="dv-bar-row" style="cursor:pointer" onclick="drillQuickFilter(\''+esc(t.name)+'\')" title="Click to view '+esc(t.name)+' in table">'
+      +'<div class="dv-bar-lbl" title="'+esc(t.name)+'">'+esc(t.name.length>30?t.name.slice(0,28)+'…':t.name)+'</div>'
+      +'<div class="dv-bar-track"><div class="dv-bar-fill" style="width:'+pctW+'%;background:'+t.col+'">'+t.sign+Number(t.diff).toLocaleString()+'</div></div>'
+      +'<div class="dv-bar-num" style="color:'+t.col+'">'+t.sign+Number(t.diff).toLocaleString()+' <span style="font-size:9px;color:#64748b">('+t.status+')</span></div>'
+      +'</div>';
+  });
+
+  pnl.innerHTML='<div style="max-width:880px;margin:0 auto">'
+    +'<div class="dv-grid">'
+    +'<div class="dv-donut-wrap">'+donutSvg
+    +'<div class="dv-center-lbl">'
+    +'<div class="dv-center-num" style="color:#1e293b">'+total.toLocaleString()+'</div>'
+    +'<div class="dv-center-sub">Total Tables</div>'
+    +'</div></div>'
+    +'<div class="dv-stats">'
+    +'<div class="dv-stat" style="cursor:pointer" onclick="drillFilterByStatus(\'matching\')" title="Click to filter Matching tables">'
+    +'<div class="dv-stat-dot" style="background:#059669"></div>'
+    +'<div class="dv-stat-body"><div class="dv-stat-lbl">✔ Matching (Source = Target)</div>'
+    +'<div class="dv-stat-sub">Record counts match perfectly (Diff = 0)</div></div>'
+    +'<div><span class="dv-stat-val" style="color:#059669">'+countMatch.toLocaleString()+'</span>'
+    +'<span class="dv-stat-pct" style="background:#dcfce7;color:#15803d">'+pctMatch+'%</span></div>'
+    +'</div>'
+    +'<div class="dv-stat" style="cursor:pointer" onclick="drillFilterByStatus(\'srcMore\')" title="Click to filter tables where Source > Target">'
+    +'<div class="dv-stat-dot" style="background:#d97706"></div>'
+    +'<div class="dv-stat-body"><div class="dv-stat-lbl">▲ Source is More (Source > Target)</div>'
+    +'<div class="dv-stat-sub">Source system has extra records</div></div>'
+    +'<div><span class="dv-stat-val" style="color:#d97706">'+countSrcMore.toLocaleString()+'</span>'
+    +'<span class="dv-stat-pct" style="background:#fef3c7;color:#92400e">'+pctSrcMore+'%</span></div>'
+    +'</div>'
+    +'<div class="dv-stat" style="cursor:pointer" onclick="drillFilterByStatus(\'srcLess\')" title="Click to filter tables where Source < Target">'
+    +'<div class="dv-stat-dot" style="background:#0284c7"></div>'
+    +'<div class="dv-stat-body"><div class="dv-stat-lbl">▼ Source is Less (Target is More)</div>'
+    +'<div class="dv-stat-sub">Target system has extra records</div></div>'
+    +'<div><span class="dv-stat-val" style="color:#0284c7">'+countSrcLess.toLocaleString()+'</span>'
+    +'<span class="dv-stat-pct" style="background:#e0f2fe;color:#0369a1">'+pctSrcLess+'%</span></div>'
+    +'</div>'
+    +(countNA>0?'<div class="dv-stat" style="cursor:pointer" onclick="drillFilterByStatus(\'na\')">'
+    +'<div class="dv-stat-dot" style="background:#94a3b8"></div>'
+    +'<div class="dv-stat-body"><div class="dv-stat-lbl">— N/A / Missing Counts</div>'
+    +'<div class="dv-stat-sub">Counts not available in Source or Target</div></div>'
+    +'<div><span class="dv-stat-val" style="color:#64748b">'+countNA.toLocaleString()+'</span>'
+    +'<span class="dv-stat-pct" style="background:#f1f5f9;color:#475569">'+pctNA+'%</span></div>'
+    +'</div>':'')
+    +'</div>'
+    +'</div>'
+    +'<div style="margin-top:24px">'
+    +'<div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#1e293b;margin-bottom:8px">&#x1F4CA; Source vs Target Pivot Summary</div>'
+    +'<table class="pivot-tbl">'
+    +'<thead><tr>'
+    +'<th>Status Category</th>'
+    +'<th class="r">Table Count</th>'
+    +'<th class="r">% of Total</th>'
+    +'<th class="r">Total Source Records</th>'
+    +'<th class="r">Total Target Records</th>'
+    +'<th class="r">Net Variance (Src - Tgt)</th>'
+    +'<th class="r">Action</th>'
+    +'</tr></thead>'
+    +'<tbody>'
+    +'<tr style="cursor:pointer" onclick="drillFilterByStatus(\'matching\')">'
+    +'<td><span class="badge-match">✔ Matching</span></td>'
+    +'<td class="r" style="font-weight:700;color:#059669">'+countMatch.toLocaleString()+'</td>'
+    +'<td class="r" style="font-weight:700;color:#059669">'+pctMatch+'%</td>'
+    +'<td class="r">'+sumSrcMatch.toLocaleString()+'</td>'
+    +'<td class="r">'+sumTgtMatch.toLocaleString()+'</td>'
+    +'<td class="r" style="color:#059669;font-weight:700">0</td>'
+    +'<td class="r"><button class="drill-dl-btn prim" style="padding:2px 8px;font-size:10px" onclick="event.stopPropagation();drillFilterByStatus(\'matching\')">View</button></td>'
+    +'</tr>'
+    +'<tr style="cursor:pointer" onclick="drillFilterByStatus(\'srcMore\')">'
+    +'<td><span class="badge-src">▲ Source is More</span></td>'
+    +'<td class="r" style="font-weight:700;color:#d97706">'+countSrcMore.toLocaleString()+'</td>'
+    +'<td class="r" style="font-weight:700;color:#d97706">'+pctSrcMore+'%</td>'
+    +'<td class="r">'+sumSrcMore.toLocaleString()+'</td>'
+    +'<td class="r">'+sumTgtMore.toLocaleString()+'</td>'
+    +'<td class="r" style="color:#d97706;font-weight:700">+'+sumDiffMore.toLocaleString()+'</td>'
+    +'<td class="r"><button class="drill-dl-btn prim" style="padding:2px 8px;font-size:10px" onclick="event.stopPropagation();drillFilterByStatus(\'srcMore\')">View</button></td>'
+    +'</tr>'
+    +'<tr style="cursor:pointer" onclick="drillFilterByStatus(\'srcLess\')">'
+    +'<td><span class="badge-tgt">▼ Source is Less</span></td>'
+    +'<td class="r" style="font-weight:700;color:#0284c7">'+countSrcLess.toLocaleString()+'</td>'
+    +'<td class="r" style="font-weight:700;color:#0284c7">'+pctSrcLess+'%</td>'
+    +'<td class="r">'+sumSrcLess.toLocaleString()+'</td>'
+    +'<td class="r">'+sumTgtLess.toLocaleString()+'</td>'
+    +'<td class="r" style="color:#0284c7;font-weight:700">'+sumDiffLess.toLocaleString()+'</td>'
+    +'<td class="r"><button class="drill-dl-btn prim" style="padding:2px 8px;font-size:10px" onclick="event.stopPropagation();drillFilterByStatus(\'srcLess\')">View</button></td>'
+    +'</tr>'
+    +(countNA>0?'<tr style="cursor:pointer" onclick="drillFilterByStatus(\'na\')">'
+    +'<td><span class="badge-na">— N/A / Missing</span></td>'
+    +'<td class="r" style="color:#64748b">'+countNA.toLocaleString()+'</td>'
+    +'<td class="r" style="color:#64748b">'+pctNA+'%</td>'
+    +'<td class="r">—</td><td class="r">—</td><td class="r">—</td>'
+    +'<td class="r"><button class="drill-dl-btn" style="padding:2px 8px;font-size:10px" onclick="event.stopPropagation();drillFilterByStatus(\'na\')">View</button></td>'
+    +'</tr>':'')
+    +'</tbody>'
+    +'</table>'
+    +'</div>'
+    +(varRowsHtml?'<div class="dv-bar-section" style="margin-top:28px">'
+    +'<div class="dv-bar-title">&#x1F4CA; Top '+top10.length+' Tables with Highest Source vs Target Variance (Click to View)</div>'
+    +varRowsHtml+'</div>':'')
+    +'</div>';
 }
 
 function drillRenderVisual(){

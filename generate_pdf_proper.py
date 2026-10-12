@@ -20,7 +20,8 @@ from reportlab.platypus import (
 from reportlab.platypus.flowables import Flowable
 from reportlab.pdfbase import pdfmetrics
 
-OUT = "Sempra_DM_Dashboard_Documentation_FULL.pdf"
+OUT = "Sempra_DM_Dashboard_Documentation.pdf"
+DESKTOP_OUT = r"C:\Users\KishorMarri\Desktop\Sempra_DM_Dashboard_Documentation.pdf"
 
 # ── Colour palette ─────────────────────────────────────────────────────────
 NAVY       = colors.HexColor("#091e3a")
@@ -535,7 +536,7 @@ def build():
     story.append(data_table(
         ["Aspect","Manual Approach (Before)","This Dashboard (After)"],
         [
-            ["Time to reconcile",     "30-60 minutes per cycle",                  "Under 10 seconds - all 3 cycles"],
+            ["Time to reconcile",     "So many hours & days of manual effort across teams", "Under 10 seconds - all 3 cycles"],
             ["Accuracy",              "Prone to double-counting & formula errors", "DISTINCT dedup algorithm - always correct"],
             ["Coverage",              "One cycle at a time",                       "All 3 cycles simultaneously"],
             ["Data freshness",        "Updated only when run manually",            "Auto-refreshes every 2 minutes"],
@@ -692,8 +693,10 @@ def build():
         ["Feature","Where","Description"],
         [
             ["3-Cycle Side-by-Side View",      "MASTER dashboard",         "DM1, DM2, DM3 cards on one page with gauge, KPIs, and match counts"],
-            ["Auto-Sync All Cycles",           "Toolbar button",           "One click reads all 5 Excel files, parses in-browser, updates all cards in under 10 seconds"],
+            ["Auto-Sync All Cycles",           "Toolbar button",           "One click reads all 5 Excel files, parses in-browser, updates all cards in under 10 seconds (replaces hours of work)"],
             ["Semicircle Match Gauges",        "Each cycle card",          "Animated SVG arc 0-100%. Spins with READING overlay during sync, snaps to final value"],
+            ["Src vs Tgt Pivot / Circle View", "Drill-down modal",         "Interactive SVG Donut chart & pivot aggregation table with click-to-filter live navigation"],
+            ["Source vs Target Variance Diff", "Reference Tables List",    "Calculates Diff = Source - Target and status tags (Matching, Source is more, Source is less, N/A)"],
             ["Business/Technical/Perf Tabs",  "MASTER dashboard",         "Switch between executive RAG view, per-table technical detail, and system performance metrics"],
             ["Business Insights Panel",        "Business View",            "Auto-generated flags: missing exports, count mismatches, DM3 status, overall match rate"],
             ["Auto-Refresh (2-min interval)",  "Toolbar",                  "Countdown badge with pause/resume. Red dot when under 60 seconds. Amber when paused"],
@@ -934,6 +937,12 @@ def build():
     )
     size_kb = os.path.getsize(OUT) // 1024
     print(f"  [OK] PDF saved -> {OUT}  ({size_kb} KB, {doc.page} pages)")
+    import shutil
+    try:
+        shutil.copyfile(OUT, DESKTOP_OUT)
+        print(f"  [OK] Copied to Desktop -> {DESKTOP_OUT}")
+    except Exception as e:
+        print(f"  [WARN] Could not copy to Desktop: {e}")
 
 if __name__ == "__main__":
     print("=" * 60)

@@ -71,8 +71,9 @@ class NumberedCanvas(canvas.Canvas):
             self.line(54, 11 * inch - 42, 8.5 * inch - 54, 11 * inch - 42)
 
         # Footer
+        today_str = datetime.now().strftime("%B %d, %Y")
         self.setFont("Helvetica", 8)
-        self.drawString(54, 34, "Sempra Data Migration Automation Framework · Confidential")
+        self.drawString(54, 34, f"Sempra Data Migration Automation Framework · Generated: {today_str} · Confidential")
         self.drawRightString(8.5 * inch - 54, 34, f"Page {self._pageNumber} of {page_count}")
         self.setStrokeColor(BORDER)
         self.setLineWidth(0.5)
@@ -157,6 +158,7 @@ def generate_pdf():
     story = []
 
     # ── BANNER HEADER ──────────────────────────────────────────────────────────
+    today_date = datetime.now().strftime("%B %d, %Y")
     banner_data = [
         [
             Paragraph("<b>SEMPRA ENERGY · ODYSSEY DATA MIGRATION PLATFORM</b>", ParagraphStyle('BnrTop', fontName='Helvetica-Bold', fontSize=9, textColor=colors.HexColor("#93c5fd"))),
@@ -167,69 +169,77 @@ def generate_pdf():
             ""
         ],
         [
-            Paragraph("Why we do this activity · What we achieve · Technology Stack & Architecture · Multi-Level Real-World Examples", ParagraphStyle('BnrSub', fontName='Helvetica', fontSize=9, leading=12, textColor=colors.HexColor("#e0f2fe"))),
+            Paragraph(f"<b>Generated:</b> {today_date} &nbsp;|&nbsp; <b>Status:</b> Active Production &nbsp;|&nbsp; <b>Cycles:</b> DM1, DM2, DM3", ParagraphStyle('BnrMeta', fontName='Helvetica-Bold', fontSize=8, textColor=colors.HexColor("#fed7aa"))),
+            ""
+        ],
+        [
+            Paragraph("What we are doing · What we achieved · Technology Stack & Architecture · Multi-Level Real-World Examples", ParagraphStyle('BnrSub', fontName='Helvetica', fontSize=8.5, leading=11, textColor=colors.HexColor("#e0f2fe"))),
             ""
         ]
     ]
     banner_tbl = Table(banner_data, colWidths=[380, 136])
     banner_tbl.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,-1), NAVY),
-        ('PADDING', (0,0), (-1,-1), 8),
+        ('PADDING', (0,0), (-1,-1), 7),
         ('SPAN', (0,1), (1,1)),
         ('SPAN', (0,2), (1,2)),
+        ('SPAN', (0,3), (1,3)),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
     ]))
     story.append(banner_tbl)
     story.append(Spacer(1, 10))
 
-    # ── SECTION 1: WHY WE ARE DOING THIS ACTIVITY ───────────────────────────────
-    story.append(Paragraph("1. WHY We Are Doing This Activity (Business Objective & Migration De-Risking)", h1_style))
+    # ── SECTION 1: WHAT WE ARE DOING & WHY ─────────────────────────────────────
+    story.append(Paragraph("1. WHAT We Are Doing & WHY (Business Mission & De-Risking Migration)", h1_style))
     story.append(Paragraph(
-        "Sempra is executing a mission-critical SAP S/4HANA migration across three sequential migration cycles: <b>DM1 (Mock 1)</b>, <b>DM2 (Mock 2)</b>, and <b>DM3 (Dry Run / Cutover)</b>. "
-        "During this migration, hundreds of millions of customer records, financial ledgers, asset structures, and work orders are extracted from legacy ECC systems, transformed, and loaded into SAP.",
+        "<b>What We Are Doing:</b> Sempra is executing an enterprise-wide SAP S/4HANA migration across three sequential migration waves: <b>DM1 (Mock 1)</b>, <b>DM2 (Mock 2)</b>, and <b>DM3 (Dry Run / Cutover)</b>. "
+        "We are extracting, transforming, harmonizing, and loading hundreds of millions of customer records, financial ledgers, utility asset hierarchies, and operational work orders from legacy systems into SAP S/4HANA across <b>7,700+ distinct database tables</b>.",
         body_style
     ))
     story.append(Paragraph(
-        "<b>The Core Business Challenge:</b> Historically, verifying data completeness required large teams of analysts manually merging 6+ massive Excel spreadsheets using complex VLOOKUPs. "
-        "This manual process took <b>3 to 4 hours per cycle</b>, was prone to human copy-paste errors, and lacked real-time visibility into discrepancies.",
+        "<b>The Manual Challenge Solved:</b> Historically, verifying data completeness and reconciliation required cross-functional teams spending <b>so many hours and days of exhausting manual spreadsheet work</b>. Analysts were forced to manually stitch together 6+ multi-gigabyte Excel workbooks using brittle VLOOKUP formulas, manually compare row counts, and coordinate across disparate teams. "
+        "This legacy approach was highly error-prone, caused massive project delays, and left leadership without real-time confidence.",
         body_style
     ))
     story.append(Paragraph(
-        "<b>The Solution & Purpose:</b> This platform delivers an automated, audit-ready reconciliation engine that ingests, deduplicates, and validates <b>7,700+ tables in under 10 seconds</b>. "
-        "It provides absolute assurance of <b>Zero Data Loss</b> and instant governance before cutover sign-off.",
+        "<b>The Mission:</b> To replace all manual spreadsheet work with an automated, single pane of glass reconciliation platform that guarantees <b>100% Zero Data Loss</b>, executes in seconds, and provides tamper-proof audit governance for final cutover sign-off.",
         body_style
     ))
     story.append(Spacer(1, 4))
 
-    # ── SECTION 2: WHAT WE CAN ACHIEVE & WHAT IS ACTIVE ────────────────────────
+    # ── SECTION 2: WHAT WE ACHIEVE & WHAT IS ACTIVE ───────────────────────────
     story.append(Paragraph("2. WHAT We Achieve & What Is Active in the Platform", h1_style))
+    story.append(Paragraph(
+        "By replacing so many hours of manual effort with automated intelligence, the platform delivers the following active achievements:",
+        body_style
+    ))
     
     achieve_data = [
-        [Paragraph("<b>Key Capability</b>", tbl_hdr_style), Paragraph("<b>What Is Active & How It Works</b>", tbl_hdr_style), Paragraph("<b>Business Outcome</b>", tbl_hdr_style)],
+        [Paragraph("<b>Active Achievement</b>", tbl_hdr_style), Paragraph("<b>How It Works & What Is Live</b>", tbl_hdr_style), Paragraph("<b>Business Value Delivered</b>", tbl_hdr_style)],
         [
-            Paragraph("<b>Unified 3-Cycle Live Cockpit</b>", tbl_cell_style),
-            Paragraph("Monitors DM1, DM2, and DM3 side-by-side with semicircle health gauges and reconciliation rates.", tbl_cell_style),
-            Paragraph("Instant executive visibility across the full migration lifecycle.", tbl_cell_style)
+            Paragraph("<b>Eliminated Hours of Manual Effort</b>", tbl_cell_style),
+            Paragraph("Automated ingestion and distinct deduplication processes 7,700+ tables across DM1, DM2, and DM3 in under 10 seconds.", tbl_cell_style),
+            Paragraph("Saves so many hours of analyst time every cycle; frees teams for strategic validation.", tbl_cell_style)
         ],
         [
-            Paragraph("<b>Sub-10s Auto-Sync</b>", tbl_cell_style),
-            Paragraph("Reads 5 massive reference, export, and import Excel files with multi-threaded Gzip compression.", tbl_cell_style),
-            Paragraph("95% time reduction in status report compilation.", tbl_cell_style)
+            Paragraph("<b>Unified 3-Cycle Executive Cockpit</b>", tbl_cell_style),
+            Paragraph("Monitors DM1, DM2, and DM3 side-by-side with live semicircle health gauges, progress bars, and match metrics.", tbl_cell_style),
+            Paragraph("Immediate executive visibility and transparent progress tracking across the entire migration journey.", tbl_cell_style)
         ],
         [
-            Paragraph("<b>Source vs. Target Gap Analysis</b>", tbl_cell_style),
-            Paragraph("Calculates table-level differences with automated status tags: <code>Matching</code>, <code>Source is more</code>, <code>Source is less</code>.", tbl_cell_style),
-            Paragraph("Zero data loss verification; pinpoint exact record discrepancies immediately.", tbl_cell_style)
+            Paragraph("<b>Source vs. Target Variance Engine</b>", tbl_cell_style),
+            Paragraph("Calculates exact record math: <code>Diff = Source - Target</code> with automated status tags (<code>Matching</code>, <code>Source is more</code>, <code>Source is less</code>, <code>N/A</code>).", tbl_cell_style),
+            Paragraph("Guarantees Zero Data Loss; pinpoints any discrepancy down to the exact table and row instantly.", tbl_cell_style)
         ],
         [
-            Paragraph("<b>Src vs Tgt Pivot / Circle View</b>", tbl_cell_style),
-            Paragraph("Multi-segment SVG Donut chart + interactive pivot table with click-to-filter navigation.", tbl_cell_style),
-            Paragraph("Intuitive visual analytics for leadership and non-technical stakeholders.", tbl_cell_style)
+            Paragraph("<b>Interactive Pivot & Circle Analytics</b>", tbl_cell_style),
+            Paragraph("Live multi-segment SVG Donut chart paired with multidimensional pivot aggregation and instant click-to-filter drill downs.", tbl_cell_style),
+            Paragraph("Non-technical clarity for executive reviews and stakeholder presentations.", tbl_cell_style)
         ],
         [
             Paragraph("<b>Audit-Ready One-Click Exports</b>", tbl_cell_style),
-            Paragraph("Generates pre-calculated Excel (.xlsx), CSV, and PDF reports with timestamped data lineage.", tbl_cell_style),
-            Paragraph("Compliance-ready documentation for steering committee meetings.", tbl_cell_style)
+            Paragraph("One-click generation of Excel (.xlsx) workbooks with pre-calculated Diff formulas, CSV manifests, and executive PDF summaries.", tbl_cell_style),
+            Paragraph("Immediate SOX compliance and governance sign-off artifacts for steering committees.", tbl_cell_style)
         ],
     ]
     achieve_tbl = Table(achieve_data, colWidths=[120, 240, 156])
@@ -480,18 +490,19 @@ def generate_html():
     <div class="header">
       <span class="badge">Sempra Energy · Odyssey Data Migration</span>
       <h1 class="title">Data Migration Executive &amp; Technical Documentation</h1>
-      <p class="subtitle">Complete blueprint: Why we are doing this activity · What we achieve · Technology Stack · Real-world examples for all levels of stakeholders.</p>
+      <p style="color: #fed7aa; font-size: 13px; font-weight: 700; margin-bottom: 6px;">📅 Date: """ + datetime.now().strftime("%B %d, %Y") + """ | Status: Active Production | Cycles: DM1, DM2, DM3</p>
+      <p class="subtitle">Complete blueprint: What we are doing &amp; why · What we achieve · Technology Stack · Real-world examples for all levels of stakeholders.</p>
     </div>
     
     <div class="content">
-      <h2>🎯 1. WHY We Are Doing This Activity</h2>
-      <p>Sempra is migrating to SAP S/4HANA across three cycles: <strong>DM1 (Mock 1), DM2 (Mock 2), and DM3 (Dry Run / Cutover)</strong>. Millions of critical customer, financial, and asset records are transferred from legacy ECC to S/4HANA.</p>
-      <p><strong>The Problem Solved:</strong> Manually cross-referencing migration files previously required <strong>3–4 hours of manual Excel VLOOKUPs per cycle</strong>. This platform provides an <strong>automated, sub-10-second reconciliation engine</strong> guaranteeing <strong>Zero Data Loss</strong>.</p>
+      <h2>🎯 1. WHAT We Are Doing &amp; WHY</h2>
+      <p><strong>What We Are Doing:</strong> Sempra is executing an enterprise-wide SAP S/4HANA migration across three sequential waves: <strong>DM1 (Mock 1), DM2 (Mock 2), and DM3 (Dry Run / Cutover)</strong>. Hundreds of millions of critical customer, financial, and asset records are extracted, transformed, and loaded across <strong>7,700+ database tables</strong>.</p>
+      <p><strong>The Manual Challenge Solved:</strong> Historically, verifying data completeness consumed <strong>so many hours and days of exhausting manual spreadsheet work</strong>. Teams had to manually cross-reference 6+ massive Excel sheets with brittle VLOOKUPs. This platform replaces all manual labor with an <strong>automated, sub-10-second reconciliation engine</strong> guaranteeing <strong>100% Zero Data Loss</strong>.</p>
       
       <div class="kpi-grid">
         <div class="kpi-card">
           <div class="kpi-num">⚡ &lt;10s</div>
-          <div class="kpi-lbl">Sync Time for All 3 Cycles (Was 3+ Hours)</div>
+          <div class="kpi-lbl">Sync Time (Replaces Hours of Manual Effort)</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-num">🎯 7,700+</div>
@@ -499,35 +510,40 @@ def generate_html():
         </div>
         <div class="kpi-card">
           <div class="kpi-num">✔ 100%</div>
-          <div class="kpi-lbl">Automated Error-Free Accuracy</div>
+          <div class="kpi-lbl">Automated Precision &amp; Governance</div>
         </div>
       </div>
 
       <h2>🚀 2. WHAT We Achieve &amp; What Is Active</h2>
       <table>
         <thead>
-          <tr><th>Capability</th><th>What Is Active</th><th>Business Outcome</th></tr>
+          <tr><th>Active Achievement</th><th>What Is Active &amp; Live</th><th>Business Value Delivered</th></tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>Unified 3-Cycle Cockpit</strong></td>
-            <td>Tracks DM1, DM2, and DM3 side-by-side with semicircle health gauges.</td>
-            <td>Instant cross-cycle visibility.</td>
+            <td><strong>Eliminated Manual Hours</strong></td>
+            <td>Processes and reconciles 7,700+ tables across DM1, DM2, and DM3 in seconds.</td>
+            <td>Saves so many hours of manual analyst effort every cycle.</td>
           </tr>
           <tr>
-            <td><strong>Source vs Target Gap Detection</strong></td>
-            <td>Calculates exact table-level record variances and tags (<code>Matching</code>, <code>Source is more</code>, <code>Source is less</code>).</td>
-            <td>Instant detection of migration gaps.</td>
+            <td><strong>Unified 3-Cycle Cockpit</strong></td>
+            <td>Tracks DM1, DM2, and DM3 side-by-side with live semicircle health gauges.</td>
+            <td>Instant cross-cycle executive visibility.</td>
+          </tr>
+          <tr>
+            <td><strong>Source vs Target Variance Engine</strong></td>
+            <td>Calculates exact record math: <code>Diff = Source - Target</code> with status tags (<code>Matching</code>, <code>Source is more</code>, <code>Source is less</code>).</td>
+            <td>Instant detection of table-level migration gaps.</td>
           </tr>
           <tr>
             <td><strong>Src vs Tgt Pivot / Circle View</strong></td>
-            <td>Interactive SVG Donut chart and pivot breakdown with click-to-filter navigation.</td>
-            <td>Visual clarity for non-technical stakeholders.</td>
+            <td>Interactive multi-segment SVG Donut chart and pivot matrix with click-to-filter navigation.</td>
+            <td>Intuitive visual analytics for leadership reviews.</td>
           </tr>
           <tr>
-            <td><strong>Audit-Ready Exports</strong></td>
-            <td>One-click Excel (.xlsx) with diff columns, CSV, and PDF reports.</td>
-            <td>Immediate governance deliverables.</td>
+            <td><strong>Audit-Ready One-Click Exports</strong></td>
+            <td>One-click Excel (.xlsx) with diff formulas, CSV manifests, and PDF summaries.</td>
+            <td>Immediate SOX compliance and governance sign-off.</td>
           </tr>
         </tbody>
       </table>

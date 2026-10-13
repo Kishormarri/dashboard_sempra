@@ -717,8 +717,8 @@ document.addEventListener('click', function(e) {
 
     <!-- STEP 1: Upload Files -->
     <div id="apPanel1">
-      <!-- 1A: Reference List -->
-      <div style="font-size:12px;font-weight:700;color:#38bdf8;margin-bottom:10px">&#x1F4CB; Step 1A — Upload Reference List</div>
+      <!-- Reference List -->
+      <div style="font-size:12px;font-weight:700;color:#38bdf8;margin-bottom:10px">&#x1F4CB; Step 1 — Upload Reference List</div>
       <div id="apDropZone" onclick="document.getElementById('apRefFile').click()"
         style="border:2px dashed #1e3a5f;border-radius:10px;padding:22px;text-align:center;cursor:pointer;transition:border-color .15s;background:#0c1a2e">
         <div style="font-size:24px;margin-bottom:6px">&#x1F4C1;</div>
@@ -730,132 +730,6 @@ document.addEventListener('click', function(e) {
       <div id="apRefPreview" style="margin-top:8px;display:none">
         <div style="font-size:10px;font-weight:700;color:#475569;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">First 10 tables detected:</div>
         <div id="apRefPreviewList" style="background:#0a0a0a;border:1px solid #1e293b;border-radius:6px;padding:8px 12px;font-family:'Courier New',monospace;font-size:10px;color:#64748b;max-height:100px;overflow-y:auto"></div>
-      </div>
-
-      <!-- 1B: SNP Export / Import File -->
-      <div style="font-size:12px;font-weight:700;color:#f59e0b;margin-top:18px;margin-bottom:10px">&#x1F4E4; Step 1B — Upload SNP Export / Import File <span style="font-size:10px;font-weight:400;color:#475569">(optional — split by TYPE column)</span></div>
-      <div id="apSnpDropZone" onclick="document.getElementById('apSnpFile').click()"
-        style="border:2px dashed #78350f;border-radius:10px;padding:22px;text-align:center;cursor:pointer;transition:border-color .15s;background:#0c0a00">
-        <div style="font-size:24px;margin-bottom:6px">&#x2197;&#xFE0F;</div>
-        <div style="font-size:13px;font-weight:700;color:#94a3b8">Click to upload SNP Export/Import file</div>
-        <div style="font-size:11px;color:#334155;margin-top:4px">Supports .xlsx, .xls, .csv — must have TYPE column (EXP / IMP) and Number of Records</div>
-      </div>
-      <input type="file" id="apSnpFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="apUploadSnp(event)"/>
-      <div id="apSnpStatus" style="margin-top:8px;font-size:11px;color:#64748b"></div>
-
-      <!-- SNP aggregate preview — EXP + IMP side by side -->
-      <div id="apSnpAggWrap" style="display:none;margin-top:12px;display:none">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <!-- EXP -->
-          <div style="background:#0c0a00;border:1px solid #78350f;border-radius:8px;overflow:hidden">
-            <div style="background:#1c1200;border-bottom:1px solid #78350f;padding:8px 12px;display:flex;align-items:center;justify-content:space-between">
-              <span style="font-size:11px;font-weight:700;color:#fbbf24">&#x1F4CA; EXP — Aggregated by Table</span>
-              <span id="apExpCount" style="font-size:10px;background:#78350f;color:#fcd34d;border-radius:10px;padding:1px 8px">0 tables</span>
-            </div>
-            <div style="max-height:160px;overflow-y:auto">
-              <table style="width:100%;border-collapse:collapse;font-size:10px">
-                <thead><tr style="background:#1c1200">
-                  <th style="padding:5px 8px;color:#78350f;text-align:left">#</th>
-                  <th style="padding:5px 8px;color:#78350f;text-align:left">Table</th>
-                  <th style="padding:5px 8px;color:#fbbf24;text-align:right">Records</th>
-                </tr></thead>
-                <tbody id="apExpBody"></tbody>
-              </table>
-            </div>
-          </div>
-          <!-- IMP -->
-          <div style="background:#001a0a;border:1px solid #065f46;border-radius:8px;overflow:hidden">
-            <div style="background:#001206;border-bottom:1px solid #065f46;padding:8px 12px;display:flex;align-items:center;justify-content:space-between">
-              <span style="font-size:11px;font-weight:700;color:#34d399">&#x1F4CA; IMP — Aggregated by Table</span>
-              <span id="apImpCount" style="font-size:10px;background:#065f46;color:#6ee7b7;border-radius:10px;padding:1px 8px">0 tables</span>
-            </div>
-            <div style="max-height:160px;overflow-y:auto">
-              <table style="width:100%;border-collapse:collapse;font-size:10px">
-                <thead><tr style="background:#001206">
-                  <th style="padding:5px 8px;color:#065f46;text-align:left">#</th>
-                  <th style="padding:5px 8px;color:#065f46;text-align:left">Table</th>
-                  <th style="padding:5px 8px;color:#34d399;text-align:right">Records</th>
-                </tr></thead>
-                <tbody id="apImpBody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div style="margin-top:8px;font-size:10px;color:#475569;display:flex;gap:16px">
-          <span>Total EXP rows: <strong id="apExpRows" style="color:#fbbf24">0</strong></span>
-          <span>Total IMP rows: <strong id="apImpRows" style="color:#34d399">0</strong></span>
-        </div>
-      </div>
-
-      <!-- 1C: DM3 only — separate Export and Import file upload -->
-      <div style="margin-top:20px;border:1px solid #1a4a28;border-radius:10px;padding:14px 16px;background:#030f07">
-        <div style="font-size:12px;font-weight:800;color:#4ade80;margin-bottom:12px;display:flex;align-items:center;gap:8px">
-          &#x1F5C4; Step 1C — DM3: Upload Export &amp; Import Files Separately
-          <span style="font-size:10px;font-weight:400;color:#475569">(Data Migration Cycle 3 only — two separate files)</span>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <!-- DM3 EXP -->
-          <div>
-            <div style="font-size:11px;font-weight:700;color:#fbbf24;margin-bottom:6px">&#x1F4E4; DM3 Export File</div>
-            <div id="apDm3ExpDz" onclick="document.getElementById('apDm3ExpFile').click()"
-              style="border:2px dashed #78350f;border-radius:8px;padding:16px;text-align:center;cursor:pointer;transition:border-color .15s;background:#0c0a00">
-              <div style="font-size:18px;margin-bottom:4px">&#x2197;&#xFE0F;</div>
-              <div style="font-size:12px;font-weight:700;color:#94a3b8">Click to upload EXP file</div>
-              <div style="font-size:10px;color:#475569;margin-top:2px">.xlsx / .xls / .csv — Table + Record Count cols</div>
-            </div>
-            <input type="file" id="apDm3ExpFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="apDm3UploadExp(event)"/>
-            <div id="apDm3ExpStatus" style="margin-top:6px;font-size:10px;color:#64748b"></div>
-            <div id="apDm3ExpPreviewWrap" style="display:none;margin-top:6px">
-              <div style="background:#1c1200;border:1px solid #78350f;border-radius:6px;overflow:hidden">
-                <div style="padding:6px 10px;display:flex;justify-content:space-between;align-items:center">
-                  <span style="font-size:10px;font-weight:700;color:#fbbf24">EXP Tables</span>
-                  <span id="apDm3ExpCount" style="font-size:10px;background:#78350f;color:#fcd34d;border-radius:10px;padding:1px 7px">0</span>
-                </div>
-                <div style="max-height:120px;overflow-y:auto">
-                  <table style="width:100%;border-collapse:collapse;font-size:10px">
-                    <thead><tr style="background:#1c1200"><th style="padding:4px 8px;color:#78350f;text-align:left">#</th><th style="padding:4px 8px;color:#78350f">Table</th><th style="padding:4px 8px;color:#fbbf24;text-align:right">Records</th></tr></thead>
-                    <tbody id="apDm3ExpBody"></tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- DM3 IMP -->
-          <div>
-            <div style="font-size:11px;font-weight:700;color:#34d399;margin-bottom:6px">&#x1F4E5; DM3 Import File</div>
-            <div id="apDm3ImpDz" onclick="document.getElementById('apDm3ImpFile').click()"
-              style="border:2px dashed #065f46;border-radius:8px;padding:16px;text-align:center;cursor:pointer;transition:border-color .15s;background:#001206">
-              <div style="font-size:18px;margin-bottom:4px">&#x2198;&#xFE0F;</div>
-              <div style="font-size:12px;font-weight:700;color:#94a3b8">Click to upload IMP file</div>
-              <div style="font-size:10px;color:#475569;margin-top:2px">.xlsx / .xls / .csv — Table + Record Count cols</div>
-            </div>
-            <input type="file" id="apDm3ImpFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="apDm3UploadImp(event)"/>
-            <div id="apDm3ImpStatus" style="margin-top:6px;font-size:10px;color:#64748b"></div>
-            <div id="apDm3ImpPreviewWrap" style="display:none;margin-top:6px">
-              <div style="background:#001206;border:1px solid #065f46;border-radius:6px;overflow:hidden">
-                <div style="padding:6px 10px;display:flex;justify-content:space-between;align-items:center">
-                  <span style="font-size:10px;font-weight:700;color:#34d399">IMP Tables</span>
-                  <span id="apDm3ImpCount" style="font-size:10px;background:#065f46;color:#6ee7b7;border-radius:10px;padding:1px 7px">0</span>
-                </div>
-                <div style="max-height:120px;overflow-y:auto">
-                  <table style="width:100%;border-collapse:collapse;font-size:10px">
-                    <thead><tr style="background:#001206"><th style="padding:4px 8px;color:#065f46;text-align:left">#</th><th style="padding:4px 8px;color:#065f46">Table</th><th style="padding:4px 8px;color:#34d399;text-align:right">Records</th></tr></thead>
-                    <tbody id="apDm3ImpBody"></tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div style="margin-top:8px;font-size:10px;color:#475569;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-          <span>EXP tables loaded: <strong id="apDm3ExpTotal" style="color:#fbbf24">0</strong></span>
-          <span>IMP tables loaded: <strong id="apDm3ImpTotal" style="color:#34d399">0</strong></span>
-          <button id="apDm3RunBtn" onclick="apDm3RunAnalysis()"
-            style="margin-left:auto;padding:6px 16px;background:#2f9e44;border:1px solid #2b8a3e;border-radius:6px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;display:none">
-            &#x25B6; Run DM3 Analysis
-          </button>
-          <div id="apDm3RunStatus" style="font-size:10px;color:#64748b"></div>
-        </div>
       </div>
 
       <button id="apStep1Btn" class="ap-btn-primary" onclick="apGoStep(2)" style="display:none;margin-top:16px">&#x2192; Next: SAP Source Login</button>
@@ -935,26 +809,38 @@ document.addEventListener('click', function(e) {
       </div>
     </div>
 
-    <!-- STEP 4: Done -->
+    <!-- STEP 4: Done & Download Options -->
     <div id="apPanel4" style="display:none;text-align:center;padding:20px 0">
       <div style="font-size:40px;margin-bottom:10px">&#x2705;</div>
-      <div style="font-size:15px;font-weight:800;color:#22c55e;margin-bottom:6px">Dashboard Updated!</div>
-      <div id="apFinalSummary" style="font-size:12px;color:#94a3b8;margin-bottom:16px"></div>
-      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:10px">
-        <!-- ★ Download SE16N counts Excel -->
-        <a id="apExcelDownloadBtn"
-           href="#"
-           onclick="event.preventDefault();apDownloadExcel()"
-           style="display:inline-flex;align-items:center;gap:6px;background:#065f46;color:#a7f3d0;border:1.5px solid #047857;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;transition:background .2s"
-           onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#065f46'">
-          &#x1F4E5; Download SE16N Counts (Excel)
-        </a>
-        <button class="ap-btn-primary" onclick="apReset()">&#x1F504; Run Again</button>
-        <button class="dl-btn" onclick="loadRefCountsFromJSON()">&#x1F4C2; Load JSON File</button>
-        <input type="file" id="autoJsonFile" accept=".json" style="display:none" onchange="handleAutoJSON(event)"/>
-        <button class="dl-btn pdf" onclick="exportPDF()">&#x1F4F1; Download PDF</button>
+      <div style="font-size:15px;font-weight:800;color:#22c55e;margin-bottom:6px">Reconciliation Complete &amp; Dashboard Updated!</div>
+      <div id="apFinalSummary" style="font-size:12px;color:#94a3b8;margin-bottom:18px"></div>
+      
+      <!-- Dedicated Download Options Card -->
+      <div style="background:#0c1a2e;border:1px solid #1e3a5f;border-radius:10px;padding:16px 20px;margin:0 auto 18px;max-width:760px;text-align:left">
+        <div style="font-size:11px;font-weight:700;color:#38bdf8;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+          <span>&#x1F4E5; DOWNLOAD RECONCILIATION REPORTS</span>
+          <span style="font-size:10px;color:#64748b;font-weight:400">Multiple export formats</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="ap-btn-primary" style="background:#065f46;border-color:#047857;color:#a7f3d0" onclick="apDownloadExcel()">
+            &#x1F4CA; Download Excel (.xlsx)
+          </button>
+          <button class="ap-btn-primary" style="background:#075985;border-color:#0284c7;color:#bae6fd" onclick="apDownloadCSV()">
+            &#x1F4CB; Download CSV (.csv)
+          </button>
+          <button class="ap-btn-primary" style="background:#4c1d95;border-color:#6d28d9;color:#ddd6fe" onclick="apDownloadJSON()">
+            &#x1F4BE; Download JSON (.json)
+          </button>
+          <button class="dl-btn pdf" onclick="exportPDF()" style="margin:0">
+            &#x1F4F1; Download PDF Report
+          </button>
+        </div>
+        <div id="apExcelStatus" style="font-size:11px;color:#64748b;margin-top:10px;min-height:16px"></div>
       </div>
-      <div id="apExcelStatus" style="font-size:10px;color:#475569;min-height:14px"></div>
+
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="ap-btn-sec" onclick="apReset()">&#x1F504; Run Another Cycle</button>
+      </div>
     </div>
 
   </div><!-- /padding -->
@@ -5032,23 +4918,121 @@ function _apApplyCounts(data){
   }, 400);
 }
 
-/* ── Download SE16N Source+Target counts as Excel via bridge ── */
+/* ── Helper to build clean reconciliation dataset for export ── */
+function _apGetReconExportData(){
+  var tables = _apRefTables || [];
+  var rows = [];
+  var matchN = 0, misN = 0, srcOnlyN = 0, tgtOnlyN = 0, noCountN = 0;
+  
+  tables.forEach(function(tbl, idx){
+    var s = _apSourceCounts[tbl] !== undefined ? _apSourceCounts[tbl] : null;
+    var t = _apTargetCounts[tbl] !== undefined ? _apTargetCounts[tbl] : null;
+    var diff = (s !== null && t !== null) ? (s - t) : null;
+    var status = 'NOT COUNTED';
+    if(s !== null && t !== null){
+      if(diff === 0){ status = 'MATCH'; matchN++; }
+      else { status = 'MISMATCH'; misN++; }
+    } else if(s !== null && t === null){
+      status = 'SOURCE ONLY'; srcOnlyN++;
+    } else if(s === null && t !== null){
+      status = 'TARGET ONLY'; tgtOnlyN++;
+    } else {
+      noCountN++;
+    }
+    rows.push({
+      idx: idx + 1,
+      table: tbl,
+      sourceCount: s !== null ? s : '',
+      targetCount: t !== null ? t : '',
+      diff: diff !== null ? diff : '',
+      status: status
+    });
+  });
+  return {
+    rows: rows,
+    summary: {
+      total: tables.length,
+      match: matchN,
+      mismatch: misN,
+      sourceOnly: srcOnlyN,
+      targetOnly: tgtOnlyN,
+      notCounted: noCountN,
+      timestamp: new Date().toISOString()
+    }
+  };
+}
+
+/* ── Download 1: Reconciled Excel (.xlsx) ── */
 function apDownloadExcel(){
   var statusEl = document.getElementById('apExcelStatus');
-  if(statusEl) statusEl.textContent = '⏳ Preparing Excel…';
-  var url = _AP_BRIDGE + '/export_excel';
-  /* trigger browser download */
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = '';
-  a.style.display = 'none';
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(function(){ document.body.removeChild(a); }, 1000);
-  if(statusEl){
-    statusEl.textContent = '✅ Download started — SAP_Table_Counts_SE16N_*.xlsx';
-    statusEl.style.color = '#22c55e';
-    setTimeout(function(){ statusEl.textContent = ''; statusEl.style.color = '#475569'; }, 5000);
+  if(statusEl){ statusEl.textContent = '⏳ Generating Excel export…'; statusEl.style.color = '#38bdf8'; }
+  try {
+    var data = _apGetReconExportData();
+    var aoa = [
+      ['SEMPRA ENERGY — SAP DATA MIGRATION RECONCILIATION REPORT'],
+      ['Generated: ' + new Date().toLocaleString() + ' | Total Tables: ' + data.summary.total + ' | Matched: ' + data.summary.match + ' | Mismatched: ' + data.summary.mismatch],
+      [],
+      ['#', 'Table Name', 'Source System Count', 'Target System Count', 'Difference (Src - Tgt)', 'Reconciliation Status']
+    ];
+    data.rows.forEach(function(r){
+      aoa.push([r.idx, r.table, r.sourceCount, r.targetCount, r.diff, r.status]);
+    });
+    
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.aoa_to_sheet(aoa);
+    ws['!cols'] = [{wch:6}, {wch:25}, {wch:20}, {wch:20}, {wch:22}, {wch:24}];
+    XLSX.utils.book_append_sheet(wb, ws, 'SAP_Reconciliation');
+    
+    var fname = 'SAP_Reconciliation_Counts_' + (new Date().toISOString().slice(0,10).replace(/-/g,'')) + '.xlsx';
+    XLSX.writeFile(wb, fname);
+    if(statusEl){ statusEl.textContent = '✅ Downloaded ' + fname; statusEl.style.color = '#22c55e'; }
+  } catch(e) {
+    if(statusEl){ statusEl.textContent = '✘ Export error: ' + e.message; statusEl.style.color = '#ef4444'; }
+  }
+}
+
+/* ── Download 2: Reconciled CSV (.csv) ── */
+function apDownloadCSV(){
+  var statusEl = document.getElementById('apExcelStatus');
+  if(statusEl){ statusEl.textContent = '⏳ Generating CSV export…'; statusEl.style.color = '#38bdf8'; }
+  try {
+    var data = _apGetReconExportData();
+    var lines = ['Index,Table Name,Source System Count,Target System Count,Difference,Status'];
+    data.rows.forEach(function(r){
+      lines.push([r.idx, '"'+r.table+'"', r.sourceCount, r.targetCount, r.diff, '"'+r.status+'"'].join(','));
+    });
+    var blob = new Blob([lines.join('\r\n')], {type: 'text/csv;charset=utf-8;'});
+    var fname = 'SAP_Reconciliation_Counts_' + (new Date().toISOString().slice(0,10).replace(/-/g,'')) + '.csv';
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fname;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    if(statusEl){ statusEl.textContent = '✅ Downloaded ' + fname; statusEl.style.color = '#22c55e'; }
+  } catch(e) {
+    if(statusEl){ statusEl.textContent = '✘ Export error: ' + e.message; statusEl.style.color = '#ef4444'; }
+  }
+}
+
+/* ── Download 3: Reconciled JSON (.json) ── */
+function apDownloadJSON(){
+  var statusEl = document.getElementById('apExcelStatus');
+  if(statusEl){ statusEl.textContent = '⏳ Generating JSON export…'; statusEl.style.color = '#38bdf8'; }
+  try {
+    var data = _apGetReconExportData();
+    var jsonStr = JSON.stringify(data, null, 2);
+    var blob = new Blob([jsonStr], {type: 'application/json;charset=utf-8;'});
+    var fname = 'SAP_Reconciliation_Counts_' + (new Date().toISOString().slice(0,10).replace(/-/g,'')) + '.json';
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fname;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    if(statusEl){ statusEl.textContent = '✅ Downloaded ' + fname; statusEl.style.color = '#22c55e'; }
+  } catch(e) {
+    if(statusEl){ statusEl.textContent = '✘ Export error: ' + e.message; statusEl.style.color = '#ef4444'; }
   }
 }
 

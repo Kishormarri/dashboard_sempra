@@ -244,7 +244,7 @@ def _get_cached(cycle: str, file_type: str):
     }
     with _cache_lock:
         _cache[key] = entry
-    log.info(f"Cached [{cycle}/{file_type}] {entry['size_kb']} KB → {entry['gz_kb']} KB gz  ETag={etag[:8]}")
+    log.info(f"Cached [{cycle}/{file_type}] {entry['size_kb']} KB -> {entry['gz_kb']} KB gz  ETag={etag[:8]}")
     return entry
 
 

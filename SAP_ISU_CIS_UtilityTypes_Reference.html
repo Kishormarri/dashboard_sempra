@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SAP IS-U — CIS Utility Types, Device Configurations & Object Reference</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;background:#080c18;color:#cdd9e5;font-size:13px;line-height:1.6;display:flex;height:100vh;overflow:hidden}
+/* SIDEBAR */
+#sb{width:258px;min-width:258px;background:#040810;border-right:1px solid #1a2535;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+#sb-top{padding:13px 13px 9px;border-bottom:1px solid #1a2535}
+#sb-top h1{font-size:12px;font-weight:900;color:#4da6ff;line-height:1.4}
+#sb-top p{font-size:10px;color:#4a5a6a;margin-top:2px}
+#sb-search{padding:7px 10px;border-bottom:1px solid #1a2535}
+#sb-search input{width:100%;background:#101820;border:1px solid #253545;color:#cdd9e5;padding:5px 8px;border-radius:5px;font-size:11px;outline:none}
+#sb-nav{flex:1;overflow-y:auto;padding:5px 0}
+.nvsec{padding:6px 12px 3px;font-size:9.5px;font-weight:800;color:#4a5a6a;text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
+.nvitem{padding:5px 12px 5px 16px;font-size:11px;color:#7a8a9a;cursor:pointer;border-left:2px solid transparent;transition:all .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nvitem:hover{background:#0d1520;color:#cdd9e5;border-left-color:#253545}
+.nvitem.on{background:#071525;color:#4da6ff;border-left-color:#4da6ff;font-weight:700}
+.nvitem .nv-badge{float:right;font-size:9px;padding:1px 5px;border-radius:6px;font-weight:700}
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#topbar{background:#0d1520;border-bottom:1px solid #1a2535;padding:8px 18px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+#topbar h2{font-size:12.5px;font-weight:800;color:#f0f6fc;flex:1}
+.tbag{font-size:10px;padding:2px 8px;border-radius:8px;border:1px solid;white-space:nowrap}
+#tabs{display:flex;gap:2px;padding:5px 14px;background:#080c18;border-bottom:1px solid #1a2535;overflow-x:auto;flex-shrink:0}
+.tab{padding:5px 13px;font-size:11px;color:#4a5a6a;cursor:pointer;border-radius:5px;white-space:nowrap;border:1px solid transparent;transition:all .12s}
+.tab:hover{background:#0d1520;color:#cdd9e5}
+.tab.on{background:#071525;color:#4da6ff;border-color:#1a3a5c}
+#content{flex:1;overflow-y:auto}
+.page{display:none;padding:20px 24px 60px}
+.page.on{display:block}
+/* ELEMENTS */
+.sh{font-size:14px;font-weight:900;color:#f0f6fc;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #1a2535}
+.callout{padding:9px 13px;border-radius:6px;margin-bottom:12px;font-size:12px;border-left:3px solid;line-height:1.7}
+.callout.i{background:#060f1f;border-color:#4da6ff;color:#79c0ff}
+.callout.w{background:#130d00;border-color:#e08020;color:#ffa657}
+.callout.g{background:#030f08;border-color:#2ea043;color:#3fb950}
+.callout.p{background:#0f0520;border-color:#8a50d8;color:#c2a0ff}
+code{background:#0d1520;border:1px solid #253545;padding:1px 5px;border-radius:3px;font-size:10.5px;color:#3fb950;font-family:monospace}
+.badge{display:inline-block;padding:1px 7px;border-radius:9px;font-size:9.5px;font-weight:800;border:1px solid}
+.be{background:#081525;color:#4da6ff;border-color:#1a4070}
+.bg{background:#030f08;color:#3fb950;border-color:#1a5030}
+.bo{background:#130d00;color:#ffa657;border-color:#5a3800}
+.bp{background:#0f0520;color:#c2a0ff;border-color:#5a2a90}
+.br{background:#150508;color:#f85149;border-color:#5a1818}
+.bw{background:#101520;color:#cdd9e5;border-color:#3a4a5a}
+/* UTILITY CARD */
+.util-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:16px}
+.util-card{border-radius:8px;border:1px solid;padding:14px;cursor:pointer;transition:all .18s;border-top:3px solid}
+.util-card:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.util-card .uc-icon{font-size:22px;margin-bottom:7px}
+.util-card .uc-name{font-size:13px;font-weight:900;margin-bottom:4px}
+.util-card .uc-sparte{font-family:monospace;font-size:11px;margin-bottom:5px}
+.util-card .uc-desc{font-size:11px;line-height:1.65;opacity:.8}
+/* DETAIL PANEL */
+#detail-wrap{background:#060e1a;border:1px solid #1a3a5c;border-radius:8px;padding:18px;margin-top:14px;display:none}
+#detail-wrap.show{display:block}
+.dp-title{font-size:15px;font-weight:900;color:#f0f6fc;margin-bottom:4px}
+.dp-sub{font-size:11px;color:#4a5a6a;margin-bottom:12px}
+.dp-tabs{display:flex;gap:3px;margin-bottom:14px;flex-wrap:wrap}
+.dp-tab{padding:4px 12px;font-size:11px;border-radius:4px;cursor:pointer;border:1px solid #253545;color:#4a5a6a;transition:all .12s}
+.dp-tab.on{background:#071525;color:#4da6ff;border-color:#1a3a5c}
+/* TABLES */
+.dtbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-bottom:12px}
+.dtbl th{background:#0d1520;color:#4a5a6a;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:6px 9px;text-align:left;border:1px solid #1a2535}
+.dtbl td{padding:6px 9px;border:1px solid #1a2535;vertical-align:top;line-height:1.65}
+.dtbl tr:hover td{background:#0a1220}
+/* DEVICE CARD */
+.dev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:9px;margin-bottom:14px}
+.dev-card{background:#0a1220;border:1px solid #1a2535;border-radius:7px;overflow:hidden;cursor:pointer;transition:all .15s;border-left:3px solid}
+.dev-card:hover{background:#0d1828;transform:translateY(-1px)}
+.dev-card .dc-hdr{padding:10px 13px;display:flex;align-items:center;gap:8px}
+.dev-card .dc-icon{font-size:18px}
+.dev-card .dc-name{font-size:12px;font-weight:800;color:#f0f6fc;flex:1}
+.dev-card .dc-body{padding:0 13px 10px;font-size:11px;line-height:1.75;color:#7a8a9a}
+/* CHAIN */
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:3px;background:#060e1a;border:1px solid #1a2535;border-radius:6px;padding:9px 12px;margin:6px 0 12px}
+.cn{background:#0d1828;border:1px solid #253545;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:700;color:#79c0ff;cursor:pointer}
+.cn:hover{border-color:#4da6ff}
+.cn.r{background:#030f08;border-color:#1a5030;color:#3fb950}
+.cn.t{background:#0f0520;border-color:#5a2a90;color:#c2a0ff}
+.ca{color:#4da6ff;font-weight:900;font-size:12px;padding:0 1px}
+.cf{font-size:9.5px;color:#4a5a6a;font-family:monospace;background:#0d1520;padding:1px 4px;border-radius:3px}
+/* SECTION */
+.sec{margin-bottom:16px}
+.sec h3{font-size:10px;font-weight:800;color:#4da6ff;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid #1a2535}
+.sec p,.sec li{font-size:12px;color:#7a8a9a;line-height:1.75}
+.sec ul,.sec ol{padding-left:17px}
+.sec li{margin-bottom:3px}
+.sec li::marker{color:#4da6ff}
+/* CONFIG STEP */
+.cstep{display:flex;gap:11px;background:#060e1a;border:1px solid #1a2535;border-radius:6px;padding:12px;margin-bottom:8px}
+.cstep-n{width:26px;height:26px;border-radius:50%;background:#071525;border:2px solid #4da6ff;color:#4da6ff;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cstep-body{flex:1}
+.cstep-title{font-size:12px;font-weight:800;color:#f0f6fc;margin-bottom:3px}
+.cstep-desc{font-size:11.5px;color:#7a8a9a;line-height:1.75}
+/* CHIP */
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin:5px 0}
+.chip{background:#0a1220;border:1px solid #253545;border-radius:4px;padding:2px 8px;font-size:10.5px;color:#79c0ff;font-family:monospace}
+.chip.g{background:#030f08;border-color:#1a5030;color:#3fb950}
+.chip.o{background:#130d00;border-color:#5a3800;color:#ffa657}
+.chip.r{background:#150508;border-color:#5a1818;color:#f85149}
+.chip.p{background:#0f0520;border-color:#5a2a90;color:#c2a0ff}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:#040810}
+::-webkit-scrollbar-thumb{background:#253545;border-radius:3px}
+/* HIGHLIGHT BOX */
+.hibox{background:#060e1a;border:1px solid #1a3a5c;border-radius:6px;padding:12px 14px;margin-bottom:10px}
+.hibox h4{font-size:11px;font-weight:800;color:#4da6ff;margin-bottom:7px}
+.hibox p,.hibox li{font-size:11.5px;color:#7a8a9a;line-height:1.75}
+.hibox ul{padding-left:16px}
+/* SPARTE COLOR coding */
+.sp-E{color:#4da6ff} .sp-G{color:#ffa657} .sp-W{color:#3fb950} .sp-V{color:#c2a0ff} .sp-S{color:#f85149} .sp-D{color:#f0e040}
+.bg-E{border-color:#1a4070;background:#051020}
+.bg-G{border-color:#704010;background:#130d00}
+.bg-W{border-color:#105a30;background:#040f08}
+.bg-V{border-color:#502090;background:#0d0520}
+.bg-S{border-color:#5a1818;background:#120505}
+.bg-D{border-color:#5a5010;background:#131000}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sb">
+  <div id="sb-top">
+    <h1>⚡ SAP IS-U CIS<br>Utility Types Reference</h1>
+    <p>Electric · Gas · Water · Waste Water · All Device Types</p>
+  </div>
+  <div id="sb-search"><input type="text" placeholder="Search utility or device…" oninput="sideSearch(this.value)"></div>
+  <div id="sb-nav">
+    <div class="nvsec">Overview</div>
+    <div class="nvitem on" onclick="goTab('overview')">🏠 Overview &amp; SPARTE Codes</div>
+    <div class="nvitem" onclick="goTab('utilities')">🔋 Utility Types (All 6)</div>
+    <div class="nvitem" onclick="goTab('devices')">📟 All Device / Meter Types</div>
+    <div class="nvitem" onclick="goTab('config')">⚙️ How to Configure in IS-U</div>
+    <div class="nvitem" onclick="goTab('emigall')">📐 EMIGALL per Utility Type</div>
+
+    <div class="nvsec">By Utility</div>
+    <div class="nvitem" onclick="goTab('utilities');showUtil('E')">⚡ Electricity <span class="nv-badge" style="background:#051020;color:#4da6ff">SPARTE E</span></div>
+    <div class="nvitem" onclick="goTab('utilities');showUtil('G')">🔥 Gas <span class="nv-badge" style="background:#130d00;color:#ffa657">SPARTE G</span></div>
+    <div class="nvitem" onclick="goTab('utilities');showUtil('W')">💧 Water <span class="nv-badge" style="background:#040f08;color:#3fb950">SPARTE W</span></div>
+    <div class="nvitem" onclick="goTab('utilities');showUtil('V')">🌊 Waste Water <span class="nv-badge" style="background:#0d0520;color:#c2a0ff">SPARTE V</span></div>
+    <div class="nvitem" onclick="goTab('utilities');showUtil('S')">♨️ Steam / Heat <span class="nv-badge" style="background:#120505;color:#f85149">SPARTE S</span></div>
+    <div class="nvitem" onclick="goTab('utilities');showUtil('D')">💡 Street Lighting <span class="nv-badge" style="background:#131000;color:#f0e040">SPARTE D</span></div>
+
+    <div class="nvsec">By Device Type</div>
+    <div class="nvitem" onclick="goTab('devices');filterDev('ELEC')">⚡ Electric Meters</div>
+    <div class="nvitem" onclick="goTab('devices');filterDev('GAS')">🔥 Gas Meters</div>
+    <div class="nvitem" onclick="goTab('devices');filterDev('WATER')">💧 Water Meters</div>
+    <div class="nvitem" onclick="goTab('devices');filterDev('CORRECTOR')">🔧 Volume Correctors</div>
+    <div class="nvitem" onclick="goTab('devices');filterDev('NETMETER')">🔄 Net / Bi-directional</div>
+    <div class="nvitem" onclick="goTab('devices');filterDev('AMI')">📡 Smart / AMI Meters</div>
+    <div class="nvitem" onclick="goTab('devices');filterDev('CT_PT')">🔌 CT/PT Metered (C&amp;I)</div>
+    <div class="nvitem" onclick="goTab('devices');filterDev('TOU')">⏱ Time-of-Use (TOU)</div>
+    <div class="nvitem" onclick="goTab('devices');filterDev('SOLAR')">☀️ Solar / DER / Net Energy</div>
+    <div class="nvitem" onclick="goTab('devices');filterDev('VIRTUAL')">🖥 Virtual / Computed</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="topbar">
+    <h2>SAP IS-U — CIS Utility Types, Device Configurations &amp; Object Reference</h2>
+    <div style="display:flex;gap:5px;flex-wrap:wrap">
+      <span class="tbag" style="color:#4da6ff;border-color:#1a4070;background:#051020">6 Utility Types</span>
+      <span class="tbag" style="color:#3fb950;border-color:#1a5030;background:#030f08">20+ Device Types</span>
+      <span class="tbag" style="color:#ffa657;border-color:#5a3800;background:#130d00">All SPARTE Codes</span>
+      <span class="tbag" style="color:#c2a0ff;border-color:#5a2a90;background:#0f0520">Corrector · Net Meter · TOU</span>
+    </div>
+  </div>
+  <div id="tabs">
+    <div class="tab on" onclick="goTab('overview')">🏠 Overview</div>
+    <div class="tab" onclick="goTab('utilities')">🔋 Utility Types</div>
+    <div class="tab" onclick="goTab('devices')">📟 Device Types</div>
+    <div class="tab" onclick="goTab('config')">⚙️ Configuration</div>
+    <div class="tab" onclick="goTab('emigall')">📐 EMIGALL Setup</div>
+  </div>
+  <div id="content">
+
+  <!-- ═══ OVERVIEW ═══ -->
+  <div id="pg-overview" class="page on">
+    <div class="sh">🏠 SAP IS-U CIS — Utility Types, SPARTE Codes &amp; Object Hierarchy Overview</div>
+    <div class="callout i"><strong>SPARTE</strong> (Division) is the single most important configuration field in SAP IS-U. It drives which rate categories, billing schemas, device types, and meter reading routes are valid for each customer. Set at Connection Object (EOBJK) and inherited by Premise, Device Location, Device, and Contract.</div>
+
+    <!-- SPARTE TABLE -->
+    <div style="margin-bottom:18px">
+      <div class="sec"><h3>All SPARTE (Division) Codes — SAP IS-U</h3></div>
+      <table class="dtbl">
+        <tr><th>SPARTE Code</th><th>Utility Type</th><th>Icon</th><th>Typical Meter</th><th>Billing Unit</th><th>Key TE006 Rate Example</th><th>Typical Config Tables</th></tr>
+        <tr><td><code class="sp-E" style="background:#051020;border-color:#1a4070;font-weight:900">E</code></td><td><strong style="color:#4da6ff">Electricity</strong></td><td>⚡</td><td>kWh electromechanical, AMI, C&amp;I CT/PT</td><td>kWh / kW demand</td><td>ZRSE, ZRSG_E, ZCME</td><td>TE001-E, TE406-ELEC, TE405-AMI</td></tr>
+        <tr><td><code class="sp-G" style="background:#130d00;border-color:#704010;font-weight:900">G</code></td><td><strong style="color:#ffa657">Gas</strong></td><td>🔥</td><td>Diaphragm, turbine, rotary, corrector</td><td>CCF / MCF / Therms / m³</td><td>ZRSG, ZRMG, ZCMG</td><td>TE001-G, TE406-GAS, TE408-GAS</td></tr>
+        <tr><td><code class="sp-W" style="background:#040f08;border-color:#105a30;font-weight:900">W</code></td><td><strong style="color:#3fb950">Water</strong></td><td>💧</td><td>Positive displacement, turbine, ultrasonic</td><td>CCF / Gallons / m³</td><td>ZRSW, ZRMW, ZCMW</td><td>TE001-W, TE406-WATER</td></tr>
+        <tr><td><code class="sp-V" style="background:#0d0520;border-color:#502090;font-weight:900">V</code></td><td><strong style="color:#c2a0ff">Waste Water / Sewer</strong></td><td>🌊</td><td>Usually computed from water meter (virtual)</td><td>CCF / Gallons (derived)</td><td>ZRSSW, ZCMSW</td><td>TE001-V, TE405-VIRTUAL</td></tr>
+        <tr><td><code class="sp-S" style="background:#120505;border-color:#5a1818;font-weight:900">S</code></td><td><strong style="color:#f85149">Steam / District Heat</strong></td><td>♨️</td><td>BTU meter, heat exchanger meter</td><td>MMBtu / MWh / klbs</td><td>ZRSS, ZCMS</td><td>TE001-S, TE406-STEAM</td></tr>
+        <tr><td><code class="sp-D" style="background:#131000;border-color:#5a5010;font-weight:900">D</code></td><td><strong style="color:#f0e040">Street Lighting / Other</strong></td><td>💡</td><td>kWh or computed by fixture count</td><td>kWh / Fixed</td><td>ZRSD, ZCMD</td><td>TE001-D, TE406-LIGHT</td></tr>
+      </table>
+    </div>
+
+    <!-- IS-U OBJECT HIERARCHY PER SPARTE -->
+    <div class="sec"><h3>IS-U Object Hierarchy — Same Structure for ALL Utility Types</h3></div>
+    <div class="callout w"><strong>Key rule:</strong> The physical object hierarchy (Connection Object → Premise → Device Location → Device) is <strong>identical</strong> for all six utility types. The SPARTE code flows top-to-bottom and determines which config tables, rate categories, and device types are valid at each level.</div>
+
+    <div style="background:#060e1a;border:1px solid #1a2535;border-radius:8px;padding:16px;margin-bottom:14px;overflow-x:auto">
+      <div style="font-size:11px;font-weight:800;color:#f0f6fc;margin-bottom:12px">CIS Object Hierarchy (applies to Electric, Gas, Water, Waste Water, Steam, Lighting)</div>
+      <div style="display:flex;gap:0;align-items:stretch;min-width:900px">
+        <!-- Level boxes -->
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1">
+          <!-- L0 -->
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="background:#051020;border:2px solid #4da6ff;border-radius:6px;padding:8px 12px;min-width:170px">
+              <div style="font-size:10px;font-weight:800;color:#4da6ff">BUSINESS PARTNER</div>
+              <div style="font-size:9.5px;font-family:monospace;color:#3fb950">BUT000 · PARTNER</div>
+              <div style="font-size:10px;color:#7a8a9a;margin-top:3px">Customer · Owner · Occupant</div>
+            </div>
+            <div style="font-size:10px;color:#4a5a6a;flex:1">Controls: BP grouping, tax, dunning, payment method</div>
+          </div>
+          <div style="text-align:center;color:#1a3a5c;font-size:18px;padding:1px 0 1px 70px">↓</div>
+
+          <!-- L1 CA -->
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="background:#130d00;border:2px solid #704010;border-radius:6px;padding:8px 12px;min-width:170px">
+              <div style="font-size:10px;font-weight:800;color:#ffa657">CONTRACT ACCOUNT</div>
+              <div style="font-size:9.5px;font-family:monospace;color:#3fb950">FKKVK · VKONT</div>
+              <div style="font-size:10px;color:#7a8a9a;margin-top:3px">FK: GPART = PARTNER</div>
+            </div>
+            <div style="font-size:10px;color:#4a5a6a;flex:1">Controls: billing account type (VKTYP), dunning proc, EFT/ACH payment — ONE CA can hold multiple SPARTE contracts</div>
+          </div>
+          <div style="text-align:center;color:#1a3a5c;font-size:18px;padding:1px 0 1px 70px">↓</div>
+
+          <!-- PHYSICAL + CONTRACT side by side -->
+          <div style="display:flex;gap:10px">
+            <div style="flex:1;display:flex;flex-direction:column;gap:4px">
+              <div style="font-size:9px;font-weight:800;color:#3fb950;text-align:center;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px">— Physical Chain —</div>
+              <div style="background:#040f08;border:2px solid #105a30;border-radius:6px;padding:8px 12px">
+                <div style="font-size:10px;font-weight:800;color:#3fb950">CONNECTION OBJECT</div>
+                <div style="font-size:9.5px;font-family:monospace;color:#4da6ff">EOBJK · EOBJK</div>
+                <div style="font-size:10px;color:#7a8a9a;margin-top:2px">SPARTE set here → inherited down</div>
+              </div>
+              <div style="text-align:center;color:#1a3a5c;font-size:16px">↓</div>
+              <div style="background:#040f08;border:2px solid #105a30;border-radius:6px;padding:8px 12px">
+                <div style="font-size:10px;font-weight:800;color:#3fb950">PREMISE / INSTALLATION</div>
+                <div style="font-size:9.5px;font-family:monospace;color:#4da6ff">EANL · ANLAGE</div>
+                <div style="font-size:10px;color:#7a8a9a;margin-top:2px">FK: EOBJK + SPARTE inherited</div>
+              </div>
+              <div style="text-align:center;color:#1a3a5c;font-size:16px">↓</div>
+              <div style="background:#040f08;border:2px solid #105a30;border-radius:6px;padding:8px 12px">
+                <div style="font-size:10px;font-weight:800;color:#3fb950">DEVICE LOCATION (MRU)</div>
+                <div style="font-size:9.5px;font-family:monospace;color:#4da6ff">EABLG · EABLG</div>
+                <div style="font-size:10px;color:#7a8a9a;margin-top:2px">FK: ANLAGE · Route: TE200</div>
+              </div>
+              <div style="text-align:center;color:#1a3a5c;font-size:16px">↓</div>
+              <div style="background:#040f08;border:2px solid #105a30;border-radius:6px;padding:8px 12px">
+                <div style="font-size:10px;font-weight:800;color:#3fb950">DEVICE / METER</div>
+                <div style="font-size:9.5px;font-family:monospace;color:#4da6ff">EGERH · GERAET / SERNR</div>
+                <div style="font-size:10px;color:#7a8a9a;margin-top:2px">FK: EABLG · Category: TE405</div>
+              </div>
+              <div style="text-align:center;color:#1a3a5c;font-size:16px">↓</div>
+              <div style="background:#040f08;border:2px solid #105a30;border-radius:6px;padding:8px 12px">
+                <div style="font-size:10px;font-weight:800;color:#3fb950">METER READINGS</div>
+                <div style="font-size:9.5px;font-family:monospace;color:#4da6ff">EABL · GERAET+ABLDAT</div>
+                <div style="font-size:10px;color:#7a8a9a;margin-top:2px">ZAEHLERSTAND · ABLEINH · ABLESART</div>
+              </div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:4px">
+              <div style="font-size:9px;font-weight:800;color:#ffa657;text-align:center;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px">— Billing / Financial Chain —</div>
+              <div style="background:#130d00;border:2px solid #704010;border-radius:6px;padding:8px 12px">
+                <div style="font-size:10px;font-weight:800;color:#ffa657">SERVICE CONTRACT</div>
+                <div style="font-size:9.5px;font-family:monospace;color:#4da6ff">EVER · VERTRAG</div>
+                <div style="font-size:10px;color:#7a8a9a;margin-top:2px">FK: VKONT + ANLAGE · TARIF from TE006</div>
+              </div>
+              <div style="text-align:center;color:#1a3a5c;font-size:16px">↓ Move-In activates</div>
+              <div style="background:#130d00;border:2px solid #704010;border-radius:6px;padding:8px 12px">
+                <div style="font-size:10px;font-weight:800;color:#ffa657">CONTRACT-PREMISE LINK</div>
+                <div style="font-size:9.5px;font-family:monospace;color:#4da6ff">EVBS · VERTRAG+ANLAGE</div>
+                <div style="font-size:10px;color:#7a8a9a;margin-top:2px">EINZDAT = Move-In date</div>
+              </div>
+              <div style="text-align:center;color:#1a3a5c;font-size:16px">↓</div>
+              <div style="background:#130d00;border:2px solid #704010;border-radius:6px;padding:8px 12px">
+                <div style="font-size:10px;font-weight:800;color:#ffa657">OPEN ITEMS / PAYMENTS</div>
+                <div style="font-size:9.5px;font-family:monospace;color:#4da6ff">FKKOP · FKKCL</div>
+                <div style="font-size:10px;color:#7a8a9a;margin-top:2px">FK: VKONT · All charges/credits</div>
+              </div>
+              <div style="text-align:center;color:#1a3a5c;font-size:16px">↓</div>
+              <div style="background:#130d00;border:2px solid #704010;border-radius:6px;padding:8px 12px">
+                <div style="font-size:10px;font-weight:800;color:#ffa657">BILL DOCUMENTS</div>
+                <div style="font-size:9.5px;font-family:monospace;color:#4da6ff">ERCH · ERCHZ</div>
+                <div style="font-size:10px;color:#7a8a9a;margin-top:2px">FK: VERTRAG · Rate components</div>
+              </div>
+              <div style="text-align:center;color:#1a3a5c;font-size:16px">↓</div>
+              <div style="background:#130d00;border:2px solid #704010;border-radius:6px;padding:8px 12px">
+                <div style="font-size:10px;font-weight:800;color:#ffa657">DEPOSITS · DUNNING · IP</div>
+                <div style="font-size:9.5px;font-family:monospace;color:#4da6ff">FKKDEP · FKKDUN · FKKINST</div>
+                <div style="font-size:10px;color:#7a8a9a;margin-top:2px">FK: VKONT</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPARTE FLOW RULE -->
+    <div class="callout g"><strong>SPARTE inheritance rule:</strong> EOBJK.SPARTE → EANL.SPARTE → EABLG.SPARTE → EGERH (device must match SPARTE) → EVER.SPARTE (contract must match). Any mismatch causes EMIGALL error. A customer with both gas and electric service has <strong>two separate connection objects, two premises, two contracts</strong> under ONE contract account (FKKVK).</div>
+  </div>
+
+  <!-- ═══ UTILITY TYPES ═══ -->
+  <div id="pg-utilities" class="page">
+    <div class="sh">🔋 All Utility Types — SAP IS-U SPARTE Configuration</div>
+    <div class="callout i">Click any utility card to expand full detail: tables, rate categories, device types, meter reading units, billing schema, and all config tables required.</div>
+    <div class="util-grid" id="util-cards"></div>
+    <div id="detail-wrap"></div>
+  </div>
+
+  <!-- ═══ DEVICE TYPES ═══ -->
+  <div id="pg-devices" class="page">
+    <div class="sh">📟 All Device / Meter Types in SAP IS-U</div>
+    <div class="callout i">Every device type must be configured in <code>TE405</code> (device category) and <code>TE406</code> (device type/model) before EMIGALL device loads. Filter by utility type below.</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+      <button class="fbt on" onclick="filterDev('ALL',this)">All Types</button>
+      <button class="fbt" onclick="filterDev('ELEC',this)">⚡ Electric</button>
+      <button class="fbt" onclick="filterDev('GAS',this)">🔥 Gas</button>
+      <button class="fbt" onclick="filterDev('WATER',this)">💧 Water</button>
+      <button class="fbt" onclick="filterDev('CORRECTOR',this)">🔧 Corrector</button>
+      <button class="fbt" onclick="filterDev('NETMETER',this)">🔄 Net Meter</button>
+      <button class="fbt" onclick="filterDev('AMI',this)">📡 AMI/Smart</button>
+      <button class="fbt" onclick="filterDev('CT_PT',this)">🔌 CT/PT</button>
+      <button class="fbt" onclick="filterDev('TOU',this)">⏱ TOU</button>
+      <button class="fbt" onclick="filterDev('SOLAR',this)">☀️ Solar/DER</button>
+      <button class="fbt" onclick="filterDev('VIRTUAL',this)">🖥 Virtual</button>
+    </div>
+    <div class="dev-grid" id="dev-grid"></div>
+    <div id="dev-detail" style="display:none;background:#060e1a;border:1px solid #1a3a5c;border-radius:8px;padding:18px;margin-top:10px"></div>
+  </div>
+
+  <!-- ═══ CONFIG ═══ -->
+  <div id="pg-config" class="page">
+    <div class="sh">⚙️ How to Configure SAP IS-U for Each Utility Type — Step by Step</div>
+    <div class="callout p"><strong>Configuration must be completed before any EMIGALL data load.</strong> Each utility type requires its own set of SPARTE-specific config tables, rate categories, billing schemas, device categories, and MRU routes. All config transported DEV→QA→PROD via STMS.</div>
+    <div id="config-steps-wrap"></div>
+  </div>
+
+  <!-- ═══ EMIGALL ═══ -->
+  <div id="pg-emigall" class="page">
+    <div class="sh">📐 EMIGALL Configuration by Utility Type</div>
+    <div class="callout i">The T7XEMI03 value translation table is the key per-utility config — every source code must map to the correct SAP SPARTE, rate category, device category, and reading unit. Below shows what must be configured in T7XEMI03 for each utility type.</div>
+    <div id="emigall-wrap"></div>
+  </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<style>
+.fbt{background:#0a1220;border:1px solid #253545;color:#7a8a9a;padding:4px 11px;border-radius:10px;cursor:pointer;font-size:11px;transition:all .12s}
+.fbt:hover,.fbt.on{background:#071525;border-color:#1a3a5c;color:#4da6ff}
+</style>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// UTILITY TYPE DATA
+// ═══════════════════════════════════════════════════════════════════════════
+const UTILITIES = [
+{
+  id:'E', name:'Electricity', icon:'⚡', color:'#4da6ff', bgClass:'bg-E',
+  sparte:'E', sparteText:'SPARTE = E',
+  desc:'Electric utility service — residential, commercial, and industrial. Supports standard metering, AMI/smart meters, TOU, demand metering, CT/PT transformers, and net metering for solar/DER.',
+  billingUnit:'kWh (energy) + kW (demand for C&I)',
+  readingUnit:'KWH (kilowatt-hour)',
+  types:['Residential (single-phase 120/240V)','Commercial (3-phase, demand)','Industrial C&I (CT/PT metered, high voltage)','Net Metering / Solar (bi-directional)','Time-of-Use (TOU / interval)','AMI / Smart Meter','Street Lighting (fixture-based)'],
+  rateCat:['ZRSE — Residential Electric','ZCME — Commercial Electric','ZINE — Industrial Electric','ZNME — Net Meter Electric','ZTOU — TOU Electric','ZSLE — Street Lighting Electric'],
+  tables:[
+    {tbl:'TE001',field:'SPARTE=E',desc:'Division definition — electricity'},
+    {tbl:'TE006',field:'TARIF+SPARTE=E',desc:'Rate categories for electric'},
+    {tbl:'TE400',field:'SPARTE=E',desc:'Rate prices and components (kWh price, demand charge)'},
+    {tbl:'TE405',field:'DEVICECAT',desc:'Device categories: AMI_E, EMECH_E, CI_E, NETMTR'},
+    {tbl:'TE406',field:'DEVICETYPE+DEVICECAT',desc:'Device models: ITRON_AMI, LANDIS_CI, etc.'},
+    {tbl:'TE200',field:'ABLBASIS+SPARTE=E',desc:'Electric MRU / meter reading routes'},
+    {tbl:'EGERH',field:'SPARTE must match EOBJK',desc:'Device install — SPARTE=E required'},
+    {tbl:'EGESD',field:'NKONST, CT_RATIO, PT_RATIO',desc:'Register data — CT/PT multiplier for C&I'},
+    {tbl:'EABL',field:'ABLEINH=KWH,KW,CCF',desc:'Meter readings — unit must match rate'}
+  ],
+  devices:['Standard electromechanical kWh meter','AMI/Smart meter (interval data)','Demand meter (kW peak demand)','CT/PT metered (transformer ratio)','Net meter (bi-directional kWh import/export)','TOU meter (multiple registers by time period)','Street lighting meter or computed fixture count'],
+  configSteps:[
+    'Create SPARTE=E in TE001 (IMG → IS-U → Basic Settings → Division)',
+    'Create rate categories in TE006 for each electric rate class (ZRSE, ZCME, ZINE, ZNME)',
+    'Enter prices in TE400 for each TE006 rate: energy ($/kWh), demand ($/kW), customer charge',
+    'Create device categories in TE405: AMI_E (smart meter), EMECH_E (electromechanical), CI_E (C&I)',
+    'Create device models in TE406 per manufacturer: ITRON_CION, LANDIS_E350, ELSTER_A1800',
+    'Create MRU routes in TE200 for each geographic reading territory (SPARTE=E)',
+    'Configure billing schema in TE422 billing class',
+    'For TOU: configure interval metering (ERTS) in device category and rate schema',
+    'For Net Meter: configure bi-directional register in EGESD (ZWNUMMER: 1=import, 2=export)',
+    'For CT/PT: ensure EGESD.CT_RATIO and PT_RATIO populated; NKONST = CT×PT'
+  ],
+  bizRules:[
+    'SERNR globally unique — electric meters from all utilities must not overlap',
+    'CT/PT ratio: NKONST = CT_RATIO × PT_RATIO — billing error if wrong',
+    'Net meter: two EGESD registers (import kWh + export kWh), two EABL reads per cycle',
+    'TOU meter: ERTS flag = X, interval length 15/30/60 min, TOU rate category required',
+    'AMI: ERTS configured, remote read enabled, interval data stored separately from EABL',
+    'Demand meter: ABLEINH=KW for demand register, billing schema uses peak kW'
+  ],
+  emigall:'T7XEMI03 for ZDEVICE:\n  DEVICE_TYPE=ELEC_STD → DEVICECAT=EMECH_E\n  DEVICE_TYPE=ELEC_AMI → DEVICECAT=AMI_E\n  DEVICE_TYPE=ELEC_CI  → DEVICECAT=CI_E\n  DEVICE_TYPE=ELEC_NET → DEVICECAT=NETMTR\n\nT7XEMI03 for ZBILL_INSTALL:\n  RATE=RES_ELEC   → TARIF=ZRSE\n  RATE=COM_ELEC   → TARIF=ZCME\n  RATE=IND_ELEC   → TARIF=ZINE\n  RATE=NET_ELEC   → TARIF=ZNME\n\nT7XEMI03 for ZMETER_READ:\n  UNIT=KWH → ABLEINH=KWH\n  UNIT=KW  → ABLEINH=KW\n  READ_TYPE=A → ABLESART=P\n  READ_TYPE=E → ABLESART=E'
+},
+{
+  id:'G', name:'Gas', icon:'🔥', color:'#ffa657', bgClass:'bg-G',
+  sparte:'G', sparteText:'SPARTE = G',
+  desc:'Natural gas utility service — residential, commercial, and industrial. Unique to gas: volume correctors (pressure/temperature correction), odorization devices, and high-pressure industrial meters.',
+  billingUnit:'CCF (hundred cubic feet) / MCF / Therms / BTU / m³',
+  readingUnit:'CCF, MCF, THERM, MCM (thousand cubic metres)',
+  types:['Residential (low-pressure diaphragm)','Commercial (medium-pressure rotary)','Industrial (high-pressure turbine)','Corrector-equipped (pressure/temperature correction)','Odorization metering','CNG (compressed natural gas)'],
+  rateCat:['ZRSG — Residential Gas','ZCMG — Commercial Gas','ZING — Industrial Gas','ZCNG — CNG Gas'],
+  tables:[
+    {tbl:'TE001',field:'SPARTE=G',desc:'Division definition — gas'},
+    {tbl:'TE006',field:'TARIF+SPARTE=G',desc:'Rate categories for gas'},
+    {tbl:'TE400',field:'SPARTE=G',desc:'Rate prices: $/therm, $/CCF, customer charge, pipeline charge'},
+    {tbl:'TE405',field:'DEVICECAT',desc:'Device categories: DIAPHRAGM, TURBINE, ROTARY, CORRECTOR'},
+    {tbl:'TE406',field:'DEVICETYPE+DEVICECAT',desc:'Device models: ELSTER_800, ITRON_B3, AC250 corrector'},
+    {tbl:'EGESD',field:'NKONST=corrector_factor',desc:'Corrector factor stored as NKONST multiplier'},
+    {tbl:'EGERH',field:'CORR_GERAET=corrector_device',desc:'Corrector device linked to base gas meter'},
+    {tbl:'TE200',field:'SPARTE=G',desc:'Gas MRU routes (may differ from electric)'}
+  ],
+  devices:['Residential diaphragm meter (low flow, low pressure)','Commercial rotary meter (medium flow)','Industrial turbine meter (high flow, custody transfer)','Electronic volume corrector (EVC / PTZ corrector)','Orifice plate meter (large industrial)','Ultrasonic gas meter (large C&I)','CNG dispenser meter'],
+  configSteps:[
+    'Create SPARTE=G in TE001',
+    'Create TE006 rate categories: ZRSG (res gas), ZCMG (com gas), ZING (ind gas)',
+    'Enter TE400 gas prices: commodity ($/therm), pipeline charge, customer charge, BTU adjustment factor',
+    'Create TE405 device categories: DIAPHRAGM (residential), ROTARY (commercial), TURBINE (industrial), CORRECTOR (EVC)',
+    'Create TE406 device models per manufacturer: ELSTER_B3, ITRON_AC250, AMERICAN_METER_DTM',
+    'Configure corrector: create separate EGERH device for corrector (DEVICECAT=CORRECTOR), link to base meter via EGESD corrector reference',
+    'Set NKONST on base meter EGESD = product of uncorrected volume factor × corrector factor (or = 1 if corrector handles separately)',
+    'Create gas MRU routes TE200 (may use drive-by reading different from AMI)',
+    'Configure BTU adjustment: if rate is in therms, BODS must convert CCF × BTU factor → therms before staging',
+    'For industrial: confirm pressure base (14.73 psi base) and temperature base (60°F) in rate schema'
+  ],
+  bizRules:[
+    'Corrector device: EGERH.DEVICECAT=CORRECTOR linked to base meter — separate EABL readings for uncorrected and corrected volumes',
+    'CCF vs Therm: billing engine multiplies raw CCF × BTU heat content factor → therms. BTU factor must be in rate schema TE400',
+    'Residential gas often read drive-by (VHF transmitter) — device must have MRU route with radio read method in TE200',
+    'Industrial turbine meters: SERNR must match custody-transfer meter tag — critical for FERC compliance',
+    'Pressure correction: P1/P2 pressure factor and T (temperature) factor = corrector produces corrected CCF for billing'
+  ],
+  emigall:'T7XEMI03 for ZDEVICE:\n  DEVICE_TYPE=GAS_DIAPHRAGM → DEVICECAT=DIAPHRAGM\n  DEVICE_TYPE=GAS_ROTARY   → DEVICECAT=ROTARY\n  DEVICE_TYPE=GAS_TURBINE  → DEVICECAT=TURBINE\n  DEVICE_TYPE=GAS_CORR     → DEVICECAT=CORRECTOR\n\nT7XEMI03 for ZBILL_INSTALL:\n  RATE=RES_GAS → TARIF=ZRSG\n  RATE=COM_GAS → TARIF=ZCMG\n  RATE=IND_GAS → TARIF=ZING\n\nT7XEMI03 for ZMETER_READ:\n  UNIT=CCF   → ABLEINH=CCF\n  UNIT=THERM → ABLEINH=THM\n  UNIT=MCF   → ABLEINH=MCF\n\nCorrector read: load TWO EABL rows per read cycle:\n  Register 1: uncorrected volume (CCF)\n  Register 2: corrected volume (CORR_CCF)\n  EGESD.ZWNUMMER: 1=uncorrected, 2=corrected'
+},
+{
+  id:'W', name:'Water', icon:'💧', color:'#3fb950', bgClass:'bg-W',
+  sparte:'W', sparteText:'SPARTE = W',
+  desc:'Potable water service — residential, commercial, and industrial. Typically positive displacement meters. Fire service lines may have separate meters. Large C&I uses turbine or compound meters.',
+  billingUnit:'CCF / Gallons (HCF, 100 cubic feet) / m³',
+  readingUnit:'CCF, GAL, CBM (cubic metres)',
+  types:['Residential (positive displacement, 5/8" to 1")','Commercial (compound or turbine, 2"-6")','Industrial (turbine or electromagnetic, 6"+)','Irrigation (separate meter, seasonal)','Fire service (detector check, large-diameter)','Bulk water (large commercial delivery)'],
+  rateCat:['ZRSW — Residential Water','ZCMW — Commercial Water','ZINW — Industrial Water','ZIRW — Irrigation Water','ZFSW — Fire Service Water'],
+  tables:[
+    {tbl:'TE001',field:'SPARTE=W',desc:'Division definition — water'},
+    {tbl:'TE006',field:'TARIF+SPARTE=W',desc:'Rate categories for water — often tiered (inclining block)'},
+    {tbl:'TE400',field:'SPARTE=W',desc:'Tiered rate prices: Tier 1 $/CCF, Tier 2 $/CCF, Tier 3 $/CCF, base charge'},
+    {tbl:'TE405',field:'DEVICECAT',desc:'Device categories: PD_WATER (pos. displacement), TURB_WATER, COMP_WATER (compound), ELEC_MAG'},
+    {tbl:'TE406',field:'DEVICETYPE',desc:'Device models: SENSUS_IPERL, BADGER_M35, NEPTUNE_T10'},
+    {tbl:'TE200',field:'SPARTE=W',desc:'Water MRU routes — often drive-by or walk-by'},
+    {tbl:'EABL',field:'ABLEINH=CCF or GAL',desc:'Water readings — match to rate billing unit'}
+  ],
+  devices:['Positive displacement (nutating disc, 5/8"-1")','Single-jet / multi-jet (small commercial)','Turbine meter (commercial, 2"-6")','Compound meter (low/high flow combination)','Electromagnetic (large C&I, no moving parts)','Ultrasonic (industrial, large diameter)','Irrigation meter (seasonal, often locked off in winter)','Fire service meter (detector check assembly)'],
+  configSteps:[
+    'Create SPARTE=W in TE001',
+    'Create TE006 rate categories: ZRSW, ZCMW, ZINW (residential, commercial, industrial)',
+    'Configure tiered (inclining block) rates in TE400: Tier 1 0-6 CCF at $3/CCF, Tier 2 6-15 at $4.50, Tier 3 15+ at $7',
+    'Create TE405 device categories: PD_WATER, TURB_WATER, COMP_WATER, ELEC_MAG',
+    'Create TE406 device models per manufacturer: SENSUS_IPERL, BADGER_M35, NEPTUNE_T10, MUELLER_HERSEY',
+    'Configure water MRU routes in TE200 (SPARTE=W) — drive-by encoder reads common',
+    'If AMI water: configure ERTS interval flag = X for hourly leak detection reads',
+    'Set ABLEINH=CCF or GAL on EGESD — must match TE006 billing unit',
+    'For tiered billing: TE400 must have step tiers configured — verify billing simulation EA05 before go-live',
+    'For irrigation: seasonal meter — EABL read schedule in TE240 excludes winter months'
+  ],
+  bizRules:[
+    'Water tiered rates: billing engine applies EACH tier in sequence — if read = 18 CCF, first 6 at Tier1, next 9 at Tier2, last 3 at Tier3',
+    'Fire service meter: typically no consumption billing — flat monthly charge. Rate category ZFSW = fixed charge only',
+    'Irrigation: seasonal activation / deactivation — Move-In/Move-Out cycle each year',
+    'Encoder reads: EABL ABLESART = A (automatic encoder read) or R (radio/AMR)',
+    'Compound meter: two EGESD registers — low-flow disc meter + high-flow turbine. TWO EABL reads per cycle, sum for billing'
+  ],
+  emigall:'T7XEMI03 for ZDEVICE:\n  DEVICE_TYPE=WATER_PD    → DEVICECAT=PD_WATER\n  DEVICE_TYPE=WATER_TURB  → DEVICECAT=TURB_WATER\n  DEVICE_TYPE=WATER_COMP  → DEVICECAT=COMP_WATER\n  DEVICE_TYPE=WATER_ELEC  → DEVICECAT=ELEC_MAG\n\nT7XEMI03 for ZBILL_INSTALL:\n  RATE=RES_WATER  → TARIF=ZRSW\n  RATE=COM_WATER  → TARIF=ZCMW\n  RATE=IRR_WATER  → TARIF=ZIRW\n\nT7XEMI03 for ZMETER_READ:\n  UNIT=CCF → ABLEINH=CCF\n  UNIT=GAL → ABLEINH=GAL\n  UNIT=CBM → ABLEINH=CBM\n  READ_TYPE=R → ABLESART=A (auto/AMR read)'
+},
+{
+  id:'V', name:'Waste Water / Sewer', icon:'🌊', color:'#c2a0ff', bgClass:'bg-V',
+  sparte:'V', sparteText:'SPARTE = V',
+  desc:'Sewer / wastewater service — usually computed from potable water consumption (no physical sewer meter). Some utilities install flow meters on large industrial discharge points.',
+  billingUnit:'CCF / Gallons (derived from water meter read)',
+  readingUnit:'CCF or GAL (usually virtual — copied from SPARTE=W reads)',
+  types:['Residential sewer (computed from water meter, 100% or capped)','Commercial sewer (computed from water, often excludes irrigation)','Industrial sewer (may have flow meter or water meter deduction)','Industrial pretreatment (discharge monitoring)','Sewer only (no water service — flat rate)'],
+  rateCat:['ZRSSW — Residential Sewer','ZCMSW — Commercial Sewer','ZINSW — Industrial Sewer/Pretreat','ZFLTSW — Flat Rate Sewer'],
+  tables:[
+    {tbl:'TE001',field:'SPARTE=V',desc:'Division — wastewater'},
+    {tbl:'TE006',field:'TARIF+SPARTE=V',desc:'Sewer rate categories'},
+    {tbl:'TE405',field:'DEVICECAT=VIRTUAL',desc:'Virtual device category — no physical meter'},
+    {tbl:'EANL',field:'Separate ANLAGE for sewer service',desc:'Separate installation for sewer under same EOBJK'},
+    {tbl:'EVER',field:'VERTRAG with SPARTE=V',desc:'Separate sewer service contract'},
+    {tbl:'EABL',field:'GERAET of virtual device',desc:'Sewer "readings" copied or derived from water meter'}
+  ],
+  devices:['Virtual/Computed device (no physical meter — SAP IS-U virtual device)','Sewer flow meter (large industrial discharge — electromagnetic or ultrasonic)','Composite sampler meter (wastewater quality monitoring)'],
+  configSteps:[
+    'Create SPARTE=V in TE001',
+    'Create TE006 sewer rate categories: ZRSSW, ZCMSW, ZINSW',
+    'Create virtual device category in TE405: VIRTUAL or COMPUTED',
+    'Create virtual device model in TE406: VIRTUAL_SEWER',
+    'In BODS: derive sewer consumption = water consumption × sewer_factor (e.g. 90% of water for residential). Stage as separate EABL rows for SPARTE=V device',
+    'Create separate EANL (installation) for sewer under the same EOBJK as water',
+    'Create separate EVER contract (SPARTE=V, TARIF=ZRSSW) under same VKONT',
+    'Move-In for sewer contract concurrent with water Move-In',
+    'Industrial with sewer meter: create physical EGERH device (DEVICECAT=FLOW_MTR), load actual EABL reads',
+    'For winter cap: billing schema in TE400 caps sewer at average of Oct-Mar water reads (many utilities apply winter averaging)'
+  ],
+  bizRules:[
+    'Virtual device: EGERH.DEVICECAT=VIRTUAL, SERNR=VIRT-<premise_id>',
+    'Sewer billing usually = % of water consumption (70%-100% depending on utility policy)',
+    'Industrial: may have separate sewer discharge meter — actual EABL reads for sewer, not derived',
+    'Winter averaging: Jan-Mar sewer billed at average of Dec-Feb water reads (prevents irrigation volume in sewer bill)',
+    'Two separate EVER contracts under ONE FKKVK.VKONT: one SPARTE=W (water), one SPARTE=V (sewer)'
+  ],
+  emigall:'T7XEMI03 for ZDEVICE (sewer virtual):\n  DEVICE_TYPE=SEWER_VIRT  → DEVICECAT=VIRTUAL\n  DEVICE_TYPE=SEWER_FLOW  → DEVICECAT=FLOW_MTR\n\nT7XEMI03 for ZBILL_INSTALL:\n  RATE=RES_SEWER  → TARIF=ZRSSW\n  RATE=COM_SEWER  → TARIF=ZCMSW\n  RATE=IND_SEWER  → TARIF=ZINSW\n\nBODS derived column for sewer reads:\n  SEWER_CCF = WATER_CCF * 0.90 (residential)\n  SEWER_CCF = WATER_CCF * 1.00 (commercial, no cap)\n  Load as EABL rows for SPARTE=V device'
+},
+{
+  id:'S', name:'Steam / District Heat', icon:'♨️', color:'#f85149', bgClass:'bg-S',
+  sparte:'S', sparteText:'SPARTE = S',
+  desc:'District steam or chilled water / district heating service. Common in dense urban areas. Metered by BTU or pounds of steam. SAP IS-U handles via SPARTE=S or SPARTE=H depending on IS-U version.',
+  billingUnit:'MMBtu / klbs (thousand pounds of steam) / MWh (for chilled water)',
+  readingUnit:'MMBTU, KLBS, KWH (heat equivalent)',
+  types:['High-pressure steam (industrial / campus)','Low-pressure steam (building heat)','Chilled water (district cooling)','Hot water district heating','Combined heat and power (CHP / cogen)'],
+  rateCat:['ZRSS — Residential Steam','ZCMS — Commercial Steam','ZDHS — District Heating','ZDCS — District Cooling'],
+  tables:[
+    {tbl:'TE001',field:'SPARTE=S or H',desc:'Division — steam/heat'},
+    {tbl:'TE006',field:'TARIF+SPARTE=S',desc:'Steam/heat rate categories'},
+    {tbl:'TE405',field:'DEVICECAT=BTU_MTR, STEAM_MTR',desc:'BTU meter, steam flow meter categories'},
+    {tbl:'EGESD',field:'ABLEINH=MMBTU or KLBS',desc:'Steam register unit'},
+    {tbl:'EABL',field:'ABLEINH=MMBTU',desc:'Steam meter readings in MMBtu or klbs'}
+  ],
+  devices:['Condensate meter (return steam measurement)','BTU/energy meter (Btu = temp difference × flow)','Turbine flow meter (steam flow in klbs/hr)','Ultrasonic flow meter (chilled water)','Vortex flow meter (steam / hot water)'],
+  configSteps:[
+    'Create SPARTE=S in TE001 (or SPARTE=H for district heating — check IS-U config)',
+    'Create TE006 rate categories for steam and heat products',
+    'Create BTU meter device categories in TE405',
+    'Configure ABLEINH=MMBTU or KLBS in TE200 and EGESD',
+    'Steam billing typically has demand (klbs/hr) and consumption (klbs) charges',
+    'Condensate credit: some steam contracts credit returned condensate — configure credit rate in TE006'
+  ],
+  bizRules:[
+    'Steam reading units: ABLEINH must match billing unit in rate schema',
+    'BTU metering: flow sensor × (supply temp - return temp) = BTU/hr → cumulative MMBtu',
+    'Condensate credit: return condensate reading subtracted from steam consumption'
+  ],
+  emigall:'T7XEMI03 for ZDEVICE:\n  DEVICE_TYPE=STEAM_TURB → DEVICECAT=STEAM_MTR\n  DEVICE_TYPE=BTU_MTR   → DEVICECAT=BTU_MTR\n\nT7XEMI03 for ZMETER_READ:\n  UNIT=MMBTU → ABLEINH=MMBTU\n  UNIT=KLBS  → ABLEINH=KLBS'
+},
+{
+  id:'D', name:'Street Lighting', icon:'💡', color:'#f0e040', bgClass:'bg-D',
+  sparte:'D', sparteText:'SPARTE = D',
+  desc:'Street lighting and outdoor lighting service. May use metered kWh or computed consumption by fixture count × hours × wattage. Often billed to municipalities.',
+  billingUnit:'kWh (metered) or Fixture-Month (computed)',
+  readingUnit:'KWH or FIXTURE (computed)',
+  types:['Metered street lighting (kWh meter on circuit)','Computed / unmetered lighting (fixture inventory method)','Traffic signal lighting','Decorative / municipal lighting','LED retrofit programmes'],
+  rateCat:['ZRSD — Residential Outdoor Lighting','ZCMD — Commercial/Municipal Lighting','ZMSD — Municipal Street Lighting'],
+  tables:[
+    {tbl:'TE001',field:'SPARTE=D',desc:'Division — street lighting'},
+    {tbl:'TE006',field:'TARIF+SPARTE=D',desc:'Lighting rate categories'},
+    {tbl:'TE405',field:'DEVICECAT=FIXTURE or KWH_MTR',desc:'Fixture count or metered device'},
+    {tbl:'EANL',field:'SPARTE=D installation',desc:'Lighting installation (often one per circuit or pole)'},
+    {tbl:'EABL',field:'ZAEHLERSTAND=fixture_count or kWh',desc:'Fixture inventory or actual kWh read'}
+  ],
+  devices:['Metered circuit kWh meter','Computed: fixture inventory record (no physical meter)','Smart street light controller (AMI-enabled)'],
+  configSteps:[
+    'Create SPARTE=D in TE001',
+    'Create rate categories: ZCMD (commercial lighting), ZMSD (municipal street lighting)',
+    'For computed billing: create virtual device category FIXTURE in TE405',
+    'Billing rate: kWh = fixture_count × wattage × hours_per_month / 1000',
+    'For metered: standard electric meter process applies (SPARTE=E or D depending on utility setup)',
+    'Maintain fixture inventory in custom Z-table or EANL attribute'
+  ],
+  bizRules:[
+    'Computed lighting: no EABL meter reads — billing based on fixture count × wattage × hours',
+    'Many utilities combine street lighting under SPARTE=E — check utility-specific config',
+    'LED retrofit: fixture wattage changes mid-contract — date-effective change needed in billing schema'
+  ],
+  emigall:'T7XEMI03 for ZBILL_INSTALL:\n  RATE=MUNI_LIGHT  → TARIF=ZMSD\n  RATE=COMM_LIGHT  → TARIF=ZCMD\n\nFor computed lighting — no ZMETER_READ needed;\nbilling uses fixed factor in TE400 rate schema'
+}
+];
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DEVICE TYPE DATA
+// ═══════════════════════════════════════════════════════════════════════════
+const DEVICES = [
+// ELECTRIC
+{id:'EMECH',name:'Electromechanical kWh Meter',icon:'⚡',cat:'ELEC',sparte:'E',te405:'EMECH_E',te406:'ELEC_MECH_*',unit:'KWH',
+ desc:'Standard residential/small commercial electric meter. Single-phase or 3-phase. Rotating disc mechanism. Being replaced by AMI but still widespread.',
+ saptables:['EGERH: DEVICECAT=EMECH_E, SERNR=meter serial','EGESD: NKONST=1 (multiplier), ABLEINH=KWH','EABL: ZAEHLERSTAND=kWh reading, ABLESART=P'],
+ keyFields:['GERAET (SAP device number)','SERNR (meter serial — globally unique)','NKONST=1 (no CT/PT)','ABLEINH=KWH','DEVICECAT=EMECH_E'],
+ biz:['NKONST=1 for residential','One EGESD row per register (usually 1)','Rollover: when ZAEHLERSTAND exceeds dial max — handle in BODS'],
+ emigall:'T7XEMI03: DEVICE_TYPE=ELEC_MECH → DEVICECAT=EMECH_E\nEGESD: NKONST=1, ABLEINH=KWH\nEABL: ABLESART=P (periodic read)'
+},
+{id:'AMI_E',name:'AMI / Smart Electric Meter',icon:'📡',cat:'AMI',sparte:'E',te405:'AMI_E',te406:'ITRON_CION, LANDIS_ZMQ',unit:'KWH + Interval',
+ desc:'Advanced metering infrastructure. Sends hourly or 15/30-minute interval reads. Enables TOU billing, outage detection, remote connect/disconnect.',
+ saptables:['EGERH: DEVICECAT=AMI_E, ERTS_FLAG=X, INTERVAL_LENGTH=15/30/60','EGESD: NKONST=1, AMI_FLAG=X','EABL: standard kWh reads','ERTS tables: interval data stored separately'],
+ keyFields:['ERTS_FLAG=X (required for interval data)','INTERVAL_LENGTH=15/30/60 min','TOU_PROFILE','DEVICECAT=AMI_E'],
+ biz:['ERTS flag must be set for TOU rate eligibility','Interval data not stored in standard EABL — AMI middleware handles','Standard EABL still loaded for billing period read','Remote disconnect/connect uses IS-U service order EAUFN'],
+ emigall:'T7XEMI03: DEVICE_TYPE=ELEC_AMI → DEVICECAT=AMI_E\nEGERH: ERTS_FLAG=X, INTERVAL_LENGTH=15\nTOU_PROFILE mapped from source TOU plan code\nPost-load: verify AMI registration in middleware'
+},
+{id:'CTPT',name:'CT/PT Metered (C&I)',icon:'🔌',cat:'CT_PT',sparte:'E',te405:'CI_E',te406:'ELEC_CI_*',unit:'KWH + KW demand',
+ desc:'Commercial and industrial metering using current transformers (CT) and potential transformers (PT) to step down high voltage/current to meter-safe levels. NKONST = CT × PT.',
+ saptables:['EGERH: DEVICECAT=CI_E, SERNR','EGESD: CT_RATIO, PT_RATIO, NKONST=CT×PT, ABLEINH=KWH','EGESD Register 2: ABLEINH=KW (demand)','EABL: two rows per cycle (kWh + kW demand)'],
+ keyFields:['CT_RATIO (e.g. 200:5 = 40)','PT_RATIO (e.g. 7200:120 = 60)','NKONST = CT_RATIO × PT_RATIO = 2400','ABLEINH=KWH (energy) + ABLEINH=KW (demand)'],
+ biz:['NKONST MUST equal CT_RATIO × PT_RATIO — billing error if wrong','Two EGESD registers: reg 1=kWh, reg 2=kW demand','Two EABL reads per cycle: energy + peak demand','Revenue protection: verify NKONST on all C&I accounts post-migration'],
+ emigall:'T7XEMI03: DEVICE_TYPE=ELEC_CI → DEVICECAT=CI_E\nBODS derived column: NKONST = CT_RATIO * PT_RATIO\nEGESD: ZWNUMMER=1 (kWh reg), ZWNUMMER=2 (kW reg)\nEABL: two rows per billing period\nSAP check: SELECT NKONST FROM EGESD = CT*PT for all CI_E devices'
+},
+{id:'NETMETER',name:'Net Meter (Bi-directional / Solar)',icon:'🔄',cat:'NETMETER',sparte:'E',te405:'NETMTR',te406:'ELEC_NET_*',unit:'KWH import + KWH export',
+ desc:'Bi-directional meter for solar, wind, or other distributed energy resources (DER). Measures both import (consumption from grid) and export (generation to grid). Net billing = import - export.',
+ saptables:['EGERH: DEVICECAT=NETMTR, SERNR','EGESD: ZWNUMMER=1 (import kWh), ZWNUMMER=2 (export kWh)','EABL: two rows per cycle — register 1=import, register 2=export','EVER: TARIF=ZNME (net metering rate category)'],
+ keyFields:['ZWNUMMER=1 (import register)','ZWNUMMER=2 (export register)','ABLEINH=KWH for both registers','TARIF=ZNME (net metering rate)'],
+ biz:['TWO EGESD rows (import + export registers)','TWO EABL rows per read cycle','Net billing: kWh_net = import_kWh - export_kWh','Export credit: if export > import, credit applied per net metering tariff','NEM 2.0/3.0: check if utility uses annual true-up vs monthly net'],
+ emigall:'T7XEMI03: DEVICE_TYPE=ELEC_NET → DEVICECAT=NETMTR\nT7XEMI03: RATE=NET_METER → TARIF=ZNME\nEGESD: ZWNUMMER=1 (import), ZWNUMMER=2 (export)\nEABL: two EABL rows per device per read date\nBODS: split source net_meter_data into import_read and export_read rows'
+},
+{id:'TOU',name:'Time-of-Use (TOU) Meter',icon:'⏱',cat:'TOU',sparte:'E',te405:'TOU_E',te406:'ELEC_TOU_*',unit:'KWH per time period',
+ desc:'Records consumption by time period: On-Peak, Off-Peak, Super Off-Peak. Multiple EGESD registers per time tier. Requires TOU rate category in TE006.',
+ saptables:['EGERH: DEVICECAT=TOU_E, ERTS_FLAG=X if AMI-based','EGESD: multiple ZWNUMMER rows — one per TOU period','EABL: multiple rows per device per read date (one per TOU register)','TE006: TARIF=ZTOU with time-of-use billing class'],
+ keyFields:['ZWNUMMER=1 (On-Peak kWh)','ZWNUMMER=2 (Off-Peak kWh)','ZWNUMMER=3 (Super Off-Peak kWh, if applicable)','TOU_PROFILE from TE006 rate schema'],
+ biz:['Number of TOU registers must match TE006 rate tier count','EABL rows = register count × read cycles','TOU schedule (hours per period) stored in IS-U rate schema','BODS must split source TOU data by time period register'],
+ emigall:'T7XEMI03: DEVICE_TYPE=ELEC_TOU → DEVICECAT=TOU_E\nT7XEMI03: RATE=TOU → TARIF=ZTOU\nEGESD: ZWNUMMER=1,2,3 (one per TOU period)\nEABL: three rows per device per read cycle\nBODS: source TOU registers mapped by period code'
+},
+// GAS
+{id:'GAS_DIAPHRAGM',name:'Gas Diaphragm Meter',icon:'🔥',cat:'GAS',sparte:'G',te405:'DIAPHRAGM',te406:'GAS_DIAP_*',unit:'CCF or MCF',
+ desc:'Standard residential gas meter. Low-pressure, low-flow. Flex diaphragm measures gas volume. Most common in North America for residential accounts.',
+ saptables:['EGERH: DEVICECAT=DIAPHRAGM, SERNR','EGESD: NKONST=1 (no corrector), ABLEINH=CCF','EABL: ZAEHLERSTAND=CCF reading'],
+ keyFields:['NKONST=1 (standard, no corrector)','ABLEINH=CCF','DEVICECAT=DIAPHRAGM'],
+ biz:['NKONST=1 for standard residential diaphragm','BTU conversion: billing engine applies TE400 BTU factor to convert CCF → therms','Read via drive-by encoder (ABLESART=A) or manual (P)'],
+ emigall:'T7XEMI03: DEVICE_TYPE=GAS_RES → DEVICECAT=DIAPHRAGM\nEGESD: NKONST=1, ABLEINH=CCF\nEABL: ABLESART=P or A (drive-by encoder)'
+},
+{id:'GAS_CORRECTOR',name:'Electronic Volume Corrector (EVC)',icon:'🔧',cat:'CORRECTOR',sparte:'G',te405:'CORRECTOR',te406:'CORR_AC250,CORR_PTZ',unit:'CCF corrected',
+ desc:'Pressure/temperature/compressibility corrector attached to a base gas meter. Converts raw volumetric readings to billing-standard conditions (60°F, 14.73 psia base pressure). Used on commercial/industrial gas accounts.',
+ saptables:['EGERH (base meter): DEVICECAT=DIAPHRAGM or TURBINE, SERNR=base_meter_serial','EGERH (corrector): DEVICECAT=CORRECTOR, SERNR=corrector_serial','EGESD (base): NKONST=1, ABLEINH=CCF_UNCORR','EGESD (corrector): NKONST=corrector_factor, ABLEINH=CCF_CORR','EABL: TWO rows — uncorrected (reg1) + corrected (reg2)'],
+ keyFields:['Two EGERH records (base meter + corrector device)','Two EGESD rows per billing read','NKONST on corrector = P×T correction factor','ABLEINH=CCF_UNCORR (raw) and CCF_CORR (billing)'],
+ biz:['CRITICAL: corrected volume is what is billed — must use corrected EGESD register in rate schema','Corrector factor varies by pressure zone and season — updated in EGESD NKONST periodically','SERNR of corrector and base meter are DIFFERENT — two distinct EGERH records','Load sequence: base meter first (Z_XREF_DEVICE entry), then corrector device with link to base'],
+ emigall:'T7XEMI03: DEVICE_TYPE=GAS_CORR → DEVICECAT=CORRECTOR\nEGERH-1 (base): DEVICECAT=DIAPHRAGM, SERNR=base_serial\nEGERH-2 (corrector): DEVICECAT=CORRECTOR, SERNR=corr_serial\nEGESD-1: ZWNUMMER=1, ABLEINH=CCF, NKONST=1 (uncorrected)\nEGESD-2: ZWNUMMER=2, ABLEINH=CORR_CCF, NKONST=pressure_factor\nEABL: TWO rows per read cycle per device pair\nBODS: split source corrector data into two device EABL rows'
+},
+{id:'GAS_TURBINE',name:'Gas Turbine Meter (Industrial)',icon:'⚙️',cat:'GAS',sparte:'G',te405:'TURBINE',te406:'GAS_TURB_*',unit:'MCF or CCF',
+ desc:'High-flow, high-pressure industrial gas meter. Uses turbine spinning to measure flow. Custody-transfer accuracy required. Always paired with an EVC corrector for billing.',
+ saptables:['EGERH: DEVICECAT=TURBINE, SERNR=turbine_serial','EGESD: NKONST=1 on raw register; corrector EGERH separate','EABL: MCF readings (thousand cubic feet)'],
+ keyFields:['DEVICECAT=TURBINE','ABLEINH=MCF or CCF','Always paired with CORRECTOR EGERH device'],
+ biz:['Industrial custody-transfer: SERNR must match meter nameplate exactly (regulatory)','Max flow rate and minimum flow rate in TE406 model config','Always used with EVC corrector — see CORRECTOR device type above'],
+ emigall:'T7XEMI03: DEVICE_TYPE=GAS_TURB → DEVICECAT=TURBINE\nABLEINH=MCF\nAlways load corrector as separate EGERH device after turbine'
+},
+// WATER
+{id:'WATER_PD',name:'Water Positive Displacement Meter',icon:'💧',cat:'WATER',sparte:'W',te405:'PD_WATER',te406:'WATER_PD_*',unit:'CCF or GAL',
+ desc:'Most common residential water meter. Nutating disc or oscillating piston measures exact volume. Typical 5/8" to 1" residential, 1.5"-2" small commercial.',
+ saptables:['EGERH: DEVICECAT=PD_WATER, SERNR','EGESD: NKONST=1, ABLEINH=CCF or GAL','EABL: ZAEHLERSTAND=CCF or GAL reading'],
+ keyFields:['DEVICECAT=PD_WATER','ABLEINH=CCF or GAL','NKONST=1'],
+ biz:['Low-flow accuracy — important for leak detection','ABLESART=A for encoder (drive-by read) — most common for water','Rollover at 99,999 → 00,000 must be handled in BODS before EABL load'],
+ emigall:'T7XEMI03: DEVICE_TYPE=WATER_PD → DEVICECAT=PD_WATER\nABLEINH=CCF or GAL per utility preference\nEABL: ABLESART=A (auto encoder) or P (manual)'
+},
+{id:'WATER_COMP',name:'Compound Water Meter',icon:'💧',cat:'WATER',sparte:'W',te405:'COMP_WATER',te406:'WATER_COMP_*',unit:'CCF (combined)',
+ desc:'Two-meter-in-one: turbine for high-flow and positive displacement for low-flow. Automatic switchover. Used for large commercial and fire-suppression accounts with variable demand.',
+ saptables:['EGERH: DEVICECAT=COMP_WATER','EGESD: ZWNUMMER=1 (low-flow disc), ZWNUMMER=2 (high-flow turbine)','EABL: TWO rows per read cycle — combine for billing'],
+ keyFields:['ZWNUMMER=1 (low-flow register)','ZWNUMMER=2 (high-flow register)','Billing: sum of both registers = total CCF'],
+ biz:['Two EGESD registers, two EABL rows per read','Billing engine sums both registers for total consumption','Low-flow accuracy critical for leak detection on large commercial accounts'],
+ emigall:'T7XEMI03: DEVICE_TYPE=WATER_COMP → DEVICECAT=COMP_WATER\nEGESD: ZWNUMMER=1 (disc meter), ZWNUMMER=2 (turbine)\nEABL: TWO rows per device per read cycle\nBODS: split source compound_read into two register rows'
+},
+// NET / SOLAR
+{id:'SOLAR_DER',name:'Solar / DER Net Energy Meter',icon:'☀️',cat:'SOLAR',sparte:'E',te405:'NETMTR',te406:'ELEC_NET_*',unit:'KWH import + KWH export',
+ desc:'Customer-owned solar PV, battery storage, or other DER. Net Energy Metering (NEM) measures import from grid and export to grid separately. SAP IS-U billing calculates net monthly and annual true-up.',
+ saptables:['EGERH: DEVICECAT=NETMTR, SERNR','EGESD: ZWNUMMER=1 (import kWh), ZWNUMMER=2 (export kWh)','EVER: TARIF=ZNME or ZNEM3 (NEM 2.0/3.0)','EABL: two reads per cycle','EANL: solar_flag or classification on installation'],
+ keyFields:['ZWNUMMER=1 (import from grid)','ZWNUMMER=2 (export to grid)','TARIF=ZNME (net metering tariff)','NEM_TYPE on EANL classification'],
+ biz:['Annual true-up: some utilities use Dec→Nov annual period, others monthly','Export credit: if export_kWh > import_kWh, credit at export rate (may differ from retail rate)','NEM 3.0: time-varying export credits require TOU + net meter combination','Battery storage: may have 4 registers (solar import, solar export, battery charge, battery discharge)'],
+ emigall:'T7XEMI03: DEVICE_TYPE=SOLAR_NET → DEVICECAT=NETMTR\nT7XEMI03: RATE=NEM_2 → TARIF=ZNME\nEGESD: ZWNUMMER=1 import, ZWNUMMER=2 export\nEABL: two rows per device per read cycle\nBODS: identify solar accounts by DER flag in source system\nClassification: BAPI_OBJCL_ASSIGN ZNME class to EANL with SOLAR_KW characteristic'
+},
+// VIRTUAL
+{id:'VIRTUAL',name:'Virtual / Computed Device',icon:'🖥',cat:'VIRTUAL',sparte:'V',te405:'VIRTUAL',te406:'VIRT_*',unit:'Derived',
+ desc:'No physical meter. Consumption computed from another device (sewer derived from water) or from a formula (street lighting from fixture count). SAP IS-U virtual device has EGERH record but no physical install.',
+ saptables:['EGERH: DEVICECAT=VIRTUAL, SERNR=VIRT-<premise>','EGESD: NKONST=derived_factor (e.g. 0.90 for sewer)','EABL: computed readings loaded by BODS (not field read)'],
+ keyFields:['DEVICECAT=VIRTUAL','SERNR naming convention: VIRT-<ANLAGE>','NKONST = computation factor','ABLESART=C (computed) or custom code'],
+ biz:['BODS computes the "reading" before staging — not a field read','NKONST can encode percentage factor (e.g. 0.90 × water CCF = sewer CCF)','No physical install date event — EGERH.EINBDAT = service start date','One virtual device per premise per computed service type'],
+ emigall:'T7XEMI03: DEVICE_TYPE=VIRTUAL → DEVICECAT=VIRTUAL\nBODS: compute derived reading before ZMETER_READ staging\nEGERH: DEVICECAT=VIRTUAL, no physical location constraint\nEABL: ABLESART=C (computed) — custom code may be needed'
+}
+];
+
+// ═══════════════════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════════════════
+function goTab(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.nvitem').forEach(n=>n.classList.remove('on'));
+  const pg = document.getElementById('pg-'+id);
+  if(pg) pg.classList.add('on');
+  document.querySelectorAll('.tab').forEach(t=>{
+    if(t.getAttribute('onclick')&&t.getAttribute('onclick').includes("'"+id+"'")) t.classList.add('on');
+  });
+  if(id==='utilities') renderUtilCards();
+  if(id==='devices') renderDeviceGrid('ALL');
+  if(id==='config') renderConfig();
+  if(id==='emigall') renderEMIGALLGuide();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// UTILITY CARDS
+// ═══════════════════════════════════════════════════════════════════════════
+function renderUtilCards(){
+  const grid = document.getElementById('util-cards');
+  grid.innerHTML = UTILITIES.map(u=>`
+    <div class="util-card ${u.bgClass}" style="border-top-color:${u.color}" onclick="showUtil('${u.id}')">
+      <div class="uc-icon">${u.icon}</div>
+      <div class="uc-name" style="color:${u.color}">${u.name}</div>
+      <div class="uc-sparte"><span class="badge" style="background:${u.bgClass.replace('bg-','bg-')||'#0a1220'};color:${u.color};border-color:${u.color}">SPARTE = ${u.sparte}</span></div>
+      <div class="uc-desc">${u.desc.substring(0,80)}…</div>
+    </div>`).join('');
+}
+
+let activeUtil = null;
+function showUtil(id){
+  const u = UTILITIES.find(x=>x.id===id);
+  if(!u) return;
+  activeUtil = u;
+  const wrap = document.getElementById('detail-wrap');
+  wrap.classList.add('show');
+  showUtilTab(u,'overview');
+  wrap.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function showUtilTab(u, tab){
+  const tabs = ['overview','tables','devices','config','emigall'];
+  const labels = {overview:'Overview',tables:'Tables & Fields',devices:'Device Types',config:'Configuration Steps',emigall:'EMIGALL Setup'};
+  const tabHtml = tabs.map(t=>`<div class="dp-tab${t===tab?' on':''}" onclick="showUtilTab(activeUtil,'${t}')">${labels[t]}</div>`).join('');
+
+  let body = '';
+  if(tab==='overview') body = `
+    <div class="sec"><h3>Service Description</h3><p>${u.desc}</p></div>
+    <table class="dtbl"><tr><th>Attribute</th><th>Value</th></tr>
+      <tr><td>SAP SPARTE Code</td><td><code style="font-size:13px;font-weight:900">${u.sparte}</code></td></tr>
+      <tr><td>Billing Unit</td><td>${u.billingUnit}</td></tr>
+      <tr><td>Reading Unit (ABLEINH)</td><td><code>${u.readingUnit}</code></td></tr>
+      <tr><td>Service Types</td><td>${u.types.map(t=>`<div style="font-size:11px;color:#7a8a9a;margin:1px 0">• ${t}</div>`).join('')}</td></tr>
+      <tr><td>Rate Categories</td><td>${u.rateCat.map(r=>`<span class="chip g" style="margin:2px">${r}</span>`).join('')}</td></tr>
+    </table>
+    <div class="sec"><h3>Multi-Utility Customer Setup (SPARTE Isolation)</h3>
+    <div class="chain">
+      <div class="cn r">FKKVK<br><small>ONE Contract Account<br>VKONT</small></div><div class="ca">+</div>
+      <div class="cn" style="color:#4da6ff">EOBJK (${u.sparte})<br><small>Connection Object<br>SPARTE=${u.sparte}</small></div><div class="ca">→</div>
+      <div class="cn">EANL<br><small>Premise SPARTE=${u.sparte}</small></div><div class="ca">→</div>
+      <div class="cn">EVER<br><small>Contract TARIF=${u.rateCat[0]?u.rateCat[0].split(' ')[0]:''}</small></div><div class="ca">→</div>
+      <div class="cn t">ERCH<br><small>Bill Document</small></div>
+    </div></div>`;
+
+  if(tab==='tables') body = `
+    <div class="sec"><h3>SAP Tables for ${u.name} Service</h3></div>
+    <table class="dtbl">
+      <tr><th>Table</th><th>Field / Value</th><th>Description</th></tr>
+      ${u.tables.map(t=>`<tr><td><code>${t.tbl}</code></td><td><code style="color:#ffa657">${t.field}</code></td><td>${t.desc}</td></tr>`).join('')}
+    </table>`;
+
+  if(tab==='devices') body = `
+    <div class="sec"><h3>Device Types for ${u.name}</h3>
+    ${u.devices.map((d,i)=>`<div style="background:#0a1220;border:1px solid #1a2535;border-radius:5px;padding:8px 12px;margin-bottom:5px;font-size:11.5px;color:#cdd9e5"><strong style="color:${u.color}">${i+1}.</strong> ${d}</div>`).join('')}
+    </div>`;
+
+  if(tab==='config') body = `
+    <div class="sec"><h3>Configuration Steps for ${u.name} (IMG / SPRO)</h3>
+    ${u.configSteps.map((s,i)=>`
+      <div class="cstep">
+        <div class="cstep-n">${i+1}</div>
+        <div class="cstep-body"><div class="cstep-desc">${s}</div></div>
+      </div>`).join('')}
+    </div>
+    <div class="sec"><h3>Business Rules</h3>
+    ${u.bizRules.map(r=>`<div style="background:#060e1a;border-left:3px solid ${u.color};padding:7px 12px;margin-bottom:5px;font-size:11.5px;border-radius:0 5px 5px 0">${r}</div>`).join('')}
+    </div>`;
+
+  if(tab==='emigall') body = `
+    <div class="sec"><h3>T7XEMI03 Value Mappings for ${u.name}</h3>
+    <div style="background:#060e1a;border:1px solid #1a3a5c;border-radius:6px;padding:14px;font-family:monospace;font-size:12px;color:#79c0ff;white-space:pre-wrap;line-height:1.9">${u.emigall}</div></div>`;
+
+  document.getElementById('detail-wrap').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div>
+        <div class="dp-title">${u.icon} ${u.name} — SPARTE = <span style="color:${u.color}">${u.sparte}</span></div>
+        <div class="dp-sub">${u.billingUnit} · ${u.readingUnit}</div>
+      </div>
+      <button onclick="document.getElementById('detail-wrap').classList.remove('show')" style="background:#1a2535;border:1px solid #253545;color:#7a8a9a;padding:4px 11px;border-radius:5px;cursor:pointer;font-size:11px">✕ Close</button>
+    </div>
+    <div class="dp-tabs">${tabHtml}</div>
+    ${body}`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DEVICE GRID
+// ═══════════════════════════════════════════════════════════════════════════
+const DEV_COLORS = {ELEC:'#4da6ff',GAS:'#ffa657',WATER:'#3fb950',CORRECTOR:'#e08020',NETMETER:'#c2a0ff',AMI:'#4da6ff',CT_PT:'#f85149',TOU:'#f0e040',SOLAR:'#ffd700',VIRTUAL:'#8a9ab0'};
+const DEV_BG = {ELEC:'#051020',GAS:'#130d00',WATER:'#030f08',CORRECTOR:'#1a0d00',NETMETER:'#0f0520',AMI:'#051020',CT_PT:'#150508',TOU:'#131000',SOLAR:'#141000',VIRTUAL:'#0a1020'};
+
+function renderDeviceGrid(cat){
+  const filtered = cat==='ALL' ? DEVICES : DEVICES.filter(d=>d.cat===cat);
+  document.getElementById('dev-grid').innerHTML = filtered.map(d=>`
+    <div class="dev-card" style="border-left-color:${DEV_COLORS[d.cat]||'#4da6ff'};background:${DEV_BG[d.cat]||'#0a1220'}" onclick="showDevice('${d.id}')">
+      <div class="dc-hdr">
+        <div class="dc-icon">${d.icon}</div>
+        <div>
+          <div class="dc-name">${d.name}</div>
+          <div style="font-size:9.5px;margin-top:2px">
+            <span class="badge" style="color:${DEV_COLORS[d.cat]};background:transparent;border-color:${DEV_COLORS[d.cat]}">${d.cat}</span>
+            <span style="font-family:monospace;font-size:9px;color:#4a5a6a;margin-left:5px">SPARTE=${d.sparte}</span>
+          </div>
+        </div>
+      </div>
+      <div class="dc-body">
+        <div style="margin-bottom:4px"><code>${d.te405}</code> → <span style="font-size:10px;color:#4a5a6a">${d.te406}</span></div>
+        <div>${d.desc.substring(0,100)}…</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('dev-detail').style.display='none';
+}
+
+function filterDev(cat, btn){
+  if(btn){document.querySelectorAll('.fbt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+  renderDeviceGrid(cat);
+}
+
+function showDevice(id){
+  const d = DEVICES.find(x=>x.id===id);
+  if(!d) return;
+  const c = DEV_COLORS[d.cat]||'#4da6ff';
+  document.getElementById('dev-detail').style.display='block';
+  document.getElementById('dev-detail').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+      <div>
+        <div style="font-size:15px;font-weight:900;color:#f0f6fc">${d.icon} ${d.name}</div>
+        <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge" style="color:${c};background:${DEV_BG[d.cat]};border-color:${c}">${d.cat}</span>
+          <span class="badge bw">SPARTE = ${d.sparte}</span>
+          <span class="chip">TE405: ${d.te405}</span>
+          <span class="chip">TE406: ${d.te406}</span>
+          <span class="chip g">Unit: ${d.unit}</span>
+        </div>
+      </div>
+      <button onclick="document.getElementById('dev-detail').style.display='none'" style="background:#1a2535;border:1px solid #253545;color:#7a8a9a;padding:4px 11px;border-radius:5px;cursor:pointer;font-size:11px">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <div class="sec"><h3>Description</h3><p style="font-size:12px">${d.desc}</p></div>
+        <div class="sec"><h3>SAP Tables Written</h3>
+          ${d.saptables.map(t=>`<div style="background:#0a1220;border:1px solid #1a2535;border-radius:4px;padding:5px 9px;margin-bottom:4px;font-size:11px;font-family:monospace;color:#3fb950">${t}</div>`).join('')}
+        </div>
+        <div class="sec"><h3>Key Fields</h3>
+          <div class="chips">${d.keyFields.map(f=>`<span class="chip o">${f}</span>`).join('')}</div>
+        </div>
+      </div>
+      <div>
+        <div class="sec"><h3>Business Rules</h3>
+          ${d.biz.map(b=>`<div style="background:#060e1a;border-left:3px solid ${c};padding:6px 11px;margin-bottom:5px;font-size:11.5px;border-radius:0 5px 5px 0">${b}</div>`).join('')}
+        </div>
+        <div class="sec"><h3>EMIGALL Setup</h3>
+          <div style="background:#060e1a;border:1px solid #1a3a5c;border-radius:5px;padding:12px;font-family:monospace;font-size:11px;color:#79c0ff;white-space:pre-wrap;line-height:1.9">${d.emigall}</div>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('dev-detail').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CONFIG STEPS
+// ═══════════════════════════════════════════════════════════════════════════
+function renderConfig(){
+  const wrap = document.getElementById('config-steps-wrap');
+  wrap.innerHTML = `
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+  ${UTILITIES.map(u=>`
+    <div style="background:#060e1a;border:1px solid #1a2535;border-left:3px solid ${u.color};border-radius:7px;padding:14px">
+      <div style="font-size:13px;font-weight:900;color:${u.color};margin-bottom:8px">${u.icon} ${u.name} — SPARTE=${u.sparte}</div>
+      ${u.configSteps.slice(0,6).map((s,i)=>`
+        <div style="display:flex;gap:8px;margin-bottom:6px">
+          <div style="min-width:20px;height:20px;border-radius:50%;background:#071525;border:1.5px solid ${u.color};color:${u.color};font-weight:900;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">${i+1}</div>
+          <div style="font-size:11.5px;color:#7a8a9a">${s}</div>
+        </div>`).join('')}
+      ${u.configSteps.length>6?`<div style="font-size:10.5px;color:#4a5a6a;margin-top:4px">+ ${u.configSteps.length-6} more steps — see Utility Types tab for full detail</div>`:''}
+    </div>`).join('')}
+  </div>
+
+  <!-- Global config tables common to ALL utility types -->
+  <div style="font-size:13px;font-weight:800;color:#f0f6fc;margin:18px 0 10px">Config Tables Required for ALL Utility Types</div>
+  <table class="dtbl">
+    <tr><th>Table</th><th>Purpose</th><th>Configures</th><th>Must Exist Before</th></tr>
+    <tr><td><code>TE001</code></td><td>Division definition — one row per SPARTE (E,G,W,V,S,D)</td><td>SPARTE code, description, settings</td><td>Connection Object, Premise, Device</td></tr>
+    <tr><td><code>TE006</code></td><td>Rate categories — one row per TARIF+SPARTE combination</td><td>Billing rate class (ZRSE, ZRSG, ZRSW…)</td><td>Service Contract (EVER) / Billing Install</td></tr>
+    <tr><td><code>TE400</code></td><td>Rate prices and components per TE006</td><td>$/kWh, $/therm, $/CCF, demand charge, fixed charge</td><td>Billing run (EA05)</td></tr>
+    <tr><td><code>TE405</code></td><td>Device categories — one row per device class</td><td>EMECH_E, AMI_E, CI_E, DIAPHRAGM, CORRECTOR, VIRTUAL…</td><td>Device (EGERH) load</td></tr>
+    <tr><td><code>TE406</code></td><td>Device types/models — one row per make/model</td><td>ITRON_CION, ELSTER_800, SENSUS_IPERL…</td><td>Device (EGERH) load</td></tr>
+    <tr><td><code>TE408</code></td><td>Manufacturer codes</td><td>ITRON, LANDIS, ELSTER, SENSUS, BADGER…</td><td>TE406 (TE406 references TE408)</td></tr>
+    <tr><td><code>TE200</code></td><td>Meter reading unit (MRU) / route per SPARTE</td><td>Route ID, reading frequency, method (manual/AMR/AMI)</td><td>Device Location (EABLG) load</td></tr>
+    <tr><td><code>TE220</code></td><td>Reading reason codes (ABLESART)</td><td>P=periodic, E=estimate, A=AMR/encoder, C=computed, T=transfer</td><td>Meter Read (EABL) load</td></tr>
+    <tr><td><code>TE422</code></td><td>Billing class — groups TE006 rates into billing schema</td><td>Billing class per service type and meter type</td><td>Service Contract / billing configuration</td></tr>
+    <tr><td><code>TFKACT</code></td><td>Contract account types (VKTYP)</td><td>ZRES, ZCOM, ZIND, ZMUNI — one per customer segment</td><td>Contract Account (FKKVK) load</td></tr>
+    <tr><td><code>TB003</code></td><td>BP groupings (BU_GROUP)</td><td>Z001=Residential, Z002=Commercial, Z003=Industrial</td><td>Business Partner (BUT000) load</td></tr>
+  </table>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// EMIGALL GUIDE per utility type
+// ═══════════════════════════════════════════════════════════════════════════
+function renderEMIGALLGuide(){
+  document.getElementById('emigall-wrap').innerHTML = `
+  <!-- T7XEMI03 MASTER TABLE -->
+  <div style="font-size:13px;font-weight:800;color:#f0f6fc;margin-bottom:12px">T7XEMI03 Value Translation — Complete Mapping for All Utility Types</div>
+  <div class="callout w">Every source code must have a T7XEMI03 entry. Run <code>SELECT DISTINCT</code> on every coded column in BODS before building this table. Any unmapped value = T7XEMERR error at runtime.</div>
+  <table class="dtbl">
+    <tr><th>Object</th><th>Field</th><th>Source Value (Cogsdale)</th><th>SAP Value</th><th>Notes</th></tr>
+    ${[
+      ['ZCONN_OBJ + ZPREMISE','SPARTE','DIV=ELECTRIC','E','Connection Object division'],
+      ['ZCONN_OBJ + ZPREMISE','SPARTE','DIV=GAS','G',''],
+      ['ZCONN_OBJ + ZPREMISE','SPARTE','DIV=WATER','W',''],
+      ['ZCONN_OBJ + ZPREMISE','SPARTE','DIV=SEWER','V',''],
+      ['ZCONN_OBJ + ZPREMISE','SPARTE','DIV=STEAM','S',''],
+      ['ZBILL_INSTALL','TARIF','RATE=RES_ELEC','ZRSE','Residential electric'],
+      ['ZBILL_INSTALL','TARIF','RATE=COM_ELEC','ZCME','Commercial electric'],
+      ['ZBILL_INSTALL','TARIF','RATE=IND_ELEC','ZINE','Industrial electric'],
+      ['ZBILL_INSTALL','TARIF','RATE=NET_METER','ZNME','Solar/DER net metering'],
+      ['ZBILL_INSTALL','TARIF','RATE=TOU_ELEC','ZTOU','Time-of-use electric'],
+      ['ZBILL_INSTALL','TARIF','RATE=RES_GAS','ZRSG','Residential gas'],
+      ['ZBILL_INSTALL','TARIF','RATE=COM_GAS','ZCMG','Commercial gas'],
+      ['ZBILL_INSTALL','TARIF','RATE=IND_GAS','ZING','Industrial gas'],
+      ['ZBILL_INSTALL','TARIF','RATE=RES_WATER','ZRSW','Residential water'],
+      ['ZBILL_INSTALL','TARIF','RATE=COM_WATER','ZCMW','Commercial water'],
+      ['ZBILL_INSTALL','TARIF','RATE=RES_SEWER','ZRSSW','Residential sewer'],
+      ['ZDEVICE','DEVICECAT','DEVICE_TYPE=ELEC_MECH','EMECH_E','Standard electric meter'],
+      ['ZDEVICE','DEVICECAT','DEVICE_TYPE=ELEC_AMI','AMI_E','Smart/AMI electric meter'],
+      ['ZDEVICE','DEVICECAT','DEVICE_TYPE=ELEC_CI','CI_E','C&I CT/PT electric'],
+      ['ZDEVICE','DEVICECAT','DEVICE_TYPE=ELEC_NET','NETMTR','Net/bi-directional meter'],
+      ['ZDEVICE','DEVICECAT','DEVICE_TYPE=ELEC_TOU','TOU_E','TOU multi-register'],
+      ['ZDEVICE','DEVICECAT','DEVICE_TYPE=GAS_DIAP','DIAPHRAGM','Residential gas diaphragm'],
+      ['ZDEVICE','DEVICECAT','DEVICE_TYPE=GAS_TURB','TURBINE','Industrial gas turbine'],
+      ['ZDEVICE','DEVICECAT','DEVICE_TYPE=GAS_CORR','CORRECTOR','EVC volume corrector'],
+      ['ZDEVICE','DEVICECAT','DEVICE_TYPE=WATER_PD','PD_WATER','Water positive displacement'],
+      ['ZDEVICE','DEVICECAT','DEVICE_TYPE=WATER_COMP','COMP_WATER','Water compound meter'],
+      ['ZDEVICE','DEVICECAT','DEVICE_TYPE=VIRTUAL','VIRTUAL','Virtual/computed device'],
+      ['ZMETER_READ','ABLEINH','UNIT=KWH','KWH','Electric energy'],
+      ['ZMETER_READ','ABLEINH','UNIT=KW','KW','Electric demand'],
+      ['ZMETER_READ','ABLEINH','UNIT=CCF','CCF','Gas/Water volume'],
+      ['ZMETER_READ','ABLEINH','UNIT=THERM','THM','Gas therms'],
+      ['ZMETER_READ','ABLEINH','UNIT=MCF','MCF','Gas MCF'],
+      ['ZMETER_READ','ABLEINH','UNIT=GAL','GAL','Water gallons'],
+      ['ZMETER_READ','ABLESART','READ_TYPE=ACTUAL','P','Periodic manual read'],
+      ['ZMETER_READ','ABLESART','READ_TYPE=ESTIMATE','E','Estimated read'],
+      ['ZMETER_READ','ABLESART','READ_TYPE=AMR','A','Automatic/encoder/drive-by'],
+      ['ZMETER_READ','ABLESART','READ_TYPE=COMPUTED','C','Virtual/derived read']
+    ].map(r=>`<tr><td><span class="badge be">${r[0]}</span></td><td><code>${r[1]}</code></td><td><code style="color:#ffa657">${r[2]}</code></td><td><code style="color:#3fb950">${r[3]}</code></td><td style="font-size:11px;color:#4a5a6a">${r[4]}</td></tr>`).join('')}
+  </table>
+
+  <!-- MULTI-UTILITY SPECIAL CASES -->
+  <div style="font-size:13px;font-weight:800;color:#f0f6fc;margin:20px 0 10px">Special Cases — Multi-Register &amp; Complex Device EMIGALL</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    ${[
+      {title:'Corrector (Gas EVC)',color:'#ffa657',steps:['1. Load base gas meter as EGERH row → Z_XREF_DEVICE (SERNR_BASE → GERAET_BASE)','2. Load corrector as SEPARATE EGERH row → Z_XREF_CORRECTOR (SERNR_CORR → GERAET_CORR)','3. EGESD for base: ZWNUMMER=1, ABLEINH=CCF, NKONST=1 (raw volume)','4. EGESD for corrector: ZWNUMMER=2, ABLEINH=CORR_CCF, NKONST=P×T factor','5. EABL: TWO rows per read cycle — one for base (GERAET_BASE), one for corrector (GERAET_CORR)','6. Billing schema uses corrector register (ZWNUMMER=2) for consumption']},
+      {title:'Net Meter / Solar DER',color:'#c2a0ff',steps:['1. Load net meter as EGERH, DEVICECAT=NETMTR','2. EGESD ZWNUMMER=1: import kWh register','3. EGESD ZWNUMMER=2: export kWh register','4. EABL: TWO rows per read date — import and export','5. BODS: split source "net_meter_import" and "net_meter_export" fields into two EABL rows','6. Rate: TARIF=ZNME — net billing engine computes import - export','7. Annual true-up period: set in TE006 billing schema']},
+      {title:'TOU Multi-Register',color:'#f0e040',steps:['1. EGERH: DEVICECAT=TOU_E, ERTS_FLAG=X (if AMI)','2. EGESD: ZWNUMMER=1 (On-Peak), =2 (Off-Peak), =3 (Super Off-Peak)','3. EABL: THREE rows per device per billing read cycle','4. BODS: source TOU data split by time-period register into separate rows','5. T7XEMI03: TOU_PERIOD=OP → ZWNUMMER=1, OP=OFF → =2, SOP → =3','6. Rate: TARIF=ZTOU with TOU billing class in TE422']},
+      {title:'Compound Water Meter',color:'#3fb950',steps:['1. One EGERH device: DEVICECAT=COMP_WATER','2. EGESD ZWNUMMER=1: low-flow disc register','3. EGESD ZWNUMMER=2: high-flow turbine register','4. EABL: TWO rows per read cycle (one per register)','5. BODS: split source compound_low_flow and compound_high_flow into two rows','6. Billing engine SUMS both registers for total consumption','7. Rate: TARIF=ZCMW — compound meter flag in TE406']},
+      {title:'Sewer Virtual Device',color:'#c2a0ff',steps:['1. Create virtual EGERH: DEVICECAT=VIRTUAL, SERNR=VIRT-<ANLAGE>','2. EGESD: NKONST=0.90 (90% of water = sewer consumption)','3. BODS: compute sewer CCF = water CCF × 0.90 BEFORE staging','4. Stage computed sewer reads as EABL rows for virtual device','5. T7XEMI03: READ_TYPE=COMPUTED → ABLESART=C','6. Separate EVER contract (SPARTE=V) under same VKONT','7. Separate EOBJK and EANL for sewer service (SPARTE=V)']},
+      {title:'Multi-Utility Single Customer',color:'#4da6ff',steps:['1. ONE BUT000 / PARTNER record for customer','2. ONE FKKVK / VKONT contract account','3. SEPARATE EOBJK per utility (SPARTE=E, SPARTE=G, SPARTE=W)','4. SEPARATE EANL per utility (ANLAGE-E, ANLAGE-G, ANLAGE-W)','5. SEPARATE EVER per utility (VERTRAG-E, VERTRAG-G, VERTRAG-W)','6. All EVERs share same VKONT → billed on ONE invoice (convergent billing)','7. Z_XREF_PREMISE: three entries per address (one per SPARTE)']}
+    ].map(c=>`
+      <div style="background:#060e1a;border:1px solid #1a2535;border-radius:7px;padding:13px">
+        <div style="font-size:12px;font-weight:800;color:${c.color};margin-bottom:9px">${c.title}</div>
+        ${c.steps.map(s=>`<div style="font-size:11.5px;color:#7a8a9a;margin-bottom:4px;padding-left:4px;border-left:2px solid ${c.color}20">  ${s}</div>`).join('')}
+      </div>`).join('')}
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SIDEBAR SEARCH
+// ═══════════════════════════════════════════════════════════════════════════
+function sideSearch(v){
+  const val = v.toLowerCase().trim();
+  // highlight matching cards
+  if(!val) return;
+  const match = UTILITIES.find(u=>u.name.toLowerCase().includes(val)||u.sparte.toLowerCase()===val);
+  if(match){ goTab('utilities'); setTimeout(()=>showUtil(match.id), 200); }
+  const devMatch = DEVICES.find(d=>d.name.toLowerCase().includes(val)||d.cat.toLowerCase().includes(val));
+  if(devMatch){ goTab('devices'); setTimeout(()=>{ filterDev('ALL'); showDevice(devMatch.id); }, 200); }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════════════
+window.onload = function(){
+  renderUtilCards();
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SAP IS-U Utilities Architecture & EMIGALL Deep Reference</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;background:#0a0e1a;color:#cdd9e5;font-size:13px;line-height:1.6;display:flex;height:100vh;overflow:hidden}
+/* ── SIDEBAR ── */
+#sb{width:260px;min-width:260px;background:#040810;border-right:1px solid #1e2a3a;display:flex;flex-direction:column;overflow:hidden}
+#sb-brand{padding:14px 14px 10px;border-bottom:1px solid #1e2a3a}
+#sb-brand h1{font-size:13px;font-weight:800;color:#4da6ff;line-height:1.3}
+#sb-brand p{font-size:10px;color:#5a6a7a;margin-top:2px}
+#sb-search{padding:8px 10px;border-bottom:1px solid #1e2a3a}
+#sb-search input{width:100%;background:#111827;border:1px solid #2a3a4a;color:#cdd9e5;padding:5px 8px;border-radius:5px;font-size:11px;outline:none}
+#sb-nav{flex:1;overflow-y:auto;padding:6px 0}
+.nvsec{padding:6px 12px 3px;font-size:10px;font-weight:700;color:#5a6a7a;text-transform:uppercase;letter-spacing:.6px;margin-top:4px}
+.nvitem{padding:6px 12px 6px 16px;font-size:11.5px;color:#8a9ab0;cursor:pointer;border-left:2px solid transparent;transition:all .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nvitem:hover{background:#111827;color:#cdd9e5;border-left-color:#2a3a4a}
+.nvitem.active{background:#0a1929;color:#4da6ff;border-left-color:#4da6ff;font-weight:700}
+/* ── MAIN ── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#topbar{background:#111827;border-bottom:1px solid #1e2a3a;padding:9px 18px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+#topbar h2{font-size:13px;font-weight:700;color:#f0f6fc}
+.tbbadge{font-size:10px;padding:2px 9px;border-radius:10px;border:1px solid}
+#tabs{display:flex;gap:2px;padding:6px 14px;background:#0a0e1a;border-bottom:1px solid #1e2a3a;overflow-x:auto;flex-shrink:0}
+.tab{padding:5px 13px;font-size:11.5px;color:#5a6a7a;cursor:pointer;border-radius:5px;white-space:nowrap;border:1px solid transparent;transition:all .15s}
+.tab:hover{background:#111827;color:#cdd9e5}
+.tab.active{background:#0a1929;color:#4da6ff;border-color:#1a3a5c}
+#content{flex:1;overflow-y:auto}
+.page{display:none;padding:22px 24px 40px}
+.page.active{display:block}
+/* ── CARDS / BOXES ── */
+.sh{font-size:15px;font-weight:800;color:#f0f6fc;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #1e2a3a;display:flex;align-items:center;gap:8px}
+.callout{padding:10px 14px;border-radius:6px;margin-bottom:14px;font-size:12px;border-left:3px solid}
+.callout.info{background:#071929;border-left-color:#4da6ff;color:#79c0ff}
+.callout.warn{background:#1a1000;border-left-color:#f0a050;color:#ffa657}
+.callout.ok{background:#051a10;border-left-color:#2ea043;color:#3fb950}
+.callout.purple{background:#120a2a;border-left-color:#a371f7;color:#d2a8ff}
+/* ── ARCHITECTURE DIAGRAM ── */
+.arch-wrap{overflow-x:auto;padding:8px 0 16px}
+.arch-layer{display:flex;gap:10px;align-items:stretch;margin-bottom:6px}
+.arch-label{writing-mode:vertical-rl;text-orientation:mixed;font-size:10px;font-weight:700;color:#5a6a7a;text-transform:uppercase;letter-spacing:.6px;min-width:26px;display:flex;align-items:center;justify-content:center}
+.arch-boxes{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+.arch-box{border-radius:7px;padding:10px 14px;border:1px solid;font-size:11.5px;min-width:130px;cursor:pointer;transition:all .2s}
+.arch-box:hover{transform:translateY(-2px);filter:brightness(1.15)}
+.arch-box .ab-title{font-weight:800;font-size:12px;margin-bottom:3px}
+.arch-box .ab-table{font-family:monospace;font-size:10.5px;margin-bottom:2px}
+.arch-box .ab-key{font-size:10px;opacity:.75}
+.arch-arrow-row{display:flex;align-items:center;padding:2px 0 2px 34px;gap:4px}
+.arch-arrow{width:2px;background:#2a3a4a;height:18px;margin-left:24px;position:relative}
+.arch-arrow::after{content:'▼';position:absolute;bottom:-8px;left:-5px;font-size:10px;color:#4da6ff}
+/* colors */
+.ab-source{background:#0a1520;border-color:#2a5a8a;color:#79c0ff}
+.ab-bp{background:#0a1a30;border-color:#1a5a9a;color:#79c0ff}
+.ab-fica{background:#1a0f00;border-color:#7a4a00;color:#ffa657}
+.ab-isu{background:#051a10;border-color:#1a6a30;color:#3fb950}
+.ab-eam{background:#150a20;border-color:#6a3aa0;color:#d2a8ff}
+.ab-erp{background:#1a1200;border-color:#8a6a00;color:#f0e040}
+.ab-emigall{background:#0a1520;border-color:#4da6ff;color:#4da6ff}
+/* ── TREE ── */
+.tree{font-size:12px}
+.tree-node{margin:1px 0}
+.tree-row{display:flex;align-items:center;gap:6px;padding:4px 8px;border-radius:5px;cursor:pointer;transition:background .15s}
+.tree-row:hover{background:#111827}
+.tree-row.selected{background:#0a1929;border-left:2px solid #4da6ff}
+.tree-toggle{width:14px;text-align:center;color:#4da6ff;font-size:10px;flex-shrink:0}
+.tree-icon{font-size:12px;flex-shrink:0}
+.tree-label{flex:1;font-weight:600;color:#cdd9e5}
+.tree-table{font-family:monospace;font-size:10px;color:#3fb950;background:#051a10;padding:1px 5px;border-radius:3px;border:1px solid #1a4a20}
+.tree-key{font-family:monospace;font-size:10px;color:#ffa657}
+.tree-children{padding-left:20px;border-left:1px dashed #1e2a3a;margin-left:10px}
+/* ── OBJECT DETAIL ── */
+#obj-detail{flex:1;background:#0a0e1a;border-left:1px solid #1e2a3a;overflow-y:auto;padding:18px;min-width:440px;max-width:580px;display:none;flex-direction:column}
+#obj-detail.show{display:flex}
+.od-head{margin-bottom:14px}
+.od-title{font-size:16px;font-weight:900;color:#f0f6fc}
+.od-sub{font-size:11px;color:#5a6a7a;margin-top:3px}
+.od-tabs{display:flex;gap:2px;margin-bottom:12px;flex-wrap:wrap}
+.od-tab{padding:4px 11px;font-size:11px;border-radius:4px;cursor:pointer;border:1px solid #2a3a4a;color:#5a6a7a;transition:all .15s}
+.od-tab.active{background:#0a1929;color:#4da6ff;border-color:#1a3a5c}
+.od-tab:hover{background:#111827;color:#cdd9e5}
+.od-body{flex:1;overflow-y:auto}
+/* ── TABLE STYLES ── */
+.dtbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-bottom:14px}
+.dtbl th{background:#111827;color:#5a6a7a;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:6px 9px;text-align:left;border:1px solid #1e2a3a}
+.dtbl td{padding:6px 9px;border:1px solid #1e2a3a;vertical-align:top;line-height:1.6}
+.dtbl tr:hover td{background:#0d1520}
+code{background:#111827;border:1px solid #2a3a4a;padding:1px 5px;border-radius:3px;font-size:10.5px;color:#3fb950;font-family:monospace}
+.badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:700;border:1px solid}
+.bblue{background:#0a1929;color:#4da6ff;border-color:#1a3a5c}
+.bgreen{background:#051a10;color:#3fb950;border-color:#1a4a20}
+.borange{background:#1a1000;color:#ffa657;border-color:#5a3a00}
+.bpurple{background:#150a2a;color:#d2a8ff;border-color:#5a3a8a}
+.byellow{background:#1a1500;color:#f0e040;border-color:#6a5a00}
+.bred{background:#1a0a08;color:#f85149;border-color:#5a1a18}
+/* ── EMIGALL STEPS ── */
+.estep{display:flex;gap:12px;margin-bottom:14px;padding:14px;background:#071929;border:1px solid #1a3a5c;border-radius:7px;position:relative}
+.estep-num{width:30px;height:30px;border-radius:50%;background:#0a2a4a;border:2px solid #4da6ff;color:#4da6ff;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.estep-body{flex:1}
+.estep-title{font-size:13px;font-weight:800;color:#f0f6fc;margin-bottom:5px}
+.estep-desc{font-size:12px;color:#8a9ab0;line-height:1.75}
+.estep-sub{margin-top:8px}
+.estep-sub h4{font-size:10px;font-weight:700;color:#4da6ff;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.chip-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px}
+.chip{background:#0a1929;border:1px solid #1a3a5c;border-radius:4px;padding:3px 9px;font-size:11px;color:#79c0ff;font-family:monospace}
+.chip.green{background:#051a10;border-color:#1a4a20;color:#3fb950}
+.chip.orange{background:#1a1000;border-color:#5a3a00;color:#ffa657}
+.chip.red{background:#1a0a08;border-color:#5a1a18;color:#f85149}
+/* ── LINK CHAIN ── */
+.lchain{display:flex;flex-wrap:wrap;align-items:center;gap:3px;margin:6px 0 10px;background:#071929;border:1px solid #1e2a3a;border-radius:6px;padding:10px 12px}
+.lc-node{background:#0a1929;border:1px solid #2a4a6a;border-radius:5px;padding:5px 11px;font-size:11px;font-weight:700;color:#79c0ff;cursor:pointer;transition:all .15s}
+.lc-node:hover{background:#1a2a3a;border-color:#4da6ff}
+.lc-node.root{background:#051a10;border-color:#2a6a40;color:#3fb950}
+.lc-node.target{background:#150a2a;border-color:#5a3a8a;color:#d2a8ff}
+.lc-arr{color:#4da6ff;font-size:13px;font-weight:900;padding:0 2px}
+.lc-field{font-size:10px;color:#5a6a7a;font-family:monospace;background:#111827;padding:1px 5px;border-radius:3px}
+/* ── FLOW STEPS ── */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:3px;margin:8px 0}
+.fs{background:#111827;border:1px solid #2a3a4a;border-radius:5px;padding:5px 11px;font-size:11px;color:#cdd9e5}
+.fa{color:#4da6ff;font-weight:900;font-size:13px}
+/* ── SECTION ── */
+.sec{margin-bottom:18px}
+.sec h3{font-size:11px;font-weight:700;color:#4da6ff;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #1e2a3a}
+.sec p,.sec li{font-size:12.5px;color:#8a9ab0;line-height:1.75}
+.sec ul,.sec ol{padding-left:18px}
+.sec li{margin-bottom:3px}
+.sec li::marker{color:#4da6ff}
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:#040810}
+::-webkit-scrollbar-thumb{background:#2a3a4a;border-radius:3px}
+/* ── SPLIT VIEW ── */
+#tree-page{display:none;height:100%}
+#tree-page.active{display:flex;gap:0}
+#tree-panel{width:320px;min-width:280px;border-right:1px solid #1e2a3a;overflow-y:auto;padding:16px 12px;flex-shrink:0}
+#detail-panel{flex:1;overflow-y:auto;padding:20px;background:#070c16}
+/* ── TCODE TABLE ── */
+.tc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.tc-card{background:#111827;border:1px solid #1e2a3a;border-radius:7px;overflow:hidden}
+.tc-hdr{padding:8px 12px;font-size:11px;font-weight:700;color:#f0f6fc}
+.tc-row{display:flex;gap:8px;padding:5px 12px;border-bottom:1px solid #1e2a3a;align-items:flex-start}
+.tc-row:last-child{border-bottom:none}
+.tc-code{min-width:120px;font-family:monospace;font-weight:700;color:#3fb950;font-size:11px}
+.tc-desc{flex:1;font-size:11.5px;color:#8a9ab0}
+.tc-diff{font-size:10px;font-weight:700;white-space:nowrap;padding:1px 6px;border-radius:8px}
+.td-both{background:#051a10;color:#3fb950}
+.td-ecc{background:#1a1500;color:#f0e040}
+.td-s4{background:#150a2a;color:#d2a8ff}
+/* emigall flow big */
+.emi-flow{display:flex;flex-direction:column;gap:0;margin-bottom:20px}
+.emi-step-row{display:flex;align-items:stretch;gap:0}
+.emi-step-box{flex:1;background:#071929;border:1px solid #1a3a5c;border-radius:7px;padding:14px 16px;margin-bottom:4px}
+.emi-step-box h4{font-size:13px;font-weight:800;color:#4da6ff;margin-bottom:6px}
+.emi-step-num{width:36px;height:36px;border-radius:50%;background:#0a2a4a;border:2px solid #4da6ff;color:#4da6ff;font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center;margin-right:14px;flex-shrink:0;margin-top:2px}
+.emi-row{display:flex;margin-bottom:8px}
+.emi-conn{width:36px;display:flex;flex-direction:column;align-items:center;margin-right:14px}
+.emi-vline{width:2px;background:#1a3a5c;flex:1;min-height:12px}
+.emi-arrow-d{color:#4da6ff;font-size:14px;margin:-3px 0}
+</style>
+</head>
+<body>
+<!-- SIDEBAR -->
+<div id="sb">
+  <div id="sb-brand">
+    <h1>⚡ SAP IS-U Utilities</h1>
+    <p>Architecture · Objects · EMIGALL · Tables</p>
+  </div>
+  <div id="sb-search"><input id="sb-inp" type="text" placeholder="Search object or table…" oninput="sideSearch(this.value)"></div>
+  <div id="sb-nav">
+    <div class="nvsec">Overview</div>
+    <div class="nvitem active" onclick="goTab('arch')">🏛 Architecture Diagram</div>
+    <div class="nvitem" onclick="goTab('tree')">🌳 Utilities Object Tree</div>
+    <div class="nvitem" onclick="goTab('seq')">📋 Load Sequence Table</div>
+
+    <div class="nvsec">Object Categories</div>
+    <div class="nvitem" onclick="goTab('tree');treeFilter('BP')">👤 Business Partner (CIS)</div>
+    <div class="nvitem" onclick="goTab('tree');treeFilter('FICA')">💳 FI-CA Contract Acctg</div>
+    <div class="nvitem" onclick="goTab('tree');treeFilter('ISU')">⚡ IS-U Physical Objects</div>
+    <div class="nvitem" onclick="goTab('tree');treeFilter('BILLING')">🧾 IS-U Billing</div>
+    <div class="nvitem" onclick="goTab('tree');treeFilter('EAM')">🔧 EAM / Plant Maint</div>
+    <div class="nvitem" onclick="goTab('tree');treeFilter('ERP')">💰 ERP Finance</div>
+
+    <div class="nvsec">EMIGALL Reference</div>
+    <div class="nvitem" onclick="goTab('emigall')">📐 EMIGALL Setup A–Z</div>
+    <div class="nvitem" onclick="goTab('emigall');scrollTo007('emi-tables')">🗂 T7XEMI* Tables</div>
+    <div class="nvitem" onclick="goTab('emigall');scrollTo007('emi-badi')">🔌 BAdI &amp; Validation</div>
+    <div class="nvitem" onclick="goTab('emigall');scrollTo007('emi-errors')">🚨 Error Codes &amp; Fixes</div>
+    <div class="nvitem" onclick="goTab('emigall');scrollTo007('emi-bods')">🔗 BODS Integration</div>
+    <div class="nvitem" onclick="goTab('emigall');scrollTo007('emi-sharepoint')">☁ SharePoint → SAP Flow</div>
+
+    <div class="nvsec">T-Codes</div>
+    <div class="nvitem" onclick="goTab('tcode')">🖥 ECC vs S/4HANA T-Codes</div>
+
+    <div id="sb-dyn"></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="topbar">
+    <h2>SAP IS-U Utilities — Architecture, Objects &amp; EMIGALL Complete Reference</h2>
+    <div style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">
+      <span class="tbbadge" style="background:rgba(77,166,255,.1);color:#4da6ff;border-color:rgba(77,166,255,.3)">43 Objects</span>
+      <span class="tbbadge" style="background:rgba(63,185,80,.1);color:#3fb950;border-color:rgba(63,185,80,.25)">80+ Tables</span>
+      <span class="tbbadge" style="background:rgba(255,166,87,.1);color:#ffa657;border-color:rgba(255,166,87,.25)">EMIGALL End-to-End</span>
+      <span class="tbbadge" style="background:rgba(210,168,255,.1);color:#d2a8ff;border-color:rgba(210,168,255,.25)">ECC + S/4 T-Codes</span>
+    </div>
+  </div>
+  <div id="tabs">
+    <div class="tab active" onclick="goTab('arch')">🏛 Architecture</div>
+    <div class="tab" onclick="goTab('tree')">🌳 Object Tree</div>
+    <div class="tab" onclick="goTab('seq')">📋 Load Sequence</div>
+    <div class="tab" onclick="goTab('emigall')">📐 EMIGALL Setup</div>
+    <div class="tab" onclick="goTab('tcode')">🖥 T-Codes</div>
+  </div>
+  <div id="content">
+
+    <!-- ═══════════════ ARCHITECTURE PAGE ═══════════════ -->
+    <div id="pg-arch" class="page active">
+      <div class="sh">🏛 SAP IS-U Utilities — Full Architecture Diagram</div>
+      <div class="callout info">Click any box to see tables, fields, and links. Layers show the SAP IS-U system from source data through EMIGALL into target modules.</div>
+
+      <!-- LAYER 0: Source Systems -->
+      <div style="background:#040810;border:1px solid #1e2a3a;border-radius:8px;padding:14px 16px;margin-bottom:10px">
+        <div style="font-size:10px;font-weight:700;color:#5a6a7a;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">Layer 0 — Source Systems (Legacy)</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div class="arch-box ab-source" onclick="showArch('src-cogsdale')"><div class="ab-title">Cogsdale / CIS+</div><div class="ab-table">Customer · Meter · Bills</div><div class="ab-key">→ CIS Objects</div></div>
+          <div class="arch-box ab-source" onclick="showArch('src-vertex')"><div class="ab-title">Vertex / Billing</div><div class="ab-table">Rates · Tax · Invoice</div><div class="ab-key">→ Bill History DS</div></div>
+          <div class="arch-box ab-source" onclick="showArch('src-mainsaver')"><div class="ab-title">MainSaver / EAM</div><div class="ab-table">FLOC · Equipment · PM</div><div class="ab-key">→ EAM Objects</div></div>
+          <div class="arch-box ab-source" onclick="showArch('src-jde')"><div class="ab-title">JDE / PeopleSoft</div><div class="ab-table">GL · Vendor · Asset</div><div class="ab-key">→ ERP Objects</div></div>
+          <div class="arch-box ab-source" onclick="showArch('src-sharepoint')"><div class="ab-title">SharePoint</div><div class="ab-table">CSV / Excel Files</div><div class="ab-key">→ BODS File Datastore</div></div>
+        </div>
+      </div>
+
+      <!-- ARROW -->
+      <div style="text-align:center;font-size:18px;color:#4da6ff;font-weight:900;margin:2px 0">↓ BODS ETL Pipeline ↓</div>
+
+      <!-- LAYER 1: BODS -->
+      <div style="background:#040810;border:1px solid #1a3a5c;border-radius:8px;padding:14px 16px;margin-bottom:10px">
+        <div style="font-size:10px;font-weight:700;color:#4da6ff;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">Layer 1 — SAP BODS ETL (Data Services)</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div class="arch-box ab-emigall" onclick="showArch('bods-extract')"><div class="ab-title">Extract Jobs</div><div class="ab-table">SQL/ODBC/File readers</div><div class="ab-key">Source → Staging</div></div>
+          <div class="arch-box ab-emigall" onclick="showArch('bods-transform')"><div class="ab-title">Transform</div><div class="ab-table">Query · Case · Validate</div><div class="ab-key">Cleanse + Map + Enrich</div></div>
+          <div class="arch-box ab-emigall" onclick="showArch('bods-zxref')"><div class="ab-title">Z-Table Lookups</div><div class="ab-table">Z_XREF_BP / CA / PREMISE</div><div class="ab-key">Legacy ID → SAP Number</div></div>
+          <div class="arch-box ab-emigall" onclick="showArch('bods-load')"><div class="ab-title">Load</div><div class="ab-table">RFC Datastore → FM</div><div class="ab-key">Write to Staging Table</div></div>
+          <div class="arch-box ab-emigall" onclick="showArch('bods-cass')"><div class="ab-title">Address CASS</div><div class="ab-table">USPS Postal Cleanse</div><div class="ab-key">→ ADRC</div></div>
+        </div>
+      </div>
+
+      <!-- ARROW -->
+      <div style="text-align:center;font-size:18px;color:#4da6ff;font-weight:900;margin:2px 0">↓ EMIGALL / Direct Insert ↓</div>
+
+      <!-- LAYER 2: SAP IS-U Modules -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">
+
+        <!-- CIS / FI-CA -->
+        <div style="background:#040810;border:1px solid #1a3a5c;border-radius:8px;padding:12px 14px">
+          <div style="font-size:10px;font-weight:700;color:#4da6ff;margin-bottom:8px;text-transform:uppercase">CIS / FI-CA</div>
+          <div class="arch-box ab-bp" style="margin-bottom:6px" onclick="showArch('bp')"><div class="ab-title">Business Partner</div><div class="ab-table">BUT000 · ADRC · BUT100</div><div class="ab-key">PARTNER (PK)</div></div>
+          <div class="arch-box ab-fica" style="margin-bottom:6px" onclick="showArch('ca')"><div class="ab-title">Contract Account</div><div class="ab-table">FKKVK · DFKKZK</div><div class="ab-key">VKONT (PK) · GPART (FK→BP)</div></div>
+          <div class="arch-box ab-fica" style="margin-bottom:6px" onclick="showArch('payment')"><div class="ab-title">Open Items / Payment</div><div class="ab-table">FKKOP · FKKCL</div><div class="ab-key">VKONT (FK→CA)</div></div>
+          <div class="arch-box ab-fica" onclick="showArch('deposit')"><div class="ab-title">Deposits / Dunning / IP</div><div class="ab-table">FKKDEP · FKKDUN · FKKINST</div><div class="ab-key">VKONT (FK→CA)</div></div>
+        </div>
+
+        <!-- IS-U Physical -->
+        <div style="background:#040810;border:1px solid #1a4a20;border-radius:8px;padding:12px 14px">
+          <div style="font-size:10px;font-weight:700;color:#3fb950;margin-bottom:8px;text-transform:uppercase">IS-U Physical Infrastructure</div>
+          <div class="arch-box ab-isu" style="margin-bottom:6px" onclick="showArch('connobj')"><div class="ab-title">Connection Object</div><div class="ab-table">EOBJK · EABJK</div><div class="ab-key">EOBJK (PK) · SPARTE</div></div>
+          <div class="arch-box ab-isu" style="margin-bottom:6px" onclick="showArch('premise')"><div class="ab-title">Premise / Installation</div><div class="ab-table">EANL · EANLH · EVBS</div><div class="ab-key">ANLAGE (PK) · EOBJK (FK)</div></div>
+          <div class="arch-box ab-isu" style="margin-bottom:6px" onclick="showArch('devloc')"><div class="ab-title">Device Location</div><div class="ab-table">EABLG · STXH/STXL</div><div class="ab-key">EABLG (PK) · ANLAGE (FK)</div></div>
+          <div class="arch-box ab-isu" style="margin-bottom:6px" onclick="showArch('device')"><div class="ab-title">Device / Meter</div><div class="ab-table">EGERH · EGESD · EGZWG</div><div class="ab-key">GERAET/SERNR (PK) · EABLG (FK)</div></div>
+          <div class="arch-box ab-isu" onclick="showArch('meterread')"><div class="ab-title">Meter Readings</div><div class="ab-table">EABL</div><div class="ab-key">GERAET+ABLDAT (PK)</div></div>
+        </div>
+
+        <!-- Billing + EAM -->
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="background:#040810;border:1px solid #1a4a20;border-radius:8px;padding:12px 14px;flex:1">
+            <div style="font-size:10px;font-weight:700;color:#3fb950;margin-bottom:8px;text-transform:uppercase">IS-U Billing</div>
+            <div class="arch-box ab-isu" style="margin-bottom:6px" onclick="showArch('contract')"><div class="ab-title">Service Contract</div><div class="ab-table">EVER · EVBS</div><div class="ab-key">VERTRAG (PK) · VKONT+ANLAGE (FK)</div></div>
+            <div class="arch-box ab-isu" onclick="showArch('bill')"><div class="ab-title">Bill Documents</div><div class="ab-table">ERCH · ERCHZ · ERCHC</div><div class="ab-key">BELNR (PK) · VERTRAG (FK)</div></div>
+          </div>
+          <div style="background:#040810;border:1px solid #5a3a8a;border-radius:8px;padding:12px 14px;flex:1">
+            <div style="font-size:10px;font-weight:700;color:#d2a8ff;margin-bottom:8px;text-transform:uppercase">EAM Plant Maintenance</div>
+            <div class="arch-box ab-eam" style="margin-bottom:6px" onclick="showArch('floc')"><div class="ab-title">Functional Location</div><div class="ab-table">IFLOT · ILOA · IFLOTX</div><div class="ab-key">TPLNR (PK)</div></div>
+            <div class="arch-box ab-eam" onclick="showArch('maintplan')"><div class="ab-title">Maintenance Plan</div><div class="ab-table">MPLA · MPOS · AFKO</div><div class="ab-key">WARPL (PK) · TPLNR (FK)</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAYER 3: Config -->
+      <div style="background:#040810;border:1px solid #5a3a00;border-radius:8px;padding:12px 14px;margin-bottom:10px">
+        <div style="font-size:10px;font-weight:700;color:#ffa657;margin-bottom:8px;text-transform:uppercase">Layer 3 — SAP Configuration Tables (Must exist BEFORE migration objects load)</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <div class="arch-box ab-erp" onclick="showArch('config-te')"><div class="ab-title">IS-U Config</div><div class="ab-table">TE001 TE006 TE200 TE405</div><div class="ab-key">Division · Rate · MRU · Device</div></div>
+          <div class="arch-box ab-erp" onclick="showArch('config-tfk')"><div class="ab-title">FI-CA Config</div><div class="ab-table">TFKACT TFKDUN TFKDEP</div><div class="ab-key">CA Types · Dunning · Deposit</div></div>
+          <div class="arch-box ab-erp" onclick="showArch('config-bp')"><div class="ab-title">BP Config</div><div class="ab-table">TB003 TB025 TFKBPTAXGRP</div><div class="ab-key">Groups · Relationships · Tax</div></div>
+          <div class="arch-box ab-erp" onclick="showArch('config-emigall')"><div class="ab-title">EMIGALL Config</div><div class="ab-table">T7XEMI01-06 T7XEMERR</div><div class="ab-key">Object · Field Map · Value Map</div></div>
+        </div>
+      </div>
+
+      <!-- ARCH DETAIL PANEL -->
+      <div id="arch-detail" style="display:none;background:#071929;border:1px solid #1a3a5c;border-radius:8px;padding:16px;margin-top:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div id="arch-title" style="font-size:14px;font-weight:800;color:#f0f6fc"></div>
+          <button onclick="document.getElementById('arch-detail').style.display='none'" style="background:#1e2a3a;border:1px solid #2a3a4a;color:#8a9ab0;padding:4px 11px;border-radius:5px;cursor:pointer;font-size:11px">✕ Close</button>
+        </div>
+        <div id="arch-body"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ TREE + DETAIL PAGE ═══════════════ -->
+    <div id="pg-tree" class="page" style="padding:0;height:100%">
+      <div id="tree-page" style="height:100%">
+        <div id="tree-panel">
+          <div style="font-size:11px;font-weight:700;color:#5a6a7a;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">Utilities Object Tree — Click to Explore</div>
+          <div id="tree-root"></div>
+        </div>
+        <div id="detail-panel">
+          <div id="tree-detail-content" style="color:#5a6a7a;font-size:13px;padding:40px 20px;text-align:center">
+            ← Select any object from the tree to see full detail:<br>tables, key fields, linking fields, dependencies, and EMIGALL setup.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ LOAD SEQUENCE PAGE ═══════════════ -->
+    <div id="pg-seq" class="page">
+      <div class="sh">📋 Migration Load Sequence — All 43 Objects</div>
+      <div class="callout info">Objects must be loaded in this exact order. Each row shows the SAP table written, the primary key created, and what prior objects must exist.</div>
+      <div id="seq-table-wrap"></div>
+    </div>
+
+    <!-- ═══════════════ EMIGALL PAGE ═══════════════ -->
+    <div id="pg-emigall" class="page">
+      <div class="sh">📐 EMIGALL — Complete Setup Guide, Start to End</div>
+      <div class="callout purple"><strong>EMIGALL (T-code: EMIGALL or ISU_EMIGALL)</strong> is SAP's native IS-U migration workbench. It provides a controlled pipeline: staging data → field mapping → value translation → BAdI validation → test run → error fix → production run. All configuration lives in the T7XEMI* table family.</div>
+
+      <!-- BIG FLOW -->
+      <div id="emi-flow-section">
+        <h3 style="font-size:13px;font-weight:800;color:#f0f6fc;margin-bottom:12px">End-to-End EMIGALL Pipeline</h3>
+        <div style="display:flex;align-items:stretch;overflow-x:auto;gap:0;margin-bottom:20px;padding-bottom:8px">
+          <div class="fs">📂 Source<br>File / DB</div><div class="fa">→</div>
+          <div class="fs">🔄 BODS<br>ETL Jobs</div><div class="fa">→</div>
+          <div class="fs">📥 Staging<br>Z-Table / Flat File</div><div class="fa">→</div>
+          <div class="fs">📋 T7XEMI02<br>Field Mapping</div><div class="fa">→</div>
+          <div class="fs">🔁 T7XEMI03<br>Value Translation</div><div class="fa">→</div>
+          <div class="fs">🔌 BAdI<br>Custom Validation</div><div class="fa">→</div>
+          <div class="fs" style="background:#051a10;border-color:#1a4a20;color:#3fb950">🧪 Test Run<br>TESTLAUF=X</div><div class="fa">→</div>
+          <div class="fs" style="background:#1a0a08;border-color:#5a1a18;color:#f85149">🚨 Fix<br>T7XEMERR</div><div class="fa">→</div>
+          <div class="fs" style="background:#0a2a4a;border-color:#1a5a8a;color:#79c0ff">🚀 Prod Run<br>Commit</div><div class="fa">→</div>
+          <div class="fs" style="background:#150a2a;border-color:#5a3a8a;color:#d2a8ff">✅ T7XEMLOG<br>Verify Count</div><div class="fa">→</div>
+          <div class="fs" style="background:#051a10;border-color:#1a4a20;color:#3fb950">🗂 Z-XREF<br>Post-Load Update</div>
+        </div>
+      </div>
+
+      <!-- STEP BY STEP -->
+      <div id="emi-tables" style="scroll-margin-top:20px">
+        <h3 style="font-size:13px;font-weight:800;color:#f0f6fc;margin:18px 0 12px">Step 1 — Pre-Requisite: Configure All T7XEMI* Tables</h3>
+      </div>
+      <div id="emigall-steps-wrap"></div>
+
+      <!-- BADI SECTION -->
+      <div id="emi-badi" style="scroll-margin-top:20px;margin-top:24px">
+        <div style="font-size:14px;font-weight:800;color:#f0f6fc;margin-bottom:12px">BAdI Configuration &amp; Custom Validation</div>
+      </div>
+      <div id="emigall-badi-wrap"></div>
+
+      <!-- ERRORS -->
+      <div id="emi-errors" style="scroll-margin-top:20px;margin-top:24px">
+        <div style="font-size:14px;font-weight:800;color:#f0f6fc;margin-bottom:12px">Error Codes, Root Causes &amp; Fixes</div>
+      </div>
+      <div id="emigall-errors-wrap"></div>
+
+      <!-- BODS -->
+      <div id="emi-bods" style="scroll-margin-top:20px;margin-top:24px">
+        <div style="font-size:14px;font-weight:800;color:#f0f6fc;margin-bottom:12px">BODS Integration — How BODS Feeds EMIGALL</div>
+      </div>
+      <div id="emigall-bods-wrap"></div>
+
+      <!-- SHAREPOINT -->
+      <div id="emi-sharepoint" style="scroll-margin-top:20px;margin-top:24px">
+        <div style="font-size:14px;font-weight:800;color:#f0f6fc;margin-bottom:12px">SharePoint → BODS → SAP IS-U Full Flow</div>
+      </div>
+      <div id="emigall-sp-wrap"></div>
+    </div>
+
+    <!-- ═══════════════ T-CODES PAGE ═══════════════ -->
+    <div id="pg-tcode" class="page">
+      <div class="sh">🖥 T-Code Reference — ECC IS-U vs S/4HANA Utilities</div>
+      <div class="callout info">Legend: <span class="tc-diff td-both" style="padding:2px 7px;border-radius:5px">✓ Both</span> works in ECC and S/4HANA &nbsp; <span class="tc-diff td-ecc" style="padding:2px 7px;border-radius:5px">ECC Only</span> deprecated or removed in S/4 &nbsp; <span class="tc-diff td-s4" style="padding:2px 7px;border-radius:5px">S/4 Fiori</span> new Fiori app replacement</div>
+      <div id="tcode-wrap"></div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</body>
+</html>
+<script>
+// ═══════════════════════════════════════════════════════════
+// OBJECT DATA — 43 Migration Objects with full linking detail
+// ═══════════════════════════════════════════════════════════
+const OBJS = [
+{id:'ZBANK',seq:1,cat:'BP',name:'Bank Master',icon:'🏦',
+ saptable:'BNKA',pk:'BANKS+BANKL',method:'EMIGALL',
+ desc:'Loads all bank routing numbers (ABA/SWIFT) into SAP BNKA. Required before any partner bank or EFT payment configuration.',
+ sapUse:'FI-CA uses house banks (T012/T012K) and BNKA for ACH/EFT payment processing. BP bank details (BUT021_FS) join BNKA on BANKL.',
+ tables:[
+  {tbl:'BNKA',role:'Target',pk:'BANKS+BANKL',fields:'BANKS,BANKL,BANKA,ORT01,SWIFT,BRNCH',desc:'Bank master — every unique routing number'},
+  {tbl:'T012',role:'Config',pk:'BUKRS+HBKID',fields:'BUKRS,HBKID,BANKS,BANKL',desc:'House banks per company code'},
+  {tbl:'T012K',role:'Config',pk:'BUKRS+HBKID+HKTID',fields:'HKTID,BANKN,WAERS',desc:'House bank accounts'},
+  {tbl:'TFKBAN',role:'Config',pk:'BUKRS+HBKID',fields:'BUKRS,HBKID',desc:'FI-CA bank determination config'}
+ ],
+ links:[
+  {to:'ZPARTNER',joinField:'BANKL',desc:'Partner bank details (BUT021_FS.BANKL = BNKA.BANKL)'},
+  {to:'ZCONT_ACCT',joinField:'HBKID',desc:'Contract account house bank (FKKVK.HBKID = T012.HBKID)'}
+ ],
+ depends:[],
+ configBefore:['T012 house banks configured','TFKBAN bank determination set'],
+ emigall:'T7XEMI01: ZBANK STATUS=A\nT7XEMI02: BANKS→BANKS, BANKL→BANKL, BANKA→BANKA, SWIFT→SWIFT\nT7XEMI04: RBNKA_UPLOAD program\nPost-load: SE16 BNKA — verify count matches source',
+ bizRules:['BANKL must be 9 digits for US ABA routing','BANKS=US for domestic ACH','SWIFT required for international wire','Duplicate BANKL rejected'],
+ sapChecks:['SELECT COUNT(*) FROM BNKA WHERE BANKS=:b AND BANKL=:r','T012 house banks configured for company code'],
+ xref:'No Z-XREF needed — BANKL is natural key'
+},
+{id:'ZPARTNER',seq:2,cat:'BP',name:'Business Partner',icon:'👤',
+ saptable:'BUT000',pk:'PARTNER',method:'EMIGALL',
+ desc:'Core IS-U customer master. Creates BP record (BUT000) with address (ADRC), phone (ADR2), email (ADR6), bank (BUT021_FS). CVI simultaneously creates FI customer KNA1.',
+ sapUse:'Every IS-U and FI-CA object references PARTNER. FKKVK.GPART = PARTNER. EANL.GPART = PARTNER. The single most critical object in the hierarchy.',
+ tables:[
+  {tbl:'BUT000',role:'Target',pk:'PARTNER',fields:'PARTNER,BU_GROUP,BU_SORT1,NAME_FIRST,NAME_LAST,NAME_ORG1,BIRTHDT,TAXNUMXL',desc:'BP master header'},
+  {tbl:'BUT020',role:'Target',pk:'PARTNER+ADDRNR',fields:'PARTNER,ADDRNR,ADR_KIND',desc:'BP address assignment'},
+  {tbl:'BUT100',role:'Target',pk:'PARTNER+RLTYP',fields:'PARTNER,RLTYP,VALIDFROM',desc:'BP roles: FLCU01=FI Customer, KUNA=IS-U Customer'},
+  {tbl:'ADRC',role:'Target',pk:'ADDRNR',fields:'ADDRNR,STREET,CITY1,REGION,POST_CODE1,COUNTRY',desc:'Central address repository'},
+  {tbl:'ADR2',role:'Target',pk:'ADDRNR+CONSNUMBER',fields:'TELNR,TELNR_EXT',desc:'Phone numbers'},
+  {tbl:'ADR6',role:'Target',pk:'ADDRNR+CONSNUMBER',fields:'SMTP_ADDR',desc:'Email addresses'},
+  {tbl:'BUT021_FS',role:'Target',pk:'PARTNER+BKVID',fields:'PARTNER,BANKS,BANKL,BANKN',desc:'Partner bank details for EFT'},
+  {tbl:'TB003',role:'Config',pk:'BU_GROUP',fields:'BU_GROUP,BU_GROUP_TXT',desc:'BP groupings: Z001=residential, Z002=commercial'}
+ ],
+ links:[
+  {to:'ZCONT_ACCT',joinField:'GPART',desc:'FKKVK.GPART = BUT000.PARTNER — CA belongs to this BP'},
+  {to:'ZCONTACT',joinField:'PARTNER1',desc:'BUT050.PARTNER1 = BUT000.PARTNER — primary in contact relationship'},
+  {to:'ZPARTNER_REL',joinField:'PARTNER1/PARTNER2',desc:'BUT050 relationship links two BPs'},
+  {to:'ZPREMISE',joinField:'GPART',desc:'EANL.GPART = BUT000.PARTNER — BP owns the premise'}
+ ],
+ depends:['ZBANK'],
+ configBefore:['TB003 BP groupings','TB000 BP categories','TFKBPTAXGRP tax groups','TB901 ID types'],
+ emigall:'T7XEMI01: ZPARTNER STATUS=A\nT7XEMI02: LEGACY_ID→ZLEGACY_ID (Z-field), FNAME→NAME_FIRST, LNAME→NAME_LAST, DOB→BIRTHDT, SSN→TAXNUMXL\nT7XEMI03: TYPE=R→BU_GROUP=Z001, TYPE=C→Z002, TYPE=I→Z003\nBAdI: SSN dedup check, name cleanse, address CASS\nPost-load: Z_XREF_BP (LEGACY_ID → PARTNER)',
+ bizRules:['One BP per SSN — dedup mandatory','Commercial BP needs EIN and NAME_ORG1','Date of birth YYYYMMDD format','No special chars in name'],
+ sapChecks:['SE16 BUT000 count vs source','BUT100 FLCU01 role count','ADRC completeness check','Z_XREF_BP populated'],
+ xref:'Z_XREF_BP: LEGACY_CUST_ID → PARTNER (10 char SAP-assigned number)'
+},
+{id:'ZCONTACT',seq:3,cat:'BP',name:'Contacts',icon:'📞',
+ saptable:'BUT050',pk:'PARTNER1+PARTNER2+RELTYP',method:'EMIGALL',
+ desc:'Creates contact persons linked to primary BP via BUT050 relationship. Phone, email, address stored on contact BP record.',
+ sapUse:'IS-U contact history, authorised reps, emergency contacts. FKKVK.ABWVK = alternative payer from BUT050.',
+ tables:[
+  {tbl:'BUT050',role:'Target',pk:'PARTNER1+PARTNER2+RELTYP',fields:'PARTNER1,PARTNER2,RELTYP,DFREL,BEGDAT,ENDDAT',desc:'BP-to-BP relationship'},
+  {tbl:'BUT000',role:'Target',pk:'PARTNER',fields:'PARTNER,NAME_FIRST,NAME_LAST',desc:'Contact is itself a BP record'},
+  {tbl:'TB025',role:'Config',pk:'RELTYP',fields:'RELTYP,RELTXT',desc:'Relationship types: CONT, AUTH, GUAR, EMRG'}
+ ],
+ links:[
+  {to:'ZPARTNER',joinField:'PARTNER1',desc:'BUT050.PARTNER1 = primary customer BP'},
+  {to:'ZCONT_ACCT',joinField:'via PARTNER',desc:'CA uses BUT050 to find authorised payers'}
+ ],
+ depends:['ZPARTNER'],
+ configBefore:['TB025 relationship types','TB901 ID types'],
+ emigall:'T7XEMI01: ZCONTACT STATUS=A\nT7XEMI02: PRIM_LEGACY→Z_XREF_BP lookup→PARTNER1, CONT_FNAME→NAME_FIRST\nT7XEMI03: CONT_TYPE=E→RELTYP=EMRG, A→AUTH, C→CONT\nPost-load: verify BUT050 count',
+ bizRules:['Primary BP must exist','Phone = 10 digits US','Email regex validation','Primary contact flag unique per account'],
+ sapChecks:['SELECT COUNT(*) FROM BUT050 WHERE PARTNER1=:p','ADR6 email format check'],
+ xref:'Resolves PARTNER1 from Z_XREF_BP. Contact BP gets own PARTNER from Z_XREF_CONTACT.'
+},
+{id:'ZCONT_ACCT',seq:4,cat:'FICA',name:'Contract Account',icon:'💳',
+ saptable:'FKKVK',pk:'VKONT',method:'EMIGALL',
+ desc:'FI-CA contract account (FKKVK) — root of all billing and financial activity per customer. Links BP to contracts, payments, dunning.',
+ sapUse:'FI-CA sub-ledger: FKKOP open items, FKKCL clearing, FKKDEP deposits, FKKDUN dunning all join on VKONT.',
+ tables:[
+  {tbl:'FKKVK',role:'Target',pk:'VKONT',fields:'VKONT,GPART,VKTYP,HBKID,HKTID,ABWVK,ZLSPR,MAHNS',desc:'Contract account header'},
+  {tbl:'DFKKZK',role:'Target',pk:'VKONT+BKVID',fields:'VKONT,ZAHLKZ,BANKS,BANKL,BANKN',desc:'Payment method / EFT bank on account'},
+  {tbl:'DFKKTAXEX',role:'Target',pk:'VKONT+TXJCD',fields:'VKONT,TXJCD,TAXEXREASON,BEGDAT',desc:'Tax exemptions'},
+  {tbl:'TFKACT',role:'Config',pk:'VKTYP',fields:'VKTYP,VKTYPTXT',desc:'Contract account types: ZRES, ZCOM, ZIND'}
+ ],
+ links:[
+  {to:'ZPARTNER',joinField:'GPART',desc:'FKKVK.GPART = BUT000.PARTNER'},
+  {to:'ZBILL_INSTALL',joinField:'VKONT',desc:'EVER.VKONT = FKKVK.VKONT — contracts under this CA'},
+  {to:'ZPAYMENT',joinField:'VKONT',desc:'FKKOP.VKONT = FKKVK.VKONT — all financial items'},
+  {to:'ZSEC_DEPOSIT',joinField:'VKONT',desc:'FKKDEP.VKONT = FKKVK.VKONT'}
+ ],
+ depends:['ZPARTNER','ZBANK'],
+ configBefore:['TFKACT contract account types','TFKSCTYP screen control','T052 payment terms','TFKZAART payment methods'],
+ emigall:'T7XEMI01: ZCONT_ACCT STATUS=A\nT7XEMI02: LEGACY_ACCT→ZLEGACY_VKONT, LEGACY_BP→Z_XREF_BP→GPART\nT7XEMI03: ACCT_TYPE=R→VKTYP=ZRES, C→ZCOM, I→ZIND\nPost-load: Z_XREF_CA (LEGACY_ACCT → VKONT)',
+ bizRules:['BP must exist (GPART check)','VKTYP must be in TFKACT','EFT flag requires DFKKZK row','Dunning area defaults from CoCo config'],
+ sapChecks:['SELECT VKONT FROM FKKVK WHERE GPART=:p','VKTYP in TFKACT check','DFKKZK EFT row if payment method=D'],
+ xref:'Z_XREF_CA: LEGACY_ACCT_ID → VKONT (12 char)'
+},
+{id:'ZCONN_OBJ',seq:5,cat:'ISU',name:'Connection Object',icon:'🔌',
+ saptable:'EOBJK',pk:'EOBJK',method:'EMIGALL',
+ desc:'Physical service connection point — the utility pole, building connection, or distribution point. Parent of Premise.',
+ sapUse:'IS-U topology: EOBJK is the top of the physical hierarchy. Division (SPARTE) set here drives all downstream objects.',
+ tables:[
+  {tbl:'EOBJK',role:'Target',pk:'EOBJK',fields:'EOBJK,SPARTE,ADRNR,VSTELLE,SWERK',desc:'Connection object header'},
+  {tbl:'EABJK',role:'Target',pk:'EOBJK+ADR_KIND',fields:'EOBJK,ADDRNR,ADR_KIND',desc:'Connection object address link'},
+  {tbl:'ADRC',role:'Target',pk:'ADDRNR',fields:'STREET,CITY1,REGION,POST_CODE1',desc:'Physical service address'},
+  {tbl:'TE001',role:'Config',pk:'SPARTE',fields:'SPARTE,SPARTTXT',desc:'Division: E=Electric, G=Gas, W=Water'}
+ ],
+ links:[
+  {to:'ZPREMISE',joinField:'EOBJK',desc:'EANL.EOBJK = EOBJK.EOBJK — premise sits under conn obj'},
+  {to:'ZPROPERTY',joinField:'EOBJK',desc:'EANLH property linked to connection object'}
+ ],
+ depends:[],
+ configBefore:['TE001 division codes','T001W service territory/plant','ADRC address format config'],
+ emigall:'T7XEMI01: ZCONN_OBJ STATUS=A\nT7XEMI02: LEGACY_SITE→ZLEGACY_EOBJK, DIVISION→T7XEMI03→SPARTE, ADDRESS→ADRC fields\nT7XEMI03: DIV=E→SPARTE=E, G→G, W→W\nPost-load: Z_XREF_CONNOBJ (LEGACY_SITE → EOBJK)',
+ bizRules:['SPARTE mandatory and in TE001','Street address required — no PO Box','CASS postal validation in BODS','Number range per division'],
+ sapChecks:['SE16 EOBJK count vs source','ADRC.STREET populated','SPARTE = TE001 value'],
+ xref:'Z_XREF_CONNOBJ: LEGACY_SITE_ID → EOBJK (internal number)'
+},
+{id:'ZPREMISE',seq:6,cat:'ISU',name:'Premise / Installation',icon:'🏠',
+ saptable:'EANL',pk:'ANLAGE',method:'EMIGALL',
+ desc:'Service address / installation site. The contractual service location. Links connection object to contracts via EVBS.',
+ sapUse:'IS-U: EANL.ANLAGE is the installation number. Move-In creates EVER+EVBS linking contract to premise. Billing runs against ANLAGE.',
+ tables:[
+  {tbl:'EANL',role:'Target',pk:'ANLAGE',fields:'ANLAGE,EOBJK,SPARTE,VSTELLE,GPART,ANNUAL_CONS',desc:'Installation / premise header'},
+  {tbl:'EANLH',role:'Target',pk:'ANLAGE',fields:'ANLAGE,PROPERTY_TYPE,ANNUAL_CONSUMPTION,PEAK_DEMAND',desc:'Installation extension — stat values'},
+  {tbl:'EVBS',role:'Target',pk:'VERTRAG+ANLAGE',fields:'VERTRAG,ANLAGE,EINZDAT,AUSZDAT',desc:'Contract-premise assignment (Move-In record)'}
+ ],
+ links:[
+  {to:'ZCONN_OBJ',joinField:'EOBJK',desc:'EANL.EOBJK = EOBJK.EOBJK'},
+  {to:'ZDEVLOC',joinField:'ANLAGE',desc:'EABLG.ANLAGE = EANL.ANLAGE'},
+  {to:'ZBILL_INSTALL',joinField:'ANLAGE',desc:'EVBS.ANLAGE = EANL.ANLAGE — contract is placed here'}
+ ],
+ depends:['ZCONN_OBJ'],
+ configBefore:['TE001 division','T001W service territory','TE200 MRU structure'],
+ emigall:'T7XEMI01: ZPREMISE STATUS=A\nT7XEMI02: LEGACY_PREMISE→ZLEGACY, LEGACY_CONNOBJ→Z_XREF_CONNOBJ→EOBJK, SPARTE from EOBJK\nPost-load: Z_XREF_PREMISE (LEGACY_PREMISE → ANLAGE)',
+ bizRules:['EOBJK must exist','Division consistent with EOBJK.SPARTE','T001W service territory configured','Number range per division'],
+ sapChecks:['SELECT ANLAGE FROM EANL WHERE EOBJK=:e','SPARTE match EOBJK→EANL','Z_XREF_PREMISE count = source'],
+ xref:'Z_XREF_PREMISE: LEGACY_PREMISE_ID → ANLAGE'
+},
+{id:'ZDEVLOC',seq:7,cat:'ISU',name:'Device Location',icon:'📍',
+ saptable:'EABLG',pk:'EABLG',method:'EMIGALL',
+ desc:'Physical meter location (MRU spot) within a premise. Where the meter physically sits. Assigned to a meter reading route.',
+ sapUse:'EABLG is the device location. EGERH links device to EABLG. EABL meter reads reference EABLG. Route (TE200) assigned here.',
+ tables:[
+  {tbl:'EABLG',role:'Target',pk:'EABLG',fields:'EABLG,ANLAGE,VSTELLE,ABLBASIS,SPARTE',desc:'Device location / MRU'},
+  {tbl:'STXH',role:'Target',pk:'TDOBJECT+TDNAME',fields:'TDOBJECT=EABLG,TDNAME=EABLG_key,TDID',desc:'Long text header for notes'},
+  {tbl:'STXL',role:'Target',pk:'TDOBJECT+TDNAME+TDLINE',fields:'TDLINE (text line)',desc:'Long text lines — field crew notes'},
+  {tbl:'TE200',role:'Config',pk:'ABLBASIS',fields:'ABLBASIS,ABLESRHYTHM',desc:'Meter reading unit / route definition'}
+ ],
+ links:[
+  {to:'ZPREMISE',joinField:'ANLAGE',desc:'EABLG.ANLAGE = EANL.ANLAGE'},
+  {to:'ZDEVICE',joinField:'EABLG',desc:'EGERH.EABLG = EABLG.EABLG — device installed here'},
+  {to:'ZMETER_READ',joinField:'EABLG',desc:'EABL.EABLG = EABLG.EABLG'}
+ ],
+ depends:['ZPREMISE'],
+ configBefore:['TE200 MRU routes','TE240 reading sequence'],
+ emigall:'T7XEMI01: ZDEVLOC STATUS=A\nT7XEMI02: LEGACY_DEVLOC→ZLEGACY, LEGACY_PREMISE→Z_XREF_PREMISE→ANLAGE\nBAdI: assign ABLBASIS route from geographic logic\nPost-load: Z_XREF_DEVLOC',
+ bizRules:['ANLAGE must exist','TE200 route required','1:1 with meter for residential','ABLBASIS from geographic route mapping'],
+ sapChecks:['SELECT EABLG FROM EABLG WHERE ANLAGE=:a','VSTELLE route in TE200','Z_XREF_DEVLOC populated'],
+ xref:'Z_XREF_DEVLOC: LEGACY_DEVLOC_ID → EABLG'
+},
+{id:'ZDEVICE',seq:8,cat:'ISU',name:'Device (Meter)',icon:'⚡',
+ saptable:'EGERH',pk:'GERAET',method:'EMIGALL',
+ desc:'Physical meter / device master. Serial number (SERNR) is globally unique. EGERH tracks install history. EGESD holds register multiplier.',
+ sapUse:'IS-U device: EGERH = device at a location. EGESD = register data (multiplier, CT/PT). SERNR used for meter reconciliation.',
+ tables:[
+  {tbl:'EGERH',role:'Target',pk:'GERAET',fields:'GERAET,SERNR,EABLG,DEVICECAT,MFRNR,EINBDAT,ABDAT',desc:'Device install history (current install = ABDAT=9999)'},
+  {tbl:'EGESD',role:'Target',pk:'GERAET+ZWNUMMER',fields:'GERAET,ZWNUMMER,NKONST,ABLEINH,CT_RATIO,PT_RATIO',desc:'Device register — multiplier/CT/PT'},
+  {tbl:'EGZWG',role:'Target',pk:'ABLBASIS+GERAET',fields:'ABLBASIS,GERAET,REIHENF',desc:'Device-MRU route group assignment'},
+  {tbl:'TE405',role:'Config',pk:'DEVICECAT',fields:'DEVICECAT,DEVICECAT_TXT',desc:'Device categories: AMI, E_MECH, CI'},
+  {tbl:'TE406',role:'Config',pk:'DEVICETYPE',fields:'DEVICETYPE,DEVICECAT,MFRNR',desc:'Device type / model codes'}
+ ],
+ links:[
+  {to:'ZDEVLOC',joinField:'EABLG',desc:'EGERH.EABLG = EABLG.EABLG'},
+  {to:'ZMETER_READ',joinField:'GERAET',desc:'EABL.GERAET = EGERH.GERAET'},
+  {to:'ZBILL_INSTALL',joinField:'via EVER',desc:'Device linked to contract via installation'}
+ ],
+ depends:['ZDEVLOC','ZDEV_MOD'],
+ configBefore:['TE405 device categories','TE406 device types','TE408 manufacturer codes'],
+ emigall:'T7XEMI01: ZDEVICE STATUS=A\nT7XEMI02: SERIAL→SERNR, LEGACY_DEVLOC→Z_XREF_DEVLOC→EABLG, MFRNR→MFRNR\nT7XEMI03: DEVICE_CAT=E1→AMI, E2→E_MECH, CI→CI\nPost-load: Z_XREF_DEVICE (SERNR → GERAET)',
+ bizRules:['SERNR globally unique in IS-U','DEVICECAT in TE405','Install date <= cutover date','NKONST defaults 1 if not specified'],
+ sapChecks:['SELECT GERAET FROM EGERH WHERE SERNR=:s — expect exactly 1','EGESD NKONST populated','EGZWG route assignment'],
+ xref:'Z_XREF_DEVICE: SERNR → GERAET (internal device number)'
+},
+{id:'ZBILL_INSTALL',seq:9,cat:'BILLING',name:'Billing Installation',icon:'📄',
+ saptable:'EVER',pk:'VERTRAG',method:'EMIGALL',
+ desc:'Service contract (EVER) — links contract account to premise with rate category. The billing unit. Move-In activates it.',
+ sapUse:'EVER is the SAP service contract. TARIF (rate category from TE006) drives billing. EVBS is the contract-premise link.',
+ tables:[
+  {tbl:'EVER',role:'Target',pk:'VERTRAG',fields:'VERTRAG,VKONT,ANLAGE,TARIF,SPARTE,EINZDAT,AUSZDAT,ASTATUS',desc:'Service contract / billing installation'},
+  {tbl:'EVBS',role:'Target',pk:'VERTRAG+ANLAGE',fields:'VERTRAG,ANLAGE,EINZDAT,AUSZDAT',desc:'Contract-premise assignment'},
+  {tbl:'TE006',role:'Config',pk:'TARIF+SPARTE',fields:'TARIF,SPARTE,TARIFTYP',desc:'Rate categories: ZRSG=residential gas, ZRSE=residential electric'}
+ ],
+ links:[
+  {to:'ZCONT_ACCT',joinField:'VKONT',desc:'EVER.VKONT = FKKVK.VKONT'},
+  {to:'ZPREMISE',joinField:'ANLAGE',desc:'EVBS.ANLAGE = EANL.ANLAGE'},
+  {to:'ZMOVE_IN',joinField:'EINZDAT',desc:'Move-In sets EVER.EINZDAT and creates EVBS row'},
+  {to:'ZBILL_HISTORY',joinField:'VERTRAG',desc:'ERCH.VERTRAG = EVER.VERTRAG'}
+ ],
+ depends:['ZCONT_ACCT','ZPREMISE','ZDEVLOC'],
+ configBefore:['TE006 rate categories','TE422 billing class','TE400 rate prices'],
+ emigall:'T7XEMI01: ZBILL_INSTALL STATUS=A\nT7XEMI02: LEGACY_CA→Z_XREF_CA→VKONT, LEGACY_PREMISE→Z_XREF_PREMISE→ANLAGE, RATE_CODE→T7XEMI03→TARIF\nT7XEMI03: RES_GAS→TARIF=ZRSG, RES_ELEC→ZRSE, COM_GAS→ZCMG (ALL rate codes must be mapped)\nPost-load: Z_XREF_CONTRACT (LEGACY_CONTRACT → VERTRAG)',
+ bizRules:['CA must exist','TE006 rate category active','Division matches premise','Rate code mapping 100% complete in T7XEMI03'],
+ sapChecks:['SELECT VERTRAG FROM EVER WHERE VKONT=:v','TE006 rate category valid','EVBS row created'],
+ xref:'Z_XREF_CONTRACT: LEGACY_CONTRACT_ID → VERTRAG'
+},
+{id:'ZMOVE_IN',seq:10,cat:'ISU',name:'Move-In',icon:'🚪',
+ saptable:'EVER+EVBS+EGERH',pk:'VERTRAG+EINZDAT',method:'EMIGALL',
+ desc:'Activates service — links contract + device + premise. Creates EVER.EINZDAT, EVBS contract-premise row, EGERH device install record, and opening EABL meter read.',
+ sapUse:'IS-U Move-In is the activation event. After Move-In: contract status=active, billing can run, meter reads can be loaded.',
+ tables:[
+  {tbl:'EVER',role:'Update',pk:'VERTRAG',fields:'EINZDAT (set to move-in date), ASTATUS=active',desc:'Contract activated'},
+  {tbl:'EVBS',role:'Target',pk:'VERTRAG+ANLAGE',fields:'VERTRAG,ANLAGE,EINZDAT',desc:'Contract-premise link row created'},
+  {tbl:'EGERH',role:'Target',pk:'GERAET',fields:'GERAET,EABLG,EINBDAT=EINZDAT,ABDAT=9999',desc:'Device installed — end date 9999'},
+  {tbl:'EABL',role:'Target',pk:'GERAET+ABLDAT',fields:'GERAET,ABLDAT=EINZDAT,ZAEHLERSTAND=opening_read',desc:'Opening meter read'}
+ ],
+ links:[
+  {to:'ZBILL_INSTALL',joinField:'VERTRAG',desc:'Move-In activates EVER contract'},
+  {to:'ZDEVICE',joinField:'GERAET/SERNR',desc:'Device installed via EGERH'},
+  {to:'ZMETER_READ',joinField:'GERAET',desc:'Opening read = first EABL row'}
+ ],
+ depends:['ZBILL_INSTALL','ZDEVICE'],
+ configBefore:['TE001 division','TE006 rate category matching contract'],
+ emigall:'T7XEMI01: ZMOVE_IN STATUS=A\nT7XEMI02: LEGACY_CONTRACT→Z_XREF_CONTRACT→VERTRAG, LEGACY_DEVICE→Z_XREF_DEVICE→SERNR, EINZDAT, OPENING_READ\nBAPI: ISU_MOVE_IN called by load program\nTest: EVER.EINZDAT set, EVBS row exists, EGERH ABDAT=9999',
+ bizRules:['Contract must be in created status before Move-In','Device not already installed elsewhere (EGERH check)','Opening read >= 0','Move-In date <= cutover date'],
+ sapChecks:['EVER.EINZDAT populated','SELECT COUNT(*) FROM EVBS WHERE VERTRAG=:v','EGERH ABDAT=9999 for active install','EABL opening read exists'],
+ xref:'No Z-XREF needed — Move-In updates existing VERTRAG'
+},
+{id:'ZMETER_READ',seq:11,cat:'ISU',name:'Meter Read',icon:'📊',
+ saptable:'EABL',pk:'GERAET+ABLDAT',method:'EMIGALL',
+ desc:'Historical meter readings loaded into EABL. CRITICAL: must be sorted by GERAET+ABLDAT ascending — out-of-order causes E3 096 EMIGALL error.',
+ sapUse:'EABL drives billing consumption calculation. Each row = one read event. ABLESART=P periodic, E=estimate.',
+ tables:[
+  {tbl:'EABL',role:'Target',pk:'GERAET+ABLDAT+ABLESART',fields:'GERAET,ABLBASIS,ABLDAT,ZAEHLERSTAND,ABLESART,ABLEINH,MWOFM',desc:'Meter readings — main table'},
+  {tbl:'EABLG',role:'Parent',pk:'EABLG',fields:'EABLG (joined via EABLG=EABLG)',desc:'Device location parent'},
+  {tbl:'TE220',role:'Config',pk:'ABLESART',fields:'ABLESART,ABLTXT',desc:'Reading reason codes: P=periodic, E=estimate, T=transfer'}
+ ],
+ links:[
+  {to:'ZDEVICE',joinField:'GERAET',desc:'EABL.GERAET = EGERH.GERAET — device must be installed'},
+  {to:'ZBILL_INSTALL',joinField:'via ANLAGE',desc:'Readings drive billing engine for this installation'}
+ ],
+ depends:['ZMOVE_IN'],
+ configBefore:['TE220 reading reason codes','TE221 reading notes'],
+ emigall:'T7XEMI01: ZMETER_READ STATUS=A\nT7XEMI02: LEGACY_DEVICE→Z_XREF_DEVICE→GERAET, READ_DATE→ABLDAT, READING→ZAEHLERSTAND\nT7XEMI03: READ_TYPE=A→ABLESART=P, E→E, T→T\nCRITICAL: BODS ORDER BY GERAET, ABLDAT ASC — chronological sort mandatory\nPost-load: spot-check EABL count per device',
+ bizRules:['CHRONOLOGICAL ORDER per GERAET — E3 096 if violated','No reading exceeds max register value (rollover logic in BODS)','ABLESART code must be in TE220','Read date within device install period (EGERH EINBDAT to ABDAT)'],
+ sapChecks:['SELECT COUNT(*) FROM EABL WHERE GERAET=:g','Verify date order: SELECT ABLDAT FROM EABL ORDER BY ABLDAT','No reads before EGERH install date'],
+ xref:'No Z-XREF — GERAET resolved from Z_XREF_DEVICE'
+},
+{id:'ZSEC_DEPOSIT',seq:12,cat:'FICA',name:'Security Deposit',icon:'🔒',
+ saptable:'FKKDEP',pk:'VKONT+DEPOT_ID',method:'EMIGALL',
+ desc:'Customer security deposits held for credit risk. FKKDEP deposit record + FKKOP posting item created.',
+ sapUse:'FI-CA FKKDEP: deposit amount, type, status. Released at move-out or after credit history establishes trust.',
+ tables:[
+  {tbl:'FKKDEP',role:'Target',pk:'VKONT+DEPOT_ID',fields:'VKONT,DEPOT_AMOUNT,DEPOT_TYPE,DEPOT_STATUS,DEPOT_DATE',desc:'Deposit record'},
+  {tbl:'FKKOP',role:'Target',pk:'VKONT+BELNR',fields:'VKONT,OPUPW=E,BETRW=DEPOT_AMOUNT',desc:'Deposit open item posting'},
+  {tbl:'TFKDEP',role:'Config',pk:'DEPOT_TYPE',fields:'DEPOT_TYPE,DEPOT_TXT',desc:'Deposit types: CASH, LOC, SURETY'}
+ ],
+ links:[
+  {to:'ZCONT_ACCT',joinField:'VKONT',desc:'FKKDEP.VKONT = FKKVK.VKONT'}
+ ],
+ depends:['ZCONT_ACCT'],
+ configBefore:['TFKDEP deposit types','TFKDEPCAT deposit categories'],
+ emigall:'T7XEMI01: ZSEC_DEPOSIT STATUS=A\nT7XEMI02: LEGACY_CA→Z_XREF_CA→VKONT, DEPOSIT_AMT→DEPOT_AMOUNT\nT7XEMI03: DEP_TYPE=CASH→DEPOT_TYPE=CASH\nPost-load: verify FKKDEP + FKKOP rows per account',
+ bizRules:['CA must exist','Amount positive','Type in TFKDEP','Date <= cutover'],
+ sapChecks:['SELECT DEPOT_AMOUNT FROM FKKDEP WHERE VKONT=:v','FKKOP item type=E exists for deposit'],
+ xref:'Resolves VKONT from Z_XREF_CA'
+},
+{id:'ZPAYMENT',seq:13,cat:'FICA',name:'Payment',icon:'💰',
+ saptable:'FKKOP',pk:'VKONT+BELNR',method:'EMIGALL',
+ desc:'Historical payments — open items and clearing documents. Balance must equal source AR ledger.',
+ sapUse:'FI-CA FKKOP: all charges (OPUPW=D), payments (P), credits (C). FKKCL clears payments against charges.',
+ tables:[
+  {tbl:'FKKOP',role:'Target',pk:'VKONT+BELNR',fields:'VKONT,BELNR,OPUPW,BETRW,AUGDT,FAEDT,ZUONR',desc:'Open items — charges, payments, credits'},
+  {tbl:'FKKCL',role:'Target',pk:'AUGBL',fields:'AUGBL,AUGDT,VKONT,BETRW',desc:'Clearing document — links payment to charge'}
+ ],
+ links:[
+  {to:'ZCONT_ACCT',joinField:'VKONT',desc:'FKKOP.VKONT = FKKVK.VKONT'},
+  {to:'ZDOCUMENT',joinField:'BELNR',desc:'FKKCL.AUGBL links to FI document BKPF.BELNR'}
+ ],
+ depends:['ZCONT_ACCT'],
+ configBefore:['TFKTYPOP FI-CA item types','TFKZAART payment methods'],
+ emigall:'T7XEMI01: ZPAYMENT STATUS=A\nT7XEMI02: LEGACY_CA→Z_XREF_CA→VKONT, AMOUNT→BETRW, PAY_DATE→AUGDT\nT7XEMI03: PAY_TYPE=CHECK→OPUPW=P, EFT→E, CHARGE→D\nBALANCE CHECK: SUM(BETRW) per VKONT must = source AR balance',
+ bizRules:['CA must exist','Non-zero amounts','Date <= cutover','Document type in TFKTYPOP','Balance reconciliation mandatory'],
+ sapChecks:['SELECT SUM(BETRW) FROM FKKOP WHERE VKONT=:v — match source','FKKCL clearing docs for paid items'],
+ xref:'Resolves VKONT from Z_XREF_CA'
+},
+{id:'ZDUNNING',seq:14,cat:'FICA',name:'Dunning',icon:'⚠️',
+ saptable:'FKKDUN',pk:'VKONT+DUN_DATE',method:'EMIGALL',
+ desc:'Active dunning history — past-due notices, levels, amounts. Active cases only migrated.',
+ sapUse:'FI-CA FKKDUN: dunning procedure and level. Drives collection escalation workflow.',
+ tables:[
+  {tbl:'FKKDUN',role:'Target',pk:'VKONT+DUNDAT',fields:'VKONT,DUNDAT,DUNSTUFE,MAHNDATUM,MAHNBETRAG,MAHNSPE',desc:'Dunning records'},
+  {tbl:'TFKDUN',role:'Config',pk:'MAHND',fields:'MAHND,MAHNVERFAHREN,DUNSTUFE_MAX',desc:'Dunning procedures'}
+ ],
+ links:[
+  {to:'ZCONT_ACCT',joinField:'VKONT',desc:'FKKDUN.VKONT = FKKVK.VKONT'},
+  {to:'ZPAYMENT',joinField:'VKONT',desc:'Dunning triggered by overdue FKKOP items'}
+ ],
+ depends:['ZCONT_ACCT','ZPAYMENT'],
+ configBefore:['TFKDUN dunning procedures','TFKDUNLEV dunning levels'],
+ emigall:'T7XEMI01: ZDUNNING STATUS=A\nT7XEMI02: LEGACY_CA→VKONT, DUN_LEVEL→DUNSTUFE\nT7XEMI03: DUN_PROC=STD→MAHND=ZDUN1\nActive cases only — completed dunning excluded',
+ bizRules:['CA must exist','Procedure in TFKDUN','Level 1-4 range','Active status only'],
+ sapChecks:['SELECT COUNT(*) FROM FKKDUN WHERE VKONT=:v AND STATUS=A'],
+ xref:'Resolves VKONT from Z_XREF_CA'
+},
+{id:'ZBILL_HISTORY',seq:15,cat:'BILLING',name:'Bill History',icon:'🧾',
+ saptable:'ERCH',pk:'BELNR',method:'DS',
+ desc:'Historical bill documents loaded via BODS direct insert (DS) into ERCH/ERCHZ. NOT processed through EMIGALL. Read-only history for customer portal.',
+ sapUse:'ERCH = bill header. ERCHZ = line items. No FKKOP posting for history bills (AR already in payments).',
+ tables:[
+  {tbl:'ERCH',role:'Target',pk:'BELNR',fields:'BELNR,VKONT,ABRDATS,ABRDATE,NETTOBT,BRUTTO,TARIF',desc:'Bill document header'},
+  {tbl:'ERCHZ',role:'Target',pk:'BELNR+POSNR',fields:'BELNR,POSNR,LART,BETRAG,MENGE,MASSEI',desc:'Bill line items — rate components, taxes'},
+  {tbl:'ERCHC',role:'Target',pk:'BELNR+COMPID',fields:'BELNR,COMPID,AMOUNT',desc:'Bill charge components'}
+ ],
+ links:[
+  {to:'ZBILL_INSTALL',joinField:'VERTRAG',desc:'ERCH.VERTRAG = EVER.VERTRAG'},
+  {to:'ZPAYMENT',joinField:'VKONT',desc:'Payment clears corresponding FKKOP charge items'}
+ ],
+ depends:['ZBILL_INSTALL','ZPAYMENT'],
+ configBefore:['TE006 rate category','TE422 billing class'],
+ emigall:'METHOD: BODS Direct Insert (DS) — NOT EMIGALL\nBODS Job: J_BILL_HISTORY_LOAD\nSource: STG_BILL_HIST staging table\nTarget: ERCH + ERCHZ via ABAP proxy FM ZBILL_HIST_INSERT\nBalance Check: SUM(ERCHZ.BETRAG) per BELNR = ERCH.NETTOBT\n24 months minimum regulatory requirement',
+ bizRules:['Load descending date order','24 months minimum','ERCHZ sum = ERCH net','No FKKOP AR posting for historical bills'],
+ sapChecks:['SELECT COUNT(*) FROM ERCH WHERE VKONT=:v','ERCHZ sum = ERCH.NETTOBT'],
+ xref:'Resolves VKONT from Z_XREF_CA, VERTRAG from Z_XREF_CONTRACT'
+},
+{id:'ZFLOC',seq:16,cat:'EAM',name:'Functional Location',icon:'🏭',
+ saptable:'IFLOT',pk:'TPLNR',method:'LTMC',
+ desc:'Plant maintenance functional location (IFLOT) — physical infrastructure hierarchy. Substation → Feeder → Transformer. Loaded via LTMC (Migration Cockpit).',
+ sapUse:'PM hierarchy root. Equipment, maintenance plans, work orders all reference TPLNR. Structure indicator (TPLKZ) defines allowed hierarchy levels.',
+ tables:[
+  {tbl:'IFLOT',role:'Target',pk:'TPLNR',fields:'TPLNR,IWERK,INGRP,EQART,TPLKZ,SWERK',desc:'Functional location master'},
+  {tbl:'ILOA',role:'Target',pk:'TPLNR',fields:'TPLNR,BUKRS,KOSTL,ANLNR,STORT',desc:'Location account assignment'},
+  {tbl:'IFLOTX',role:'Target',pk:'TPLNR+SPRAS',fields:'TPLNR,SPRAS,PLTXT',desc:'Functional location description text'},
+  {tbl:'T370',role:'Config',pk:'IFLOTCAT',fields:'IFLOTCAT,IFLOTCATTXT',desc:'FLOC categories'},
+  {tbl:'T395',role:'Config',pk:'TPLKZ',fields:'TPLKZ,TPLKZTXT',desc:'Structure indicator — defines hierarchy levels allowed'}
+ ],
+ links:[
+  {to:'ZHR_MINI',joinField:'INGRP',desc:'IFLOT.INGRP = planner group = PA0001.PERNR org'},
+  {to:'ZFLOC_CLASS',joinField:'TPLNR',desc:'Classification assigned to TPLNR via INOB'},
+  {to:'ZMAINT_PLAN',joinField:'TPLNR',desc:'MPLA.TPLNR = IFLOT.TPLNR — maintenance plan on FLOC'}
+ ],
+ depends:['ZHR_MINI'],
+ configBefore:['T370 FLOC categories','T395 structure indicators','T024P planner groups'],
+ emigall:'METHOD: LTMC (SAP Migration Cockpit)\nLTMC Template: FunctionalLocation\nSource: Excel from GIS / MainSaver\nField Map: TPLNR must match structure indicator pattern\nLoad order: top-down — parent FLOC before child FLOC\nPost-load: Z_XREF_FLOC (LEGACY_FLOC → TPLNR)',
+ bizRules:['TPLNR format matches TPLKZ structure indicator','Parent FLOC must exist before child','No special chars except structure separators','Planner group in T024P'],
+ sapChecks:['SELECT COUNT(*) FROM IFLOT','Hierarchy integrity — parent exists','TPLNR format matches T395 TPLKZ pattern'],
+ xref:'Z_XREF_FLOC: LEGACY_FLOC_ID → TPLNR'
+},
+{id:'ZMAINT_PLAN',seq:17,cat:'EAM',name:'Maintenance Plan',icon:'🔧',
+ saptable:'MPLA',pk:'WARPL',method:'LTMC',
+ desc:'Preventive maintenance plans — scheduled maintenance cycles for utility assets. Generates PM work orders automatically.',
+ sapUse:'MPLA: maintenance plan. MPOS: plan items (task lists). Run IP10 after load to schedule. AFKO work orders generated per cycle.',
+ tables:[
+  {tbl:'MPLA',role:'Target',pk:'WARPL',fields:'WARPL,TPLNR,EQUNR,INGRP,STRATEGY,CYCLE_DAYS',desc:'Maintenance plan header'},
+  {tbl:'MPOS',role:'Target',pk:'WARPL+POSNR',fields:'WARPL,POSNR,PLNNR,PLNTY',desc:'Plan items — task list assignments'},
+  {tbl:'MHIS',role:'Target',pk:'WARPL+CALLNO',fields:'WARPL,CALLNO,ZDATE,AUFNR',desc:'Maintenance plan call history'},
+  {tbl:'T351',role:'Config',pk:'MPTYP',fields:'MPTYP,MPTYPTXT',desc:'Maintenance plan categories'},
+  {tbl:'T353',role:'Config',pk:'STRAT',fields:'STRAT,STRATTXT',desc:'Maintenance strategies'}
+ ],
+ links:[
+  {to:'ZFLOC',joinField:'TPLNR',desc:'MPLA.TPLNR = IFLOT.TPLNR'},
+  {to:'ZHR_MINI',joinField:'INGRP',desc:'Planner group from HR mini master org'}
+ ],
+ depends:['ZFLOC','ZHR_MINI'],
+ configBefore:['T351 maintenance plan types','T353 strategies','T356 work order types','PLNNR task lists must exist'],
+ emigall:'METHOD: LTMC\nLTMC Template: MaintenancePlan\nBODS: convert legacy frequency (months) to CYCLE_DAYS\nPost-load: run IP10 to schedule first maintenance calls\nVerify: MHIS call objects created',
+ bizRules:['FLOC must exist','T351 strategy configured','Cycle > 0 days','Task list PLNNR must exist','Planner group from HR'],
+ sapChecks:['SELECT WARPL FROM MPLA WHERE TPLNR=:t','MPOS items per plan > 0','IP10 scheduled successfully'],
+ xref:'Z_XREF_MAINTPLAN: LEGACY_PLAN_ID → WARPL'
+},
+{id:'ZHR_MINI',seq:18,cat:'EAM',name:'HR Mini Master',icon:'👷',
+ saptable:'PA0001',pk:'PERNR',method:'LSMW',
+ desc:'Minimal HR employee data for EAM. Only PM planners/supervisors needed. Loaded via LSMW PA30 batch input.',
+ sapUse:'PA0001 org assignment gives PERNR. Used as planner (INGRP) in IFLOT and MPLA. Required before FLOC load.',
+ tables:[
+  {tbl:'PA0001',role:'Target',pk:'PERNR+BEGDA',fields:'PERNR,PLANS,ORGEH,BUKRS,WERKS,ENDDA',desc:'Org assignment infotype'},
+  {tbl:'PA0002',role:'Target',pk:'PERNR+BEGDA',fields:'PERNR,NACHN,VORNA,GBDAT',desc:'Personal data infotype'},
+  {tbl:'T527X',role:'Config',pk:'ORGEH',fields:'ORGEH,ORGTX',desc:'Org units'}
+ ],
+ links:[
+  {to:'ZFLOC',joinField:'INGRP',desc:'FLOC planner group references PERNR org'},
+  {to:'ZMAINT_PLAN',joinField:'INGRP',desc:'Maintenance planner from PA0001'}
+ ],
+ depends:[],
+ configBefore:['T503K employee groups','T503 employee subgroups','T500P personnel areas','Position in org structure'],
+ emigall:'METHOD: LSMW (ECC) / LTMC (S/4)\nLSMW Project: HR_MINI_MASTER\nTransaction: PA30 infotype maintenance\nBatch input recording — replay in BODS\nSource: Excel from HR team — active EAM employees only',
+ bizRules:['Active employees only','PERNR no conflict with existing','Company code configured','Position exists in org structure'],
+ sapChecks:['SELECT PERNR FROM PA0001 WHERE ENDDA=9999','Org unit assignment valid'],
+ xref:'No Z-XREF — PERNR known before FLOC load'
+}
+];
+
+// ═══════════════════════════════════════════════════════════
+// ARCHITECTURE DETAIL DATA
+// ═══════════════════════════════════════════════════════════
+const ARCH_DATA = {
+'src-cogsdale':{title:'Cogsdale / CIS+ Source System',body:`
+<div class="sec"><h3>What Cogsdale Contains</h3><ul>
+<li>Customer master (name, address, SSN/EIN, contact info)</li>
+<li>Account master (account type, status, start date)</li>
+<li>Premise / service location (address, division, meter location)</li>
+<li>Meter master (serial number, device type, manufacturer)</li>
+<li>Meter readings (historical EABL data)</li>
+<li>Bills (ERCH equivalent), payments, deposits, dunning</li>
+<li>Disconnect/reconnect history, budget billing plans</li>
+</ul></div>
+<div class="sec"><h3>BODS Connection to Cogsdale</h3>
+<div class="lchain">
+<div class="lc-node root">Cogsdale DB<br>(SQL Server)</div><div class="lc-arr">→</div><div class="lc-field">ODBC Datastore</div><div class="lc-arr">→</div>
+<div class="lc-node">BODS Dataflow</div><div class="lc-arr">→</div><div class="lc-field">Query Transform</div><div class="lc-arr">→</div>
+<div class="lc-node target">SAP Staging Table</div>
+</div></div>`},
+'src-sharepoint':{title:'SharePoint → BODS → SAP Flow',body:`
+<div class="sec"><h3>SharePoint File Upload Architecture</h3>
+<div class="lchain">
+<div class="lc-node root">Source Team<br>uploads CSV</div><div class="lc-arr">→</div><div class="lc-field">SharePoint<br>Doc Library</div><div class="lc-arr">→</div>
+<div class="lc-node">BODS File<br>Datastore</div><div class="lc-arr">→</div><div class="lc-field">UNC path \\SP\\...</div><div class="lc-arr">→</div>
+<div class="lc-node">BODS Transform<br>+ Validate</div><div class="lc-arr">→</div><div class="lc-field">RFC call</div><div class="lc-arr">→</div>
+<div class="lc-node target">SAP IS-U<br>Staging Table</div>
+</div></div>
+<div class="sec"><h3>Config Required in BODS</h3><ul>
+<li>File Datastore: UNC path to SharePoint sync folder (mapped drive or SharePoint → OneDrive sync)</li>
+<li>OR: SharePoint REST API adapter (BODS 4.3+) with OAuth token</li>
+<li>RFC Datastore: SAP hostname, system number, client, logon user</li>
+<li>SM59 RFC destination in SAP pointing to BODS</li>
+<li>ABAP FM ZBODS_STAGE_WRITE on SAP side receiving the RFC call</li>
+</ul></div>`},
+'bp':{title:'Business Partner (BUT000)',body:`
+<div class="sec"><h3>Table Structure</h3>
+<table class="dtbl"><tr><th>Table</th><th>PK</th><th>Key Fields</th><th>Description</th></tr>
+<tr><td><code>BUT000</code></td><td><code>PARTNER</code></td><td>BU_GROUP, NAME_FIRST, NAME_LAST, BIRTHDT, TAXNUMXL</td><td>BP master header</td></tr>
+<tr><td><code>BUT020</code></td><td><code>PARTNER+ADDRNR</code></td><td>ADR_KIND</td><td>BP address assignment</td></tr>
+<tr><td><code>BUT100</code></td><td><code>PARTNER+RLTYP</code></td><td>RLTYP=FLCU01 (FI Cust)</td><td>BP roles</td></tr>
+<tr><td><code>ADRC</code></td><td><code>ADDRNR</code></td><td>STREET, CITY1, POST_CODE1</td><td>Central address</td></tr>
+<tr><td><code>BUT021_FS</code></td><td><code>PARTNER+BKVID</code></td><td>BANKL, BANKN</td><td>Bank details</td></tr>
+</table></div>
+<div class="sec"><h3>Downstream Join Chain</h3>
+<div class="lchain">
+<div class="lc-node root">BUT000<br>PARTNER</div><div class="lc-arr">→</div><div class="lc-field">FKKVK.GPART</div><div class="lc-arr">→</div>
+<div class="lc-node">FKKVK<br>VKONT</div><div class="lc-arr">→</div><div class="lc-field">EVER.VKONT</div><div class="lc-arr">→</div>
+<div class="lc-node">EVER<br>VERTRAG</div><div class="lc-arr">→</div><div class="lc-field">ERCH.VERTRAG</div><div class="lc-arr">→</div>
+<div class="lc-node target">ERCH<br>Bill</div>
+</div></div>`},
+'ca':{title:'Contract Account (FKKVK)',body:`
+<div class="sec"><h3>Key Fields</h3>
+<table class="dtbl"><tr><th>Field</th><th>Description</th><th>Config Table</th></tr>
+<tr><td><code>VKONT</code></td><td>Contract account number (PK)</td><td>Number range</td></tr>
+<tr><td><code>GPART</code></td><td>Business partner (FK → BUT000.PARTNER)</td><td>BUT000</td></tr>
+<tr><td><code>VKTYP</code></td><td>Contract account type</td><td>TFKACT</td></tr>
+<tr><td><code>HBKID</code></td><td>House bank ID</td><td>T012</td></tr>
+<tr><td><code>ABWVK</code></td><td>Alternative payer CA</td><td>FKKVK (self-ref)</td></tr>
+<tr><td><code>MAHNS</code></td><td>Dunning level</td><td>TFKDUN</td></tr>
+</table></div>
+<div class="sec"><h3>All Children of FKKVK.VKONT</h3>
+<div class="chip-row">
+<span class="chip">EVER.VKONT → Service Contracts</span>
+<span class="chip">FKKOP.VKONT → Open Items</span>
+<span class="chip green">FKKDEP.VKONT → Deposits</span>
+<span class="chip green">FPLA.VKONT → Budget Billing</span>
+<span class="chip orange">FKKDUN.VKONT → Dunning</span>
+<span class="chip orange">FKKINST.VKONT → Instalment Plans</span>
+<span class="chip">ERCH.VKONT → Bill History</span>
+</div></div>`},
+'connobj':{title:'Connection Object (EOBJK)',body:`
+<div class="sec"><h3>Physical Hierarchy Position</h3>
+<div class="lchain">
+<div class="lc-node root">EOBJK<br>(Service Point)</div><div class="lc-arr">→</div><div class="lc-field">EANL.EOBJK</div><div class="lc-arr">→</div>
+<div class="lc-node">EANL<br>(Premise)</div><div class="lc-arr">→</div><div class="lc-field">EABLG.ANLAGE</div><div class="lc-arr">→</div>
+<div class="lc-node">EABLG<br>(DevLoc)</div><div class="lc-arr">→</div><div class="lc-field">EGERH.EABLG</div><div class="lc-arr">→</div>
+<div class="lc-node target">EGERH<br>(Device)</div>
+</div></div>
+<div class="sec"><h3>Key Config: Division (SPARTE)</h3>
+<table class="dtbl"><tr><th>SPARTE</th><th>Meaning</th></tr>
+<tr><td><code>E</code></td><td>Electricity</td></tr>
+<tr><td><code>G</code></td><td>Gas</td></tr>
+<tr><td><code>W</code></td><td>Water</td></tr>
+<tr><td><code>V</code></td><td>Waste Water</td></tr>
+</table></div>`},
+'device':{title:'Device / Meter (EGERH + EGESD)',body:`
+<div class="sec"><h3>Table Relationships</h3>
+<table class="dtbl"><tr><th>Table</th><th>PK</th><th>Critical Fields</th><th>Purpose</th></tr>
+<tr><td><code>EGERH</code></td><td>GERAET</td><td>SERNR, EABLG, EINBDAT, ABDAT=9999</td><td>Device install history — active install has ABDAT=9999</td></tr>
+<tr><td><code>EGESD</code></td><td>GERAET+ZWNUMMER</td><td>NKONST, CT_RATIO, PT_RATIO, ABLEINH</td><td>Register data — multiplier for billing</td></tr>
+<tr><td><code>EGZWG</code></td><td>ABLBASIS+GERAET</td><td>REIHENF (sequence)</td><td>Device route group assignment</td></tr>
+<tr><td><code>EABL</code></td><td>GERAET+ABLDAT</td><td>ZAEHLERSTAND, ABLESART</td><td>Readings for this device</td></tr>
+</table></div>
+<div class="sec"><h3>CT/PT Formula</h3><p>For commercial/industrial meters: <code>NKONST = CT_RATIO × PT_RATIO</code>. Must be computed in BODS as derived column before EMIGALL staging write. Revenue-critical — verify spot checks post-load.</p></div>`},
+'config-emigall':{title:'EMIGALL Configuration Tables (T7XEMI*)',body:`
+<div class="sec"><h3>Complete T7XEMI* Table Reference</h3>
+<table class="dtbl"><tr><th>Table</th><th>Purpose</th><th>Key Fields</th><th>Action Required</th></tr>
+<tr><td><code>T7XEMI01</code></td><td>Migration object definition</td><td>EMIGOBJ, STATUS=A, DESCRIPTION</td><td>Set STATUS=A to activate object</td></tr>
+<tr><td><code>T7XEMI02</code></td><td>Field mappings — source → SAP target</td><td>EMIGOBJ, SOURCE_FIELD, TARGET_FIELD, MFLAGS</td><td>Map ALL fields; MFLAGS=M for mandatory</td></tr>
+<tr><td><code>T7XEMI03</code></td><td>Value translation — legacy code → SAP code</td><td>EMIGOBJ, FIELD, SOURCE_VALUE, SAP_VALUE</td><td>100% coverage — unmapped = T7XEMERR</td></tr>
+<tr><td><code>T7XEMI04</code></td><td>Load program assignment per object</td><td>EMIGOBJ, PROGRAM</td><td>Assign ABAP program for each object</td></tr>
+<tr><td><code>T7XEMI05</code></td><td>Processing status / restart markers</td><td>EMIGOBJ, RUN_ID, STATUS, RESTART_PTR</td><td>Check before rerun after error</td></tr>
+<tr><td><code>T7XEMI06</code></td><td>BAdI configuration</td><td>EMIGOBJ, BADI_CLASS, ACTIVE</td><td>Activate custom BAdI implementation</td></tr>
+<tr><td><code>T7XEMERR</code></td><td>Error log — row-level errors</td><td>EMIGOBJ, RUN_ID, ROW_ID, MSG_ID, MSG_TEXT</td><td>SE16 after test run — fix all errors</td></tr>
+<tr><td><code>T7XEMLOG</code></td><td>Success log — loaded records</td><td>EMIGOBJ, RUN_ID, COUNT_LOADED</td><td>Verify count = source after prod run</td></tr>
+</table></div>`}
+};
+
+// ═══════════════════════════════════════════════════════════
+// TREE DATA
+// ═══════════════════════════════════════════════════════════
+const TREE = [
+{id:'BP',label:'Business Partner Layer',icon:'👤',color:'#4da6ff',children:[
+  {id:'ZBANK',label:'Bank Master',table:'BNKA',pk:'BANKL',seq:1},
+  {id:'ZPARTNER',label:'Business Partner',table:'BUT000',pk:'PARTNER',seq:2},
+  {id:'ZCONTACT',label:'Contacts',table:'BUT050',pk:'PARTNER2',seq:3},
+  {id:'ZPARTNER_REL',label:'Partner Relationship',table:'BUT050',pk:'PARTNER1+PARTNER2',seq:14}
+]},
+{id:'FICA',label:'FI-CA Contract Accounting',icon:'💳',color:'#ffa657',children:[
+  {id:'ZCONT_ACCT',label:'Contract Account',table:'FKKVK',pk:'VKONT',seq:4},
+  {id:'ZSEC_DEPOSIT',label:'Security Deposit',table:'FKKDEP',pk:'VKONT',seq:12},
+  {id:'ZPAYMENT',label:'Payment / Open Items',table:'FKKOP',pk:'VKONT+BELNR',seq:13},
+  {id:'ZDOCUMENT',label:'Document',table:'BKPF',pk:'BELNR',seq:15},
+  {id:'ZDUNNING',label:'Dunning',table:'FKKDUN',pk:'VKONT',seq:14},
+  {id:'ZIP_PLAN',label:'Instalment Plan (IP)',table:'FKKINST',pk:'VKONT',seq:16},
+  {id:'ZBUDGET_BILL',label:'Budget Billing',table:'FPLA',pk:'VKONT',seq:17},
+  {id:'ZCREDIT_HIST',label:'Credit History',table:'Z_CREDIT_HIST',pk:'VKONT',seq:18},
+  {id:'ZCOLL_HIST',label:'Collection History',table:'FKKCOLAGENCY',pk:'VKONT',seq:19}
+]},
+{id:'ISU',label:'IS-U Physical Infrastructure',icon:'⚡',color:'#3fb950',children:[
+  {id:'ZCONN_OBJ',label:'Connection Object',table:'EOBJK',pk:'EOBJK',seq:5},
+  {id:'ZPREMISE',label:'Premise / Installation',table:'EANL',pk:'ANLAGE',seq:6},
+  {id:'ZDEVLOC',label:'Device Location',table:'EABLG',pk:'EABLG',seq:7},
+  {id:'ZDEV_MOD',label:'Device Model (Config)',table:'TE406',pk:'DEVICETYPE',seq:8},
+  {id:'ZDEVICE',label:'Device / Meter',table:'EGERH',pk:'GERAET',seq:9},
+  {id:'ZDEV_GRP',label:'Device Group',table:'EGZWG',pk:'ABLBASIS+GERAET',seq:10},
+  {id:'ZDEV_CT_PT',label:'Device CT/PT',table:'EGESD',pk:'GERAET',seq:11},
+  {id:'ZDEV_ERTS',label:'Device ERTS (TOU)',table:'EGERH',pk:'GERAET',seq:12},
+  {id:'ZDEVLOC_NOTES',label:'DevLoc Notes',table:'STXH/STXL',pk:'EABLG',seq:13},
+  {id:'ZDEVLOC_CLASS',label:'DevLoc Classification',table:'INOB',pk:'EABLG',seq:14},
+  {id:'ZSTREET_ROUTE',label:'Street Route',table:'TE200/TE240',pk:'ABLBASIS',seq:15},
+  {id:'ZPROPERTY',label:'Property',table:'EANLH',pk:'ANLAGE',seq:16},
+  {id:'ZMOVE_IN',label:'Move-In',table:'EVER+EVBS',pk:'VERTRAG+EINZDAT',seq:17},
+  {id:'ZMETER_READ',label:'Meter Read',table:'EABL',pk:'GERAET+ABLDAT',seq:18},
+  {id:'ZFACTS',label:'FACTS (AMI Events)',table:'QMEL',pk:'QMNUM',seq:19}
+]},
+{id:'BILLING',label:'IS-U Billing',icon:'🧾',color:'#79c0ff',children:[
+  {id:'ZBILL_INSTALL',label:'Billing Installation',table:'EVER',pk:'VERTRAG',seq:9},
+  {id:'ZBILL_CT_PT',label:'Billing Install CT/PT',table:'EGESD',pk:'GERAET',seq:12},
+  {id:'ZINSTLN',label:'Installation Tech',table:'EGERH',pk:'ANLAGE',seq:13},
+  {id:'ZINST_TECH',label:'Installation Tech Data',table:'EANLH',pk:'ANLAGE',seq:14},
+  {id:'ZTECH_CT_PT',label:'Tech CT/PT',table:'EGESD',pk:'ANLAGE',seq:15},
+  {id:'ZREF_VALUES',label:'Ref Values',table:'EANL',pk:'ANLAGE',seq:16},
+  {id:'ZBILL_HISTORY',label:'Bill History (DS)',table:'ERCH',pk:'BELNR',seq:17},
+  {id:'ZDISC_DOC',label:'Disc Document',table:'EAUFN',pk:'AUFNR',seq:18},
+  {id:'ZDISC_ORDER',label:'Disc Order',table:'EAUFN',pk:'AUFNR',seq:19},
+  {id:'ZDISC_ENTRY',label:'Disc Entry',table:'EAUFN',pk:'AUFNR',seq:20},
+  {id:'ZDEVLOC_PREM',label:'DevLoc Premise Map',table:'EABLG',pk:'EABLG+ANLAGE',seq:21}
+]},
+{id:'EAM',label:'EAM Plant Maintenance',icon:'🔧',color:'#d2a8ff',children:[
+  {id:'ZHR_MINI',label:'HR Mini Master',table:'PA0001',pk:'PERNR',seq:1},
+  {id:'ZFLOC',label:'Functional Location',table:'IFLOT',pk:'TPLNR',seq:2},
+  {id:'ZFLOC_CLASS',label:'FLOC Classification',table:'INOB',pk:'TPLNR',seq:3},
+  {id:'ZMAINT_PLAN',label:'Maintenance Plan',table:'MPLA',pk:'WARPL',seq:4}
+]}
+];
+
+// ═══════════════════════════════════════════════════════════
+// LOAD SEQUENCE
+// ═══════════════════════════════════════════════════════════
+const SEQ_DATA = [
+{seq:1,code:'ZBANK',name:'Bank Master',cat:'Config',tbl:'BNKA',pk:'BANKL',method:'EMIGALL',depends:'—',xref:'None (natural key)'},
+{seq:2,code:'ZPARTNER',name:'Business Partner',cat:'CIS/BP',tbl:'BUT000',pk:'PARTNER',method:'EMIGALL',depends:'ZBANK',xref:'Z_XREF_BP'},
+{seq:3,code:'ZCONTACT',name:'Contacts',cat:'CIS/BP',tbl:'BUT050',pk:'PARTNER1+PARTNER2',method:'EMIGALL',depends:'ZPARTNER',xref:'Z_XREF_CONTACT'},
+{seq:4,code:'ZCONT_ACCT',name:'Contract Account',cat:'FI-CA',tbl:'FKKVK',pk:'VKONT',method:'EMIGALL',depends:'ZPARTNER',xref:'Z_XREF_CA'},
+{seq:5,code:'ZCONN_OBJ',name:'Connection Object',cat:'IS-U',tbl:'EOBJK',pk:'EOBJK',method:'EMIGALL',depends:'—',xref:'Z_XREF_CONNOBJ'},
+{seq:6,code:'ZPREMISE',name:'Premise',cat:'IS-U',tbl:'EANL',pk:'ANLAGE',method:'EMIGALL',depends:'ZCONN_OBJ',xref:'Z_XREF_PREMISE'},
+{seq:7,code:'ZDEVLOC',name:'Device Location',cat:'IS-U',tbl:'EABLG',pk:'EABLG',method:'EMIGALL',depends:'ZPREMISE',xref:'Z_XREF_DEVLOC'},
+{seq:8,code:'ZDEV_MOD',name:'Device Model',cat:'Config',tbl:'TE406',pk:'DEVICETYPE',method:'Config TR',depends:'—',xref:'None (config key)'},
+{seq:9,code:'ZDEVICE',name:'Device / Meter',cat:'IS-U',tbl:'EGERH',pk:'GERAET',method:'EMIGALL',depends:'ZDEVLOC, ZDEV_MOD',xref:'Z_XREF_DEVICE'},
+{seq:10,code:'ZBILL_INSTALL',name:'Billing Installation',cat:'Billing',tbl:'EVER',pk:'VERTRAG',method:'EMIGALL',depends:'ZCONT_ACCT, ZPREMISE',xref:'Z_XREF_CONTRACT'},
+{seq:11,code:'ZMOVE_IN',name:'Move-In',cat:'IS-U',tbl:'EVER+EVBS',pk:'VERTRAG+EINZDAT',method:'EMIGALL',depends:'ZBILL_INSTALL, ZDEVICE',xref:'Updates EVER'},
+{seq:12,code:'ZMETER_READ',name:'Meter Read',cat:'IS-U',tbl:'EABL',pk:'GERAET+ABLDAT',method:'EMIGALL',depends:'ZMOVE_IN',xref:'Z_XREF_DEVICE (GERAET)'},
+{seq:13,code:'ZSEC_DEPOSIT',name:'Security Deposit',cat:'FI-CA',tbl:'FKKDEP',pk:'VKONT',method:'EMIGALL',depends:'ZCONT_ACCT',xref:'Z_XREF_CA (VKONT)'},
+{seq:14,code:'ZPAYMENT',name:'Payment',cat:'FI-CA',tbl:'FKKOP',pk:'VKONT+BELNR',method:'EMIGALL',depends:'ZCONT_ACCT',xref:'Z_XREF_CA (VKONT)'},
+{seq:15,code:'ZDOCUMENT',name:'Document',cat:'FI-CA',tbl:'BKPF',pk:'BELNR',method:'EMIGALL',depends:'ZPAYMENT',xref:'Z_XREF_CA'},
+{seq:16,code:'ZDUNNING',name:'Dunning',cat:'FI-CA',tbl:'FKKDUN',pk:'VKONT',method:'EMIGALL',depends:'ZCONT_ACCT, ZPAYMENT',xref:'Z_XREF_CA'},
+{seq:17,code:'ZIP_PLAN',name:'Instalment Plan',cat:'FI-CA',tbl:'FKKINST',pk:'VKONT',method:'EMIGALL',depends:'ZCONT_ACCT, ZDUNNING',xref:'Z_XREF_CA'},
+{seq:18,code:'ZBUDGET_BILL',name:'Budget Billing',cat:'FI-CA',tbl:'FPLA',pk:'VKONT',method:'EMIGALL',depends:'ZCONT_ACCT, ZBILL_INSTALL',xref:'Z_XREF_CA'},
+{seq:19,code:'ZBILL_HISTORY',name:'Bill History',cat:'Billing',tbl:'ERCH',pk:'BELNR',method:'DS (BODS Direct)',depends:'ZBILL_INSTALL, ZPAYMENT',xref:'Z_XREF_CONTRACT'},
+{seq:20,code:'ZREF_VALUES',name:'Ref Values',cat:'IS-U',tbl:'EANL',pk:'ANLAGE',method:'EMIGALL',depends:'ZBILL_INSTALL',xref:'Z_XREF_PREMISE'},
+{seq:21,code:'ZDEVLOC_NOTES',name:'DevLoc Notes',cat:'IS-U',tbl:'STXH/STXL',pk:'EABLG',method:'EMIGALL',depends:'ZDEVLOC',xref:'Z_XREF_DEVLOC'},
+{seq:22,code:'ZDEVLOC_CLASS',name:'DevLoc Classification',cat:'IS-U',tbl:'INOB',pk:'EABLG',method:'EMIGALL',depends:'ZDEVLOC',xref:'Z_XREF_DEVLOC'},
+{seq:23,code:'ZSTREET_ROUTE',name:'Street Route',cat:'Config',tbl:'TE200/TE240',pk:'ABLBASIS',method:'Config TR',depends:'ZDEVLOC',xref:'None (config)'},
+{seq:24,code:'ZPROPERTY',name:'Property',cat:'IS-U',tbl:'EANLH',pk:'ANLAGE',method:'EMIGALL',depends:'ZCONN_OBJ',xref:'Z_XREF_CONNOBJ'},
+{seq:25,code:'ZPARTNER_REL',name:'Partner Relationship',cat:'CIS/BP',tbl:'BUT050',pk:'PARTNER1+PARTNER2',method:'EMIGALL',depends:'ZPARTNER',xref:'Z_XREF_BP'},
+{seq:26,code:'ZBILL_CT_PT',name:'Billing CT/PT',cat:'Billing',tbl:'EGESD',pk:'GERAET',method:'EMIGALL',depends:'ZDEVICE, ZBILL_INSTALL',xref:'Z_XREF_DEVICE'},
+{seq:27,code:'ZDEV_CT_PT',name:'Device CT/PT',cat:'IS-U',tbl:'EGESD',pk:'GERAET',method:'EMIGALL',depends:'ZDEVICE',xref:'Z_XREF_DEVICE'},
+{seq:28,code:'ZDEV_ERTS',name:'Device ERTS (TOU)',cat:'IS-U',tbl:'EGERH',pk:'GERAET',method:'EMIGALL',depends:'ZDEVICE',xref:'Z_XREF_DEVICE'},
+{seq:29,code:'ZINSTLN',name:'Installation Tech',cat:'Billing',tbl:'EGERH',pk:'ANLAGE',method:'EMIGALL',depends:'ZBILL_INSTALL, ZDEVICE',xref:'Z_XREF_CONTRACT'},
+{seq:30,code:'ZINST_TECH',name:'Installation Tech Data',cat:'Billing',tbl:'EANLH',pk:'ANLAGE',method:'EMIGALL',depends:'ZINSTLN',xref:'Z_XREF_PREMISE'},
+{seq:31,code:'ZTECH_CT_PT',name:'Tech CT/PT',cat:'Billing',tbl:'EGESD',pk:'ANLAGE',method:'EMIGALL',depends:'ZINST_TECH',xref:'Z_XREF_PREMISE'},
+{seq:32,code:'ZDEVLOC_PREM',name:'DevLoc Premise Map',cat:'IS-U',tbl:'EABLG',pk:'EABLG+ANLAGE',method:'EMIGALL',depends:'ZDEVLOC, ZPREMISE',xref:'Z_XREF_DEVLOC'},
+{seq:33,code:'ZFACTS',name:'FACTS (AMI Events)',cat:'IS-U',tbl:'QMEL',pk:'QMNUM',method:'EMIGALL',depends:'ZDEVLOC, ZDEVICE',xref:'Z_XREF_DEVLOC'},
+{seq:34,code:'ZDISC_DOC',name:'Disc Document',cat:'Billing',tbl:'EAUFN',pk:'AUFNR',method:'EMIGALL',depends:'ZCONT_ACCT',xref:'Z_XREF_CA'},
+{seq:35,code:'ZDISC_ORDER',name:'Disc Order',cat:'Billing',tbl:'EAUFN',pk:'AUFNR',method:'EMIGALL',depends:'ZDISC_DOC',xref:'—'},
+{seq:36,code:'ZDISC_ENTRY',name:'Disc Entry',cat:'Billing',tbl:'EAUFN',pk:'AUFNR',method:'EMIGALL',depends:'ZDISC_ORDER',xref:'—'},
+{seq:37,code:'ZCREDIT_HIST',name:'Credit History',cat:'FI-CA',tbl:'Z_CREDIT_HIST',pk:'VKONT',method:'DS (BODS Direct)',depends:'ZCONT_ACCT',xref:'Z_XREF_CA'},
+{seq:38,code:'ZCOLL_HIST',name:'Collection History',cat:'FI-CA',tbl:'FKKCOLAGENCY',pk:'VKONT',method:'DS (BODS Direct)',depends:'ZCONT_ACCT, ZDUNNING',xref:'Z_XREF_CA'},
+{seq:39,code:'ZHR_MINI',name:'HR Mini Master',cat:'EAM',tbl:'PA0001',pk:'PERNR',method:'LSMW/LTMC',depends:'—',xref:'None (PERNR known)'},
+{seq:40,code:'ZFLOC',name:'Functional Location',cat:'EAM',tbl:'IFLOT',pk:'TPLNR',method:'LTMC',depends:'ZHR_MINI',xref:'Z_XREF_FLOC'},
+{seq:41,code:'ZFLOC_CLASS',name:'FLOC Classification',cat:'EAM',tbl:'INOB',pk:'TPLNR',method:'LTMC',depends:'ZFLOC',xref:'Z_XREF_FLOC'},
+{seq:42,code:'ZMAINT_PLAN',name:'Maintenance Plan',cat:'EAM',tbl:'MPLA',pk:'WARPL',method:'LTMC',depends:'ZFLOC, ZHR_MINI',xref:'Z_XREF_MAINTPLAN'},
+{seq:43,code:'ZPAYMENT_HIST',name:'Payment History',cat:'FI-CA',tbl:'Z_PAYMENT_HIST',pk:'VKONT',method:'DS (BODS Direct)',depends:'ZPAYMENT',xref:'Z_XREF_CA'}
+];
+
+// ═══════════════════════════════════════════════════════════
+// TCODE DATA
+// ═══════════════════════════════════════════════════════════
+const TCODES = [
+{grp:'Migration & Data Load',color:'#1a3a5c',rows:[
+  {tc:'EMIGALL',desc:'Main EMIGALL migration workbench — create objects, run test/production',diff:'both'},
+  {tc:'ISU_EMIGALL',desc:'Alternate T-code for EMIGALL (same screen)',diff:'both'},
+  {tc:'SE16 / SE16N',desc:'Table browser — check T7XEMI*, Z-tables, target tables',diff:'both'},
+  {tc:'SM30',desc:'View maintenance — update T7XEMI03 value mappings',diff:'both'},
+  {tc:'SM37',desc:'Background job monitor — EMIGALL runs as batch',diff:'both'},
+  {tc:'SE38',desc:'ABAP editor — verify load programs in T7XEMI04',diff:'both'},
+  {tc:'SE19',desc:'BAdI maintenance — activate ISU_EMIGALL_BADI',diff:'both'},
+  {tc:'LTMC',desc:'Migration Cockpit (S/4 replacement for LSMW) — FLOC, Equipment',diff:'s4'},
+  {tc:'LTMOM',desc:'Migration Object Modeler — edit LTMC migration templates',diff:'s4'},
+  {tc:'LSMW',desc:'Legacy System Migration Workbench — HR Mini Master (ECC)',diff:'ecc'},
+  {tc:'SM59',desc:'RFC destinations — configure BODS → SAP connection',diff:'both'},
+  {tc:'STMS',desc:'Transport Management — move config DEV→QA→PROD',diff:'both'},
+  {tc:'SPRO',desc:'IMG customising — transport TE006, TFKACT, TE405',diff:'both'}
+]},
+{grp:'Business Partner',color:'#1a2a5c',rows:[
+  {tc:'BP',desc:'Central BP maintenance — primary T-code for BUT000 in both ECC and S/4',diff:'both'},
+  {tc:'XD01 / XD02',desc:'Create/change FI customer — ECC (CVI syncs to BP)',diff:'ecc'},
+  {tc:'XD03',desc:'Display FI customer — ECC',diff:'ecc'},
+  {tc:'F1591 (Fiori)',desc:'Manage Business Partners — S/4 Fiori replaces XD01/02',diff:'s4'},
+  {tc:'BUPA_ROLE_ADD',desc:'Add BP role programmatically via ABAP',diff:'both'},
+  {tc:'MDS_LOAD_COCKPIT',desc:'S/4 master data load cockpit for BP migration',diff:'s4'}
+]},
+{grp:'FI-CA Contract Accounting',color:'#5a3a00',rows:[
+  {tc:'CAA1 / CAA2 / CAA3',desc:'Create / Change / Display contract account (FKKVK)',diff:'both'},
+  {tc:'FPE1 / FPE3',desc:'Post / Display FI-CA document (FKKOP)',diff:'both'},
+  {tc:'FP03',desc:'Display FI-CA open items for contract account',diff:'both'},
+  {tc:'FPVA',desc:'Budget billing plan / instalment plan maintenance',diff:'both'},
+  {tc:'FPD1 / FPD5',desc:'Create / Display dunning history (FKKDUN)',diff:'both'},
+  {tc:'FPCD',desc:'Security deposit management (FKKDEP)',diff:'both'},
+  {tc:'FPCJ',desc:'Cash journal posting in FI-CA',diff:'both'},
+  {tc:'F1390 (Fiori)',desc:'Manage Contract Accounts — S/4 replaces CAA3',diff:'s4'},
+  {tc:'F0020 (Fiori)',desc:'Post Incoming Payments — S/4 Fiori',diff:'s4'}
+]},
+{grp:'IS-U Customer / Device / Premise',color:'#1a4a20',rows:[
+  {tc:'ES32 / ES33',desc:'Display Installation (EANL) / Connection Object (EOBJK)',diff:'both'},
+  {tc:'ES32F',desc:'Display Device Location (EABLG)',diff:'both'},
+  {tc:'EC50 / EC55',desc:'Create / Display Device master (EGERH)',diff:'both'},
+  {tc:'EG30 / EG32',desc:'Enter / Display meter readings (EABL)',diff:'both'},
+  {tc:'EMMA',desc:'Move-In / Move-Out transaction',diff:'both'},
+  {tc:'ISU50',desc:'IS-U customer account overview',diff:'both'},
+  {tc:'ISU51',desc:'IS-U device display (full)',diff:'both'},
+  {tc:'ELR1',desc:'Meter reading list creation',diff:'both'},
+  {tc:'ELRM',desc:'Manual meter reading entry batch',diff:'both'}
+]},
+{grp:'IS-U Billing',color:'#0a3a20',rows:[
+  {tc:'EA05 / EA10',desc:'Manual billing / Create bill document (ERCH)',diff:'both'},
+  {tc:'EA20 / EA22',desc:'Display / Reverse billing document',diff:'both'},
+  {tc:'EASIMU',desc:'Billing simulation — test without posting',diff:'both'},
+  {tc:'SPBP',desc:'Budget billing plan maintenance',diff:'both'},
+  {tc:'TE006 (SM30)',desc:'View/maintain rate category config table directly',diff:'both'},
+  {tc:'EABL',desc:'Display meter readings for billing',diff:'both'}
+]},
+{grp:'EAM Plant Maintenance',color:'#3a1a5a',rows:[
+  {tc:'IL01 / IL02 / IL03',desc:'Create / Change / Display Functional Location (IFLOT)',diff:'both'},
+  {tc:'IE01 / IE02 / IE03',desc:'Create / Change / Display Equipment (EQUI)',diff:'both'},
+  {tc:'IP01 / IP02 / IP10',desc:'Create / Change maintenance plan / Schedule (MPLA)',diff:'both'},
+  {tc:'IW21 / IW22 / IW23',desc:'Create / Change / Display PM notification',diff:'both'},
+  {tc:'IW31 / IW32 / IW33',desc:'Create / Change / Display PM work order (AFKO)',diff:'both'},
+  {tc:'CATS',desc:'Time sheet entry for PM work orders',diff:'both'},
+  {tc:'F4664 / F4665 (Fiori)',desc:'Manage FLOCs / Equipment — S/4 Fiori replaces IL/IE',diff:'s4'},
+  {tc:'F2372 (Fiori)',desc:'Monitor Migration Objects (LTMC cockpit)',diff:'s4'}
+]},
+{grp:'System Admin / Monitor',color:'#2a2a2a',rows:[
+  {tc:'SU01',desc:'User maintenance — migration batch user auth objects',diff:'both'},
+  {tc:'STAD',desc:'System activity log — monitor EMIGALL run performance',diff:'both'},
+  {tc:'ST05',desc:'Performance trace — SQL trace for BODS RFC calls',diff:'both'},
+  {tc:'SM50 / SM66',desc:'Work process / Global work process monitor',diff:'both'},
+  {tc:'SNOTE',desc:'Apply SAP Notes — pre-migration patching',diff:'both'},
+  {tc:'SARA',desc:'Archive administration — archiving after migration',diff:'both'}
+]}
+];
+
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function goTab(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nvitem').forEach(n=>n.classList.remove('active'));
+  const pg = document.getElementById('pg-'+id);
+  if(pg) pg.classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>{
+    if(t.onclick && t.onclick.toString().includes("'"+id+"'")) t.classList.add('active');
+  });
+  if(id==='tree'){
+    document.getElementById('tree-page').classList.add('active');
+    renderTree();
+  }
+  if(id==='seq') renderSeqTable();
+  if(id==='emigall') renderEMIGALL();
+  if(id==='tcode') renderTcodes();
+}
+
+function scrollTo007(id){
+  setTimeout(()=>{
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  },200);
+}
+
+// ═══════════════════════════════════════════════════════════
+// ARCHITECTURE DETAIL
+// ═══════════════════════════════════════════════════════════
+function showArch(key){
+  const d = ARCH_DATA[key];
+  const panel = document.getElementById('arch-detail');
+  if(!d){
+    // Try object by id
+    const obj = OBJS.find(o=>o.id===key);
+    if(obj){
+      document.getElementById('arch-title').textContent = obj.icon+' '+obj.name+' ('+obj.saptable+')';
+      document.getElementById('arch-body').innerHTML = buildObjDetail(obj,'overview');
+      panel.style.display='block';
+      panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
+    return;
+  }
+  document.getElementById('arch-title').textContent = d.title;
+  document.getElementById('arch-body').innerHTML = d.body;
+  panel.style.display='block';
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+// ═══════════════════════════════════════════════════════════
+// TREE RENDERING
+// ═══════════════════════════════════════════════════════════
+let treeOpen = {};
+function renderTree(){
+  const root = document.getElementById('tree-root');
+  root.innerHTML = TREE.map(cat=>renderCategory(cat)).join('');
+}
+
+function renderCategory(cat){
+  const open = treeOpen[cat.id] !== false;
+  return `<div class="tree-node">
+    <div class="tree-row" onclick="toggleCat('${cat.id}')">
+      <div class="tree-toggle">${open?'▼':'▶'}</div>
+      <div class="tree-icon">${cat.icon}</div>
+      <div class="tree-label" style="color:${cat.color};font-size:12px;font-weight:800">${cat.label}</div>
+    </div>
+    <div class="tree-children" id="cat-${cat.id}" style="display:${open?'block':'none'}">
+      ${cat.children.map(ch=>renderTreeItem(ch,cat.color)).join('')}
+    </div>
+  </div>`;
+}
+
+function renderTreeItem(item,color){
+  return `<div class="tree-node">
+    <div class="tree-row" onclick="showTreeDetail('${item.id}')">
+      <div class="tree-toggle" style="color:#2a3a4a">—</div>
+      <div class="tree-icon">📦</div>
+      <div class="tree-label" style="color:#cdd9e5">${item.label}</div>
+      <span class="tree-table">${item.table}</span>
+      <span class="tree-key">${item.pk}</span>
+    </div>
+  </div>`;
+}
+
+function toggleCat(id){
+  treeOpen[id] = treeOpen[id] === false ? true : false;
+  renderTree();
+}
+
+function treeFilter(catId){
+  // Expand only the selected category
+  TREE.forEach(c=>{ treeOpen[c.id] = (c.id === catId); });
+  setTimeout(renderTree, 100);
+}
+
+function showTreeDetail(objId){
+  const obj = OBJS.find(o=>o.id===objId);
+  const panel = document.getElementById('tree-detail-content');
+  if(!obj){
+    // Show basic info from SEQ_DATA
+    const s = SEQ_DATA.find(x=>x.code===objId);
+    if(s){
+      panel.innerHTML = `<div style="padding:20px">
+        <div style="font-size:16px;font-weight:900;color:#f0f6fc;margin-bottom:8px">${s.code} — ${s.name}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+          <span class="badge bblue">${s.cat}</span>
+          <span class="badge bgreen">${s.method}</span>
+          <span class="badge borange">SEQ #${s.seq}</span>
+        </div>
+        <table class="dtbl">
+          <tr><th>Target Table</th><td><code>${s.tbl}</code></td></tr>
+          <tr><th>Primary Key</th><td><code>${s.pk}</code></td></tr>
+          <tr><th>Depends On</th><td>${s.depends}</td></tr>
+          <tr><th>Cross-Ref Z-Table</th><td><code>${s.xref}</code></td></tr>
+        </table>
+      </div>`;
+    }
+    return;
+  }
+  let currentTab = 'overview';
+  panel.innerHTML = buildObjFullDetail(obj, currentTab);
+}
+
+function buildObjFullDetail(obj, tab){
+  const tabs = ['overview','tables','links','emigall','rules'];
+  const tabLabels = {overview:'Overview',tables:'Tables & Fields',links:'Object Links',emigall:'EMIGALL Setup',rules:'Biz Rules & Checks'};
+  return `
+    <div class="od-head">
+      <div class="od-title">${obj.icon} ${obj.id} — ${obj.name}</div>
+      <div class="od-sub">Seq #${obj.seq} · Target: ${obj.saptable} · Method: <span style="color:#3fb950">${obj.method}</span></div>
+    </div>
+    <div class="od-tabs">
+      ${tabs.map(t=>`<div class="od-tab${t===tab?' active':''}" onclick="reloadDetail('${obj.id}','${t}')">${tabLabels[t]}</div>`).join('')}
+    </div>
+    <div class="od-body">${buildObjDetail(obj,tab)}</div>`;
+}
+
+function reloadDetail(objId, tab){
+  const obj = OBJS.find(o=>o.id===objId);
+  if(!obj) return;
+  document.getElementById('tree-detail-content').innerHTML = buildObjFullDetail(obj, tab);
+}
+
+function buildObjDetail(obj, tab){
+  if(tab==='overview') return `
+    <div class="sec"><h3>SAP Purpose</h3><p>${obj.sapUse}</p></div>
+    <div class="sec"><h3>Overview</h3><p>${obj.desc}</p></div>
+    <div class="sec"><h3>Config Tables Required Before Load</h3>
+    <div class="chip-row">${(obj.configBefore||[]).map(c=>`<span class="chip orange">${c}</span>`).join('')}</div></div>
+    <div class="sec"><h3>Dependencies</h3>
+    <div class="chip-row">${obj.depends.length?obj.depends.map(d=>`<span class="chip" onclick="showTreeDetail('${d}')" style="cursor:pointer">${d}</span>`).join(''):'<span style="color:#5a6a7a">No dependencies</span>'}</div></div>
+    <div class="sec"><h3>Cross-Reference Z-Table</h3><p><code>${obj.xref}</code></p></div>`;
+
+  if(tab==='tables') return `
+    <div class="sec"><h3>All SAP Tables Written / Read</h3>
+    <table class="dtbl">
+      <tr><th>Table</th><th>Role</th><th>Primary Key</th><th>Key Fields</th><th>Description</th></tr>
+      ${obj.tables.map(t=>`<tr>
+        <td><code>${t.tbl}</code></td>
+        <td><span class="badge ${t.role==='Target'?'bgreen':t.role==='Config'?'borange':'bblue'}">${t.role}</span></td>
+        <td><code>${t.pk}</code></td>
+        <td style="font-family:monospace;font-size:10.5px">${t.fields}</td>
+        <td>${t.desc}</td>
+      </tr>`).join('')}
+    </table></div>`;
+
+  if(tab==='links') return `
+    <div class="sec"><h3>Object-to-Object Links</h3>
+    <table class="dtbl">
+      <tr><th>Links To</th><th>Join Field</th><th>Description</th></tr>
+      ${obj.links.map(l=>`<tr>
+        <td><span class="badge bblue" onclick="showTreeDetail('${l.to}')" style="cursor:pointer">${l.to}</span></td>
+        <td><code>${l.joinField}</code></td>
+        <td>${l.desc}</td>
+      </tr>`).join('')}
+    </table></div>
+    <div class="sec"><h3>Dependency Chain</h3>
+    <div class="lchain">
+      ${obj.depends.map(d=>`<div class="lc-node root" onclick="showTreeDetail('${d}')">${d}</div><div class="lc-arr">→</div>`).join('')}
+      <div class="lc-node target">${obj.id}<br><small style="font-family:monospace">${obj.saptable}</small></div>
+    </div></div>`;
+
+  if(tab==='emigall') return `
+    <div class="sec"><h3>EMIGALL Configuration Steps</h3>
+    <div style="background:#071929;border:1px solid #1a3a5c;border-radius:6px;padding:14px;font-family:monospace;font-size:12px;color:#79c0ff;white-space:pre-wrap;line-height:1.9">${obj.emigall}</div></div>`;
+
+  if(tab==='rules') return `
+    <div class="sec"><h3>Business Rules</h3>
+    ${obj.bizRules.map(r=>`<div style="background:#071929;border-left:3px solid #4da6ff;padding:7px 12px;margin-bottom:5px;font-size:12px;border-radius:0 5px 5px 0">${r}</div>`).join('')}
+    </div>
+    <div class="sec"><h3>SAP Validation Checks (Post-Load)</h3>
+    ${obj.sapChecks.map(c=>`<div style="background:#051a10;border:1px solid #1a4a20;border-radius:5px;padding:6px 10px;margin-bottom:4px;font-family:monospace;font-size:11px;color:#3fb950">${c}</div>`).join('')}
+    </div>`;
+  return '';
+}
+
+// ═══════════════════════════════════════════════════════════
+// SEQUENCE TABLE
+// ═══════════════════════════════════════════════════════════
+const CAT_C={CIS:'#1a3a5c','CIS/BP':'#1a3a5c','FI-CA':'#5a3a00','IS-U':'#1a4a20',Billing:'#1a2a4a',EAM:'#3a1a5a',Config:'#2a2a2a'};
+function renderSeqTable(){
+  const w = document.getElementById('seq-table-wrap');
+  w.innerHTML = `<table class="dtbl">
+    <tr>
+      <th style="width:40px">Seq</th>
+      <th style="width:120px">Code</th>
+      <th>Object Name</th>
+      <th style="width:80px">Category</th>
+      <th style="width:120px">Target Table</th>
+      <th style="width:100px">Primary Key</th>
+      <th style="width:80px">Method</th>
+      <th>Depends On</th>
+      <th>Z-XREF Table</th>
+    </tr>
+    ${SEQ_DATA.map(s=>`<tr>
+      <td style="font-weight:900;color:#4da6ff;text-align:center">${s.seq}</td>
+      <td><code>${s.code}</code></td>
+      <td style="font-weight:600">${s.name}</td>
+      <td><span class="badge" style="background:${CAT_C[s.cat]||'#1e2a3a'};color:#cdd9e5;border-color:#2a3a4a;font-size:9.5px">${s.cat}</span></td>
+      <td><code>${s.tbl}</code></td>
+      <td><code style="font-size:10px">${s.pk}</code></td>
+      <td><span class="badge" style="color:${{EMIGALL:'#4da6ff','DS (BODS Direct)':'#3fb950',LSMW:'#ffa657',LTMC:'#d2a8ff','Config TR':'#f0e040'}[s.method]||'#cdd9e5'};background:#111827;border-color:#2a3a4a;font-size:9.5px">${s.method}</span></td>
+      <td style="font-size:11px;color:#5a6a7a">${s.depends}</td>
+      <td><code style="font-size:10px">${s.xref}</code></td>
+    </tr>`).join('')}
+  </table>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// EMIGALL FULL GUIDE
+// ═══════════════════════════════════════════════════════════
+function renderEMIGALL(){
+  renderEMIGALLSteps();
+  renderEMIGALLBadi();
+  renderEMIGALLErrors();
+  renderEMIGALLBods();
+  renderEMIGALLSP();
+}
+
+function estep(num,title,desc,chips,chipClass){
+  return `<div class="estep">
+    <div class="estep-num">${num}</div>
+    <div class="estep-body">
+      <div class="estep-title">${title}</div>
+      <div class="estep-desc">${desc}</div>
+      ${chips?`<div class="estep-sub"><h4>Key Config / Tables</h4><div class="chip-row">${chips.map(c=>`<span class="chip ${chipClass||''}">${c}</span>`).join('')}</div></div>`:''}
+    </div>
+  </div>`;
+}
+
+function renderEMIGALLSteps(){
+  document.getElementById('emigall-steps-wrap').innerHTML = `
+  ${estep(1,'Activate Migration Object in T7XEMI01',
+    'Go to T-code <strong>EMIGALL</strong> → Create Migration Object → Enter object code (e.g. <code>ZBUPA</code>) and description. Set <code>STATUS = A</code> (Active). This registers the object in T7XEMI01. Transport the activated object from DEV→QA→PROD via standard TR (SE01/STMS).',
+    ['T7XEMI01.STATUS=A','EMIGALL T-code','SE01 Transport','DEV→QA→PROD'])}
+
+  ${estep(2,'Define Field Mappings in T7XEMI02',
+    'For each SAP target field, define the source field name and mapping rules. Mark mandatory fields with <code>MFLAGS = M</code>. Add default values for fields not present in source data. For cross-reference lookups (e.g. legacy BP → SAP PARTNER), define the Z-table lookup in the BAdI or as a derived field in BODS before the staging write.',
+    ['T7XEMI02 view (SM30)','MFLAGS=M for mandatory','Source field names','Default values','FK lookup via Z_XREF_BP'])}
+
+  ${estep(3,'Run Frequency Analysis & Configure Value Translation (T7XEMI03)',
+    'In BODS, run a SELECT DISTINCT on every coded source field (account type, rate category, division, reading type, etc.). For each unique source value, create a T7XEMI03 row mapping it to the SAP target code. <strong>100% coverage is mandatory</strong> — any unmapped value causes T7XEMERR error at runtime. Use SM30 T7XEMI03 view or upload via LTMC.',
+    ['T7XEMI03 (SM30)','Freq analysis in BODS','RATE=RES→TARIF=ZRSG','TYPE=R→BU_GROUP=Z001','DIV=E→SPARTE=E'],'orange')}
+
+  ${estep(4,'Assign Load Program in T7XEMI04',
+    'Each migration object needs an ABAP program assigned in T7XEMI04. For standard IS-U objects, SAP provides pre-built programs (e.g. <code>RISBUPA_MIGRATION</code> for BP, <code>RFKK_CA_MIGRATION</code> for Contract Account). For custom objects, develop a Z-program that calls the relevant BAPI or FM. Verify the program compiles via SE38.',
+    ['T7XEMI04','SE38 compile check','BAPI_BUPA_CREATE_FROM_DATA2','BAPI_CTRACC_CREATE','ISU_MOVE_IN'])}
+
+  ${estep(5,'Configure BAdI ISU_EMIGALL_BADI (if custom validation needed)',
+    'For cross-object validation, custom enrichment, or legacy-specific business rules not handled by standard EMIGALL, implement BAdI <code>ISU_EMIGALL_BADI</code>. Example: SSN dedup check during BP load, address CASS cleanse trigger, Z-table cross-reference lookup during load. Activate in SE19. Enter implementation class in T7XEMI06.',
+    ['SE19 BAdI definition','T7XEMI06 BAdI config','ISU_EMIGALL_BADI','Custom IF_ISU_EMIGALL_BADI~PROCESS','Z_XREF_BP lookup logic'],'orange')}
+
+  ${estep(6,'Prepare and Validate Staging Data in BODS',
+    'BODS jobs must produce a clean staging file or Z-table that exactly matches T7XEMI02 field names and T7XEMI03 source values. Key transforms: <br>• <code>ORDER BY GERAET, ABLDAT ASC</code> for meter reads<br>• <code>NKONST = CT × PT</code> derived column for C&I devices<br>• Address CASS cleanse before BP/ConnObj load<br>• Lookup join to Z_XREF tables to resolve legacy IDs → SAP numbers<br>• Date format conversion: MM/DD/YYYY → YYYYMMDD (SAP format)',
+    ['BODS Query Transform','ORDER BY GERAET,ABLDAT','NKONST=CT×PT derived col','Address Cleanse transform','Date format conversion','Z_XREF lookup joins'])}
+
+  ${estep(7,'Execute Test Mode Run (TESTLAUF = X)',
+    'In EMIGALL, select the migration object and execute with <code>Test Mode = X</code>. SAP processes ALL records through field mapping, value translation, and BAdI validation, but performs a full <strong>ROLLBACK</strong> at the end — nothing is committed. Errors are written to T7XEMERR. Run via SM37 background job for large volumes.',
+    ['EMIGALL → Execute','TESTLAUF = X','SM37 job monitor','T7XEMERR error log','Background job: ZBATCH_EMIGALL'],'green')}
+
+  ${estep(8,'Analyse Errors in T7XEMERR',
+    'After Test Mode: SE16 → T7XEMERR → Export to Excel. <strong>GROUP BY MSG_TEXT</strong> to identify systemic issues:<br>• "Value not found in T7XEMI03" → missing value mapping (fix T7XEMI03, re-transport)<br>• "Object not found" → parent not loaded (run parent object first)<br>• "Address incomplete" → CASS cleanse missing in BODS<br>• "E3 096 chronological order" → BODS sort ORDER BY missing<br>Fix systemic issues first, then data issues. Repeat until 0 errors.',
+    ['SE16 T7XEMERR','Export to Excel','GROUP BY MSG_TEXT','Fix T7XEMI03 gaps','Fix BODS sort issue','Re-run test after each fix'],'red')}
+
+  ${estep(9,'Execute Production Run (TESTLAUF = blank)',
+    'When Test Mode shows 0 errors, execute <strong>Production Run</strong> (TESTLAUF = space). Records are committed to SAP target tables. T7XEMLOG captures success count. Run as SM37 background job. Monitor progress via SM37 job log.',
+    ['EMIGALL → Execute (no test flag)','SM37 background job','T7XEMLOG success count','Commit to database','Monitor SM37 spool'],'green')}
+
+  ${estep(10,'Post-Load Verification',
+    'After each production run: verify record counts match source. Update cross-reference Z-table with legacy ID → SAP number mapping. Run SE16 spot checks on target tables. Execute any downstream Z-programs to populate additional Z-tables.',
+    ['SE16 target table count','Z_XREF_BP update','Z_XREF_CA update','Count: source = SAP','Spot-check key records','Notify downstream object team'])}
+
+  ${estep(11,'Cross-Reference Z-Table Update Pattern',
+    'Every EMIGALL production run that generates new SAP numbers must update the cross-reference Z-table. Pattern: <br>1. ABAP program reads T7XEMLOG for this run<br>2. Joins legacy staging table on row key<br>3. Writes LEGACY_ID + SAP_NUMBER to Z_XREF_&lt;OBJECT&gt;<br>4. Downstream object EMIGALL jobs use BODS lookup join to this Z-table to resolve FK values.',
+    ['Z_XREF_BP','Z_XREF_CA','Z_XREF_PREMISE','Z_XREF_DEVLOC','Z_XREF_DEVICE','Z_XREF_CONTRACT'])}
+
+  ${estep(12,'Restart After Failure (T7XEMI05)',
+    'If a production run fails mid-way (system crash, timeout), use T7XEMI05 restart markers. EMIGALL records last successfully processed record ID. Execute with RESTART = X to continue from the last committed point, skipping already-loaded records. Verify T7XEMLOG count includes both original and restart records.',
+    ['T7XEMI05 restart markers','EMIGALL → Restart mode','RESTART = X flag','T7XEMLOG cumulative count','Verify no duplicates'],'orange')}`;
+}
+
+function renderEMIGALLBadi(){
+  document.getElementById('emigall-badi-wrap').innerHTML = `
+  <div style="background:#071929;border:1px solid #1a3a5c;border-radius:8px;padding:16px;margin-bottom:12px">
+    <div style="font-size:13px;font-weight:800;color:#f0f6fc;margin-bottom:10px">BAdI: ISU_EMIGALL_BADI</div>
+    <table class="dtbl">
+      <tr><th>Method</th><th>Trigger Point</th><th>Typical Use</th></tr>
+      <tr><td><code>CHECK_BEFORE_LOAD</code></td><td>Before any field mapping — called per record</td><td>SSN duplicate check, mandatory field validation, cross-object existence check</td></tr>
+      <tr><td><code>ENRICH_DATA</code></td><td>After field mapping — before value translation</td><td>Derive additional fields (e.g. SPARTE from division code, computed NKONST), lookup Z-table enrichment</td></tr>
+      <tr><td><code>POST_LOAD</code></td><td>After successful record commit</td><td>Update Z-table cross-reference, write audit log, trigger dependent processes</td></tr>
+      <tr><td><code>ON_ERROR</code></td><td>When T7XEMERR row is written</td><td>Custom error categorisation, notify migration team, increment error counters in Z-table</td></tr>
+    </table>
+    <div style="margin-top:12px;font-size:12px;color:#8a9ab0">
+      <strong style="color:#4da6ff">Configuration steps:</strong><br>
+      1. SE19 → Find BAdI <code>ISU_EMIGALL_BADI</code> → Create implementation → Set implementation class name (e.g. <code>ZCL_ISU_EMIGALL_BADI_IMPL</code>)<br>
+      2. Implement interface methods in SE24 / SE80<br>
+      3. Enter implementation class in T7XEMI06 for each migration object that needs custom logic<br>
+      4. Transport implementation class and T7XEMI06 entry DEV→QA→PROD
+    </div>
+  </div>`;
+}
+
+function renderEMIGALLErrors(){
+  const errors = [
+    {code:'E3 096',msg:'Meter reading out of chronological order',cause:'EABL reads not sorted ascending by GERAET+ABLDAT',fix:'BODS: add ORDER BY GERAET, ABLDAT ASC in query transform before staging write. Also check for duplicate read dates per device.'},
+    {code:'ISU-CA 001',msg:'Business partner not found',cause:'FKKVK.GPART or EVER.GPART references a PARTNER that does not exist in BUT000',fix:'Check Z_XREF_BP completeness. Ensure ZPARTNER run completed before ZCONT_ACCT/ZBILL_INSTALL.'},
+    {code:'FKK 002',msg:'Contract account type not configured',cause:'FKKVK.VKTYP value not found in TFKACT config table',fix:'Transport TFKACT configuration from DEV to target system. Verify T7XEMI03 mapping uses correct VKTYP code.'},
+    {code:'TE006 NOT FOUND',msg:'Rate category not configured',cause:'EVER.TARIF value not found in TE006 config table',fix:'Transport TE006 rate category config. Verify T7XEMI03 covers 100% of source rate codes.'},
+    {code:'ADDR 001',msg:'Address data incomplete',cause:'ADRC record missing mandatory fields (STREET, CITY1, POST_CODE1)',fix:'Run USPS/CASS address cleanse in BODS Address Cleanse transform before BP/ConnObj staging write.'},
+    {code:'SERNR DUP',msg:'Duplicate serial number',cause:'EGERH already contains a record for this SERNR (globally unique)',fix:'Dedup SERNR in BODS. Check if device already loaded in a prior run. Verify source system dedup.'},
+    {code:'T7XEMI03 NO MAP',msg:'Value not found in T7XEMI03',cause:'Source coded field has a value not mapped in T7XEMI03 for this object+field',fix:'SE16 T7XEMERR → GROUP BY MSG_TEXT → get all unmapped values → add rows to T7XEMI03 → re-transport → re-test.'},
+    {code:'PARENT NOT FOUND',msg:'Parent object does not exist',cause:'FK reference to parent object that has not been loaded yet (wrong load order)',fix:'Check load sequence — load parent object first. Verify Z_XREF parent table is populated.'},
+    {code:'FKK BALANCE',msg:'FI-CA balance inconsistency',cause:'Sum of FKKOP items does not equal expected AR balance',fix:'Reconcile in BODS: aggregate source payments vs charges. Check for missing records in source extract.'},
+    {code:'NKONST MISMATCH',msg:'Device register multiplier mismatch',cause:'EGESD.NKONST does not equal CT_RATIO × PT_RATIO',fix:'Fix BODS derived column: NKONST = CT_RATIO * PT_RATIO (integer multiplication, avoid float rounding).'}
+  ];
+  document.getElementById('emigall-errors-wrap').innerHTML = `
+  <table class="dtbl">
+    <tr><th style="width:120px">Error Code</th><th>Message</th><th>Root Cause</th><th>Fix</th></tr>
+    ${errors.map(e=>`<tr>
+      <td><code style="color:#f85149">${e.code}</code></td>
+      <td style="color:#ffa657">${e.msg}</td>
+      <td style="font-size:11.5px;color:#8a9ab0">${e.cause}</td>
+      <td style="font-size:11.5px;color:#3fb950">${e.fix}</td>
+    </tr>`).join('')}
+  </table>`;
+}
+
+function renderEMIGALLBods(){
+  document.getElementById('emigall-bods-wrap').innerHTML = `
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div style="background:#071929;border:1px solid #1a3a5c;border-radius:7px;padding:14px">
+      <div style="font-size:12px;font-weight:800;color:#4da6ff;margin-bottom:10px">BODS → SAP Connection Setup</div>
+      <div style="font-size:12px;color:#8a9ab0;line-height:1.9">
+        <strong style="color:#cdd9e5">1. SAP RFC Datastore in BODS</strong><br>
+        &nbsp;&nbsp;• Datastore type: SAP Application<br>
+        &nbsp;&nbsp;• Host/IP: SAP IS-U server<br>
+        &nbsp;&nbsp;• System number / Client<br>
+        &nbsp;&nbsp;• Logon: Migration batch user (SU01)<br>
+        &nbsp;&nbsp;• Test connection: must succeed before job runs<br><br>
+        <strong style="color:#cdd9e5">2. SAP Side: SM59 RFC Destination</strong><br>
+        &nbsp;&nbsp;• Create destination type R/3 or ABAP<br>
+        &nbsp;&nbsp;• Host matches BODS connection<br>
+        &nbsp;&nbsp;• Test with F8 (ping) — green = ready<br><br>
+        <strong style="color:#cdd9e5">3. ABAP FM: ZBODS_STAGE_WRITE</strong><br>
+        &nbsp;&nbsp;• RFC-enabled ABAP FM on SAP side<br>
+        &nbsp;&nbsp;• Receives row data from BODS via RFC call<br>
+        &nbsp;&nbsp;• Writes to EMIGALL staging Z-table or flat file<br>
+      </div>
+    </div>
+    <div style="background:#071929;border:1px solid #1a3a5c;border-radius:7px;padding:14px">
+      <div style="font-size:12px;font-weight:800;color:#4da6ff;margin-bottom:10px">BODS Job Architecture per Object</div>
+      <div style="font-size:12px;color:#8a9ab0;line-height:1.9">
+        <strong style="color:#cdd9e5">Dataflow 1 — Extract</strong><br>
+        &nbsp;&nbsp;Source Datastore (Cogsdale/SQL) → Query Transform<br><br>
+        <strong style="color:#cdd9e5">Dataflow 2 — Transform</strong><br>
+        &nbsp;&nbsp;• Case Transform: source codes → SAP codes<br>
+        &nbsp;&nbsp;• Lookup join: Z_XREF_BP → resolve PARTNER<br>
+        &nbsp;&nbsp;• Lookup join: Z_XREF_CA → resolve VKONT<br>
+        &nbsp;&nbsp;• Validation Transform: reject nulls / bad formats<br>
+        &nbsp;&nbsp;• Address Cleanse: CASS validation for BP/ConnObj<br>
+        &nbsp;&nbsp;• Date conversion: MM/DD/YYYY → YYYYMMDD<br>
+        &nbsp;&nbsp;• Sort: ORDER BY GERAET, ABLDAT ASC (meter reads)<br><br>
+        <strong style="color:#cdd9e5">Dataflow 3 — Load</strong><br>
+        &nbsp;&nbsp;RFC call → ZBODS_STAGE_WRITE → Z_STG_&lt;OBJECT&gt;<br>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderEMIGALLSP(){
+  document.getElementById('emigall-sp-wrap').innerHTML = `
+  <div style="background:#071929;border:1px solid #1a3a5c;border-radius:8px;padding:16px;margin-bottom:12px">
+    <div style="font-size:13px;font-weight:800;color:#f0f6fc;margin-bottom:12px">Complete SharePoint → BODS → EMIGALL → SAP Flow</div>
+    <div class="lchain">
+      <div class="lc-node root">Business Team<br>uploads CSV/XLSX<br>to SharePoint</div><div class="lc-arr">→</div>
+      <div class="lc-node">SharePoint<br>Document Library<br>(DM Migration)</div><div class="lc-arr">→</div>
+      <div class="lc-node">BODS File<br>Datastore<br>(UNC path or REST API)</div><div class="lc-arr">→</div>
+      <div class="lc-node">BODS Job<br>Extract+Transform<br>+Validate</div><div class="lc-arr">→</div>
+      <div class="lc-node">RFC call to SAP<br>ZBODS_STAGE_WRITE</div><div class="lc-arr">→</div>
+      <div class="lc-node">Z_STG_&lt;OBJ&gt;<br>Staging Table</div><div class="lc-arr">→</div>
+      <div class="lc-node">EMIGALL<br>Test Run</div><div class="lc-arr">→</div>
+      <div class="lc-node target">EMIGALL<br>Production Run<br>→ SAP IS-U</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#4da6ff;text-transform:uppercase;margin-bottom:8px">SharePoint Config Checklist</div>
+        <div style="font-size:12px;color:#8a9ab0;line-height:2">
+          ✅ Document library: /sites/DMmigration/StagingFiles<br>
+          ✅ File naming convention: ZPARTNER_20230815_v01.csv<br>
+          ✅ BODS service account has Read permission on library<br>
+          ✅ SharePoint sync folder mapped as UNC path OR REST API OAuth token configured in BODS Connection Manager<br>
+          ✅ File archival: processed files moved to /Processed subfolder<br>
+          ✅ File format: UTF-8 CSV with header row matching T7XEMI02 SOURCE_FIELD names
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#3fb950;text-transform:uppercase;margin-bottom:8px">BODS Config Checklist</div>
+        <div style="font-size:12px;color:#8a9ab0;line-height:2">
+          ✅ File Datastore: root folder = SharePoint UNC/REST path<br>
+          ✅ RFC Datastore: SAP host, system #, client, user/pass<br>
+          ✅ SM59 RFC destination tested from SAP side<br>
+          ✅ Z_XREF tables accessible (SAP RFC read permission)<br>
+          ✅ BODS job scheduler: hourly trigger or manual<br>
+          ✅ Error file: rejected rows written to /Errors/<br>
+          ✅ Log: BODS job log + SAP T7XEMERR correlated for each file
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <div style="font-size:11px;font-weight:700;color:#ffa657;text-transform:uppercase;margin-bottom:8px">Configuration Check Tables (Verify Before Each EMIGALL Run)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${['T7XEMI01 STATUS=A','T7XEMI02 field mappings complete','T7XEMI03 100% value coverage','T7XEMI04 load program assigned','T7XEMI06 BAdI active (if used)','TE001 divisions','TE006 rate categories','TFKACT CA types','TE405 device categories','TB003 BP groupings','Z_XREF parent tables populated','SM59 RFC green','BODS staging table empty before run'].map(c=>`<span class="chip orange">${c}</span>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// T-CODES
+// ═══════════════════════════════════════════════════════════
+function renderTcodes(){
+  document.getElementById('tcode-wrap').innerHTML = `<div class="tc-grid">
+    ${TCODES.map(grp=>`
+    <div class="tc-card">
+      <div class="tc-hdr" style="background:${grp.color}">${grp.grp}</div>
+      ${grp.rows.map(r=>`
+      <div class="tc-row">
+        <div class="tc-code">${r.tc}</div>
+        <div class="tc-desc">${r.desc}</div>
+        <div class="tc-diff ${r.diff==='both'?'td-both':r.diff==='ecc'?'td-ecc':'td-s4'}">${r.diff==='both'?'✓ Both':r.diff==='ecc'?'ECC':'S/4 Fiori'}</div>
+      </div>`).join('')}
+    </div>`).join('')}
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// SIDEBAR SEARCH
+// ═══════════════════════════════════════════════════════════
+function sideSearch(v){
+  const val = v.toLowerCase().trim();
+  const dyn = document.getElementById('sb-dyn');
+  if(!val){ dyn.innerHTML=''; return; }
+  const results = [];
+  OBJS.forEach(o=>{
+    if(o.name.toLowerCase().includes(val)||o.id.toLowerCase().includes(val)||o.saptable.toLowerCase().includes(val))
+      results.push({label:o.icon+' '+o.id+' — '+o.name, action:`goTab('tree');setTimeout(()=>showTreeDetail('${o.id}'),200)`});
+  });
+  SEQ_DATA.forEach(s=>{
+    if(!OBJS.find(o=>o.id===s.code) && (s.name.toLowerCase().includes(val)||s.code.toLowerCase().includes(val)||s.tbl.toLowerCase().includes(val)))
+      results.push({label:'📦 '+s.code+' — '+s.name, action:`goTab('seq')`});
+  });
+  dyn.innerHTML = results.slice(0,8).map(r=>`<div class="nvitem" onclick="${r.action}">${r.label}</div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+window.onload = function(){
+  renderSeqTable();
+};
+</script>
+
+</body>
+</html>

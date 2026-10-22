@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SAP IS-U Emigall — Complete Reference | Sempra/Chesapeake</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'Segoe UI',sans-serif;background:#0d1117;color:#c9d1d9;font-size:13px;line-height:1.6;display:flex;height:100vh;overflow:hidden}
+/* SIDEBAR */
+#sidebar{width:240px;min-width:240px;background:#010409;border-right:1px solid #21262d;display:flex;flex-direction:column;overflow:hidden}
+#sb-head{padding:14px 12px 10px;border-bottom:1px solid #21262d}
+#sb-head h1{font-size:13px;font-weight:800;color:#58a6ff;line-height:1.3}
+#sb-head p{font-size:10px;color:#6e7681;margin-top:2px}
+#sb-search{padding:8px 10px;border-bottom:1px solid #21262d}
+#sb-search input{width:100%;background:#161b22;border:1px solid #30363d;color:#c9d1d9;padding:5px 8px;border-radius:5px;font-size:11px}
+#sb-nav{flex:1;overflow-y:auto;padding:6px 0}
+.nv-sec{padding:6px 12px 3px;font-size:10px;font-weight:700;color:#6e7681;text-transform:uppercase;letter-spacing:.6px}
+.nv-item{padding:5px 12px;font-size:11px;color:#8b949e;cursor:pointer;border-left:2px solid transparent;transition:all .15s}
+.nv-item:hover{background:#161b22;color:#c9d1d9;border-left-color:#30363d}
+.nv-item.active{background:#0d2744;color:#58a6ff;border-left-color:#58a6ff}
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#topbar{background:#161b22;border-bottom:1px solid #21262d;padding:8px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+#topbar h2{font-size:13px;font-weight:700;color:#f0f6fc}
+.tb-badge{font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid}
+#tabs{display:flex;gap:2px;padding:6px 14px;background:#0d1117;border-bottom:1px solid #21262d;overflow-x:auto;flex-shrink:0}
+.tab{padding:5px 12px;font-size:11px;color:#6e7681;cursor:pointer;border-radius:5px;white-space:nowrap;border:1px solid transparent;transition:all .15s}
+.tab:hover{background:#161b22;color:#c9d1d9}
+.tab.active{background:#0d2744;color:#58a6ff;border-color:#1f4e8c}
+#content{flex:1;overflow-y:auto;padding:0}
+.page{display:none;padding:20px}
+.page.active{display:block}
+/* CARDS */
+.sh{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#f0f6fc;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #21262d}
+.callout{padding:10px 14px;border-radius:6px;margin-bottom:12px;font-size:12px}
+.callout.info{background:#0d2744;border:1px solid #1f4e8c;color:#79c0ff}
+.callout.warn{background:#2d1a00;border:1px solid #7d4e00;color:#ffa657}
+.callout.ok{background:#0a2a0a;border:1px solid #1a7f37;color:#3fb950}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;border:1px solid}
+/* OBJECT GRID */
+.obj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:14px}
+.obj-card{background:#161b22;border:1px solid #21262d;border-radius:6px;padding:10px;cursor:pointer;transition:all .15s;border-top:3px solid}
+.obj-card:hover{background:#1c2128;transform:translateY(-1px);border-color:#30363d}
+.obj-card .oc-id{font-size:9px;font-weight:800;margin-bottom:2px}
+.obj-card .oc-name{font-size:12px;font-weight:700;color:#f0f6fc;line-height:1.3;margin-bottom:5px}
+.obj-card .oc-cat{font-size:10px}
+.obj-card .oc-dep{font-size:10px;color:#6e7681;margin-top:4px}
+/* DETAIL PANEL */
+#detail-panel{background:#0d1117;border-top:2px solid #58a6ff;display:none}
+.dp-head{background:#161b22;padding:14px 18px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid #21262d}
+.dp-head h2{font-size:18px;font-weight:800;color:#f0f6fc;margin-bottom:4px}
+.dp-tabs{display:flex;gap:2px;padding:6px 14px;background:#010409;border-bottom:1px solid #21262d;overflow-x:auto;flex-shrink:0}
+.dp-tab{padding:4px 12px;font-size:11px;color:#6e7681;cursor:pointer;border-radius:4px;white-space:nowrap;transition:all .15s}
+.dp-tab:hover{background:#161b22;color:#c9d1d9}
+.dp-tab.active{background:#0d2744;color:#58a6ff}
+#dp-body{padding:16px 18px;max-height:420px;overflow-y:auto}
+.dp-section{margin-bottom:18px}
+.dp-section h3{font-size:11px;font-weight:700;color:#58a6ff;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #21262d}
+.dp-section p,.dp-section li{font-size:12.5px;color:#c9d1d9;line-height:1.75}
+.dp-section ol,.dp-section ul{padding-left:18px}
+.dp-section ol li::marker{color:#58a6ff}
+.dp-section ul li::marker{color:#3fb950}
+.dp-section li{margin-bottom:3px}
+.dp-section code{background:#161b22;border:1px solid #30363d;padding:1px 5px;border-radius:3px;font-size:11px;color:#79c0ff;font-family:monospace}
+.tbl-grid{display:flex;flex-direction:column;gap:4px}
+.tbl-row{display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #21262d;border-radius:5px;padding:6px 10px}
+.tbl-row code{min-width:130px;font-size:11px;font-weight:700;color:#3fb950;font-family:monospace}
+.tbl-row span{font-size:12px;color:#8b949e}
+.flow-box{background:#161b22;border:1px solid #21262d;border-radius:6px;padding:14px;margin-bottom:8px}
+.flow-steps{display:flex;flex-wrap:wrap;align-items:center;gap:2px}
+.flow-step{background:#0d1117;border:1px solid #30363d;border-radius:5px;padding:5px 10px;font-size:11px;color:#c9d1d9}
+.flow-arrow{color:#58a6ff;font-weight:900;font-size:14px;padding:0 3px}
+.link-chips{display:flex;flex-wrap:wrap;gap:5px}
+.link-chip{background:#0d2744;border:1px solid #1f4e8c;border-radius:5px;padding:4px 10px;font-size:11px;cursor:pointer}
+.link-chip:hover{background:#1f4e8c;color:#f0f6fc}
+.link-chip .lc-obj{font-weight:700;color:#58a6ff}
+.link-chip .lc-via{font-size:10px;color:#6e7681;display:block;margin-top:1px;font-family:monospace}
+.val-item{background:#0a2a0a;border:1px solid #1a7f37;border-radius:5px;padding:6px 10px;margin-bottom:4px;font-size:11.5px;color:#3fb950;font-family:monospace}
+.rule-item{background:#161b22;border-left:3px solid #58a6ff;border-radius:0 5px 5px 0;padding:7px 12px;margin-bottom:5px;font-size:12.5px;color:#c9d1d9}
+.err-item{background:#2d1200;border-left:3px solid #f85149;border-radius:0 5px 5px 0;padding:7px 12px;margin-bottom:5px;font-size:12px;color:#ffa198}
+.ex-box{background:#0d1117;border:1px solid #30363d;border-left:4px solid #3fb950;border-radius:5px;padding:12px;font-size:12px;font-family:monospace;color:#3fb950;white-space:pre-wrap;word-break:break-all}
+.emigall-box{background:#0d2744;border:1px solid #1f4e8c;border-radius:6px;padding:12px}
+.emigall-box pre{font-size:11.5px;color:#79c0ff;white-space:pre-wrap;line-height:1.8;font-family:monospace}
+.ksm-box{background:#2d1a00;border:1px solid #7d4e00;border-radius:6px;padding:12px}
+.ksm-box p{font-size:12px;color:#ffa657;line-height:1.7}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-top:8px}
+.tool-card{background:#161b22;border:1px solid #21262d;border-radius:6px;overflow:hidden}
+.tool-card .tc-hdr{padding:6px 10px;font-size:11px;font-weight:700;color:#f0f6fc}
+.tool-card pre{padding:8px 10px;font-size:11px;color:#8b949e;white-space:pre-wrap;line-height:1.7;font-family:monospace}
+/* CUTOVER */
+.co-row{background:#161b22;border:1px solid #21262d;border-radius:6px;margin-bottom:4px;overflow:hidden}
+.co-row-hdr{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;transition:background .15s}
+.co-row-hdr:hover{background:#1c2128}
+.co-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.co-id{font-size:11px;font-weight:800;min-width:40px;font-family:monospace}
+.co-name{font-size:13px;font-weight:700;color:#f0f6fc;flex:1}
+.co-ws{font-size:10px;padding:2px 7px;border-radius:8px;white-space:nowrap}
+.co-method{font-size:10px;min-width:50px;font-weight:700}
+.co-eta{font-size:10px;color:#6e7681;font-family:monospace;min-width:150px}
+.co-dep{font-size:10px;color:#484f58;font-family:monospace}
+.co-detail{display:none;border-top:1px solid #21262d;padding:14px 16px}
+.co-detail.open{display:block}
+.co-notes{font-size:11px;color:#6e7681;padding:2px 12px 6px;font-style:italic}
+/* Filters */
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.filt-btn{background:#161b22;border:1px solid #30363d;color:#8b949e;padding:4px 11px;border-radius:12px;cursor:pointer;font-size:11px;transition:all .15s}
+.filt-btn:hover,.filt-btn.active{background:#0d2744;border-color:#1f4e8c;color:#58a6ff}
+.filt-input{background:#161b22;border:1px solid #30363d;color:#c9d1d9;padding:5px 10px;border-radius:6px;font-size:11px;width:200px}
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:16px}
+.stat-card{background:#161b22;border:1px solid #21262d;border-radius:6px;padding:12px;text-align:center}
+.stat-card .n{font-size:26px;font-weight:900;color:#58a6ff}
+.stat-card .l{font-size:10px;color:#6e7681;margin-top:2px}
+/* SEQ table */
+.seq-table{display:flex;flex-direction:column;gap:3px}
+.seq-hdr{display:flex;gap:8px;padding:6px 10px;background:#010409;border-radius:5px;font-size:10px;font-weight:700;color:#6e7681;text-transform:uppercase}
+.seq-row{display:flex;align-items:center;gap:8px;padding:7px 10px;background:#161b22;border:1px solid #21262d;border-radius:5px;cursor:pointer;transition:background .15s}
+.seq-row:hover{background:#1c2128}
+/* scrollbar */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:#010409}
+::-webkit-scrollbar-thumb{background:#30363d;border-radius:3px}
+/* close btn */
+.close-btn{background:#21262d;border:1px solid #30363d;color:#8b949e;padding:5px 12px;border-radius:5px;cursor:pointer;font-size:11px}
+.close-btn:hover{background:#f85149;color:#fff;border-color:#f85149}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div id="sb-head">
+    <h1>⚡ SAP IS-U / Emigall</h1>
+    <p>Complete Reference · Sempra / Chesapeake</p>
+  </div>
+  <div id="sb-search"><input type="text" id="sb-inp" placeholder="Search objects…" oninput="sideSearch(this.value)"></div>
+  <div id="sb-nav">
+    <div class="nv-sec">Overview</div>
+    <div class="nv-item active" onclick="goTab('home')">🏠 Home / Dashboard</div>
+    <div class="nv-item" onclick="goTab('seq')">📊 Load Sequence (45+43)</div>
+    <div class="nv-sec">CIS Objects</div>
+    <div class="nv-item" onclick="goTab('obj');filterCat('CIS')">👤 CIS Migration Objects</div>
+    <div class="nv-item" onclick="goTab('obj');filterCat('Config')">⚙️ Config Objects</div>
+    <div class="nv-sec">EAM / ERP</div>
+    <div class="nv-item" onclick="goTab('obj');filterCat('EAM')">🔧 EAM Objects</div>
+    <div class="nv-item" onclick="goTab('obj');filterCat('ERP')">💰 ERP Objects</div>
+    <div class="nv-item" onclick="goTab('obj');filterCat('Tool')">🛠️ Tools / Config</div>
+    <div class="nv-sec">Chesapeake 1CX</div>
+    <div class="nv-item" onclick="goTab('cutover')">⏱️ Cutover Dashboard (45)</div>
+    <div class="nv-item" onclick="goTab('cutover');coFilterThread(1)">T1 · CS/FICA/DWM</div>
+    <div class="nv-item" onclick="goTab('cutover');coFilterThread(2)">T2 · DWM/FICA</div>
+    <div class="nv-item" onclick="goTab('cutover');coFilterThread(3)">T3 · HR/EAM</div>
+    <div class="nv-sec">Reference</div>
+    <div class="nv-item" onclick="goTab('emigall')">📐 EMIGALL Config Guide</div>
+    <div class="nv-item" onclick="goTab('tables')">📋 SAP Tables Reference</div>
+    <div class="nv-item" onclick="goTab('qa')">🎯 Interview Q&amp;A</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="topbar">
+    <h2>SAP IS-U / Emigall Complete Reference</h2>
+    <div style="margin-left:auto;display:flex;gap:6px">
+      <span class="tb-badge" style="background:rgba(88,166,255,.12);color:#58a6ff;border-color:rgba(88,166,255,.3)">45 Cutover Objects</span>
+      <span class="tb-badge" style="background:rgba(63,185,80,.1);color:#3fb950;border-color:rgba(63,185,80,.25)">43 Migration Objects</span>
+      <span class="tb-badge" style="background:rgba(255,166,87,.1);color:#ffa657;border-color:rgba(255,166,87,.25)">EMIGALL · LTMC · BODS</span>
+    </div>
+  </div>
+  <div id="tabs">
+    <div class="tab active" onclick="goTab('home')">🏠 Home</div>
+    <div class="tab" onclick="goTab('obj')">📦 All Objects</div>
+    <div class="tab" onclick="goTab('seq')">📊 Sequence</div>
+    <div class="tab" onclick="goTab('cutover')">⏱️ 1CX Cutover</div>
+    <div class="tab" onclick="goTab('emigall')">📐 EMIGALL Guide</div>
+    <div class="tab" onclick="goTab('tables')">📋 Tables</div>
+    <div class="tab" onclick="goTab('qa')">🎯 Q&amp;A</div>
+  </div>
+  <div id="content">
+
+    <!-- HOME -->
+    <div id="pg-home" class="page active">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="n">45</div><div class="l">Cutover Objects</div></div>
+        <div class="stat-card"><div class="n">43</div><div class="l">Migration Objects</div></div>
+        <div class="stat-card"><div class="n">3</div><div class="l">Cutover Threads</div></div>
+        <div class="stat-card"><div class="n">80+</div><div class="l">SAP Tables</div></div>
+        <div class="stat-card"><div class="n">5</div><div class="l">Load Tools</div></div>
+        <div class="stat-card"><div class="n">T7XEMI</div><div class="l">EMIGALL Tables</div></div>
+      </div>
+      <div class="callout info"><strong>How to use:</strong> Click any tab above or sidebar link. Select <strong>All Objects</strong> to browse all 43 migration objects — click any card to see full detail: SAP Use, Table Links, Config Tables, EMIGALL Setup, KSM, Business Rules, Validation. Use <strong>1CX Cutover</strong> for the Chesapeake thread plan with all 45 objects.</div>
+      <div class="sh">Sempra / Chesapeake Data Migration Scope</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div class="flow-box"><div style="font-size:12px;font-weight:700;color:#58a6ff;margin-bottom:8px">CIS — From Cogsdale/Vertex</div>
+          <div style="font-size:11px;color:#8b949e;line-height:1.9">Partner · Account · Contract · Premise · DevLoc · Device · Meter Read · Bill History · Security Deposit · Payment · Budget Billing · Dunning · IP · Disc Doc/Order/Entry · Facts · Ref Values</div>
+        </div>
+        <div class="flow-box"><div style="font-size:12px;font-weight:700;color:#3fb950;margin-bottom:8px">EAM — From MS Dynamics/MainSaver</div>
+          <div style="font-size:11px;color:#8b949e;line-height:1.9">Functional Location · Floc Class · Equipment · PM Work Order · Measuring Point · Maintenance Plan · Warranty · HR Mini Master</div>
+        </div>
+        <div class="flow-box"><div style="font-size:12px;font-weight:700;color:#ffa657;margin-bottom:8px">ERP — From JDE/PeopleSoft</div>
+          <div style="font-size:11px;color:#8b949e;line-height:1.9">GL Account · Vendor · Customer · Fixed Asset · Material · Inventory · Cost Center · WBS Element · GL Balances · Credit/Payment/Collection History</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALL OBJECTS -->
+    <div id="pg-obj" class="page">
+      <div class="filter-bar">
+        <button class="filt-btn active" onclick="filterCat('ALL',this)">All (43)</button>
+        <button class="filt-btn" onclick="filterCat('CIS',this)">CIS</button>
+        <button class="filt-btn" onclick="filterCat('EAM',this)">EAM</button>
+        <button class="filt-btn" onclick="filterCat('ERP',this)">ERP</button>
+        <button class="filt-btn" onclick="filterCat('Config',this)">Config</button>
+        <button class="filt-btn" onclick="filterCat('Tool',this)">Tools</button>
+        <input class="filt-input" type="text" placeholder="Search objects…" oninput="filterSearch(this.value)">
+        <span id="obj-count" style="font-size:11px;color:#6e7681;margin-left:4px"></span>
+      </div>
+      <div id="obj-grid" class="obj-grid"></div>
+      <div id="detail-panel">
+        <div class="dp-head">
+          <div>
+            <div style="font-size:11px;color:#6e7681;margin-bottom:3px" id="dp-meta"></div>
+            <h2 id="dp-title"></h2>
+            <div style="margin-top:5px" id="dp-badges"></div>
+          </div>
+          <button class="close-btn" onclick="closeDetail()">✕ Close</button>
+        </div>
+        <div class="dp-tabs" id="dp-tabs"></div>
+        <div id="dp-body"></div>
+      </div>
+    </div>
+
+    <!-- SEQUENCE -->
+    <div id="pg-seq" class="page">
+      <div class="sh">Load Sequence — All Objects in Dependency Order</div>
+      <div class="callout info">Click any row to view full object detail. Colour = category. Dependencies shown on right.</div>
+      <div class="seq-table">
+        <div class="seq-hdr">
+          <div style="min-width:32px">Seq</div>
+          <div style="min-width:55px">Code</div>
+          <div style="flex:1">Object Name</div>
+          <div style="min-width:70px">Category</div>
+          <div style="min-width:70px">Method</div>
+          <div style="min-width:170px">Depends On</div>
+        </div>
+        <div id="seq-list"></div>
+      </div>
+    </div>
+
+    <!-- CUTOVER -->
+    <div id="pg-cutover" class="page">
+      <div class="sh">⏱️ Chesapeake 1CX Cutover Dashboard — 45 Objects, 3 Threads</div>
+      <div class="callout warn"><strong>Source: Chesapeake 1CX Cut Over Dashboard.</strong> 3 parallel threads running 8/23–8/24 EST. Click any row to expand business rules, SAP tables, key fields, validation checks, EMIGALL setup, and KSM utility usage.</div>
+      <div class="filter-bar">
+        <button class="filt-btn active" onclick="coFilterThread(0,this)">All Threads</button>
+        <button class="filt-btn" onclick="coFilterThread(1,this)" style="border-color:#1f4e8c">🔵 Thread 1</button>
+        <button class="filt-btn" onclick="coFilterThread(2,this)" style="border-color:#1a7f37">🟢 Thread 2</button>
+        <button class="filt-btn" onclick="coFilterThread(3,this)" style="border-color:#7d4e00">🟡 Thread 3</button>
+        <button class="filt-btn" onclick="coFilterWS('CS',this)">CS</button>
+        <button class="filt-btn" onclick="coFilterWS('FICA',this)">FICA</button>
+        <button class="filt-btn" onclick="coFilterWS('DWM',this)">DWM</button>
+        <button class="filt-btn" onclick="coFilterWS('Billing',this)">Billing</button>
+        <button class="filt-btn" onclick="coFilterWS('ALL',this)">All WS</button>
+        <input class="filt-input" type="text" placeholder="Search…" oninput="coFilterSearch(this.value)">
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;font-size:10px;color:#6e7681">
+        <span>🔵 Thread 1 = CS/FICA/DWM/Billing</span>
+        <span>🟢 Thread 2 = DWM/FICA/Billing</span>
+        <span>🟡 Thread 3 = DWM HR/EAM</span>
+        <span>EMIGALL = standard method · DS = direct BODS insert · LSMW/LTMC = ERP/EAM</span>
+      </div>
+      <div id="co-hdr" style="display:flex;gap:8px;padding:6px 10px;background:#010409;border-radius:5px;font-size:10px;font-weight:700;color:#6e7681;text-transform:uppercase;margin-bottom:4px">
+        <div style="width:8px"></div>
+        <div style="min-width:40px">ID</div>
+        <div style="flex:1">Object Name</div>
+        <div style="min-width:80px">Workstream</div>
+        <div style="min-width:55px">Method</div>
+        <div style="min-width:155px">ETA Preload → Post</div>
+        <div style="min-width:80px">Depends</div>
+      </div>
+      <div id="co-list"></div>
+    </div>
+
+    <!-- EMIGALL GUIDE -->
+    <div id="pg-emigall" class="page">
+      <div class="sh">📐 EMIGALL Configuration Guide — T7XEMI* Tables</div>
+      <div class="callout info"><strong>EMIGALL</strong> (T-code: EMIGALL or ISU_EMIGALL) is SAP's native IS-U migration workbench. It processes migration objects through a pipeline: Source Data → Value Mapping → Business Validation → Target Table Load → Error Log.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+        <div class="flow-box">
+          <div style="font-size:12px;font-weight:700;color:#58a6ff;margin-bottom:8px">Key EMIGALL Configuration Tables</div>
+          <div class="tbl-grid">
+            <div class="tbl-row"><code>T7XEMI01</code><span>Migration Object definitions — STATUS=A to activate</span></div>
+            <div class="tbl-row"><code>T7XEMI02</code><span>Field Mappings — source field → target SAP field</span></div>
+            <div class="tbl-row"><code>T7XEMI03</code><span>Value Translation — source codes → SAP codes (e.g., R→ZRES)</span></div>
+            <div class="tbl-row"><code>T7XEMI04</code><span>Load Program assignments per migration object</span></div>
+            <div class="tbl-row"><code>T7XEMI05</code><span>Object processing status and restart markers</span></div>
+            <div class="tbl-row"><code>T7XEMI06</code><span>BAdI configuration for custom validation</span></div>
+            <div class="tbl-row"><code>T7XEMERR</code><span>Error log — row-level errors per run</span></div>
+            <div class="tbl-row"><code>T7XEMLOG</code><span>Success log — successfully loaded records</span></div>
+          </div>
+        </div>
+        <div class="flow-box">
+          <div style="font-size:12px;font-weight:700;color:#3fb950;margin-bottom:8px">EMIGALL Processing Flow</div>
+          <div class="flow-steps">
+            <span class="flow-step">Source File / Staging Table</span><span class="flow-arrow">→</span>
+            <span class="flow-step">BODS Extract & Transform</span><span class="flow-arrow">→</span>
+            <span class="flow-step">EMIGALL Upload Interface</span><span class="flow-arrow">→</span>
+            <span class="flow-step">T7XEMI02 Field Mapping</span><span class="flow-arrow">→</span>
+            <span class="flow-step">T7XEMI03 Value Translation</span><span class="flow-arrow">→</span>
+            <span class="flow-step">Business Rule Validation (BAdI)</span><span class="flow-arrow">→</span>
+            <span class="flow-step">Test Run (no commit)</span><span class="flow-arrow">→</span>
+            <span class="flow-step">Fix T7XEMERR Errors</span><span class="flow-arrow">→</span>
+            <span class="flow-step">Production Run (commit)</span><span class="flow-arrow">→</span>
+            <span class="flow-step">T7XEMLOG Success</span>
+          </div>
+        </div>
+      </div>
+      <div class="flow-box">
+        <div style="font-size:12px;font-weight:700;color:#ffa657;margin-bottom:8px">Step-by-Step EMIGALL Setup for a New Object</div>
+        <ol style="padding-left:18px;font-size:12px;color:#c9d1d9;line-height:2">
+          <li>T-code <strong>EMIGALL</strong> → Create migration object → Enter object code (e.g., ZBUPA) and description</li>
+          <li>Set <strong>T7XEMI01.STATUS = A</strong> (Active). Transport DEV→QA→PROD via standard TR.</li>
+          <li><strong>T7XEMI02</strong> — Define field mappings: for each target SAP field, map source field name. Mark mandatory fields (MFLAGS=M). Add default values for fields not in source.</li>
+          <li><strong>T7XEMI03</strong> — Value translation: run frequency analysis in BODS on coded source fields. Map every distinct source value to SAP code. Unmapped values → T7XEMERR at runtime.</li>
+          <li><strong>T7XEMI04</strong> — Assign load program (ABAP program that executes the BAPI calls). Pre-built programs exist for standard IS-U objects.</li>
+          <li><strong>BAdI ISU_EMIGALL_BADI</strong> — Implement custom validation class if business rules beyond standard EMIGALL are needed (e.g., cross-object checks, enrichment from Z-tables).</li>
+          <li>Upload staging data file → T-code EMIGALL → Execute in <strong>Test Mode (TESTLAUF=X)</strong> → Check T7XEMERR → Fix → Re-test until 0 errors.</li>
+          <li>Execute <strong>Production Run</strong> (TESTLAUF=space) → Monitor SM37 background job → Verify T7XEMLOG count = expected.</li>
+          <li>Post-load: update <strong>cross-reference Z-table</strong> (Z_XREF_&lt;OBJECT&gt;) with old legacy ID → new SAP number mapping for all downstream objects.</li>
+        </ol>
+      </div>
+      <div class="flow-box">
+        <div style="font-size:12px;font-weight:700;color:#58a6ff;margin-bottom:8px">EMIGALL Error Analysis</div>
+        <div class="callout warn">After each test run: SE16 T7XEMERR → Export to Excel → GROUP BY error message → Fix systemic issues (value mapping gaps, config missing) first, then data issues.</div>
+        <div class="tbl-grid">
+          <div class="tbl-row"><code>E3 096</code><span>Meter reading out of chronological order → Sort EABL by date ascending</span></div>
+          <div class="tbl-row"><code>ISU-CA 001</code><span>Business Partner not found → Check Z_XREF_BP cross-reference</span></div>
+          <div class="tbl-row"><code>FKK 002</code><span>Contract Account type not configured → Config TFKACT</span></div>
+          <div class="tbl-row"><code>TE006</code><span>Rate category not found → Config TE006 before contract load</span></div>
+          <div class="tbl-row"><code>ADDR 001</code><span>Address incomplete → Run USPS/CASS cleansing in BODS</span></div>
+          <div class="tbl-row"><code>SERNR DUP</code><span>Duplicate serial number → Dedup in BODS before device load</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLES REFERENCE -->
+    <div id="pg-tables" class="page">
+      <div class="sh">📋 SAP IS-U Key Tables Reference</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div class="flow-box">
+          <div style="font-size:11px;font-weight:700;color:#58a6ff;margin-bottom:8px">Business Partner (CVI)</div>
+          <div class="tbl-grid">
+            <div class="tbl-row"><code>BUT000</code><span>BP Header (PARTNER, BU_GROUP)</span></div>
+            <div class="tbl-row"><code>BUT020</code><span>BP Address Assignment</span></div>
+            <div class="tbl-row"><code>BUT100</code><span>BP Roles (FLCU01=FI Cust)</span></div>
+            <div class="tbl-row"><code>BUT050</code><span>BP Relationships (contact)</span></div>
+            <div class="tbl-row"><code>BUT021_FS</code><span>BP Bank Details</span></div>
+            <div class="tbl-row"><code>ADRC</code><span>Central Address (ADRNR)</span></div>
+            <div class="tbl-row"><code>ADR6</code><span>Email Address</span></div>
+            <div class="tbl-row"><code>ADR2</code><span>Phone Numbers</span></div>
+          </div>
+        </div>
+        <div class="flow-box">
+          <div style="font-size:11px;font-weight:700;color:#58a6ff;margin-bottom:8px">FI-CA Contract Accounting</div>
+          <div class="tbl-grid">
+            <div class="tbl-row"><code>FKKVK</code><span>Contract Account Header</span></div>
+            <div class="tbl-row"><code>FKKOP</code><span>Open Items (AR)</span></div>
+            <div class="tbl-row"><code>FKKCL</code><span>Clearing Documents</span></div>
+            <div class="tbl-row"><code>FKKDEP</code><span>Security Deposits</span></div>
+            <div class="tbl-row"><code>FPLA</code><span>Budget Billing Plan</span></div>
+            <div class="tbl-row"><code>FKKINST</code><span>Installment Plans</span></div>
+            <div class="tbl-row"><code>DFKKZK</code><span>Payment Method Record</span></div>
+            <div class="tbl-row"><code>DFKKTAXEX</code><span>Tax Exemptions</span></div>
+          </div>
+        </div>
+        <div class="flow-box">
+          <div style="font-size:11px;font-weight:700;color:#3fb950;margin-bottom:8px">IS-U Device / Premise</div>
+          <div class="tbl-grid">
+            <div class="tbl-row"><code>EANL</code><span>Installation (Premise)</span></div>
+            <div class="tbl-row"><code>EABLG</code><span>MRU / Device Location</span></div>
+            <div class="tbl-row"><code>EABL</code><span>Meter Readings</span></div>
+            <div class="tbl-row"><code>EGERH</code><span>Device History (IS-U)</span></div>
+            <div class="tbl-row"><code>EGESD</code><span>Device Register (multiplier)</span></div>
+            <div class="tbl-row"><code>EVER</code><span>Contract / Service Contract</span></div>
+            <div class="tbl-row"><code>EVBS</code><span>Contract-Premise Assignment</span></div>
+            <div class="tbl-row"><code>EOBJK</code><span>Connection Object</span></div>
+          </div>
+        </div>
+        <div class="flow-box">
+          <div style="font-size:11px;font-weight:700;color:#3fb950;margin-bottom:8px">IS-U Billing</div>
+          <div class="tbl-grid">
+            <div class="tbl-row"><code>ERCH</code><span>Billing Document Header</span></div>
+            <div class="tbl-row"><code>ERCHZ</code><span>Bill Line Items</span></div>
+            <div class="tbl-row"><code>TE006</code><span>Rate Category Config</span></div>
+            <div class="tbl-row"><code>TE400</code><span>Prices / Rate Components</span></div>
+            <div class="tbl-row"><code>TE422</code><span>Billing Class Config</span></div>
+            <div class="tbl-row"><code>TE001</code><span>Division (SPARTE)</span></div>
+            <div class="tbl-row"><code>EAUFN</code><span>Service Orders (C&D)</span></div>
+          </div>
+        </div>
+        <div class="flow-box">
+          <div style="font-size:11px;font-weight:700;color:#ffa657;margin-bottom:8px">EAM Plant Maintenance</div>
+          <div class="tbl-grid">
+            <div class="tbl-row"><code>IFLOT</code><span>Functional Location</span></div>
+            <div class="tbl-row"><code>EQUI</code><span>Equipment Master</span></div>
+            <div class="tbl-row"><code>ILOA</code><span>Location / Time-dep Data</span></div>
+            <div class="tbl-row"><code>AFKO</code><span>PM Work Order Header</span></div>
+            <div class="tbl-row"><code>MPLA</code><span>Maintenance Plan</span></div>
+            <div class="tbl-row"><code>IMPTT</code><span>Measuring Points</span></div>
+            <div class="tbl-row"><code>IMRG</code><span>Measurement Documents</span></div>
+          </div>
+        </div>
+        <div class="flow-box">
+          <div style="font-size:11px;font-weight:700;color:#ffa657;margin-bottom:8px">ERP Finance</div>
+          <div class="tbl-grid">
+            <div class="tbl-row"><code>SKA1</code><span>GL Account COA</span></div>
+            <div class="tbl-row"><code>LFA1</code><span>Vendor General</span></div>
+            <div class="tbl-row"><code>KNA1</code><span>Customer General</span></div>
+            <div class="tbl-row"><code>ANLA</code><span>Fixed Asset Master</span></div>
+            <div class="tbl-row"><code>MARA</code><span>Material Master</span></div>
+            <div class="tbl-row"><code>BKPF</code><span>Accounting Document</span></div>
+            <div class="tbl-row"><code>CSKS</code><span>Cost Center Master</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q&A -->
+    <div id="pg-qa" class="page">
+      <div class="sh">🎯 Interview Q&amp;A — SAP IS-U &amp; Emigall</div>
+      <div class="filter-bar">
+        <button class="filt-btn active" onclick="qaFilter('ALL',this)">All</button>
+        <button class="filt-btn" onclick="qaFilter('EMIGALL',this)">EMIGALL</button>
+        <button class="filt-btn" onclick="qaFilter('BODS',this)">BODS</button>
+        <button class="filt-btn" onclick="qaFilter('Tables',this)">Tables</button>
+        <button class="filt-btn" onclick="qaFilter('Process',this)">Process</button>
+        <button class="filt-btn" onclick="qaFilter('Config',this)">Config</button>
+      </div>
+      <div id="qa-list"></div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+
+<script>
+// ============================================================
+// OBJECTS — 43 Migration Objects (seq 1-22)
+// ============================================================
+const OBJECTS = [
+{seq:1,code:'ZBANK',name:'Bank Master',cat:'Config',method:'EMIGALL',
+ overview:'Upload bank routing numbers and bank codes into SAP FI-CA before any payment or partner bank assignment.',
+ sapUse:'FI-CA payment setup; required before Contract Account and Payment loads.',
+ tables:['BNKA — Bank master (BANKS+BANKL key)','T012 — House banks','T012K — House bank accounts'],
+ configTables:['BNKA','T012','T012K','TFKBAN (FI-CA bank determination)'],
+ keyFields:['BANKS (country)','BANKL (routing number)','BANKA (bank name)','ORT01 (city)','SWIFT (BIC)'],
+ links:[{obj:'ZPARTNER',via:'PARTNER.BANKL → BNKA.BANKL'},{obj:'ZCONT_ACCT',via:'FKKVK.HBKID → T012.HBKID'}],
+ emigallSetup:'T7XEMI01: ZBANK STATUS=A\nT7XEMI02: BANKS→BANKS, BANKL→BANKL, BANKA→BANKA, SWIFT→SWIFT\nT7XEMI04: Program RBNKA_UPLOAD or direct INSERT\nTest: SE16 BNKA count before/after',
+ ksm:'KSM BankCreate API; verify SWIFT codes for EFT/ACH payment processing in utility billing.',
+ bizRules:['Routing number (BANKL) must be 9 digits for US banks','BANKS must be US for domestic ACH','Duplicate BANKL values rejected','SWIFT required for international wire payments'],
+ sapValidation:['SELECT COUNT(*) FROM BNKA WHERE BANKS=:b AND BANKL=:r — expect > 0 after load','Check T012 house banks configured for company code'],
+ errors:['Invalid BANKL length → pad to 9 digits in BODS','Duplicate bank → check BNKA before load'],
+ example:'BANKS=US | BANKL=021000021 | BANKA=JPMorgan Chase | ORT01=Columbus | SWIFT=CHASUS33',
+ depends:[]},
+
+{seq:2,code:'ZPARTNER',name:'Business Partner',cat:'CIS',method:'EMIGALL',
+ overview:'Core master data — creates BP records for residential and commercial customers, individuals and organisations.',
+ sapUse:'CVI (Customer-Vendor Integration): BP creates FI customer simultaneously. Every downstream CIS object needs PARTNER number.',
+ tables:['BUT000 — BP header (PARTNER, BU_GROUP, BU_SORT1)','BUT020 — BP-Address link (ADDRNR)','BUT100 — BP Roles (FLCU01=FI Customer)','ADRC — Central address','ADR6 — Email','ADR2 — Phone','BUT021_FS — Bank details (BANKL, BANKN)'],
+ configTables:['TB003 — BP groupings (Z001=residential, Z002=commercial)','TB000 — BP categories','TFKBPTAXGRP — tax groups','TB901 — identification types'],
+ keyFields:['PARTNER (SAP-assigned)','BU_GROUP (grouping determines number range)','NAME_FIRST/NAME_LAST or NAME_ORG1','XSEXM/XSEXF (gender)','BIRTHDT','TAXNUMXL (SSN/EIN)'],
+ links:[{obj:'ZCONT_ACCT',via:'FKKVK.GPART = BUT000.PARTNER'},{obj:'ZCONTACT',via:'BUT050.PARTNER2 = BUT000.PARTNER'},{obj:'ZPREMISE',via:'EANL.GPART = BUT000.PARTNER'}],
+ emigallSetup:'T7XEMI01: ZPARTNER STATUS=A\nT7XEMI02: LEGACY_ID→ZLEGACY_ID, FNAME→NAME_FIRST, LNAME→NAME_LAST, DOB→BIRTHDT\nT7XEMI03: TYPE=R→BU_GROUP=Z001, TYPE=C→Z002\nBAdI: Validate SSN format, deduplicate on name+DOB\nPost-load: populate Z_XREF_BP (LEGACY_ID → PARTNER)',
+ ksm:'KSM BUPA API (BAPI_BUPA_CREATE_FROM_DATA2). KSM reads Z_XREF_BP to resolve PARTNER for all downstream loads.',
+ bizRules:['One BP per SSN (residential) — dedup check mandatory','Commercial BP must have EIN and NAME_ORG1','Gender required for individual BPs','Date of birth format: YYYYMMDD','No special characters in name fields'],
+ sapValidation:['SELECT PARTNER FROM BUT000 WHERE ZLEGACY_ID=:l — verify 1:1 mapping','SELECT COUNT(*) FROM BUT100 WHERE RLTYP=FLCU01 AND PARTNER=:p','Check ADRC address completeness'],
+ errors:['Duplicate SSN → resolve in BODS before load','Address ADRNR not assigned → BUPA address BAdI issue'],
+ example:'LEGACY_ID=CG-100001 | NAME_FIRST=John | NAME_LAST=Smith | BU_GROUP=Z001 | BIRTHDT=19680315 | TAXNUMXL=123456789',
+ depends:['ZBANK']},
+
+{seq:3,code:'ZCONTACT',name:'Contact / Contact Persons',cat:'CIS',method:'EMIGALL',
+ overview:'Creates contact persons linked to primary BP via BUT050 relationship (CONT role). Stores phone, email, address.',
+ sapUse:'CRM/IS-U contact history; authorised representatives; emergency contacts for utility accounts.',
+ tables:['BUT000 — Contact BP record','BUT050 — BP-to-BP relationship (RELTYP=CONT)','ADR2 — Phone','ADR6 — Email','ADRC — Address'],
+ configTables:['TB025 — Relationship types (CONT)','TB901 — ID types'],
+ keyFields:['PARTNER (contact)','PARTNER1 (primary BP)','RELTYP=CONT','PARTNER2 (contact BP)','NAME_FIRST','NAME_LAST'],
+ links:[{obj:'ZPARTNER',via:'BUT050.PARTNER1 = BUT000.PARTNER (primary BP)'},{obj:'ZCONT_ACCT',via:'FKKVK.GPART → BUT050 contact lookup'}],
+ emigallSetup:'T7XEMI01: ZCONTACT STATUS=A\nT7XEMI02: PRIMARY_LEGACY→Z_XREF_BP lookup → PARTNER1\nT7XEMI03: CONTACT_TYPE=E→RELTYP=EMRG, CONTACT_TYPE=A→RELTYP=AUTH\nPost-load: verify BUT050 rows',
+ ksm:'KSM BUPA relationship API. Resolve primary PARTNER from Z_XREF_BP.',
+ bizRules:['Contact must be linked to an existing primary BP','Phone format: strip non-digits, must be 10 digits','Primary contact flag must be unique per account','Email format validation (BODS regex)'],
+ sapValidation:['SELECT COUNT(*) FROM BUT050 WHERE PARTNER1=:p AND RELTYP=CONT','Check ADR6 email format'],
+ errors:['Primary BP not found → run after ZPARTNER','Phone > 10 digits → strip country code in BODS'],
+ example:'PRIMARY_LEGACY=CG-100001 | CONTACT_NAME=Jane Smith | PHONE=5551234567 | EMAIL=jane@example.com | RELTYP=CONT',
+ depends:['ZPARTNER']},
+
+{seq:4,code:'ZCONT_ACCT',name:'Contract Account',cat:'CIS',method:'EMIGALL',
+ overview:'FI-CA contract account (FKKVK) linking BP to account. Controls dunning, payment terms, correspondence.',
+ sapUse:'FI-CA sub-ledger root — all open items, payments, dunning hang off contract account.',
+ tables:['FKKVK — Contract account header (VKONT, GPART, VKTYP)','DFKKZK — Payment method','DFKKTAXEX — Tax exemptions','T052 — Payment terms config'],
+ configTables:['TFKACT — Contract account types (e.g., ZRES, ZCOM)','TFKSCTYP — Screen control types','T052 — Payment terms'],
+ keyFields:['VKONT (contract account number)','GPART (business partner)','VKTYP (account type)','HBKID (house bank)','HKTID (account ID)','ABWVK (alternative payer)'],
+ links:[{obj:'ZPARTNER',via:'FKKVK.GPART = BUT000.PARTNER'},{obj:'ZCONTRACT',via:'EVER.VKONT = FKKVK.VKONT'},{obj:'ZPAYMENT',via:'FKKOP.VKONT = FKKVK.VKONT'}],
+ emigallSetup:'T7XEMI01: ZCONT_ACCT STATUS=A\nT7XEMI02: LEGACY_ACCT→ZLEGACY_VKONT, LEGACY_BP→Z_XREF_BP→GPART\nT7XEMI03: ACCT_TYPE=R→VKTYP=ZRES, ACCT_TYPE=C→ZCOM\nPost-load: Z_XREF_CA (LEGACY_ACCT → VKONT)',
+ ksm:'KSM CA_CREATE (BAPI_CTRACC_CREATE). Resolve GPART from Z_XREF_BP.',
+ bizRules:['BP must exist before CA load','Contract account type must be configured in TFKACT','One primary contract account per BP (additional CAs allowed)','Payment method required for EFT accounts','Dunning area defaulted from company code config'],
+ sapValidation:['SELECT VKONT FROM FKKVK WHERE GPART=:p','Check VKTYP configured in TFKACT','Verify DFKKZK payment method row created'],
+ errors:['GPART not found → resolve Z_XREF_BP first','VKTYP not in TFKACT → add config transport'],
+ example:'LEGACY_ACCT=CG-CA-50001 | LEGACY_BP=CG-100001 | ACCT_TYPE=R → VKTYP=ZRES | HBKID=BK01',
+ depends:['ZPARTNER','ZBANK']},
+
+{seq:5,code:'ZCONN_OBJ',name:'Connection Object',cat:'CIS',method:'EMIGALL',
+ overview:'Physical service point (utility pole, building connection) — parent to Premise. Maps to EOBJK.',
+ sapUse:'IS-U field: connection object is the physical attachment point. Required before Premise.',
+ tables:['EOBJK — Connection object header','EABJK — Connection object address','T_EOBJK_CLASS — Connection object class'],
+ configTables:['TE001 — Division (SPARTE: gas/elec/water)','T001 — Company code'],
+ keyFields:['EOBJK (connection object number)','SPARTE (division: E=electric, G=gas)','ADRNR (address)','VSTELLE (premise reference)'],
+ links:[{obj:'ZPREMISE',via:'EANL.EOBJK = EOBJK.EOBJK'},{obj:'ZDEVLOC',via:'EABLG.EOBJK = EOBJK.EOBJK'}],
+ emigallSetup:'T7XEMI01: ZCONN_OBJ STATUS=A\nT7XEMI02: MAP source address fields → ADRC via EMIGALL address creation\nT7XEMI03: DIV=E→SPARTE=E, DIV=G→SPARTE=G\nPost-load: Z_XREF_CONNOBJ',
+ ksm:'IS_CONNOBJ_CREATE function module. SPARTE from KSM division config table.',
+ bizRules:['Division (SPARTE) required and must exist in TE001','Address must pass CASS postal validation','Connection object number range per division config','Street address required — no PO Box allowed for service point'],
+ sapValidation:['SELECT COUNT(*) FROM EOBJK WHERE EOBJK=:e','Check ADRC address completeness'],
+ errors:['SPARTE not in TE001 → transport config','Address CASS fail → BODS address cleanse job'],
+ example:'LEGACY_CONNOBJ=SITE-10001 | SPARTE=E | STREET=123 Main St | CITY=Norfolk | STATE=VA | ZIP=23501',
+ depends:[]},
+
+{seq:6,code:'ZPREMISE',name:'Premise',cat:'CIS',method:'EMIGALL',
+ overview:'Service address / installation site. Links Connection Object to Installation (contract). Maps to EANL.',
+ sapUse:'IS-U: EANL is the premise. MoveIn creates EVER+EVBS linking contract to premise.',
+ tables:['EANL — Installation (premise) header','EVBS — Contract-Premise assignment','EOBJK — Parent connection object'],
+ configTables:['TE001 — Division','T001W — Plant/service territory','TE200 — Meter reading unit structure'],
+ keyFields:['ANLAGE (installation number)','EOBJK (parent connection object)','SPARTE (division)','VSTELLE (premise/MRU)','GPART (owner BP)'],
+ links:[{obj:'ZCONN_OBJ',via:'EANL.EOBJK = EOBJK.EOBJK'},{obj:'ZDEVLOC',via:'EABLG.ANLAGE = EANL.ANLAGE'},{obj:'ZCONTRACT',via:'EVBS.ANLAGE = EANL.ANLAGE'}],
+ emigallSetup:'T7XEMI01: ZPREMISE STATUS=A\nT7XEMI02: LEGACY_PREMISE→ZLEGACY, LEGACY_CONNOBJ→Z_XREF_CONNOBJ→EOBJK\nPost-load: Z_XREF_PREMISE (LEGACY → ANLAGE)',
+ ksm:'ISU_PREMISE_CREATE. Resolve EOBJK from Z_XREF_CONNOBJ.',
+ bizRules:['Connection object must exist','Division consistent with connection object','Service territory (T001W) must be configured','Premise number range per division','Owner BP optional at premise level (set at contract)'],
+ sapValidation:['SELECT ANLAGE FROM EANL WHERE EOBJK=:e','Verify SPARTE consistent across EOBJK→EANL'],
+ errors:['EOBJK not found → run after ZCONN_OBJ','Division mismatch → align source data'],
+ example:'LEGACY_PREMISE=P-20001 | LEGACY_CONNOBJ=SITE-10001 | SPARTE=E | VSTELLE=MRU-001',
+ depends:['ZCONN_OBJ']},
+
+{seq:7,code:'ZDEVLOC',name:'Device Location',cat:'CIS',method:'EMIGALL',
+ overview:'Physical meter location (EABLG) within a premise — the spot where the meter is installed.',
+ sapUse:'IS-U: EABLG links device to physical location. Meter reading route assigned here.',
+ tables:['EABLG — Device location (MRU/VSTELLE)','EANL — Parent installation','EGERH — Device-location history'],
+ configTables:['TE200 — MRU (meter reading unit) structure','TE240 — Meter reading order'],
+ keyFields:['EABLG (device location number)','VSTELLE (MRU assignment)','ANLAGE (installation)','SERNR (serial number slot)'],
+ links:[{obj:'ZPREMISE',via:'EABLG.ANLAGE = EANL.ANLAGE'},{obj:'ZDEVICE',via:'EGERH.EABLG = EABLG.EABLG'},{obj:'ZMOVE_IN',via:'EVBS references EABLG for service'}],
+ emigallSetup:'T7XEMI01: ZDEVLOC STATUS=A\nT7XEMI02: LEGACY_DEVLOC→ZLEGACY, LEGACY_PREMISE→Z_XREF_PREMISE→ANLAGE\nPost-load: Z_XREF_DEVLOC',
+ ksm:'ISU_DEVLOC_CREATE. Route assignment via TE200/TE240 KSM config.',
+ bizRules:['Premise (ANLAGE) must exist before device location','MRU route must be configured in TE200','Device location has 1:1 with meter for residential','Commercial can have multiple device locations'],
+ sapValidation:['SELECT EABLG FROM EABLG WHERE ANLAGE=:a','Check VSTELLE route assignment in TE200'],
+ errors:['ANLAGE not found → check Z_XREF_PREMISE','MRU not configured → transport TE200 config'],
+ example:'LEGACY_DEVLOC=DL-30001 | LEGACY_PREMISE=P-20001 | VSTELLE=MRU-001 | ROUTE=RT001',
+ depends:['ZPREMISE']},
+
+{seq:8,code:'ZDEVICE',name:'Device (Meter)',cat:'CIS',method:'EMIGALL',
+ overview:'Meter/device master record (GERAET) — the physical measurement device.',
+ sapUse:'IS-U device: EGERH tracks installation history. EGESD holds register multiplier. SERNR is the serial number.',
+ tables:['EGERH — Device history (installed/removed)','EGESD — Device register (multiplier, digits)','EGZWG — Device-meter reading group','T_GERAET — Device master catalog'],
+ configTables:['TE405 — Device categories','TE406 — Device types','TE408 — Manufacturer codes'],
+ keyFields:['GERAET (device/meter number)','SERNR (serial number)','DEVICECAT (device category)','MFRNR (manufacturer)','NKONST (register multiplier)'],
+ links:[{obj:'ZDEVLOC',via:'EGERH.EABLG = EABLG.EABLG'},{obj:'ZINSTLN',via:'ISU_TECH links device to installation tech object'},{obj:'ZMETER_READ',via:'EABL.GERAET = EGERH.GERAET'}],
+ emigallSetup:'T7XEMI01: ZDEVICE STATUS=A\nT7XEMI02: SERIAL_NO→SERNR, LEGACY_DEVLOC→Z_XREF_DEVLOC→EABLG\nT7XEMI03: DEVICE_CAT=E1→TE405 mapping\nPost-load: Z_XREF_DEVICE',
+ ksm:'ISU_DEVICE_INSTALL (BAPI). SERNR uniqueness enforced by IS-U.',
+ bizRules:['Serial number globally unique in IS-U','Device category must be in TE405 config','Install date must be <= migration cutover date','Multiplier (NKONST) defaults 1 if not specified','One device per device location for residential'],
+ sapValidation:['SELECT GERAET FROM EGERH WHERE SERNR=:s — expect 1 row','SELECT NKONST FROM EGESD WHERE GERAET=:g'],
+ errors:['Duplicate SERNR → dedup in BODS','TE405 category missing → transport config before device load'],
+ example:'SERIAL_NO=MTR-001234 | DEVICE_CAT=E1 | MFRNR=ITRON | INSTALL_DATE=20230815 | NKONST=1',
+ depends:['ZDEVLOC']},
+
+{seq:9,code:'ZDEV_MOD',name:'Device Model',cat:'Config',method:'EMIGALL',
+ overview:'Device model / type configuration — defines meter model attributes in TE406.',
+ sapUse:'IS-U device model config referenced by ZDEVICE loads. Must exist before device master records.',
+ tables:['TE406 — Device type/model','TE405 — Device category'],
+ configTables:['TE406','TE405','TE408 (manufacturer)'],
+ keyFields:['DEVICETYPE (model code)','DEVICECAT (parent category)','MFRNR (manufacturer)','DIGITS (register digits)'],
+ links:[{obj:'ZDEVICE',via:'EGERH.DEVICETYPE = TE406.DEVICETYPE'}],
+ emigallSetup:'Config transport — not EMIGALL processed. Use LTMC or direct SM30 entry.\nVerify TE406 entries exist for all device types in source data.',
+ ksm:'Config table — load via standard SAP config transport (TR).',
+ bizRules:['All device types in source must have TE406 entry before ZDEVICE','Manufacturer (MFRNR) must exist in TE408','Register digit count must match physical meter'],
+ sapValidation:['SELECT COUNT(*) FROM TE406 WHERE DEVICETYPE=:t','Check TE405 parent category exists'],
+ errors:['Missing device type → add to config before ZDEVICE run'],
+ example:'DEVICETYPE=ELEC_AMI_1 | DEVICECAT=AMI | MFRNR=ITRON | DIGITS=8',
+ depends:[]},
+
+{seq:10,code:'ZDEV_GRP',name:'Device Group',cat:'Config',method:'EMIGALL',
+ overview:'Device groupings / meter reading groups — EGZWG table. Groups meters for batch reading.',
+ sapUse:'IS-U meter reading route management. Devices assigned to groups for reading schedule.',
+ tables:['EGZWG — Device-meter reading group assignment'],
+ configTables:['TE200 — MRU structure','TE240 — Meter reading order'],
+ keyFields:['ABLBASIS (MRU group)','GERAET (device)','REIHENF (sequence)'],
+ links:[{obj:'ZDEVICE',via:'EGZWG.GERAET = EGERH.GERAET'},{obj:'ZMETER_READ',via:'EABL reads by ABLBASIS group'}],
+ emigallSetup:'T7XEMI01: ZDEV_GRP STATUS=A\nT7XEMI02: LEGACY_GROUP→ABLBASIS, LEGACY_DEVICE→Z_XREF_DEVICE→GERAET',
+ ksm:'MRU assignment via TE200/TE240 config. Impacts field crew reading route efficiency.',
+ bizRules:['Device must exist before group assignment','MRU group must match geographic territory','Sequence numbers must be unique within group'],
+ sapValidation:['SELECT COUNT(*) FROM EGZWG WHERE ABLBASIS=:a','Check TE200 route defined'],
+ errors:['GERAET not found → run after ZDEVICE'],
+ example:'LEGACY_GROUP=ROUTE-001 | LEGACY_DEVICE=MTR-001234 | REIHENF=10',
+ depends:['ZDEVICE']},
+
+{seq:11,code:'ZBILL_INSTALL',name:'Billing Installation',cat:'CIS',method:'EMIGALL',
+ overview:'IS-U billing installation — the contractual unit for billing. Links contract to rate category.',
+ sapUse:'EVER + EANL form the billing installation. Rate category (TE006) drives billing engine.',
+ tables:['EVER — Contract (service contract)','EANL — Installation','EVBS — Contract-Premise link','TE006 — Rate category'],
+ configTables:['TE006 — Rate category (TARIF)','TE422 — Billing class','TE400 — Rate components/prices'],
+ keyFields:['VERTRAG (contract number)','VKONT (contract account)','ANLAGE (installation)','TARIF (rate category)','EINZDAT (move-in date)'],
+ links:[{obj:'ZCONT_ACCT',via:'EVER.VKONT = FKKVK.VKONT'},{obj:'ZPREMISE',via:'EVBS.ANLAGE = EANL.ANLAGE'},{obj:'ZMOVE_IN',via:'EVER.EINZDAT = move-in date'}],
+ emigallSetup:'T7XEMI01: ZBILL_INSTALL STATUS=A\nT7XEMI02: LEGACY_CA→Z_XREF_CA→VKONT, LEGACY_PREMISE→Z_XREF_PREMISE→ANLAGE, RATE_CODE→T7XEMI03→TARIF\nT7XEMI03: RATE=RES_GAS→TARIF=ZRSG\nPost-load: Z_XREF_CONTRACT',
+ ksm:'ISU_CONTRACT_CREATE. Rate category mapping is largest translation exercise — frequency analysis in BODS essential.',
+ bizRules:['Contract account must exist','Rate category must be configured in TE006','Move-in date must be <= cutover date','Division must match premise division','Budget billing flag requires FPLA record'],
+ sapValidation:['SELECT VERTRAG FROM EVER WHERE VKONT=:v AND ANLAGE=:a','Check TE006 rate category active'],
+ errors:['TE006 rate category not found → transport config first','VKONT not found → run after ZCONT_ACCT'],
+ example:'LEGACY_CA=CG-CA-50001 | LEGACY_PREMISE=P-20001 | RATE=RES_GAS → TARIF=ZRSG | EINZDAT=20190101',
+ depends:['ZCONT_ACCT','ZPREMISE','ZDEVLOC']},
+
+{seq:12,code:'ZBILL_CT_PT',name:'Billing Install CT/PT',cat:'CIS',method:'EMIGALL',
+ overview:'Current transformer (CT) and potential transformer (PT) ratios for commercial/industrial billing installations.',
+ sapUse:'Transformer ratios applied to meter readings to compute actual consumption. Stored in EGESD.',
+ tables:['EGESD — Device register with CT/PT multipliers','EGERH — Device history'],
+ configTables:['TE405 — Device categories for C&I meters'],
+ keyFields:['GERAET','CT_RATIO','PT_RATIO','NKONST (combined multiplier = CT×PT)'],
+ links:[{obj:'ZBILL_INSTALL',via:'Applies to commercial billing installations'},{obj:'ZDEVICE',via:'EGESD.GERAET = EGERH.GERAET'}],
+ emigallSetup:'T7XEMI01: ZBILL_CT_PT STATUS=A\nT7XEMI02: LEGACY_DEVICE→Z_XREF_DEVICE→GERAET, CT_RATIO+PT_RATIO→NKONST (computed in BODS)\nTest: verify NKONST = CT×PT',
+ ksm:'NKONST computation: BODS derived column. Impacts billing accuracy for C&I customers.',
+ bizRules:['CT and PT ratios must be positive numbers','NKONST = CT ratio × PT ratio','Must load after device master','Only applicable to commercial/industrial metering'],
+ sapValidation:['SELECT NKONST FROM EGESD WHERE GERAET=:g — verify = CT×PT','Check EGERH device is C&I category'],
+ errors:['NKONST mismatch → recalculate CT×PT in BODS'],
+ example:'LEGACY_DEVICE=MTR-C001 | CT_RATIO=200 | PT_RATIO=3 | NKONST=600',
+ depends:['ZDEVICE','ZBILL_INSTALL']},
+
+{seq:13,code:'ZMOVE_IN',name:'Move-In',cat:'CIS',method:'EMIGALL',
+ overview:'Creates the active service connection — links Contract + BP + Premise + Device. IS-U MoveIn transaction.',
+ sapUse:'EVER.EINZDAT populated. EVBS contract-premise link created. Device assigned via EGERH.',
+ tables:['EVER — Contract with EINZDAT','EVBS — Contract-premise','EGERH — Device-premise install history','EABL — Opening meter read'],
+ configTables:['TE001 — Division','TE006 — Rate category (must match contract)'],
+ keyFields:['VERTRAG','EINZDAT (move-in date)','SERNR (meter serial)','ZZHACT (actual opening read)'],
+ links:[{obj:'ZBILL_INSTALL',via:'Move-in activates billing installation'},{obj:'ZDEVICE',via:'EGERH install record created'},{obj:'ZMETER_READ',via:'Opening read stored in EABL'}],
+ emigallSetup:'T7XEMI01: ZMOVE_IN STATUS=A\nT7XEMI02: LEGACY_CONTRACT→Z_XREF_CONTRACT→VERTRAG, LEGACY_DEVICE→Z_XREF_DEVICE→SERNR\nTest: verify EVER.EINZDAT set, EGERH row created',
+ ksm:'ISU_MOVE_IN BAPI. Opening read automatically creates first EABL record.',
+ bizRules:['Contract must be in status "created" (not yet activated)','Device must not be already installed at another location','Opening read must be non-negative','Move-in date cannot be future-dated beyond cutover','One active move-in per installation at a time'],
+ sapValidation:['SELECT EINZDAT FROM EVER WHERE VERTRAG=:v','SELECT COUNT(*) FROM EVBS WHERE VERTRAG=:v','SELECT COUNT(*) FROM EGERH WHERE SERNR=:s AND ABDAT=9999'],
+ errors:['Device already installed → check EGERH end date','Contract not in correct status → check EVER.ASTATUS'],
+ example:'LEGACY_CONTRACT=CG-C-60001 | LEGACY_DEVICE=MTR-001234 | EINZDAT=20190101 | OPENING_READ=1234',
+ depends:['ZBILL_INSTALL','ZDEVICE']},
+
+{seq:14,code:'ZPARTNER_REL',name:'Partner Relationship',cat:'CIS',method:'EMIGALL',
+ overview:'BP-to-BP relationships (BUT050): co-tenant, authorised rep, guarantor, contact person.',
+ sapUse:'Drives FI-CA alternative payer (ABWVK), dunning recipient, correspondence address.',
+ tables:['BUT050 — BP relationships','BUT000 — Both BPs must exist'],
+ configTables:['TB025 — Relationship types (COTP, AUTH, GUAR, CONT)'],
+ keyFields:['PARTNER1','PARTNER2','RELTYP (relationship type)','DFREL (default relationship flag)'],
+ links:[{obj:'ZPARTNER',via:'Both PARTNER1 and PARTNER2 must exist in BUT000'},{obj:'ZCONT_ACCT',via:'FKKVK.ABWVK uses BUT050 relationship'}],
+ emigallSetup:'T7XEMI01: ZPARTNER_REL STATUS=A\nT7XEMI02: Both legacy IDs → Z_XREF_BP → PARTNER1/PARTNER2\nT7XEMI03: REL=CO→RELTYP=COTP, REL=AUTH→AUTH\nPost-load: verify BUT050 count',
+ ksm:'BUPA_RELATIONSHIP_CREATE. Resolve both partners from Z_XREF_BP.',
+ bizRules:['Both BPs must exist in SAP','Relationship type must be in TB025','No circular relationships of same type','Date range must span migration cutover'],
+ sapValidation:['SELECT COUNT(*) FROM BUT050 WHERE PARTNER1=:p1 AND PARTNER2=:p2','Check RELTYP in TB025'],
+ errors:['Either partner not found → verify Z_XREF_BP completeness'],
+ example:'LEGACY_P1=CG-100001 | LEGACY_P2=CG-200001 | REL=CO → RELTYP=COTP | DFREL=X',
+ depends:['ZPARTNER']},
+
+{seq:15,code:'ZPROPERTY',name:'Property',cat:'CIS',method:'EMIGALL',
+ overview:'Property/parcel master — land parcel linked to connection object. Municipal parcel data.',
+ sapUse:'IS-U property management — links service address to parcel ID for rate determination (rural/municipal).',
+ tables:['EANLH — Property header','EOBJK — Connection object','ADRC — Property address'],
+ configTables:['TE601 — Property types','T001W — Service territory'],
+ keyFields:['PROPERTY (parcel number)','EOBJK (connection object)','PARCEL_ID (GIS/municipal ID)'],
+ links:[{obj:'ZCONN_OBJ',via:'EANLH.EOBJK = EOBJK.EOBJK'},{obj:'ZPREMISE',via:'Property defines territory for billing'}],
+ emigallSetup:'T7XEMI01: ZPROPERTY STATUS=A\nT7XEMI02: LEGACY_PARCEL→PROPERTY, LEGACY_CONNOBJ→Z_XREF_CONNOBJ→EOBJK',
+ ksm:'Property data enriched from GIS in BODS before EMIGALL load.',
+ bizRules:['Parcel ID must be unique','Connection object must exist','Municipal code required for rate determination'],
+ sapValidation:['SELECT COUNT(*) FROM EANLH WHERE EOBJK=:e'],
+ errors:['EOBJK not found → run after ZCONN_OBJ'],
+ example:'LEGACY_PARCEL=PCL-001 | LEGACY_CONNOBJ=SITE-10001 | PARCEL_ID=GIS-77001',
+ depends:['ZCONN_OBJ']},
+
+{seq:16,code:'ZBUDGET_BILL',name:'Budget Billing',cat:'CIS',method:'EMIGALL',
+ overview:'Budget billing plans (FPLA) — equal payment amounts for residential customers over a 12-month period.',
+ sapUse:'FI-CA FPLA table: instalment plan type = BB. Each plan row = 1 monthly budget instalment.',
+ tables:['FPLA — Budget billing plan header','FPLAPOS — Plan line items (monthly amounts)','FKKVK — Contract account (BBP flag)'],
+ configTables:['TFKITYPE — Instalment plan types (BB=budget billing)','FPLA config in FI-CA IMG'],
+ keyFields:['VKONT','FPLART=BB (plan type)','RATEBETRAG (monthly amount)','LAUFDAT (effective date)'],
+ links:[{obj:'ZCONT_ACCT',via:'FPLA.VKONT = FKKVK.VKONT'},{obj:'ZBILL_INSTALL',via:'Budget billing tied to active contract'}],
+ emigallSetup:'T7XEMI01: ZBUDGET_BILL STATUS=A\nT7XEMI02: LEGACY_CA→Z_XREF_CA→VKONT, MONTHLY_AMT→RATEBETRAG\nTest: verify FPLA + FPLAPOS rows per account',
+ ksm:'FKK_PLANREC_CREATE FM. Monthly amount from source system, validated against account balance.',
+ bizRules:['Contract account must be active','Monthly amount must be positive','Plan start date must be <= cutover','12 monthly instalments required for annual plan','Budget billing flag on FKKVK must be set'],
+ sapValidation:['SELECT COUNT(*) FROM FPLA WHERE VKONT=:v AND FPLART=BB','SELECT SUM(RATEBETRAG) FROM FPLAPOS — verify annual total'],
+ errors:['FKKVK BB flag not set → update CA before FPLA','RATEBETRAG = 0 → data issue in source'],
+ example:'LEGACY_CA=CG-CA-50001 | MONTHLY_AMT=125.00 | START_DATE=20230101 | FPLART=BB',
+ depends:['ZCONT_ACCT','ZBILL_INSTALL']},
+
+{seq:17,code:'ZMETER_READ',name:'Meter Read',cat:'CIS',method:'EMIGALL',
+ overview:'Historical meter readings loaded into EABL. Required for billing history reconciliation and first bill accuracy.',
+ sapUse:'IS-U EABL table: each row = one meter reading. ABLESART=P (periodic read). Drives bill calculation.',
+ tables:['EABL — Meter readings (GERAET, ABLDAT, ABLESART, ZAEHLERSTAND)','EABLG — Device location','EGERH — Device install dates'],
+ configTables:['TE220 — Reading reasons (ABLESART)','TE221 — Meter reading notes'],
+ keyFields:['GERAET','ABLDAT (read date)','ZAEHLERSTAND (reading value)','ABLESART (read type: P=periodic, E=estimate)','ABLEINH (read unit)'],
+ links:[{obj:'ZDEVICE',via:'EABL.GERAET = EGERH.GERAET'},{obj:'ZBILL_INSTALL',via:'Readings drive billing engine calculation'}],
+ emigallSetup:'T7XEMI01: ZMETER_READ STATUS=A\nT7XEMI02: LEGACY_DEVICE→Z_XREF_DEVICE→GERAET, READ_DATE→ABLDAT, READING→ZAEHLERSTAND\nT7XEMI03: READ_TYPE=A→ABLESART=P, READ_TYPE=E→E\nCRITICAL: sort by GERAET+ABLDAT ASC before load — chronological order enforced',
+ ksm:'EABL_CREATE or direct ISU_MR_UPLOAD. Date sorting is most common error — BODS ORDER BY essential.',
+ bizRules:['Readings must be in chronological order per device','No reading can exceed maximum register value (rollover handling needed)','Estimated reads flagged ABLESART=E','Reading date must be within device install period','Opening read = first EABL row after ZMOVE_IN'],
+ sapValidation:['SELECT COUNT(*) FROM EABL WHERE GERAET=:g ORDER BY ABLDAT','Verify ZAEHLERSTAND >= prior read (unless rollover)','Check no gaps > 365 days between consecutive reads'],
+ errors:['E3 096 out-of-order → BODS sort fix','Rollover not handled → add rollover logic in BODS','Reading before install date → filter in BODS'],
+ example:'LEGACY_DEVICE=MTR-001234 | READ_DATE=20230101 | READING=1234.56 | READ_TYPE=P',
+ depends:['ZMOVE_IN']},
+
+{seq:18,code:'ZDEVLOC_NOTES',name:'DevLoc Notes',cat:'CIS',method:'EMIGALL',
+ overview:'Free-text notes and notifications attached to device locations — field crew instructions, access notes.',
+ sapUse:'IS-U EABLG-linked notes. Appear in meter reading orders and field service work orders.',
+ tables:['EABLG — Device location (parent)','STXH/STXL — SAP long text tables (text objects)'],
+ configTables:['TTXID — Text IDs for IS-U device location text object'],
+ keyFields:['EABLG (device location)','TEXT_ID','LANGU (language)','TEXT_LINE'],
+ links:[{obj:'ZDEVLOC',via:'Notes linked to EABLG device location'},{obj:'ZDEVLOC_CLASS',via:'Classification may trigger note creation'}],
+ emigallSetup:'T7XEMI01: ZDEVLOC_NOTES STATUS=A\nT7XEMI02: LEGACY_DEVLOC→Z_XREF_DEVLOC→EABLG, NOTE_TEXT→TEXT_LINE\nUse SAVE_TEXT FM to write STXH/STXL',
+ ksm:'SAVE_TEXT function module. Text ID and object configured per IS-U client.',
+ bizRules:['Device location must exist','Text length max 132 chars per line','Language code EN required','Strip HTML/special characters in BODS'],
+ sapValidation:['READ_TEXT for EABLG after load — verify text exists'],
+ errors:['Special chars corrupt text → BODS regex clean','EABLG not found → run after ZDEVLOC'],
+ example:'LEGACY_DEVLOC=DL-30001 | NOTE=Meter behind locked gate, call 24h ahead | TEXT_ID=MRN',
+ depends:['ZDEVLOC']},
+
+{seq:19,code:'ZDEVLOC_CLASS',name:'DevLoc Classification',cat:'CIS',method:'EMIGALL',
+ overview:'Classification data for device locations — characteristic values for hazardous sites, AMI flags, zone codes.',
+ sapUse:'IS-U classification via SAP classification system (KLAH, KSML, INOB) on EABLG.',
+ tables:['INOB — Object classification link','KSML — Characteristic values','KLAH — Class header'],
+ configTables:['T006 — Classification class types','CABN — Characteristic definitions'],
+ keyFields:['EABLG','CLASS (class name)','CHARACT (characteristic)','ATWRT (characteristic value)'],
+ links:[{obj:'ZDEVLOC',via:'Classification assigned to EABLG'},{obj:'ZDEVLOC_NOTES',via:'Classification triggers notes in some configs'}],
+ emigallSetup:'T7XEMI01: ZDEVLOC_CLASS STATUS=A\nT7XEMI02: LEGACY_DEVLOC→EABLG, CLASS_CODE→CLASS, CHAR_VALUE→ATWRT\nUse CLAM_CREATE or BAPI_OBJCL_ASSIGN',
+ ksm:'BAPI_OBJCL_ASSIGN. Classification classes pre-configured in customising.',
+ bizRules:['Class must be configured before classification load','Characteristic values must be in allowed value list (CAWN)','Object type for EABLG is specific IS-U object type'],
+ sapValidation:['SELECT COUNT(*) FROM INOB WHERE OBJEK=:e AND KLART=IS_U_class_type'],
+ errors:['Class not found → transport classification config','ATWRT not in CAWN → add allowed value'],
+ example:'LEGACY_DEVLOC=DL-30001 | CLASS=ZDEVLOC_AMI | CHARACT=AMI_FLAG | ATWRT=YES',
+ depends:['ZDEVLOC']},
+
+{seq:20,code:'ZSTREET_ROUTE',name:'Street Route',cat:'Config',method:'EMIGALL',
+ overview:'Meter reading route / street route assignments — assigns premises/device locations to reading routes for field crew.',
+ sapUse:'TE200/TE240 MRU configuration. Drives efficient meter reading order for field operations.',
+ tables:['TE200 — MRU (meter reading unit)','TE240 — Reading sequence'],
+ configTables:['TE200','TE240','TE241 — Route attributes'],
+ keyFields:['ABLBASIS (MRU/route ID)','REIHENF (sequence in route)','EABLG (device location)'],
+ links:[{obj:'ZDEVLOC',via:'EABLG assigned to route in TE240'},{obj:'ZDEV_GRP',via:'EGZWG route assignment'}],
+ emigallSetup:'Config table load via SM30 or LTMC for TE200/TE240.\nMap legacy route IDs to SAP ABLBASIS codes in BODS.',
+ ksm:'Route optimisation — load in geographic sequence. KSM reviews route efficiency metrics post-load.',
+ bizRules:['Route IDs must be unique','Sequence numbers must be unique within a route','All device locations must be on exactly one route','Route must cover geographic territory'],
+ sapValidation:['SELECT COUNT(*) FROM TE240 WHERE ABLBASIS=:r','Verify no EABLG appears on multiple routes'],
+ errors:['Duplicate sequence → renumber in BODS','EABLG on multiple routes → data quality fix'],
+ example:'ROUTE_ID=RT001 | LEGACY_DEVLOC=DL-30001 | SEQUENCE=10',
+ depends:['ZDEVLOC']},
+
+{seq:21,code:'ZDEV_CT_PT',name:'Device CT/PT',cat:'CIS',method:'EMIGALL',
+ overview:'Current/Potential transformer configuration at device level for commercial/industrial meters.',
+ sapUse:'Separate from billing installation CT/PT — this is the physical device-level transformer ratio in EGESD.',
+ tables:['EGESD — Device register data','EGERH — Device history'],
+ configTables:['TE405 — Device category (C&I type required)'],
+ keyFields:['GERAET','CT_RATIO','PT_RATIO','NKONST','ABLEINH (unit)'],
+ links:[{obj:'ZDEVICE',via:'EGESD.GERAET = EGERH.GERAET'},{obj:'ZBILL_CT_PT',via:'Physical CT/PT feeds billing multiplier'}],
+ emigallSetup:'T7XEMI01: ZDEV_CT_PT STATUS=A\nT7XEMI02: LEGACY_DEVICE→Z_XREF_DEVICE→GERAET, CT→CT_RATIO, PT→PT_RATIO\nBODS: compute NKONST = CT×PT',
+ ksm:'C&I meter configuration. Revenue impact if ratios incorrect.',
+ bizRules:['Only for C&I device categories','NKONST must equal CT × PT','Ratios must be positive integers','Only one EGESD row per register'],
+ sapValidation:['SELECT NKONST,CT_RATIO,PT_RATIO FROM EGESD WHERE GERAET=:g — verify CT×PT=NKONST'],
+ errors:['Float rounding → ensure integer multiplication in BODS'],
+ example:'LEGACY_DEVICE=MTR-C001 | CT=200 | PT=3 | NKONST=600',
+ depends:['ZDEVICE']},
+
+{seq:22,code:'ZDEV_ERTS',name:'Device ERTS',cat:'CIS',method:'EMIGALL',
+ overview:'Device Entity Reference / Time Series — time-of-use (TOU) interval data configuration for smart meters.',
+ sapUse:'IS-U interval metering: ERTS (Energy Read Time Series) in EGERH. Required for AMI/smart meter billing.',
+ tables:['EGERH — Device with TOU flag','EGESD — Register with interval flag','T_ERTS — Interval configuration'],
+ configTables:['TE405 — Device category must include AMI/TOU types'],
+ keyFields:['GERAET','ERTS_FLAG','INTERVAL_LENGTH (15/30/60 min)','TOU_PROFILE'],
+ links:[{obj:'ZDEVICE',via:'ERTS config on EGERH device'},{obj:'ZBILL_INSTALL',via:'TOU rate requires ERTS device'}],
+ emigallSetup:'T7XEMI01: ZDEV_ERTS STATUS=A\nT7XEMI02: LEGACY_DEVICE→Z_XREF_DEVICE→GERAET, INTERVAL→INTERVAL_LENGTH\nVerify AMI device category in TE405',
+ ksm:'AMI/smart meter programmes. BODS maps TOU profile codes to IS-U ERTS config.',
+ bizRules:['Only AMI/smart meter device categories','Interval must be 15, 30 or 60 minutes','TOU profile must be configured in IS-U pricing','ERTS devices must have TOU rate category in EVER.TARIF'],
+ sapValidation:['SELECT ERTS_FLAG FROM EGERH WHERE GERAET=:g','Check TE006 rate category supports TOU'],
+ errors:['Non-AMI device set to ERTS → filter in BODS by device category'],
+ example:'LEGACY_DEVICE=AMI-001234 | INTERVAL=15 | TOU_PROFILE=TP_RESI | ERTS_FLAG=X',
+ depends:['ZDEVICE']}
+];
+
+// ============================================================
+// OBJECTS — Part 2 (seq 23-43)
+// ============================================================
+OBJECTS.push(
+{seq:23,code:'ZINSTLN',name:'Installation (IS-U Tech)',cat:'CIS',method:'EMIGALL',
+ overview:'Technical installation object linking device to IS-U installation tech data (EVBS sub-level).',
+ sapUse:'IS-U tech installation: connects physical device network to contractual installation. Required for AMI deployments.',
+ tables:['EGERH — Device history with tech install link','EVBS — Contract-premise-installation','EANLH — Installation-tech link'],
+ configTables:['TE001 — Division','TE500 — Installation types'],
+ keyFields:['ANLAGE (installation)','TECH_INST_ID','VERTRAG (contract)','GERAET (device)'],
+ links:[{obj:'ZBILL_INSTALL',via:'EVER.ANLAGE = EANL.ANLAGE'},{obj:'ZDEVICE',via:'EGERH links to ANLAGE'}],
+ emigallSetup:'T7XEMI01: ZINSTLN STATUS=A\nT7XEMI02: LEGACY_CONTRACT→Z_XREF_CONTRACT→VERTRAG\nPost-load: verify EGERH tech install link',
+ ksm:'ISU_INSTALLATION_TECH_CREATE. Required for real-time read and remote disconnect features.',
+ bizRules:['Billing installation must exist first','Tech installation type must be in TE500','One tech installation per physical connection'],
+ sapValidation:['SELECT COUNT(*) FROM EGERH WHERE ANLAGE=:a AND GERAET=:g'],
+ errors:['ANLAGE not found → verify Z_XREF_CONTRACT completeness'],
+ example:'LEGACY_CONTRACT=CG-C-60001 | TECH_TYPE=AMI | GERAET=AMI-001234',
+ depends:['ZBILL_INSTALL','ZDEVICE']},
+
+{seq:24,code:'ZINST_TECH',name:'Installation Tech Data',cat:'CIS',method:'EMIGALL',
+ overview:'Technical attributes for IS-U installation — network data, connection capacity, voltage class.',
+ sapUse:'IS-U infrastructure: voltage, capacity, network operator data stored on installation tech object.',
+ tables:['EGERH — Device/install tech data','EANLH — Installation attributes','TE500 — Tech install types'],
+ configTables:['TE500','TE502 — Voltage levels','TE504 — Capacity classes'],
+ keyFields:['ANLAGE','VOLTAGE_CLASS','CONNECTION_TYPE','CAPACITY_KW','NETWORK_OPERATOR'],
+ links:[{obj:'ZINSTLN',via:'Tech data extends ZINSTLN installation'},{obj:'ZPREMISE',via:'Voltage/capacity tied to service address'}],
+ emigallSetup:'T7XEMI01: ZINST_TECH STATUS=A\nT7XEMI02: LEGACY_PREMISE→Z_XREF_PREMISE→ANLAGE, VOLTAGE→VOLTAGE_CLASS\nT7XEMI03: VOLTAGE=120→TE502=120V class',
+ ksm:'Network operator data from GIS system loaded via BODS lookup join.',
+ bizRules:['Voltage class must be in TE502','Capacity must be positive decimal','Network operator code must exist in config','Commercial customers require explicit capacity class'],
+ sapValidation:['SELECT VOLTAGE_CLASS FROM EGERH WHERE ANLAGE=:a'],
+ errors:['TE502 missing → transport config'],
+ example:'LEGACY_PREMISE=P-20001 | VOLTAGE=120 | CAPACITY_KW=10.5 | CONNECTION_TYPE=OH',
+ depends:['ZINSTLN']},
+
+{seq:25,code:'ZTECH_CT_PT',name:'Tech CT/PT',cat:'CIS',method:'EMIGALL',
+ overview:'CT/PT ratio at installation-technical level — separate from device CT/PT, used for network billing calculations.',
+ sapUse:'Network-level transformer ratio. Affects grid billing and network operator settlement.',
+ tables:['EGERH — Technical register','EGESD — Register with network multiplier'],
+ configTables:['TE405 — Device categories'],
+ keyFields:['ANLAGE','NET_CT','NET_PT','NET_NKONST'],
+ links:[{obj:'ZINST_TECH',via:'Network CT/PT on tech installation'},{obj:'ZDEV_CT_PT',via:'Device-level CT/PT feeds network calc'}],
+ emigallSetup:'T7XEMI01: ZTECH_CT_PT STATUS=A\nT7XEMI02: LEGACY_PREMISE→ANLAGE, NET_CT→NET_CT, NET_PT→NET_PT\nBODS: NET_NKONST = NET_CT × NET_PT',
+ ksm:'Grid operator billing reconciliation. Revenue-critical for C&I network settlements.',
+ bizRules:['Only applicable to grid-connected C&I sites','NET_NKONST = NET_CT × NET_PT','Network CT/PT distinct from metering CT/PT'],
+ sapValidation:['SELECT NET_NKONST FROM EGESD WHERE ANLAGE=:a'],
+ errors:['Mismatch with ZDEV_CT_PT → cross-validate source data'],
+ example:'LEGACY_PREMISE=P-20001 | NET_CT=100 | NET_PT=2 | NET_NKONST=200',
+ depends:['ZINST_TECH']},
+
+{seq:26,code:'ZDEVLOC_PREM',name:'DevLoc Premise Map',cat:'CIS',method:'EMIGALL',
+ overview:'Explicit device-location-to-premise mapping — used where 1:many or complex relationships exist.',
+ sapUse:'EABLG.ANLAGE cross-reference when a single device location covers multiple premises (e.g., apartment complexes).',
+ tables:['EABLG — Device location','EANL — Premise','EVBS — Contract-premise link'],
+ configTables:['TE001 — Division'],
+ keyFields:['EABLG','ANLAGE','SPARTE','MAP_TYPE'],
+ links:[{obj:'ZDEVLOC',via:'EABLG source'},{obj:'ZPREMISE',via:'EANL target'}],
+ emigallSetup:'T7XEMI01: ZDEVLOC_PREM STATUS=A\nT7XEMI02: LEGACY_DEVLOC→Z_XREF_DEVLOC→EABLG, LEGACY_PREMISE→Z_XREF_PREMISE→ANLAGE',
+ ksm:'Apartment/master meter scenarios. BODS identifies 1:many from source data.',
+ bizRules:['Both device location and premise must exist','Division must be consistent','No circular or duplicate mappings'],
+ sapValidation:['SELECT COUNT(*) FROM EABLG WHERE ANLAGE=:a'],
+ errors:['EABLG not found → run after ZDEVLOC'],
+ example:'LEGACY_DEVLOC=DL-MASTER-001 | LEGACY_PREMISE=P-20001 | MAP_TYPE=MASTER',
+ depends:['ZDEVLOC','ZPREMISE']},
+
+{seq:27,code:'ZSEC_DEPOSIT',name:'Security Deposit',cat:'CIS',method:'EMIGALL',
+ overview:'Customer security deposits (FKKDEP) — cash deposits held for utility service credit risk.',
+ sapUse:'FI-CA FKKDEP: deposit amount, type, status. Released at move-out or after payment history establishes credit.',
+ tables:['FKKDEP — Security deposit header','FKKVK — Contract account','FKKOP — Open items (deposit posting)'],
+ configTables:['TFKDEP — Deposit types','TFKDEPCAT — Deposit categories'],
+ keyFields:['VKONT','DEPOT_AMOUNT','DEPOT_TYPE','DEPOT_STATUS','DEPOT_DATE'],
+ links:[{obj:'ZCONT_ACCT',via:'FKKDEP.VKONT = FKKVK.VKONT'},{obj:'ZPAYMENT',via:'Deposit payment creates FKKOP item'}],
+ emigallSetup:'T7XEMI01: ZSEC_DEPOSIT STATUS=A\nT7XEMI02: LEGACY_CA→Z_XREF_CA→VKONT, DEPOSIT_AMT→DEPOT_AMOUNT\nT7XEMI03: DEP_TYPE=C→TFKDEP=CASH',
+ ksm:'FKK_DEPOSIT_CREATE. Deposit types from TFKDEP config transport.',
+ bizRules:['Contract account must exist','Deposit amount must be positive','Deposit type must be in TFKDEP config','Deposit date must be <= cutover date','Interest calculation requires interest rate config'],
+ sapValidation:['SELECT DEPOT_AMOUNT FROM FKKDEP WHERE VKONT=:v','Check FKKOP posting for deposit amount'],
+ errors:['TFKDEP type not found → transport config','VKONT not found → run after ZCONT_ACCT'],
+ example:'LEGACY_CA=CG-CA-50001 | DEPOSIT_AMT=200.00 | DEP_TYPE=C | DEPOT_DATE=20190101',
+ depends:['ZCONT_ACCT']},
+
+{seq:28,code:'ZPAYMENT',name:'Payment',cat:'CIS',method:'EMIGALL',
+ overview:'Historical payment records — open items and clearing documents in FI-CA (FKKOP/FKKCL).',
+ sapUse:'FI-CA open items: payment postings create FKKOP/FKKCL. Required for AR balance migration.',
+ tables:['FKKOP — Open items (charges, credits, payments)','FKKCL — Clearing documents','DFKKZK — Payment method assigned'],
+ configTables:['TFKTYPOP — FI-CA item types','TFKZAART — Payment methods'],
+ keyFields:['VKONT','BETRW (amount in local currency)','OPUPW (document type)','AUGDT (clearing date)','ZUONR (assignment)'],
+ links:[{obj:'ZCONT_ACCT',via:'FKKOP.VKONT = FKKVK.VKONT'},{obj:'ZDOCUMENT',via:'FKKCL document links to FI posting'}],
+ emigallSetup:'T7XEMI01: ZPAYMENT STATUS=A\nT7XEMI02: LEGACY_CA→Z_XREF_CA→VKONT, AMOUNT→BETRW, PAY_DATE→AUGDT\nT7XEMI03: PAY_METHOD=CHECK→OPUPW=P, EFT→E\nTest: verify balance = source AR total',
+ ksm:'FKK_OPEN_ITEM_POST. Balance reconciliation critical — sum of FKKOP per VKONT must equal source ledger.',
+ bizRules:['Contract account must exist','Payment amount must be non-zero','Payment date must be <= cutover date','Document type must be in TFKTYPOP','Clearing document required for paid invoices'],
+ sapValidation:['SELECT SUM(BETRW) FROM FKKOP WHERE VKONT=:v — verify = source balance','Check FKKCL clearing document count'],
+ errors:['Balance mismatch → reconcile BODS aggregation vs source totals','VKONT not found → run after ZCONT_ACCT'],
+ example:'LEGACY_CA=CG-CA-50001 | AMOUNT=150.00 | PAY_DATE=20230101 | PAY_TYPE=EFT',
+ depends:['ZCONT_ACCT']},
+
+{seq:29,code:'ZDOCUMENT',name:'Document',cat:'CIS',method:'EMIGALL',
+ overview:'FI-CA/FI accounting documents — bill documents, AR postings, reversal documents.',
+ sapUse:'BKPF/BSEG (FI) and FKKOP (FI-CA) document posting. Drives AR ageing and customer statement.',
+ tables:['BKPF — Accounting document header','BSEG — Line items','FKKOP — Contract account items'],
+ configTables:['T003 — Document types','T004 — Chart of accounts','TFKTYPOP — FI-CA document types'],
+ keyFields:['BUKRS (company code)','BELNR (document number)','GJAHR (fiscal year)','VKONT','BETRW'],
+ links:[{obj:'ZPAYMENT',via:'Payment document in FKKOP/BKPF'},{obj:'ZDUNNING',via:'Dunning uses open FI-CA document items'}],
+ emigallSetup:'T7XEMI01: ZDOCUMENT STATUS=A\nT7XEMI02: LEGACY_DOC→BELNR, LEGACY_CA→VKONT, AMOUNT→BETRW\nBODS: split source invoices into BKPF header + BSEG line items',
+ ksm:'BAPI_ACC_DOCUMENT_POST for FI documents. FI-CA items via FKK posting FM.',
+ bizRules:['Document date must be <= cutover date','Company code must be configured','Document number range must not overlap existing SAP documents','Credit/debit balance must net to zero (double-entry)'],
+ sapValidation:['SELECT COUNT(*) FROM BKPF WHERE VKONT=:v','Verify BSEG debit = credit for each document'],
+ errors:['Unbalanced document → fix GL account mapping in BODS'],
+ example:'LEGACY_DOC=INV-20230101 | AMOUNT=150.00 | DOC_TYPE=DZ | GJAHR=2023',
+ depends:['ZCONT_ACCT','ZPAYMENT']},
+
+{seq:30,code:'ZDUNNING',name:'Dunning',cat:'CIS',method:'EMIGALL',
+ overview:'Dunning history — past-due notices, levels, amounts for migration of AR collection history.',
+ sapUse:'FI-CA dunning: FKKDUN table. Dunning level determines collection action. History required for compliance.',
+ tables:['FKKDUN — Dunning records','FKKVK — Contract account dunning config','FKKOP — Overdue items triggering dunning'],
+ configTables:['TFKDUN — Dunning procedures','TFKDUNLEV — Dunning levels'],
+ keyFields:['VKONT','DUNNING_LEVEL','DUNNING_DATE','AMOUNT_DUNNED','DUNNING_PROC'],
+ links:[{obj:'ZCONT_ACCT',via:'FKKDUN.VKONT = FKKVK.VKONT'},{obj:'ZPAYMENT',via:'Dunning triggered by overdue FKKOP items'}],
+ emigallSetup:'T7XEMI01: ZDUNNING STATUS=A\nT7XEMI02: LEGACY_CA→Z_XREF_CA→VKONT, DUN_LEVEL→DUNNING_LEVEL\nT7XEMI03: DUN_PROC=STD→TFKDUN=ZDUN1',
+ ksm:'FKKI_DUNNING_CREATE. Only migrate open/active dunning — closed cases excluded.',
+ bizRules:['Contract account must exist','Dunning procedure must be in TFKDUN','Only active dunning cases migrated','Dunning level must be within procedure range (1-4)'],
+ sapValidation:['SELECT COUNT(*) FROM FKKDUN WHERE VKONT=:v AND STATUS=A'],
+ errors:['TFKDUN procedure not configured → transport before dunning load'],
+ example:'LEGACY_CA=CG-CA-50001 | DUN_LEVEL=2 | DUN_DATE=20230115 | DUN_AMT=150.00',
+ depends:['ZCONT_ACCT','ZPAYMENT']},
+
+{seq:31,code:'ZIP_PLAN',name:'Instalment Plan (IP)',cat:'CIS',method:'EMIGALL',
+ overview:'Customer payment instalment plans — structured repayment of past-due balances.',
+ sapUse:'FI-CA FKKINST: instalment plan header and line items. Separate from budget billing.',
+ tables:['FKKINST — Instalment plan header','FKKINSTPOS — Instalment plan line items','FKKVK — Contract account'],
+ configTables:['TFKITYPE — Instalment plan types (IP=instalment plan)','TFKIPTERM — IP terms'],
+ keyFields:['VKONT','IPLAN_TYPE','TOTAL_AMOUNT','INSTALMENT_AMT','IPLAN_START','NUM_INSTALMENTS'],
+ links:[{obj:'ZCONT_ACCT',via:'FKKINST.VKONT = FKKVK.VKONT'},{obj:'ZDUNNING',via:'IP often created to stop dunning escalation'}],
+ emigallSetup:'T7XEMI01: ZIP_PLAN STATUS=A\nT7XEMI02: LEGACY_CA→VKONT, TOTAL_AMT→TOTAL_AMOUNT, MONTHLY_AMT→INSTALMENT_AMT',
+ ksm:'FKK_INST_PLAN_CREATE. Active instalment plans with remaining balance migrated.',
+ bizRules:['Contract account must be active','Total amount must equal sum of instalments','Start date must be <= cutover','Only active plans migrated (not completed/cancelled)'],
+ sapValidation:['SELECT SUM(INSTALMENT_AMT) FROM FKKINSTPOS WHERE VKONT=:v — verify = TOTAL_AMOUNT'],
+ errors:['TFKITYPE not configured → transport config','Instalment sum mismatch → fix in BODS'],
+ example:'LEGACY_CA=CG-CA-50001 | TOTAL_AMT=600.00 | MONTHLY=100.00 | MONTHS=6 | START=20230201',
+ depends:['ZCONT_ACCT','ZDUNNING']},
+
+{seq:32,code:'ZDISC_DOC',name:'Disconnection Document',cat:'CIS',method:'EMIGALL',
+ overview:'Service disconnection document — records disconnection events for regulatory compliance.',
+ sapUse:'IS-U EAUFN (service order) for disconnect. Regulatory reporting on disconnection activity.',
+ tables:['EAUFN — Service order (disconnect type)','FKKVK — Contract account','EVER — Contract status'],
+ configTables:['TE550 — Service order types (DISC)','TE552 — Disconnect reasons'],
+ keyFields:['AUFNR (service order number)','VKONT','DISC_DATE','DISC_REASON','DISC_STATUS'],
+ links:[{obj:'ZCONT_ACCT',via:'EAUFN linked to VKONT'},{obj:'ZDISC_ORDER',via:'Disc document triggers disc order'}],
+ emigallSetup:'T7XEMI01: ZDISC_DOC STATUS=A\nT7XEMI02: LEGACY_CA→VKONT, DISC_DATE→AUFDAT, DISC_REASON→TE552 mapping',
+ ksm:'ISU_DISC_DOC_CREATE. Regulatory requirement — all disconnects in last 3 years migrated.',
+ bizRules:['Contract account must exist','Disconnect reason in TE552','Disconnect date must be valid history date','Only completed or active disconnects migrated'],
+ sapValidation:['SELECT COUNT(*) FROM EAUFN WHERE VKONT=:v AND AUFART=DISC'],
+ errors:['TE552 reason not mapped → add to T7XEMI03'],
+ example:'LEGACY_CA=CG-CA-50001 | DISC_DATE=20220601 | DISC_REASON=NONPAY | STATUS=COMPLETED',
+ depends:['ZCONT_ACCT']},
+
+{seq:33,code:'ZDISC_ORDER',name:'Disconnection Order',cat:'CIS',method:'EMIGALL',
+ overview:'Field work order for physical disconnection of service.',
+ sapUse:'IS-U field service: EAUFN order dispatched to field crew. Links to disconnection document.',
+ tables:['EAUFN — Service order','EGERH — Device status post-disconnect','EABLG — DevLoc status'],
+ configTables:['TE550 — Service order types','TE554 — Priority codes'],
+ keyFields:['AUFNR','DISC_ORDER_DATE','CREW_ID','PRIORITY','ORDER_STATUS'],
+ links:[{obj:'ZDISC_DOC',via:'EAUFN parent document'},{obj:'ZDEVICE',via:'EGERH status updated on disconnect'}],
+ emigallSetup:'T7XEMI01: ZDISC_ORDER STATUS=A\nT7XEMI02: LEGACY_DISC_DOC→AUFNR, ORDER_DATE→DISC_ORDER_DATE\nOnly completed orders migrated',
+ ksm:'Field service dispatch module. Completed orders only — pending orders not migrated.',
+ bizRules:['Disconnection document must exist','Order status must be completed or cancelled','Priority code must be in TE554'],
+ sapValidation:['SELECT ORDER_STATUS FROM EAUFN WHERE AUFNR=:a'],
+ errors:['Parent disc doc not found → run after ZDISC_DOC'],
+ example:'LEGACY_DISC_DOC=DD-001 | ORDER_DATE=20220602 | PRIORITY=N | STATUS=COMPLETED',
+ depends:['ZDISC_DOC']},
+
+{seq:34,code:'ZDISC_ENTRY',name:'Disconnection Entry',cat:'CIS',method:'EMIGALL',
+ overview:'Confirmation entry of physical disconnect execution — meter seal, lock status recorded.',
+ sapUse:'IS-U EAUFN confirmation: technician logs actual disconnect date/time and method.',
+ tables:['EAUFN — Confirmed service order','EGERH — Device deactivation record'],
+ configTables:['TE556 — Disconnect methods'],
+ keyFields:['AUFNR','ACTUAL_DISC_DATE','DISC_METHOD','TECHNICIAN_ID','SEAL_NUMBER'],
+ links:[{obj:'ZDISC_ORDER',via:'Confirmation of EAUFN order'},{obj:'ZDEVICE',via:'EGERH device status = disconnected'}],
+ emigallSetup:'T7XEMI01: ZDISC_ENTRY STATUS=A\nT7XEMI02: LEGACY_ORDER→AUFNR, ACTUAL_DATE→ACTUAL_DISC_DATE, METHOD→TE556 mapping',
+ ksm:'Technician confirmation via field service mobile. Post-migration: verify EGERH device status.',
+ bizRules:['Disconnect order must be completed','Actual date >= order date','Seal number unique per device','Technician ID must be in HR master'],
+ sapValidation:['SELECT EGERH.STATUS WHERE GERAET disconnected'],
+ errors:['Technician ID not in HR → coordinate with HR mini master load'],
+ example:'LEGACY_ORDER=DO-001 | ACTUAL_DATE=20220603 | METHOD=LOCK | SEAL=SL-001',
+ depends:['ZDISC_ORDER']},
+
+{seq:35,code:'ZFACTS',name:'FACTS',cat:'CIS',method:'EMIGALL',
+ overview:'FACTS (Field Automation Customer and Technical System) data — AMI event codes, field action records.',
+ sapUse:'IS-U FACTS integration: automated meter events (tamper, outage, reconnect) stored as IS-U notifications.',
+ tables:['VIQMEL — IS-U notification','EABLG — Device location event link','QMEL — Quality notification header'],
+ configTables:['QMCAT — Notification categories','TE600 — FACTS event codes'],
+ keyFields:['QMNUM (notification)','MANDT','EABLG','EVENT_CODE','EVENT_DATE','EVENT_TYPE'],
+ links:[{obj:'ZDEVLOC',via:'Events linked to EABLG device location'},{obj:'ZDEVICE',via:'AMI events reference GERAET'}],
+ emigallSetup:'T7XEMI01: ZFACTS STATUS=A\nT7XEMI02: LEGACY_DEVLOC→Z_XREF_DEVLOC→EABLG, EVENT_CODE→T7XEMI03→SAP notification category',
+ ksm:'AMI middleware integration. FACTS event history required for tamper analysis and revenue protection reporting.',
+ bizRules:['Device location must exist','Event codes must map to SAP notification categories','Event date must be within device active period','Only last 3 years of events migrated for performance'],
+ sapValidation:['SELECT COUNT(*) FROM QMEL WHERE EABLG=:e AND QMART=FACTS'],
+ errors:['Unknown event code → add to T7XEMI03 mapping','EABLG not found → run after ZDEVLOC'],
+ example:'LEGACY_DEVLOC=DL-30001 | EVENT_CODE=TAMPER | EVENT_DATE=20221015 | TYPE=ALERT',
+ depends:['ZDEVLOC','ZDEVICE']},
+
+{seq:36,code:'ZREF_VALUES',name:'Ref Values',cat:'CIS',method:'EMIGALL',
+ overview:'Reference values / statistical values stored on contract accounts — prior usage history, thresholds.',
+ sapUse:'IS-U EANL statistical values: average consumption, peak demand, summer/winter usage stored for billing comparison.',
+ tables:['EANL — Installation with stat values','EANLH — Extended installation data'],
+ configTables:['TE006 — Rate category stat value types'],
+ keyFields:['ANLAGE','STAT_USAGE_SUMMER','STAT_USAGE_WINTER','ANNUAL_CONSUMPTION','PEAK_DEMAND_KW'],
+ links:[{obj:'ZBILL_INSTALL',via:'Statistical values linked to ANLAGE installation'},{obj:'ZBUDGET_BILL',via:'Stat usage drives budget billing amount'}],
+ emigallSetup:'T7XEMI01: ZREF_VALUES STATUS=A\nT7XEMI02: LEGACY_PREMISE→Z_XREF_PREMISE→ANLAGE, AVG_USAGE→ANNUAL_CONSUMPTION',
+ ksm:'Annual consumption from source billing history. BODS aggregates 12-month usage before load.',
+ bizRules:['Installation must exist','Annual consumption must be positive','Summer/winter split must total annual','Peak demand for C&I only'],
+ sapValidation:['SELECT ANNUAL_CONSUMPTION FROM EANL WHERE ANLAGE=:a'],
+ errors:['ANLAGE not found → run after ZBILL_INSTALL','Negative consumption → source data quality issue'],
+ example:'LEGACY_PREMISE=P-20001 | ANNUAL_KWH=12000 | SUMMER_KWH=7000 | WINTER_KWH=5000',
+ depends:['ZBILL_INSTALL']},
+
+{seq:37,code:'ZBILL_HISTORY',name:'Bill History',cat:'CIS',method:'DS',
+ overview:'Historical bill documents — loaded via direct BODS insert into ERCH/ERCHZ (not EMIGALL). Read-only history.',
+ sapUse:'IS-U billing archive: ERCH (bill header), ERCHZ (line items). Customers can view on self-service portal.',
+ tables:['ERCH — Bill document header','ERCHZ — Bill line items','ERCHC — Bill charge components'],
+ configTables:['TE422 — Billing class','TE006 — Rate category'],
+ keyFields:['BELNR (bill document)','VKONT','ABRDATS (from date)','ABRDATE (to date)','NETTOBT (net amount)'],
+ links:[{obj:'ZBILL_INSTALL',via:'Bills linked to VERTRAG contract'},{obj:'ZPAYMENT',via:'Payment clears bill balance in FKKOP'}],
+ emigallSetup:'METHOD: Direct BODS insert (DS) — NOT EMIGALL.\nBODS Job: J_BILL_HISTORY_LOAD\nSource: BODS staging table STG_BILL_HIST\nTarget: ERCH + ERCHZ INSERT via ABAP proxy FM\nTest: SE16 ERCH count per VKONT',
+ ksm:'Bill PDF archive stored in SAP CMS (Content Management System). BODS loads both ERCH and document PDF links.',
+ bizRules:['Bills loaded in descending date order','Minimum 24 months of history required (regulatory)','Net amount = sum of ERCHZ line items','Bill date must match meter read period','No bill posting to FI-CA for historical bills (AR already in FKKOP)'],
+ sapValidation:['SELECT COUNT(*) FROM ERCH WHERE VKONT=:v','SELECT SUM(NETTOBT) FROM ERCHZ WHERE BELNR=:b — verify = ERCH total'],
+ errors:['ERCH-ERCHZ balance mismatch → fix BODS aggregation','Missing rate category → ensure TE006 config loaded first'],
+ example:'LEGACY_CA=CG-CA-50001 | BILL_DATE=20230101 | FROM=20221201 | TO=20231231 | NET_AMT=145.23',
+ depends:['ZBILL_INSTALL','ZPAYMENT']},
+
+{seq:38,code:'ZHR_MINI',name:'HR Mini Master',cat:'EAM',method:'LSMW',
+ overview:'Minimal HR employee master data — required for EAM work order assignment and plant maintenance.',
+ sapUse:'PA0001/PA0002 infotypes: employee org assignment. Required before EAM FLOC and work order loads.',
+ tables:['PA0001 — Org assignment','PA0002 — Personal data','PA0007 — Work schedule','T527X — Org units'],
+ configTables:['T503K — Employee groups','T503 — Employee subgroups','T500P — Personnel areas'],
+ keyFields:['PERNR (personnel number)','ENAME (name)','PLANS (position)','ORGEH (org unit)','BUKRS (company code)'],
+ links:[{obj:'ZFLOC',via:'FLOC responsible person = PERNR'},{obj:'ZMAINT_PLAN',via:'Maintenance planner = PERNR'}],
+ emigallSetup:'METHOD: LSMW — not EMIGALL.\nLSMW Project: HR_MINI_MASTER\nTransaction: PA30 (maintain HR master)\nBatch input recording\nSource: Excel file from HR team',
+ ksm:'Minimum HR data for EAM: only active employees who are PM planners/supervisors loaded.',
+ bizRules:['Only load active employees needed for EAM','PERNR must not conflict with existing HR numbers','Company code must be configured','Position must exist in org structure','Start date = go-live date'],
+ sapValidation:['SELECT PERNR FROM PA0001 WHERE ENDDA=9999','Verify org unit assignment'],
+ errors:['PERNR conflict → coordinate with HR team on number range'],
+ example:'PERNR=10001 | ENAME=John Technician | ORGEH=OU-FIELD-TEAM | BUKRS=1000',
+ depends:[]},
+
+{seq:39,code:'ZFLOC',name:'Functional Location',cat:'EAM',method:'LTMC',
+ overview:'Plant maintenance functional location (IFLOT) — physical infrastructure hierarchy (substation/feeder/transformer).',
+ sapUse:'PM IFLOT master: hierarchical location structure for asset management. Parent of Equipment.',
+ tables:['IFLOT — Functional location','ILOA — Location/account data','IFLOTX — FLOC text','IFLOS — FLOC classification'],
+ configTables:['T370 — FLOC categories','T370T — FLOC category texts','T395 — FLOC structure indicators'],
+ keyFields:['TPLNR (FLOC number/label)','IWERK (planning plant)','INGRP (planner group)','EQART (construction type)','TPLKZ (structure indicator)'],
+ links:[{obj:'ZHR_MINI',via:'IFLOT.INGRP planner = PA0001.PERNR'},{obj:'ZFLOC_CLASS',via:'IFLOT classification via BAPI_OBJCL_ASSIGN'},{obj:'ZMAINT_PLAN',via:'Maintenance plan linked to FLOC'}],
+ emigallSetup:'METHOD: LTMC (SAP Migration Cockpit).\nLTMC Template: Functional Location\nSource: Excel mapping from MS Dynamics/MainSaver\nField: TPLNR must follow SAP structure indicator pattern\nPost-load: Z_XREF_FLOC (legacy FLOC → TPLNR)',
+ ksm:'GIS-to-FLOC hierarchy mapping. Structure indicator (TPLKZ) determines allowed hierarchy levels.',
+ bizRules:['TPLNR must follow structure indicator format','Hierarchy parent must exist before child','Planning plant must be configured','Planner group must be in T024P','No special characters in TPLNR except structure separators'],
+ sapValidation:['SELECT COUNT(*) FROM IFLOT WHERE TPLNR=:t','Verify IFLOT hierarchy structure'],
+ errors:['TPLNR format error → fix structure indicator template in LTMC','Parent FLOC not found → load in hierarchy order'],
+ example:'TPLNR=1000-ELEC-SUB001-FEAT001 | IWERK=1000 | INGRP=E01 | EQART=TRAN',
+ depends:['ZHR_MINI']},
+
+{seq:40,code:'ZFLOC_CLASS',name:'FLOC Classification',cat:'EAM',method:'LTMC',
+ overview:'Classification and characteristic values for functional locations — asset attributes (voltage, capacity, age).',
+ sapUse:'SAP classification system (INOB/KSML/KLAH) on IFLOT objects. Enables asset attribute-based reporting.',
+ tables:['INOB — Classification object link','KSML — Characteristic values','KLAH — Class header','CABN — Characteristic definitions'],
+ configTables:['T006 — Classification types','CABN — Characteristics','CAWN — Characteristic values'],
+ keyFields:['TPLNR','CLASS_NAME','CHARACT','ATWRT (char value)','KLART (class type)'],
+ links:[{obj:'ZFLOC',via:'Classification assigned to IFLOT TPLNR'},{obj:'ZMAINT_PLAN',via:'Asset class drives maintenance strategy'}],
+ emigallSetup:'METHOD: LTMC.\nLTMC Template: Classification (Functional Location)\nSource: Asset attribute spreadsheet from EAM team\nBAPI: BAPI_OBJCL_ASSIGN\nPost-load: verify INOB count per FLOC',
+ ksm:'Asset registry classification. Characteristic values from GIS and SCADA systems imported via BODS lookup.',
+ bizRules:['FLOC must exist before classification','Class must be configured in SAP','Characteristic values must be in CAWN allowed values','Class type for FLOC is specific (usually 015)'],
+ sapValidation:['SELECT COUNT(*) FROM INOB WHERE OBJEK=:t AND KLART=015'],
+ errors:['CAWN value not allowed → add characteristic value config','FLOC not found → run after ZFLOC'],
+ example:'TPLNR=1000-ELEC-SUB001 | CLASS=ZSUBSTATION | CHARACT=VOLTAGE_KV | ATWRT=115',
+ depends:['ZFLOC']},
+
+{seq:41,code:'ZMAINT_PLAN',name:'Maintenance Plan',cat:'EAM',method:'LTMC',
+ overview:'Preventive maintenance plans (MPLA) — scheduled maintenance cycles for utility assets.',
+ sapUse:'PM MPLA: maintenance plan header with cycle (monthly, annual). Generates PM work orders automatically.',
+ tables:['MPLA — Maintenance plan header','MPOS — Maintenance plan items','MHIS — Maintenance plan history','MTQP — Task lists'],
+ configTables:['T351 — Maintenance plan categories','T353 — Schedule types','T356 — PM work order types'],
+ keyFields:['WARPL (plan number)','TPLNR (FLOC)','CYCLE_DAYS','LEAD_FLOAT','STRATEGY','PLNNR (task list)'],
+ links:[{obj:'ZFLOC',via:'MPLA.TPLNR = IFLOT.TPLNR'},{obj:'ZHR_MINI',via:'MPLA.INGRP = planner group from PA0001'}],
+ emigallSetup:'METHOD: LTMC.\nLTMC Template: Maintenance Plan\nSource: Maintenance schedule from MainSaver\nField: CYCLE_DAYS computed from legacy frequency\nPost-load: schedule plan via IP10',
+ ksm:'PM strategy alignment. BODS converts legacy maintenance frequency (months) to SAP cycle days.',
+ bizRules:['FLOC must exist','Strategy must be configured in T351','Cycle must be positive integer days','Planner group from HR mini master','Task list (PLNNR) must exist for plan item'],
+ sapValidation:['SELECT WARPL FROM MPLA WHERE TPLNR=:t','Check MPOS items per plan'],
+ errors:['T351 strategy not configured → transport config','TPLNR not found → run after ZFLOC'],
+ example:'WARPL=MP-001 | TPLNR=1000-ELEC-SUB001 | CYCLE=365 | STRATEGY=ANNUAL | PLNNR=TL-001',
+ depends:['ZFLOC','ZHR_MINI']},
+
+{seq:42,code:'ZCREDIT_HIST',name:'Credit History',cat:'CIS',method:'DS',
+ overview:'Customer credit history — loaded via direct BODS insert (DS). Regulatory/compliance retention.',
+ sapUse:'FI-CA credit score history and credit risk class stored on contract account.',
+ tables:['FKKVK — Contract account credit class','Z_CREDIT_HIST — Z-table for history archive'],
+ configTables:['TFKCREDITCAT — Credit categories','TFKCREDITCLASS — Credit classes'],
+ keyFields:['VKONT','CREDIT_CLASS','CREDIT_DATE','CREDIT_SCORE','REVIEW_DATE'],
+ links:[{obj:'ZCONT_ACCT',via:'FKKVK.CREDIT_CLASS = TFKCREDITCLASS'},{obj:'ZDUNNING',via:'Credit class drives dunning procedure'}],
+ emigallSetup:'METHOD: Direct BODS insert (DS).\nBODS Job: J_CREDIT_HISTORY\nTarget: Z_CREDIT_HIST Z-table (custom archive)\nFKKVK.CREDIT_CLASS updated for current class only',
+ ksm:'Credit risk scoring. Last 3 credit reviews migrated per regulatory requirement.',
+ bizRules:['Contract account must exist','Credit class must be in TFKCREDITCLASS','Credit date must be <= cutover','Only active credit class updated on FKKVK','History in Z-table — not FKKVK itself'],
+ sapValidation:['SELECT CREDIT_CLASS FROM FKKVK WHERE VKONT=:v','SELECT COUNT(*) FROM Z_CREDIT_HIST WHERE VKONT=:v'],
+ errors:['TFKCREDITCLASS not configured → add config','VKONT not found → run after ZCONT_ACCT'],
+ example:'LEGACY_CA=CG-CA-50001 | CREDIT_CLASS=C2 | CREDIT_DATE=20230101 | SCORE=720',
+ depends:['ZCONT_ACCT']},
+
+{seq:43,code:'ZCOLL_HIST',name:'Collection History',cat:'CIS',method:'DS',
+ overview:'Customer collection activity history — legal proceedings, write-offs, agency referrals.',
+ sapUse:'FI-CA collections: FKKCOLAGENCY (collection agency assignment), write-off history in FKKOP.',
+ tables:['FKKCOLAGENCY — Collection agency assignments','FKKOP — Write-off items','Z_COLL_HIST — Custom collection history Z-table'],
+ configTables:['TFKCOLAGENCY — Collection agencies','TFKWRITEOFF — Write-off reason codes'],
+ keyFields:['VKONT','AGENCY_CODE','REFERRAL_DATE','WRITEOFF_AMT','WRITEOFF_DATE','COLL_STATUS'],
+ links:[{obj:'ZCONT_ACCT',via:'Collection linked to VKONT'},{obj:'ZDUNNING',via:'Collection follows dunning escalation'}],
+ emigallSetup:'METHOD: Direct BODS insert (DS).\nBODS Job: J_COLLECTION_HISTORY\nTarget: FKKCOLAGENCY + Z_COLL_HIST\nWrite-off items: FKKOP with write-off doc type',
+ ksm:'Revenue recovery tracking. Write-off amounts reconciled against source system AR write-off records.',
+ bizRules:['Contract account must exist','Agency code must be in TFKCOLAGENCY','Write-off requires approval documentation','Active agency referrals migrated with current status','Write-off amount must match FKKOP open item'],
+ sapValidation:['SELECT COUNT(*) FROM FKKCOLAGENCY WHERE VKONT=:v','SELECT SUM(BETRW) FROM FKKOP WHERE VKONT=:v AND OPUPW=WO'],
+ errors:['TFKCOLAGENCY agency not configured → add config','Balance mismatch → reconcile write-off amounts in BODS'],
+ example:'LEGACY_CA=CG-CA-50001 | AGENCY=CA_MIDLAND | REFERRAL=20221001 | WRITEOFF_AMT=450.00',
+ depends:['ZCONT_ACCT','ZDUNNING']}
+);
+
+// ============================================================
+// CO_OBJECTS — 45 Chesapeake 1CX Cutover Objects
+// ============================================================
+const COLS={T1:'#1f4e8c',T2:'#1a7f37',T3:'#7d4e00'};
+const CO_OBJECTS=[
+// THREAD 1 — CS/FICA/DWM
+{id:'C_31',name:'Bank Master',thread:1,ws:'FICA',method:'EMIGALL',etaPre:'T-2h',etaPost:'30m',
+ depends:[],notes:'Load bank routing numbers first — all payment and EFT setups depend on BNKA.',
+ tables:['BNKA','T012'],keyFields:['BANKS','BANKL','BANKA','SWIFT'],
+ bizRules:['BANKL = 9 digits','SWIFT required for EFT','BANKS=US for domestic'],
+ sapChecks:['SE16 BNKA count','T012 house banks configured']},
+
+{id:'C_4',name:'Business Partner',thread:1,ws:'CS',method:'EMIGALL',etaPre:'T-90m',etaPost:'4h',
+ depends:['C_31'],notes:'Core object — all CIS downstream depends on PARTNER. Dedup on SSN in BODS.',
+ tables:['BUT000','BUT020','BUT100','ADRC','ADR6'],keyFields:['PARTNER','BU_GROUP','NAME_FIRST','BIRTHDT'],
+ bizRules:['One BP per SSN','Gender required','DOB format YYYYMMDD','No special chars in name'],
+ sapChecks:['SE16 BUT000 count vs source','BUT100 FLCU01 role check','ADRC completeness']},
+
+{id:'C_8',name:'Contacts',thread:1,ws:'CS',method:'EMIGALL',etaPre:'T-60m',etaPost:'2h',
+ depends:['C_4'],notes:'Run after BP. Resolve PARTNER from Z_XREF_BP.',
+ tables:['BUT050','ADR2','ADR6'],keyFields:['PARTNER1','PARTNER2','RELTYP'],
+ bizRules:['Primary BP must exist','Phone 10 digits','Email format valid'],
+ sapChecks:['BUT050 count per BP','ADR6 email format check']},
+
+{id:'C_9',name:'Contract Account',thread:1,ws:'FICA',method:'EMIGALL',etaPre:'T-60m',etaPost:'3h',
+ depends:['C_4','C_31'],notes:'FI-CA root. VKTYP must be in TFKACT config. Post-load: Z_XREF_CA.',
+ tables:['FKKVK','DFKKZK'],keyFields:['VKONT','GPART','VKTYP'],
+ bizRules:['BP must exist','VKTYP in TFKACT','EFT requires DFKKZK'],
+ sapChecks:['FKKVK count per GPART','VKTYP config in TFKACT']},
+
+{id:'C_6',name:'Connection Object',thread:1,ws:'DWM',method:'EMIGALL',etaPre:'T-120m',etaPost:'3h',
+ depends:[],notes:'Physical service point. SPARTE required. CASS address check in BODS.',
+ tables:['EOBJK','EABJK'],keyFields:['EOBJK','SPARTE','ADRNR'],
+ bizRules:['SPARTE in TE001','CASS postal valid','No PO Box'],
+ sapChecks:['EOBJK count vs source','ADRC street address populated']},
+
+{id:'C_25',name:'Premise',thread:1,ws:'DWM',method:'EMIGALL',etaPre:'T-90m',etaPost:'3h',
+ depends:['C_6'],notes:'Links connection object to installation. Post-load: Z_XREF_PREMISE.',
+ tables:['EANL','EVBS'],keyFields:['ANLAGE','EOBJK','SPARTE'],
+ bizRules:['EOBJK must exist','Division consistent','T001W configured'],
+ sapChecks:['EANL count vs source','EOBJK→EANL SPARTE match']},
+
+{id:'C_12',name:'Device Location',thread:1,ws:'DWM',method:'EMIGALL',etaPre:'T-60m',etaPost:'2h',
+ depends:['C_25'],notes:'EABLG per premise. MRU route required. Post-load: Z_XREF_DEVLOC.',
+ tables:['EABLG'],keyFields:['EABLG','VSTELLE','ANLAGE'],
+ bizRules:['ANLAGE must exist','TE200 route configured','1:1 residential'],
+ sapChecks:['EABLG count vs EANL','TE200 route assignment']},
+
+{id:'C_56',name:'Device Model',thread:1,ws:'DWM',method:'EMIGALL',etaPre:'T-3d',etaPost:'30m',
+ depends:[],notes:'Config table. Load before devices. All TE406 device types must be pre-configured.',
+ tables:['TE406','TE405'],keyFields:['DEVICETYPE','DEVICECAT','MFRNR'],
+ bizRules:['All source device types in TE406','MFRNR in TE408'],
+ sapChecks:['SE16 TE406 coverage check']},
+
+{id:'C_10',name:'Device Group',thread:1,ws:'DWM',method:'EMIGALL',etaPre:'T-30m',etaPost:'1h',
+ depends:['C_12'],notes:'MRU reading groups. Load after device locations.',
+ tables:['EGZWG','TE200'],keyFields:['ABLBASIS','GERAET','REIHENF'],
+ bizRules:['Device must exist','Sequence unique in group'],
+ sapChecks:['EGZWG count','TE200 route active']},
+
+{id:'C_1',name:'Billing Installation',thread:1,ws:'Billing',method:'EMIGALL',etaPre:'T-60m',etaPost:'4h',
+ depends:['C_9','C_25','C_12'],notes:'EVER+EANL. Rate category translation in T7XEMI03. Post-load: Z_XREF_CONTRACT.',
+ tables:['EVER','EVBS'],keyFields:['VERTRAG','VKONT','ANLAGE','TARIF'],
+ bizRules:['CA must exist','TE006 rate cat active','Division matches premise'],
+ sapChecks:['EVER count vs source','TE006 rate category check']},
+
+{id:'C_1B',name:'Billing Install CT/PT',thread:1,ws:'Billing',method:'EMIGALL',etaPre:'T-30m',etaPost:'1h',
+ depends:['C_1'],notes:'CT×PT=NKONST in BODS. C&I only.',
+ tables:['EGESD','EGERH'],keyFields:['GERAET','CT_RATIO','PT_RATIO','NKONST'],
+ bizRules:['C&I only','NKONST=CT×PT','Positive ratios'],
+ sapChecks:['EGESD NKONST = CT×PT spot check']},
+
+{id:'C_22',name:'Move-In',thread:1,ws:'CS',method:'EMIGALL',etaPre:'T-45m',etaPost:'4h',
+ depends:['C_1'],notes:'Activates service. EGERH created. Opening EABL read.',
+ tables:['EVER','EVBS','EGERH','EABL'],keyFields:['VERTRAG','EINZDAT','SERNR'],
+ bizRules:['Contract in created status','Device not installed elsewhere','Opening read >= 0'],
+ sapChecks:['EVER.EINZDAT set','EVBS row created','EGERH end date 9999']},
+
+{id:'C_2',name:'Partner Relationship',thread:1,ws:'CS',method:'EMIGALL',etaPre:'T-30m',etaPost:'1h',
+ depends:['C_4'],notes:'BUT050 relationships. Both BPs must exist. Resolve both from Z_XREF_BP.',
+ tables:['BUT050'],keyFields:['PARTNER1','PARTNER2','RELTYP'],
+ bizRules:['Both BPs exist','RELTYP in TB025','No circular'],
+ sapChecks:['BUT050 count per partner pair']},
+
+{id:'C_26',name:'Property',thread:1,ws:'DWM',method:'EMIGALL',etaPre:'T-30m',etaPost:'1h',
+ depends:['C_6'],notes:'Land parcel linked to connection object. GIS parcel ID enriched in BODS.',
+ tables:['EANLH','EOBJK'],keyFields:['PROPERTY','EOBJK','PARCEL_ID'],
+ bizRules:['EOBJK must exist','Unique parcel ID','Municipal code required'],
+ sapChecks:['EANLH count per EOBJK']},
+
+{id:'C_3',name:'Budget Billing',thread:1,ws:'FICA',method:'EMIGALL',etaPre:'T-30m',etaPost:'2h',
+ depends:['C_9','C_1'],notes:'FPLA + FPLAPOS. BB flag on FKKVK required first.',
+ tables:['FPLA','FPLAPOS'],keyFields:['VKONT','FPLART','RATEBETRAG'],
+ bizRules:['CA active','Monthly amt positive','12 rows for annual plan'],
+ sapChecks:['FPLA count per CA','SUM FPLAPOS = annual amount']},
+
+{id:'C_21',name:'Meter Read',thread:1,ws:'DWM',method:'EMIGALL',etaPre:'T-45m',etaPost:'3h',
+ depends:['C_22'],notes:'EABL. CRITICAL: sort by GERAET+ABLDAT ASC before load — E3 096 error if out of order.',
+ tables:['EABL'],keyFields:['GERAET','ABLDAT','ZAEHLERSTAND','ABLESART'],
+ bizRules:['Chronological order mandatory','Rollover handling in BODS','Read within device install period'],
+ sapChecks:['EABL count per GERAET','Date order validation','Max register check']},
+
+{id:'C_11',name:'DevLoc Notes',thread:1,ws:'DWM',method:'EMIGALL',etaPre:'T-15m',etaPost:'30m',
+ depends:['C_12'],notes:'STXH/STXL long texts. Strip special chars in BODS.',
+ tables:['STXH','STXL'],keyFields:['EABLG','TEXT_ID','TEXT_LINE'],
+ bizRules:['EABLG must exist','Max 132 chars/line','Language EN'],
+ sapChecks:['READ_TEXT spot check per EABLG']},
+
+{id:'C_46',name:'DevLoc Classification',thread:1,ws:'DWM',method:'EMIGALL',etaPre:'T-15m',etaPost:'30m',
+ depends:['C_12'],notes:'INOB/KSML classification on EABLG. Classes must be pre-configured.',
+ tables:['INOB','KSML','KLAH'],keyFields:['EABLG','CLASS','CHARACT','ATWRT'],
+ bizRules:['EABLG must exist','Class in KLAH','ATWRT in CAWN'],
+ sapChecks:['INOB count per EABLG','CAWN value check']},
+
+{id:'C_57',name:'Street Route',thread:1,ws:'DWM',method:'EMIGALL',etaPre:'T-2d',etaPost:'1h',
+ depends:['C_12'],notes:'TE200/TE240 config. Load in geographic sequence. Unique ABLBASIS per route.',
+ tables:['TE200','TE240'],keyFields:['ABLBASIS','REIHENF','EABLG'],
+ bizRules:['Unique route IDs','Unique sequence per route','All EABLG on exactly one route'],
+ sapChecks:['TE240 count per route','No duplicate EABLG across routes']},
+
+// THREAD 2 — DWM/FICA/Billing
+{id:'C_13',name:'Device',thread:2,ws:'DWM',method:'EMIGALL',etaPre:'T-60m',etaPost:'3h',
+ depends:['C_12','C_56'],notes:'EGERH device master. SERNR globally unique. Post-load: Z_XREF_DEVICE.',
+ tables:['EGERH','EGESD'],keyFields:['GERAET','SERNR','DEVICECAT','NKONST'],
+ bizRules:['SERNR unique','TE405 category exists','Install date <= cutover'],
+ sapChecks:['EGERH count vs source','Duplicate SERNR check','EGESD NKONST']},
+
+{id:'C_41',name:'Device CT/PT',thread:2,ws:'DWM',method:'EMIGALL',etaPre:'T-30m',etaPost:'1h',
+ depends:['C_13'],notes:'Device-level CT/PT ratios. NKONST=CT×PT in BODS.',
+ tables:['EGESD','EGERH'],keyFields:['GERAET','CT_RATIO','PT_RATIO','NKONST'],
+ bizRules:['C&I only','Integer multiplication','One EGESD per register'],
+ sapChecks:['EGESD NKONST spot check']},
+
+{id:'C_41B',name:'Device ERTS',thread:2,ws:'DWM',method:'EMIGALL',etaPre:'T-30m',etaPost:'1h',
+ depends:['C_13'],notes:'TOU/interval metering config. AMI devices only. 15/30/60 min interval.',
+ tables:['EGERH','EGESD'],keyFields:['GERAET','ERTS_FLAG','INTERVAL_LENGTH','TOU_PROFILE'],
+ bizRules:['AMI devices only','Interval = 15/30/60 min','TOU rate in TE006'],
+ sapChecks:['EGERH.ERTS_FLAG=X for AMI devices','TE006 TOU rate category active']},
+
+{id:'C_19',name:'Installation',thread:2,ws:'DWM',method:'EMIGALL',etaPre:'T-30m',etaPost:'1h',
+ depends:['C_1','C_13'],notes:'IS-U tech installation. Required for AMI remote read and disconnect.',
+ tables:['EGERH','EVBS'],keyFields:['ANLAGE','TECH_INST_ID','VERTRAG'],
+ bizRules:['EVER must exist','TE500 tech type configured','1 per physical connection'],
+ sapChecks:['EGERH.ANLAGE populated','TE500 config check']},
+
+{id:'C_30',name:'Installation Tech Data',thread:2,ws:'DWM',method:'EMIGALL',etaPre:'T-20m',etaPost:'30m',
+ depends:['C_19'],notes:'Voltage, capacity, network operator data. GIS lookup join in BODS.',
+ tables:['EGERH','EANLH'],keyFields:['ANLAGE','VOLTAGE_CLASS','CAPACITY_KW'],
+ bizRules:['TE502 voltage class must exist','Capacity positive','Network operator in config'],
+ sapChecks:['EGERH voltage_class populated','TE502 config check']},
+
+{id:'C_44',name:'Tech CT/PT',thread:2,ws:'DWM',method:'EMIGALL',etaPre:'T-20m',etaPost:'30m',
+ depends:['C_30'],notes:'Network-level CT/PT for grid billing. Separate from device CT/PT.',
+ tables:['EGERH','EGESD'],keyFields:['ANLAGE','NET_CT','NET_PT','NET_NKONST'],
+ bizRules:['C&I grid sites only','NET_NKONST=NET_CT×NET_PT'],
+ sapChecks:['NET_NKONST cross-check with device CT/PT']},
+
+{id:'C_55',name:'DevLoc Premise Map',thread:2,ws:'DWM',method:'EMIGALL',etaPre:'T-15m',etaPost:'30m',
+ depends:['C_12','C_25'],notes:'1:many mappings for apartments/master meters. BODS identifies from source.',
+ tables:['EABLG','EANL'],keyFields:['EABLG','ANLAGE','MAP_TYPE'],
+ bizRules:['EABLG and ANLAGE must exist','Division consistent','No circular maps'],
+ sapChecks:['EABLG.ANLAGE populated for master meters']},
+
+{id:'C_28',name:'Security Deposit',thread:2,ws:'FICA',method:'EMIGALL',etaPre:'T-30m',etaPost:'2h',
+ depends:['C_9'],notes:'FKKDEP. Deposit types from TFKDEP config. FKKOP posting created.',
+ tables:['FKKDEP','FKKVK','FKKOP'],keyFields:['VKONT','DEPOT_AMOUNT','DEPOT_TYPE'],
+ bizRules:['CA must exist','Amount positive','Type in TFKDEP'],
+ sapChecks:['FKKDEP count per CA','FKKOP posting for deposit']},
+
+{id:'C_23',name:'Payment',thread:2,ws:'FICA',method:'EMIGALL',etaPre:'T-45m',etaPost:'3h',
+ depends:['C_9'],notes:'FKKOP open items and FKKCL clearing docs. Balance reconciliation mandatory.',
+ tables:['FKKOP','FKKCL'],keyFields:['VKONT','BETRW','OPUPW','AUGDT'],
+ bizRules:['CA must exist','Non-zero amounts','Date <= cutover','TFKTYPOP doc type'],
+ sapChecks:['SUM(FKKOP.BETRW) per VKONT = source balance']},
+
+{id:'C_16',name:'Document',thread:2,ws:'FICA',method:'EMIGALL',etaPre:'T-30m',etaPost:'2h',
+ depends:['C_9','C_23'],notes:'BKPF/BSEG and FKKOP posting. Double-entry balance check.',
+ tables:['BKPF','BSEG','FKKOP'],keyFields:['BELNR','GJAHR','BETRW','VKONT'],
+ bizRules:['Doc date <= cutover','DR=CR balance','Number range no overlap'],
+ sapChecks:['BSEG DR=CR per document','BKPF count']},
+
+{id:'C_17',name:'Dunning',thread:2,ws:'FICA',method:'EMIGALL',etaPre:'T-20m',etaPost:'1h',
+ depends:['C_9','C_23'],notes:'FKKDUN active dunning cases only. Procedure in TFKDUN config.',
+ tables:['FKKDUN'],keyFields:['VKONT','DUNNING_LEVEL','DUNNING_DATE'],
+ bizRules:['CA must exist','TFKDUN configured','Active cases only','Level 1-4'],
+ sapChecks:['FKKDUN count active status']},
+
+{id:'C_20',name:'Instalment Plan (IP)',thread:2,ws:'FICA',method:'EMIGALL',etaPre:'T-20m',etaPost:'1h',
+ depends:['C_9','C_17'],notes:'FKKINST active plans with remaining balance. Sum of instalments = total.',
+ tables:['FKKINST','FKKINSTPOS'],keyFields:['VKONT','TOTAL_AMOUNT','INSTALMENT_AMT'],
+ bizRules:['CA active','SUM instalments = total','Active plans only'],
+ sapChecks:['FKKINSTPOS sum = FKKINST total']},
+
+{id:'C_14',name:'Disc Document',thread:2,ws:'CS',method:'EMIGALL',etaPre:'T-20m',etaPost:'1h',
+ depends:['C_9'],notes:'EAUFN disconnect documents. Last 3 years regulatory requirement.',
+ tables:['EAUFN'],keyFields:['AUFNR','VKONT','DISC_DATE','DISC_REASON'],
+ bizRules:['CA must exist','TE552 reason mapped','3-year history'],
+ sapChecks:['EAUFN count by AUFART=DISC']},
+
+{id:'C_15',name:'Disc Order',thread:2,ws:'CS',method:'EMIGALL',etaPre:'T-15m',etaPost:'30m',
+ depends:['C_14'],notes:'Field disconnect work orders. Completed orders only.',
+ tables:['EAUFN'],keyFields:['AUFNR','ORDER_DATE','PRIORITY','STATUS'],
+ bizRules:['Disc doc must exist','Status = completed/cancelled'],
+ sapChecks:['ORDER_STATUS = COMP in EAUFN']},
+
+{id:'C_43',name:'Disc Entry',thread:2,ws:'CS',method:'EMIGALL',etaPre:'T-15m',etaPost:'30m',
+ depends:['C_15'],notes:'Technician confirmation. Seal number unique per device.',
+ tables:['EAUFN','EGERH'],keyFields:['AUFNR','ACTUAL_DISC_DATE','SEAL_NUMBER'],
+ bizRules:['Order completed','Actual date >= order date','Seal unique'],
+ sapChecks:['EGERH device status = disconnected']},
+
+{id:'C_18',name:'FACTS',thread:2,ws:'DWM',method:'EMIGALL',etaPre:'T-30m',etaPost:'2h',
+ depends:['C_12','C_13'],notes:'AMI events → IS-U notifications. Last 3 years. Event code mapping in T7XEMI03.',
+ tables:['QMEL','VIQMEL'],keyFields:['EABLG','EVENT_CODE','EVENT_DATE'],
+ bizRules:['EABLG must exist','Event codes mapped','3-year history only'],
+ sapChecks:['QMEL count per EABLG']},
+
+{id:'C_27',name:'Ref Values',thread:2,ws:'Billing',method:'EMIGALL',etaPre:'T-15m',etaPost:'30m',
+ depends:['C_1'],notes:'Statistical usage values on EANL. BODS aggregates 12-month usage.',
+ tables:['EANL','EANLH'],keyFields:['ANLAGE','ANNUAL_CONSUMPTION','STAT_USAGE_SUMMER'],
+ bizRules:['ANLAGE must exist','Positive consumption','Summer+Winter=Annual'],
+ sapChecks:['EANL.ANNUAL_CONSUMPTION > 0 check']},
+
+{id:'C_33',name:'Bill History',thread:2,ws:'Billing',method:'DS',etaPre:'T-60m',etaPost:'4h',
+ depends:['C_1','C_23'],notes:'BODS direct insert into ERCH/ERCHZ. 24 months minimum. No FKKOP posting.',
+ tables:['ERCH','ERCHZ'],keyFields:['BELNR','VKONT','ABRDATS','NETTOBT'],
+ bizRules:['24 months history','ERCHZ sum = ERCH net','No FKKOP posting for history'],
+ sapChecks:['ERCH count per VKONT','ERCHZ balance check']},
+
+{id:'C_42',name:'Device Class',thread:2,ws:'DWM',method:'EMIGALL',etaPre:'T-2d',etaPost:'30m',
+ depends:[],notes:'Device classification config. Must be loaded before ZDEVICE classification loads.',
+ tables:['KLAH','CABN','CAWN'],keyFields:['CLASS_NAME','CHARACT','ATWRT'],
+ bizRules:['Config object — load as transport','All device classifications pre-configured'],
+ sapChecks:['KLAH class exists','CAWN allowed values populated']},
+
+// THREAD 3 — DWM HR/EAM
+{id:'C_35',name:'HR Mini Master',thread:3,ws:'DWM',method:'LSMW',etaPre:'T-2d',etaPost:'2h',
+ depends:[],notes:'LSMW PA30. Active EAM planners only. PERNR number range agreed with HR.',
+ tables:['PA0001','PA0002'],keyFields:['PERNR','ENAME','ORGEH','PLANS'],
+ bizRules:['Active employees only','No PERNR conflict','Position in org structure'],
+ sapChecks:['PA0001 ENDDA=9999 count','Org unit assignment check']},
+
+{id:'C_36',name:'Functional Location',thread:3,ws:'DWM',method:'LTMC',etaPre:'T-3d',etaPost:'4h',
+ depends:['C_35'],notes:'LTMC IFLOT. TPLNR format per structure indicator. Load hierarchy top-down.',
+ tables:['IFLOT','ILOA','IFLOTX'],keyFields:['TPLNR','IWERK','INGRP','TPLKZ'],
+ bizRules:['TPLNR format per TPLKZ','Parent FLOC before child','No special chars in TPLNR'],
+ sapChecks:['IFLOT count vs source','Hierarchy parent-child integrity']},
+
+{id:'C_53',name:'FLOC Classification',thread:3,ws:'DWM',method:'LTMC',etaPre:'T-2d',etaPost:'2h',
+ depends:['C_36'],notes:'BAPI_OBJCL_ASSIGN. Classes and characteristics pre-configured. Class type 015.',
+ tables:['INOB','KSML','KLAH'],keyFields:['TPLNR','CLASS_NAME','CHARACT','ATWRT'],
+ bizRules:['FLOC must exist','Class in KLAH','ATWRT in CAWN','KLART=015'],
+ sapChecks:['INOB count per FLOC','KLART=015 check']},
+
+{id:'C_37',name:'Maintenance Plan',thread:3,ws:'DWM',method:'LTMC',etaPre:'T-2d',etaPost:'2h',
+ depends:['C_36','C_35'],notes:'LTMC MPLA. Schedule via IP10 after load. BODS converts frequency to cycle days.',
+ tables:['MPLA','MPOS','MHIS'],keyFields:['WARPL','TPLNR','CYCLE_DAYS','STRATEGY'],
+ bizRules:['FLOC must exist','T351 strategy configured','Task list must exist'],
+ sapChecks:['MPLA count vs source','MPOS items per plan']},
+
+{id:'C_32',name:'Credit History',thread:3,ws:'FICA',method:'DS',etaPre:'T-20m',etaPost:'1h',
+ depends:['C_9'],notes:'BODS direct insert into Z_CREDIT_HIST. FKKVK.CREDIT_CLASS updated for current.',
+ tables:['FKKVK','Z_CREDIT_HIST'],keyFields:['VKONT','CREDIT_CLASS','CREDIT_DATE'],
+ bizRules:['CA must exist','TFKCREDITCLASS configured','Last 3 reviews only'],
+ sapChecks:['FKKVK.CREDIT_CLASS populated','Z_CREDIT_HIST count per VKONT']},
+
+{id:'C_47',name:'Payment History',thread:3,ws:'FICA',method:'DS',etaPre:'T-30m',etaPost:'2h',
+ depends:['C_9','C_23'],notes:'BODS direct insert into Z_PAYMENT_HIST. On-time payment pattern for credit risk.',
+ tables:['FKKOP','Z_PAYMENT_HIST'],keyFields:['VKONT','PAY_DATE','PAY_AMT','ON_TIME_FLAG'],
+ bizRules:['CA must exist','24 months history','On-time flag from source system'],
+ sapChecks:['Z_PAYMENT_HIST count per VKONT']},
+
+{id:'C_34',name:'Collection History',thread:3,ws:'FICA',method:'DS',etaPre:'T-20m',etaPost:'1h',
+ depends:['C_9','C_17'],notes:'BODS direct insert into FKKCOLAGENCY + Z_COLL_HIST. Write-off reconciliation.',
+ tables:['FKKCOLAGENCY','Z_COLL_HIST'],keyFields:['VKONT','AGENCY_CODE','WRITEOFF_AMT'],
+ bizRules:['CA must exist','Agency in TFKCOLAGENCY','Writeoff matches FKKOP'],
+ sapChecks:['FKKCOLAGENCY count','FKKOP writeoff balance match']}
+];
+
+// ============================================================
+// Q&A DATA
+// ============================================================
+const QA_DATA=[
+{cat:'EMIGALL',q:'What are the T7XEMI* tables and what does each do?',
+ a:'T7XEMI01: Migration object definitions (STATUS=A to activate). T7XEMI02: Field mappings (source field → target SAP field, MFLAGS=M for mandatory). T7XEMI03: Value translation table (source codes → SAP codes). T7XEMI04: Load program assignments per migration object. T7XEMI05: Object processing status and restart markers. T7XEMI06: BAdI configuration. T7XEMERR: Row-level error log. T7XEMLOG: Success load log.'},
+{cat:'EMIGALL',q:'What is the EMIGALL processing flow end-to-end?',
+ a:'1. Source data extracted from legacy (Cogsdale/MainSaver) by BODS into staging tables. 2. BODS transforms, cleanses, maps fields. 3. EMIGALL Upload Interface reads staging. 4. T7XEMI02 field mapping applied. 5. T7XEMI03 value translation applied. 6. BAdI ISU_EMIGALL_BADI validates business rules. 7. Test Run (TESTLAUF=X) — no commit — errors go to T7XEMERR. 8. Fix errors, re-test until 0 errors. 9. Production Run (TESTLAUF=space, commit). 10. Verify T7XEMLOG count = expected. 11. Update cross-reference Z-table (LEGACY_ID → SAP number).'},
+{cat:'EMIGALL',q:'How do you set up a new EMIGALL migration object from scratch?',
+ a:'1. T-code EMIGALL → Create object, enter code (e.g. ZBUPA) and description. 2. Set T7XEMI01.STATUS=A. 3. T7XEMI02: map all source fields to SAP target fields, mark mandatory fields. 4. T7XEMI03: frequency analysis in BODS → map every source coded value to SAP equivalent. 5. T7XEMI04: assign load program (ABAP program that calls BAPIs). 6. Implement BAdI if custom validation needed. 7. Upload test file → Execute Test Mode → Fix T7XEMERR → Repeat. 8. Production run. 9. Post-load Z-table update.'},
+{cat:'EMIGALL',q:'What causes the E3 096 error in EMIGALL meter read load and how do you fix it?',
+ a:'E3 096 is "Meter reading out of chronological order". IS-U requires EABL readings to be loaded in ascending date order per device (GERAET). Fix: In BODS, add ORDER BY GERAET, ABLDAT ASC in the query or use a BODS sort transform before the EMIGALL staging table write. Also check for duplicate dates — EMIGALL rejects exact duplicate read dates for the same device.'},
+{cat:'EMIGALL',q:'What is the difference between Test Mode and Production Mode in EMIGALL?',
+ a:'Test Mode (TESTLAUF=X): Processes all records through field mapping, value translation, and business validation but rolls back all database changes. Errors written to T7XEMERR. No records committed to SAP. Use to identify and fix all errors. Production Mode (TESTLAUF=space): Full commit. Records written to SAP target tables. T7XEMLOG captures success count. Only run after Test Mode shows 0 errors.'},
+{cat:'BODS',q:'How does SAP BODS connect to SAP IS-U to load data via EMIGALL?',
+ a:'BODS uses an RFC/ABAP Datastore connection to the SAP IS-U system. The connection calls ABAP function modules that write to EMIGALL staging tables (custom Z-tables or standard T7XEMI* staging). BODS jobs: 1. Extract from source (Cogsdale ODBC or flat file). 2. Transform: cleanse, map, derive computed fields. 3. Load: write to SAP staging table via RFC call or file drop to SAP application server. EMIGALL then reads the staging table. Alternatively, BODS calls SAP BAPIs directly for DS (direct insert) objects like ERCH/ERCHZ.'},
+{cat:'BODS',q:'What is the difference between EMIGALL loading and BODS direct insert (DS) in the cutover?',
+ a:'EMIGALL: SAP-native migration workbench. Uses T7XEMI02 field mapping and T7XEMI03 value translation. Provides test/production mode, error log (T7XEMERR), and BAdI hooks. Suitable for IS-U business objects where business validation is critical. DS (Direct Insert): BODS job writes directly to SAP tables via ABAP proxy function module or RFC ABAP program — bypasses EMIGALL entirely. Used for read-only history tables (ERCH bill history, ERCHZ, Z_CREDIT_HIST) where no business logic firing is needed and volume is very high. Faster but less controlled.'},
+{cat:'Tables',q:'What is the relationship between BUT000, FKKVK, EVER, EANL and EABLG?',
+ a:'The CIS data model flows: BUT000 (Business Partner) → FKKVK (Contract Account, GPART=PARTNER) → EVER (Contract/Service Contract, VKONT=VKONT) → EVBS (Contract-Premise link, ANLAGE=EANL.ANLAGE) → EANL (Installation/Premise) → EABLG (Device Location, ANLAGE=EANL.ANLAGE). The device chain: EABLG → EGERH (Device history, EABLG=EABLG.EABLG) → EABL (Meter readings, GERAET=EGERH.GERAET). FI-CA financial chain: FKKVK → FKKOP (Open items) → FKKCL (Clearing).'},
+{cat:'Tables',q:'What SAP tables store meter readings and what are the key fields?',
+ a:'EABL is the primary meter reading table. Key fields: GERAET (device number), ABLBASIS (MRU), ABLDAT (reading date), ZAEHLERSTAND (reading value), ABLESART (reading type: P=periodic, E=estimate, T=transfer), ABLEINH (unit), MWOFM (consumption calculated). EABLG (device location) is the parent — EABLG.EABLG = EABL.EABLG. EGERH stores the device install dates (EGERH.EINBDAT = install date, EGERH.ABDAT = removal date). Reading must fall within EGERH install period.'},
+{cat:'Tables',q:'What config tables must exist before loading Contract Account?',
+ a:'TFKACT: Contract account types (e.g. ZRES, ZCOM) — defines account type code used in FKKVK.VKTYP. TFKSCTYP: Screen control types for the CA. T052: Payment terms configuration. TFKZAART: Payment method types. TFKDUN: Dunning procedures assigned to the CA. TFKBPTAXGRP: Tax group config if tax exemptions apply. All must be transported from DEV → QA → PROD before the Contract Account EMIGALL run.'},
+{cat:'Config',q:'How do you configure EMIGALL value translation (T7XEMI03) for rate categories?',
+ a:'1. Export all distinct rate codes from source system (Cogsdale) using BODS frequency analysis. 2. Create a mapping spreadsheet: source rate code → SAP TE006 TARIF code. 3. Enter each mapping row in T7XEMI03 for the ZCONTRACT migration object, field TARIF. 4. Unmapped values will cause EMIGALL to write T7XEMERR error "value not found in T7XEMI03". 5. Run Test Mode after each T7XEMI03 update to validate zero unmapped rate codes. Rate category (TE006) itself must be transported to the target system before T7XEMI03 entries can reference it.'},
+{cat:'Config',q:'What is the cross-reference Z-table pattern used in IS-U Emigall migrations?',
+ a:'Each migration object that generates a new SAP number creates a cross-reference Z-table: Z_XREF_BP (legacy ID → PARTNER), Z_XREF_CA (legacy account → VKONT), Z_XREF_PREMISE (legacy premise → ANLAGE), Z_XREF_DEVLOC (legacy devloc → EABLG), Z_XREF_DEVICE (legacy serial → GERAET), Z_XREF_CONTRACT (legacy contract → VERTRAG). Downstream objects look up the SAP number from the Z-table in T7XEMI02 using a custom field mapping. Post-load: update Z-table from EMIGALL log. Ensures all child objects can resolve parent SAP numbers.'},
+{cat:'Process',q:'What is the business flow from Business Partner to Move-In in IS-U?',
+ a:'1. BP created (BUT000) with residential/commercial grouping. 2. Contract Account (FKKVK) created and linked to BP (GPART=PARTNER). 3. Connection Object (EOBJK) created as physical service point. 4. Premise/Installation (EANL) created under connection object. 5. Device Location (EABLG) created within premise, assigned to MRU route. 6. Device (EGERH) created with serial number. 7. Billing Installation — Contract (EVER) created, linked to CA (VKONT) and Premise (ANLAGE) with rate category (TARIF). 8. Move-In (ISU_MOVE_IN): Contract activated (EVER.EINZDAT set), device installed (EGERH record), opening meter read (EABL) created. Service is now active and billing can run.'},
+{cat:'Process',q:'How does EMIGALL handle errors and what is the error resolution workflow?',
+ a:'After each Test Mode run: 1. SE16 T7XEMERR — export to Excel. 2. GROUP BY error message to find systemic issues (e.g. 500 rows with "value not found in T7XEMI03 for TARIF"). 3. Fix systemic issues first: add missing T7XEMI03 entries, transport missing config. 4. Fix data issues in BODS staging tables. 5. Re-run Test Mode. Repeat until 0 errors. 6. Production Run. Common errors: ISU-CA 001 (BP not found → check Z_XREF_BP), FKK 002 (CA type not configured → TFKACT), TE006 (rate category missing → transport), E3 096 (meter read out of order → BODS sort), ADDR 001 (address incomplete → CASS cleanse).'},
+{cat:'Process',q:'How does BODS connect to SharePoint to load files into SAP EMIGALL staging?',
+ a:'Architecture: 1. Source files uploaded to SharePoint document library. 2. BODS uses a File datastore or custom SharePoint adapter. 3. BODS job reads files via SharePoint REST API or mapped network drive (UNC path to SharePoint sync folder). 4. Transform and cleanse data. 5. Write to SAP IS-U staging table via RFC Datastore (ABAP FM call) or write flat file to SAP application server path /usr/sap/... 6. EMIGALL reads from staging or file. Config check: BODS Datastore for RFC must have SAP logon credentials, host/SID, RFC destination configured in SM59. SharePoint connection requires OAuth token or service account credentials in BODS Connection Manager.'},
+{cat:'Config',q:'How do you check EMIGALL configuration and validate it is correct before a production run?',
+ a:'Config check steps: 1. T7XEMI01: verify STATUS=A for all objects in scope. 2. T7XEMI02: check all mandatory fields mapped (MFLAGS=M), no source field names misspelled. 3. T7XEMI03: run frequency analysis on source data, verify 100% of coded values have mappings — zero unmapped values. 4. T7XEMI04: verify load program exists and compiles (SE38). 5. BAdI ISU_EMIGALL_BADI: verify implementation active in SE19. 6. Config tables: SE16 TFKACT, TE006, TE405, etc. — verify all entries expected by T7XEMI03 are present. 7. Z-table cross-references: verify count matches migrated parent objects (Z_XREF_BP count = BUT000 count). 8. Test Mode run with small extract sample → 0 errors.'},
+{cat:'Config',q:'What SAP t-codes are most important for EMIGALL migration work?',
+ a:'EMIGALL / ISU_EMIGALL: Main migration workbench (object definition, test/production run). SE16: Table browser — check T7XEMI*, Z-tables, target tables. SM37: Background job monitor — EMIGALL runs as batch job. SM59: RFC destinations — verify BODS RFC connection. SE38: ABAP editor — verify load programs in T7XEMI04. SM30: View maintenance — update T7XEMI03 value mappings. SPRO: IMG configuration — transport TFKACT, TE006, TE405. SU01: User accounts — migration user needs EMIGALL auth objects. STAD: System workload — monitor EMIGALL run performance.'},
+{cat:'BODS',q:'What BODS transforms are most commonly used in IS-U data migration?',
+ a:'Query Transform: SELECT, JOIN, WHERE, derived columns. Used for field mappings, lookup joins (Z-table resolution), and date calculations. Case Transform: conditional value mapping (e.g. source rate code → SAP tarif code). Validation Transform: reject invalid records before staging write (null checks, format checks). Merge Transform: combine multiple source extracts. Map_Operation: direct column-to-column mapping in the dataflow. Key Transforms for IS-U: 1. BODS lookup to Z_XREF_BP for PARTNER resolution. 2. ORDER BY GERAET, ABLDAT for meter reads (E3 096 prevention). 3. NKONST = CT_RATIO × PT_RATIO derived column. 4. Address CASS cleanse via Address Cleanse transform. 5. Date format conversion (source MM/DD/YYYY → SAP YYYYMMDD).'},
+{cat:'Tables',q:'What is the FI-CA open item table FKKOP and what are its key fields?',
+ a:'FKKOP stores all FI-CA open items: charges, payments, credits, deposits. Key fields: MANDT (client), VKONT (contract account), OPUPW (item type: D=charge, P=payment, E=deposit), BETRW (amount in company currency), AUGDT (clearing date — blank if open), AUGBL (clearing document), BELNR (document number), GJAHR (fiscal year), ZUONR (assignment/reference), FAEDT (due date), DUEDT (discount due date). Key queries: SUM(BETRW) WHERE AUGDT IS NULL = open AR balance. FKKCL is the clearing document table — links payment to charge.'}
+];
+
+// ============================================================
+// HELPERS
+// ============================================================
+const CAT_COLORS={CIS:'#1f4e8c',EAM:'#7d4e00',ERP:'#1a5c3a',Config:'#4a2080',Tool:'#7a3a00'};
+const CAT_TEXT={CIS:'#79c0ff',EAM:'#ffa657',ERP:'#3fb950',Config:'#d2a8ff',Tool:'#e3b341'};
+const WS_COLORS={CS:'#1f4e8c',FICA:'#7d4e00',DWM:'#1a5c3a',Billing:'#4a2080'};
+const WS_TEXT={CS:'#79c0ff',FICA:'#ffa657',DWM:'#3fb950',Billing:'#d2a8ff'};
+
+function badge(label,bg,color){
+  return '<span class="badge" style="background:'+bg+';color:'+color+';border-color:'+color+'">'+label+'</span>';
+}
+function methodBadge(m){
+  const c={EMIGALL:'#58a6ff',DS:'#3fb950',LSMW:'#ffa657',LTMC:'#d2a8ff'};
+  return badge(m,'rgba(0,0,0,0)',c[m]||'#c9d1d9');
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+let currentPage='home';
+function goTab(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nv-item').forEach(t=>t.classList.remove('active'));
+  const pg=document.getElementById('pg-'+id);
+  if(pg) pg.classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>{if(t.onclick&&t.onclick.toString().includes("'"+id+"'"))t.classList.add('active');});
+  currentPage=id;
+  if(id==='seq') renderSeq();
+  if(id==='cutover') renderCO();
+  if(id==='qa') renderQA();
+}
+
+// ============================================================
+// OBJECT GRID
+// ============================================================
+let currentCat='ALL', currentSearch='';
+function filterCat(cat,btn){
+  currentCat=cat;
+  document.querySelectorAll('#pg-obj .filt-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderGrid();
+}
+function filterSearch(v){currentSearch=v.toLowerCase();renderGrid();}
+
+function renderGrid(){
+  const grid=document.getElementById('obj-grid');
+  const count=document.getElementById('obj-count');
+  const filtered=OBJECTS.filter(o=>{
+    if(currentCat!=='ALL'&&o.cat!==currentCat) return false;
+    if(currentSearch&&!o.name.toLowerCase().includes(currentSearch)&&!o.code.toLowerCase().includes(currentSearch)) return false;
+    return true;
+  });
+  count.textContent=filtered.length+' shown';
+  grid.innerHTML=filtered.map(o=>`
+    <div class="obj-card" style="border-top-color:${CAT_COLORS[o.cat]||'#30363d'}" onclick="showDetail('${o.code}')">
+      <div class="oc-id" style="color:${CAT_TEXT[o.cat]||'#8b949e'}">SEQ ${o.seq} · ${o.code}</div>
+      <div class="oc-name">${o.name}</div>
+      <div class="oc-cat">${badge(o.cat,CAT_COLORS[o.cat]||'#0d1117',CAT_TEXT[o.cat]||'#c9d1d9')} ${methodBadge(o.method)}</div>
+      ${o.depends.length?'<div class="oc-dep">Needs: '+o.depends.join(', ')+'</div>':''}
+    </div>`).join('');
+}
+
+// ============================================================
+// DETAIL PANEL
+// ============================================================
+let detailTabs=['Overview','Tables','Config','EMIGALL','KSM','Business Rules','Validation','Example'];
+let currentDpTab=0;
+let currentObj=null;
+
+function showDetail(code){
+  const o=OBJECTS.find(x=>x.code===code);
+  if(!o) return;
+  currentObj=o;
+  currentDpTab=0;
+  document.getElementById('dp-meta').textContent='SEQ '+o.seq+' · '+o.cat+' · '+o.method;
+  document.getElementById('dp-title').textContent=o.code+' — '+o.name;
+  document.getElementById('dp-badges').innerHTML=
+    badge(o.cat,CAT_COLORS[o.cat],'#fff')+' '+
+    methodBadge(o.method)+
+    (o.depends.length?' <span style="font-size:11px;color:#6e7681;margin-left:8px">Depends: '+o.depends.join(', ')+'</span>':'');
+  const dp=document.getElementById('detail-panel');
+  dp.style.display='flex';
+  dp.style.flexDirection='column';
+  renderDpTabs();
+  renderDpBody();
+  dp.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeDetail(){
+  document.getElementById('detail-panel').style.display='none';
+  currentObj=null;
+}
+
+function dpTab(i){
+  currentDpTab=i;
+  renderDpTabs();
+  renderDpBody();
+}
+
+function renderDpTabs(){
+  const tabs=document.getElementById('dp-tabs');
+  tabs.innerHTML=detailTabs.map((t,i)=>`<div class="dp-tab${i===currentDpTab?' active':''}" onclick="dpTab(${i})">${t}</div>`).join('');
+}
+
+function renderDpBody(){
+  const body=document.getElementById('dp-body');
+  const o=currentObj;
+  if(!o){body.innerHTML='';return;}
+  const views=[
+    // 0 Overview
+    `<div class="dp-section"><h3>SAP Use</h3><p>${o.sapUse}</p></div>
+     <div class="dp-section"><h3>Overview</h3><p>${o.overview}</p></div>
+     <div class="dp-section"><h3>Object Links</h3><div class="link-chips">${
+       o.links.map(l=>`<div class="link-chip" onclick="showDetail('${l.obj}')"><span class="lc-obj">${l.obj}</span><span class="lc-via">${l.via}</span></div>`).join('')
+     }</div></div>`,
+    // 1 Tables
+    `<div class="dp-section"><h3>SAP Tables</h3><div class="tbl-grid">${
+       o.tables.map(t=>`<div class="tbl-row"><code>${t.split('—')[0].trim()}</code><span>${t.split('—')[1]||''}</span></div>`).join('')
+     }</div></div>
+     <div class="dp-section"><h3>Key Fields</h3><ul>${o.keyFields.map(f=>`<li><code>${f}</code></li>`).join('')}</ul></div>`,
+    // 2 Config Tables
+    `<div class="dp-section"><h3>Config / Customising Tables</h3><div class="tbl-grid">${
+       o.configTables.map(t=>{const p=t.split('—');return`<div class="tbl-row"><code>${p[0].trim()}</code><span>${p[1]||'Configuration table'}</span></div>`;}).join('')
+     }</div></div>`,
+    // 3 EMIGALL Setup
+    `<div class="dp-section"><h3>EMIGALL / Load Setup</h3><div class="emigall-box"><pre>${o.emigallSetup}</pre></div></div>`,
+    // 4 KSM
+    `<div class="dp-section"><h3>KSM / Utility Tool</h3><div class="ksm-box"><p>${o.ksm}</p></div></div>`,
+    // 5 Business Rules
+    `<div class="dp-section"><h3>Business Rules</h3>${o.bizRules.map(r=>`<div class="rule-item">${r}</div>`).join('')}</div>`,
+    // 6 Validation
+    `<div class="dp-section"><h3>SAP Validation Checks</h3>${o.sapValidation.map(v=>`<div class="val-item">${v}</div>`).join('')}</div>
+     <div class="dp-section"><h3>Common Errors</h3>${o.errors.map(e=>`<div class="err-item">${e}</div>`).join('')}</div>`,
+    // 7 Example
+    `<div class="dp-section"><h3>Example Record</h3><div class="ex-box">${o.example}</div></div>`
+  ];
+  body.innerHTML=views[currentDpTab]||'';
+}
+
+// ============================================================
+// SEQUENCE TABLE
+// ============================================================
+function renderSeq(){
+  const list=document.getElementById('seq-list');
+  list.innerHTML=[...OBJECTS].sort((a,b)=>a.seq-b.seq).map(o=>`
+    <div class="seq-row" onclick="goTab('obj');showDetail('${o.code}')">
+      <div style="min-width:32px;font-weight:900;color:${CAT_TEXT[o.cat]||'#c9d1d9'}">${o.seq}</div>
+      <div style="min-width:55px;font-family:monospace;font-size:11px;color:#3fb950">${o.code}</div>
+      <div style="flex:1;font-weight:600">${o.name}</div>
+      <div style="min-width:70px">${badge(o.cat,CAT_COLORS[o.cat],'#fff')}</div>
+      <div style="min-width:70px">${methodBadge(o.method)}</div>
+      <div style="min-width:170px;font-size:10px;color:#484f58;font-family:monospace">${o.depends.join(', ')||'—'}</div>
+    </div>`).join('');
+}
+
+// ============================================================
+// CUTOVER DASHBOARD
+// ============================================================
+let coThreadFilter=0, coWsFilter='ALL', coSearch='';
+
+function coFilterThread(t,btn){
+  coThreadFilter=t;
+  document.querySelectorAll('#pg-cutover .filt-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderCO();
+}
+function coFilterWS(ws,btn){
+  coWsFilter=ws;
+  document.querySelectorAll('#pg-cutover .filt-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderCO();
+}
+function coFilterSearch(v){coSearch=v.toLowerCase();renderCO();}
+
+function renderCO(){
+  const list=document.getElementById('co-list');
+  const filtered=CO_OBJECTS.filter(o=>{
+    if(coThreadFilter>0&&o.thread!==coThreadFilter) return false;
+    if(coWsFilter!=='ALL'&&o.ws!==coWsFilter) return false;
+    if(coSearch&&!o.name.toLowerCase().includes(coSearch)&&!o.id.toLowerCase().includes(coSearch)) return false;
+    return true;
+  });
+  const tc={1:'#1f6ad4',2:'#2da44e',3:'#d4a017'};
+  list.innerHTML=filtered.map(o=>`
+    <div class="co-row" id="cor-${o.id}">
+      <div class="co-row-hdr" onclick="toggleCO('${o.id}')">
+        <div class="co-dot" style="background:${tc[o.thread]||'#30363d'}"></div>
+        <div class="co-id" style="color:${tc[o.thread]||'#8b949e'}">${o.id}</div>
+        <div class="co-name">${o.name}</div>
+        <div class="co-ws" style="background:${WS_COLORS[o.ws]||'#161b22'};color:${WS_TEXT[o.ws]||'#8b949e'}">${o.ws}</div>
+        <div class="co-method" style="color:${{EMIGALL:'#58a6ff',DS:'#3fb950',LSMW:'#ffa657',LTMC:'#d2a8ff'}[o.method]||'#c9d1d9'}">${o.method}</div>
+        <div class="co-eta">Pre: ${o.etaPre} → Post: ${o.etaPost}</div>
+        <div class="co-dep">${o.depends.join(', ')||'—'}</div>
+      </div>
+      ${o.notes?`<div class="co-notes">📌 ${o.notes}</div>`:''}
+      <div class="co-detail" id="cod-${o.id}">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div>
+            <div class="dp-section"><h3>SAP Tables</h3><div class="tbl-grid">${o.tables.map(t=>`<div class="tbl-row"><code>${t}</code></div>`).join('')}</div></div>
+            <div class="dp-section"><h3>Key Fields</h3><ul>${o.keyFields.map(f=>`<li><code>${f}</code></li>`).join('')}</ul></div>
+          </div>
+          <div>
+            <div class="dp-section"><h3>Business Rules</h3>${o.bizRules.map(r=>`<div class="rule-item">${r}</div>`).join('')}</div>
+            <div class="dp-section"><h3>SAP Checks</h3>${o.sapChecks.map(c=>`<div class="val-item">${c}</div>`).join('')}</div>
+          </div>
+        </div>
+        ${o.depends.length?`<div class="dp-section" style="margin-top:10px"><h3>Dependencies</h3><div class="link-chips">${o.depends.map(d=>`<div class="link-chip"><span class="lc-obj">${d}</span><span class="lc-via">${CO_OBJECTS.find(x=>x.id===d)?CO_OBJECTS.find(x=>x.id===d).name:''}</span></div>`).join('')}</div></div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function toggleCO(id){
+  const det=document.getElementById('cod-'+id);
+  if(det) det.classList.toggle('open');
+}
+
+// ============================================================
+// Q&A
+// ============================================================
+let qaFilter_current='ALL';
+function qaFilter(cat,btn){
+  qaFilter_current=cat;
+  document.querySelectorAll('#pg-qa .filt-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderQA();
+}
+function renderQA(){
+  const list=document.getElementById('qa-list');
+  const filtered=QA_DATA.filter(q=>qaFilter_current==='ALL'||q.cat===qaFilter_current);
+  list.innerHTML=filtered.map((q,i)=>`
+    <div style="background:#161b22;border:1px solid #21262d;border-radius:6px;margin-bottom:8px;overflow:hidden">
+      <div style="padding:12px 14px;cursor:pointer;display:flex;gap:10px;align-items:flex-start" onclick="this.nextElementSibling.classList.toggle('open')">
+        ${badge(q.cat,CAT_COLORS[q.cat]||'#161b22',CAT_TEXT[q.cat]||'#8b949e')}
+        <div style="font-size:13px;font-weight:600;color:#f0f6fc;flex:1">${q.q}</div>
+        <div style="color:#6e7681;font-size:16px;flex-shrink:0">▼</div>
+      </div>
+      <div style="display:none;padding:12px 14px 14px;border-top:1px solid #21262d;font-size:12.5px;color:#c9d1d9;line-height:1.8">
+        ${q.a}
+      </div>
+    </div>`).join('');
+  // make toggles work
+  document.querySelectorAll('#qa-list [onclick]').forEach(el=>{
+    const ans=el.nextElementSibling;
+    if(ans) ans.classList.remove('open');
+  });
+}
+
+// make the display:none toggleable
+document.addEventListener('click',function(e){
+  if(e.target.closest && e.target.closest('#qa-list [onclick]')){
+    const ans=e.target.closest('[onclick]').nextElementSibling;
+    if(ans){ans.style.display=ans.style.display==='block'?'none':'block';}
+  }
+});
+
+// ============================================================
+// SIDEBAR SEARCH
+// ============================================================
+function sideSearch(v){
+  const val=v.toLowerCase();
+  const matched=OBJECTS.filter(o=>o.name.toLowerCase().includes(val)||o.code.toLowerCase().includes(val));
+  const nav=document.getElementById('sb-nav');
+  if(!val){
+    nav.querySelectorAll('.nv-item[data-dyn]').forEach(el=>el.remove());
+    return;
+  }
+  nav.querySelectorAll('.nv-item[data-dyn]').forEach(el=>el.remove());
+  matched.slice(0,8).forEach(o=>{
+    const item=document.createElement('div');
+    item.className='nv-item';
+    item.setAttribute('data-dyn','1');
+    item.textContent=o.code+' — '+o.name;
+    item.onclick=()=>{goTab('obj');showDetail(o.code);};
+    nav.appendChild(item);
+  });
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.onload=function(){
+  renderGrid();
+  renderSeq();
+  renderCO();
+  renderQA();
+};
+</script>
+</body>
+</html>

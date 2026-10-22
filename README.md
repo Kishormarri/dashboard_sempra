@@ -35,15 +35,14 @@ correctly, how many are mismatched, and how many are still outstanding.
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/YOUR_USERNAME/sempra-dm-dashboard.git
-cd sempra-dm-dashboard
+git clone https://github.com/Kishormarri/dashboard_sempra.git
+cd dashboard_sempra
 
-# 2. Install Python dependencies (one-time)
-pip install flask flask-cors openpyxl pandas xlrd
+# 2. One-Click Launch (Windows)
+Double-click INSTALL_AND_RUN.bat
 
-# 3. Place your Excel data files (see Data Files section below)
-
-# 4. Launch everything with one command
+# OR run manually via CLI:
+pip install -r requirements.txt
 python launch_dashboard.py
 ```
 

@@ -1127,7 +1127,7 @@ function onLoaded(rows,filename,kind){
 /* ── Save just the file-upload + card stats state (no analysis needed) ── */
 function saveUploadState(){
   try{
-    var raw = localStorage.getItem(_SESSION_KEY);
+    var raw = localStorage.getItem(_SESSION_KEY) || sessionStorage.getItem(_SESSION_KEY) || localStorage.getItem(_FIXED_KEY);
     var existing = raw ? JSON.parse(raw) : {};
     /* Merge file badge + card stats into whatever is already saved */
     var patch = {
@@ -1164,6 +1164,8 @@ function saveUploadState(){
     var merged = Object.assign({}, existing, patch);
     localStorage.setItem(_SESSION_KEY, JSON.stringify(merged));
     localStorage.setItem(_FIXED_KEY, JSON.stringify(merged));
+    try{ sessionStorage.setItem(_SESSION_KEY, JSON.stringify(merged)); }catch(e){}
+    try{ sessionStorage.setItem(_FIXED_KEY, JSON.stringify(merged)); }catch(e){}
   }catch(ex){}
 }
 
@@ -1950,6 +1952,10 @@ var _KPI_KEY     = 'Sempra_DM3_Dashboard_kpi';
 var _FIXED_KEY   = 'sampra_cycle_DM3';
 var _TABLE_KEY   = 'sampra_DM3_tableData'; /* separate key — never blocks KPI save */
 
+var _DEFAULT_CYCLE_DATA = {
+  "DM3": {"kTotal":7751,"kPct":"86%","kExp":7741,"kImp":7673,"kExpOnly":77,"kImpOnly":58,"kSTok":7325,"kSTfail":384,"kEIok":7155,"kEIfail":502,"cvSeOk":7490,"cvSeTot":7751,"cvTiOk":6934,"cvTiTot":7751,"refInExp":7664,"refInImp":7615,"refMissExp":87,"refMissImp":136,"expTotalRec":32471487096,"impTotalRec":30179778240,"srcTotalRec":32339454785,"tgtTotalRec":27203962075,"reconN":6680,"tableN":7802,"_refOnly":false,"_cycle":"DM3","runStamp":"10/22/2026, 09:55:00 PM","_savedAt":1792695000000,"fnRef":"DM3_Reference_List.xlsx","fnExp":"DM3_SNP_Export_Import.xlsx","refTables":"7,751","refRows":"7,751","expTables":"7,741","expRows":"7,741","impTables":"7,673","impRows":"7,673","expMatchedTables":"7,664","expMatchedRec":"32,471,487,096","impMatchedTables":"7,615","impMatchedRec":"30,179,778,240","rb_refTotal":"7,751","rb_bothMatched":"7,615","rb_bothPct":"(98%)","rb_expMatched":"7,664","rb_expPct":"(99%)","rb_impMatched":"7,615","rb_impPct":"(98%)","rb_mismatch":"136","rb_mismatchPct":"(2%)","rb_extraRec":"51","s1Count":"7,751","s2Count":"51","s1Matched":"6,680","s1Diff":"1,071","reconWidth":"86%","reconClass":"recon-fill","reconSub":"6,680 of 7,751 tables fully reconciled across all sources"}
+};
+
 function saveKPI(){
   /* 1. KPI text — tiny, always fits */
   try{
@@ -1983,7 +1989,7 @@ function saveKPI(){
       s1Diff:   document.getElementById('s1Diff').textContent,
       fnRef:    document.getElementById('fnRef').textContent,
       fnExp:    document.getElementById('fnExp').textContent,
-      fnImp:    document.getElementById('fnImp').textContent,
+      fnImp:    document.getElementById('fnImp')?document.getElementById('fnImp').textContent:'',
       refTableCol:_refTableCol, refSrcCol:_refSrcCol, refTgtCol:_refTgtCol,
       csRefVisible:document.getElementById('csRef').style.display,
       csExpVisible:document.getElementById('csExp').style.display,
@@ -1993,15 +1999,22 @@ function saveKPI(){
       _savedAt: Date.now(),
       _cycle: 'DM3'
     };
-    localStorage.setItem(_KPI_KEY, JSON.stringify(kpi));
-    localStorage.setItem(_SESSION_KEY, JSON.stringify(kpi));
-    localStorage.setItem(_FIXED_KEY, JSON.stringify(kpi));
+    var jsonKpi = JSON.stringify(kpi);
+    localStorage.setItem(_KPI_KEY, jsonKpi);
+    localStorage.setItem(_SESSION_KEY, jsonKpi);
+    localStorage.setItem(_FIXED_KEY, jsonKpi);
+    try{ sessionStorage.setItem(_SESSION_KEY, jsonKpi); }catch(e){}
+    try{ sessionStorage.setItem(_FIXED_KEY, jsonKpi); }catch(e){}
   }catch(ex){}
   /* 2. tableData — compact array, own key, own try/catch */
   try{
-    var compact=_eiTableData.map(function(r){return[r.name,r.key,r.src,r.tgt,r.exp,r.imp,r.inRef?1:0];});
-    localStorage.setItem(_TABLE_KEY, JSON.stringify(compact));
-  }catch(ex){try{localStorage.removeItem(_TABLE_KEY);}catch(e){}}
+    if(_eiTableData && _eiTableData.length){
+      var compact=_eiTableData.map(function(r){return[r.name,r.key,r.src,r.tgt,r.exp,r.imp,r.inRef?1:0];});
+      var str = JSON.stringify(compact);
+      try{ localStorage.setItem(_TABLE_KEY, str); }catch(e){}
+      try{ sessionStorage.setItem(_TABLE_KEY, str); }catch(e){}
+    }
+  }catch(ex){}
 }
 
 function saveSession(){
@@ -2098,14 +2111,24 @@ function saveSession(){
       rb_extraRec:   document.getElementById('rb-extraRec').textContent,
       _cycle: 'DM3'
     };
-    localStorage.setItem(_SESSION_KEY, JSON.stringify(snap));
-    localStorage.setItem(_FIXED_KEY, JSON.stringify(snap));
+    var jsonSnap = JSON.stringify(snap);
+    localStorage.setItem(_SESSION_KEY, jsonSnap);
+    localStorage.setItem(_FIXED_KEY, jsonSnap);
+    try{ sessionStorage.setItem(_SESSION_KEY, jsonSnap); }catch(e){}
+    try{ sessionStorage.setItem(_FIXED_KEY, jsonSnap); }catch(e){}
   }catch(ex){
     /* Full snapshot too large — KPI snapshot already saved above, Executive Dashboard is fine */
   }
+
+  if (window.location.search.indexOf('auto=true') !== -1) {
+    var nextUrl = 'Sempra_CrossCycle_Summary_MASTER.html?auto_done=true';
+    setTimeout(function() {
+      window.location.href = nextUrl;
+    }, 1500);
+  }
 }
 
-/* Save full state whenever user navigates away â€” covers both pre- and post-analysis */
+/* Save full state whenever user navigates away — covers both pre- and post-analysis */
 window.addEventListener('beforeunload', function(){
   if(_eiTableData && _eiTableData.length){
     saveSession(); /* post-analysis: save everything */
@@ -2116,29 +2139,61 @@ window.addEventListener('beforeunload', function(){
 
 function restoreSession(){
   try{
-    var raw=localStorage.getItem(_SESSION_KEY);
+    var raw = localStorage.getItem(_SESSION_KEY);
+    if(!raw) raw = localStorage.getItem(_FIXED_KEY);
+    if(!raw) raw = sessionStorage.getItem(_SESSION_KEY) || sessionStorage.getItem(_FIXED_KEY);
+    if(!raw && typeof _DEFAULT_CYCLE_DATA !== 'undefined' && _DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA['DM3']){
+      raw = JSON.stringify(_DEFAULT_CYCLE_DATA['DM3']);
+    }
     if(!raw) return false;
-    var s=JSON.parse(raw);
+    var s = (typeof raw === 'string') ? JSON.parse(raw) : raw;
+    if(!s) return false;
+
     _refTableCol=s.refTableCol||null;_refSrcCol=s.refSrcCol||null;_refTgtCol=s.refTgtCol||null;
     var ids=['kTotal','kExp','kImp','kSTok','kSTfail','kEIok','kEIfail','kExpOnly','kImpOnly','kPct'];
     ids.forEach(function(id){if(s[id]!==undefined)document.getElementById(id).textContent=s[id];});
-    document.getElementById('reconFill').style.width=s.reconWidth||'0%';
-    document.getElementById('reconFill').className=s.reconClass||'recon-fill';
-    document.getElementById('reconSub').textContent=s.reconSub||'';
-    document.getElementById('runStamp').innerHTML=s.runStamp||'';
+    if(s.reconWidth) document.getElementById('reconFill').style.width=s.reconWidth;
+    else if(s.kPct) document.getElementById('reconFill').style.width=s.kPct;
+    if(s.reconClass) document.getElementById('reconFill').className=s.reconClass;
+    if(s.reconSub) document.getElementById('reconSub').textContent=s.reconSub;
+    if(s.runStamp) document.getElementById('runStamp').innerHTML=s.runStamp;
+
+    /* File badges */
     if(s.fnRef&&s.fnRef.trim()){document.getElementById('fnRef').textContent=s.fnRef;document.getElementById('fbRef').style.display='flex';document.getElementById('dzRef').style.display='none';}
     else{document.getElementById('fbRef').style.display='none';document.getElementById('dzRef').style.display='';}
     if(s.fnExp&&s.fnExp.trim()){document.getElementById('fnExp').textContent=s.fnExp;document.getElementById('fbExp').style.display='flex';document.getElementById('dzExp').style.display='none';}
     else{document.getElementById('fbExp').style.display='none';document.getElementById('dzExp').style.display='';}
     if(s.fnImp&&s.fnImp.trim()){document.getElementById('fnImp').textContent=s.fnImp;document.getElementById('fbImp').style.display='flex';document.getElementById('dzImp').style.display='none';}
     else{document.getElementById('fbImp').style.display='none';document.getElementById('dzImp').style.display='';}
-    document.getElementById('csRef').style.display=s.csRefVisible||'none';
-    document.getElementById('csExp').style.display=s.csExpVisible||'none';
-    document.getElementById('csImp').style.display=s.csImpVisible||'none';
+
+    /* Card stats */
+    document.getElementById('csRef').style.display=s.csRefVisible||(s.refTables?'block':'none');
+    document.getElementById('csExp').style.display=s.csExpVisible||(s.expTables?'block':'none');
+    document.getElementById('csImp').style.display=s.csImpVisible||(s.impTables?'block':'none');
     ['refTables','refRows','expTables','expRows','impTables','impRows','expMatchedTables','expMatchedRec','impMatchedTables','impMatchedRec'].forEach(function(id){if(s[id]!==undefined)document.getElementById(id).textContent=s[id];});
-    /* Restore _eiTableData from compact key and re-render tables */
+
+    /* Agg tables */
+    if(s.aggRefVisible) document.getElementById('aggRef').style.display=s.aggRefVisible;
+    if(s.aggExpVisible) document.getElementById('aggExp').style.display=s.aggExpVisible;
+    if(s.aggImpVisible) document.getElementById('aggImp').style.display=s.aggImpVisible;
+    if(s.aggRefCount) document.getElementById('aggRefCount').textContent=s.aggRefCount;
+    if(s.aggExpCount) document.getElementById('aggExpCount').textContent=s.aggExpCount;
+    if(s.aggImpCount) document.getElementById('aggImpCount').textContent=s.aggImpCount;
+    if(s.aggRefBody) document.getElementById('aggRefBody').innerHTML=s.aggRefBody;
+    if(s.aggExpBody) document.getElementById('aggExpBody').innerHTML=s.aggExpBody;
+    if(s.aggImpBody) document.getElementById('aggImpBody').innerHTML=s.aggImpBody;
+
+    /* Restore reconBreakdown if saved */
+    if(s.rb_refTotal || s.kTotal){
+      var rbIds=['rb-refTotal','rb-bothMatched','rb-bothPct','rb-expMatched','rb-expPct','rb-impMatched','rb-impPct','rb-mismatch','rb-mismatchPct','rb-extraRec'];
+      rbIds.forEach(function(id){var key=id.replace(/-/g,'_');if(s[key]!==undefined){var el=document.getElementById(id);if(el)el.textContent=s[key];}});
+      var rbd = document.getElementById('reconBreakdown');
+      if(rbd) rbd.style.display='block';
+    }
+
+    /* Restore _eiTableData from compact _TABLE_KEY — expand [name,key,src,tgt,exp,imp,inRef] */
     try{
-      var td=localStorage.getItem(_TABLE_KEY);
+      var td=localStorage.getItem(_TABLE_KEY) || sessionStorage.getItem(_TABLE_KEY);
       if(td){
         var compact=JSON.parse(td);
         _eiTableData=compact.map(function(c){
@@ -2147,7 +2202,9 @@ function restoreSession(){
           var eiD=(exp!==null&&imp!==null)?(exp-imp):null;
           var stOk=stD!==null?(stD===0):null;
           var eiOk=eiD!==null?(eiD===0):null;
-          return{name:c[0],key:c[1],src:src,tgt:tgt,stD:stD,stOk:stOk,exp:exp,imp:imp,eiD:eiD,eiOk:eiOk,overall:computeOverall(stOk,eiOk,exp,imp),inRef:inRef};
+          return{name:c[0],key:c[1],src:src,tgt:tgt,stD:stD,stOk:stOk,
+                 exp:exp,imp:imp,eiD:eiD,eiOk:eiOk,
+                 overall:computeOverall(stOk,eiOk,exp,imp),inRef:inRef};
         });
       }
     }catch(e){_eiTableData=[];}
@@ -2156,19 +2213,15 @@ function restoreSession(){
       populateDrill(_eiTableData);
       recomputeCards(_eiTableData,s);
     }
-    if(s.allPanelOpen){document.getElementById('allPanelWrap').classList.remove('hidden');document.getElementById('allCaret').classList.add('open');}
-    /* Restore reconBreakdown */
-    if(s.rb_refTotal){
-      var rbIds=['rb-refTotal','rb-bothMatched','rb-bothPct','rb-expMatched','rb-expPct','rb-impMatched','rb-impPct','rb-mismatch','rb-mismatchPct','rb-extraRec'];
-      rbIds.forEach(function(id){var key=id.replace(/-/g,'_');if(s[key]!==undefined){var el=document.getElementById(id);if(el)el.textContent=s[key];}});
-      document.getElementById('reconBreakdown').style.display='block';
+    if(s.allPanelOpen && document.getElementById('allPanelWrap')){document.getElementById('allPanelWrap').classList.remove('hidden');if(document.getElementById('allCaret'))document.getElementById('allCaret').classList.add('open');}
+
+    /* Show results only if analysis has been run or valid KPI data exists */
+    if(_eiTableData.length||s.runStamp||s.kTotal){
+      var rs = document.getElementById('resultsSection');
+      if(rs) rs.classList.remove('hidden');
     }
-    /* Show results only if analysis has been run */
-    if(_eiTableData.length||s.runStamp){
-      document.getElementById('resultsSection').classList.remove('hidden');
-    }
-    document.getElementById('btnRun').disabled=false;
-    document.getElementById('btnReset').disabled=false;
+    var btnR = document.getElementById('btnRun'); if(btnR) btnR.disabled=false;
+    var btnX = document.getElementById('btnReset'); if(btnX) btnX.disabled=false;
     bindFilters();
     return true;
   }catch(ex){ return false; }

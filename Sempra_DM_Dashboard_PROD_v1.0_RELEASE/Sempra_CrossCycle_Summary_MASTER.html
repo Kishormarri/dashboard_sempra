@@ -586,33 +586,142 @@ body:not(.role-admin) .admin-only{display:none!important}
 <div class="page-header">
   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
     <h1>Executive Summary &mdash; &#x1F4CA; Data Migration Cycles</h1>
-    <!-- Cycle Dropdown -->
-    <div style="position:relative" id="cycleDropWrap" class="admin-only">
-      <button onclick="toggleCycleDrop()"
-        style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 16px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .18s;backdrop-filter:blur(6px)"
-        onmouseover="this.style.background='rgba(255,255,255,.18)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">
-        &#x1F4CA; View Cycle Dashboard &nbsp;&#x25BE;
+    <!-- Header Right Action Controls -->
+    <div style="display:flex;align-items:center;gap:10px">
+      <!-- Independent Single File Manual Upload Button -->
+      <button onclick="openSingleFileInspector()" id="btnSingleFileInspector" title="Single File Manual Upload & Inspector"
+        style="display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(5,150,105,0.3));border:1px solid rgba(52,211,153,0.4);border-radius:20px;padding:6px 14px;color:#a7f3d0;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;backdrop-filter:blur(6px)"
+        onmouseover="this.style.background='rgba(16,185,129,0.35)';this.style.borderColor='#6ee7b7';this.style.transform='translateY(-1px)'"
+        onmouseout="this.style.background='linear-gradient(135deg,rgba(16,185,129,0.2),rgba(5,150,105,0.3))';this.style.borderColor='rgba(52,211,153,0.4)';this.style.transform='none'">
+        <span style="font-size:14px">&#x1F4C2;</span> Single File Upload
       </button>
-      <div id="cycleDropMenu" style="display:none;position:fixed;min-width:240px;background:#0f1f38;border:1px solid #1e3a5f;border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.9);z-index:99999">
-        <a href="Sempra_DM1_Dashboard.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;color:#a5b4fc;font-size:12px;font-weight:700;text-decoration:none;border-bottom:1px solid #1e293b;transition:background .15s"
-          onmouseover="this.style.background='rgba(99,102,241,.15)'" onmouseout="this.style.background=''">
-          <span style="width:28px;height:28px;border-radius:8px;background:rgba(99,102,241,.2);border:1px solid rgba(99,102,241,.4);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">&#x1F5C2;</span>
-          <div><div style="font-size:12px;font-weight:800;color:#a5b4fc">Data Migration Cycle 1</div><div style="font-size:10px;color:#475569;margin-top:1px">DM1 — Table Comparison Analysis</div></div>
-        </a>
-        <a href="Sempra_DM2_Dashboard.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;color:#d8b4fe;font-size:12px;font-weight:700;text-decoration:none;border-bottom:1px solid #1e293b;transition:background .15s"
-          onmouseover="this.style.background='rgba(168,85,247,.15)'" onmouseout="this.style.background=''">
-          <span style="width:28px;height:28px;border-radius:8px;background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.4);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">&#x1F5C3;</span>
-          <div><div style="font-size:12px;font-weight:800;color:#d8b4fe">Data Migration Cycle 2</div><div style="font-size:10px;color:#475569;margin-top:1px">DM2 — Table Comparison Analysis</div></div>
-        </a>
-        <a href="Sempra_DM3_Dashboard.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;color:#86efac;font-size:12px;font-weight:700;text-decoration:none;transition:background .15s"
-          onmouseover="this.style.background='rgba(34,197,94,.15)'" onmouseout="this.style.background=''">
-          <span style="width:28px;height:28px;border-radius:8px;background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.4);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">&#x1F5C4;</span>
-          <div><div style="font-size:12px;font-weight:800;color:#86efac">Data Migration Cycle 3</div><div style="font-size:10px;color:#475569;margin-top:1px">DM3 — Reference Table Analysis</div></div>
-        </a>
+
+      <!-- Circle Button with Dashboard Inside Circle Symbol -->
+      <div style="position:relative" id="cycleDropWrap" class="admin-only">
+        <button onclick="toggleCycleDrop()" id="cycleDropBtn" title="Switch Cycle Dashboard (DM1 / DM2 / DM3)"
+          style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,rgba(59,130,246,0.35),rgba(99,102,241,0.35));border:1.5px solid rgba(147,197,253,0.5);cursor:pointer;transition:all .2s cubic-bezier(0.4,0,0.2,1);box-shadow:0 4px 14px rgba(0,0,0,0.3);position:relative;padding:0"
+          onmouseover="this.style.transform='scale(1.08)';this.style.borderColor='#93c5fd';this.style.boxShadow='0 0 16px rgba(99,102,241,0.6)'"
+          onmouseout="this.style.transform='scale(1)';this.style.borderColor='rgba(147,197,253,0.5)';this.style.boxShadow='0 4px 14px rgba(0,0,0,0.3)'">
+          <!-- Inside Concentric Circle with Dashboard Symbol -->
+          <span style="width:26px;height:26px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.55);display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.12);font-size:13px;line-height:1">&#x1F4CA;</span>
+        </button>
+        <div id="cycleDropMenu" style="display:none;position:fixed;min-width:240px;background:#0f1f38;border:1px solid #1e3a5f;border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.9);z-index:99999">
+          <a href="Sempra_DM1_Dashboard.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;color:#a5b4fc;font-size:12px;font-weight:700;text-decoration:none;border-bottom:1px solid #1e293b;transition:background .15s"
+            onmouseover="this.style.background='rgba(99,102,241,.15)'" onmouseout="this.style.background=''">
+            <span style="width:28px;height:28px;border-radius:8px;background:rgba(99,102,241,.2);border:1px solid rgba(99,102,241,.4);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">&#x1F5C2;</span>
+            <div><div style="font-size:12px;font-weight:800;color:#a5b4fc">Data Migration Cycle 1</div><div style="font-size:10px;color:#475569;margin-top:1px">DM1 — Table Comparison Analysis</div></div>
+          </a>
+          <a href="Sempra_DM2_Dashboard.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;color:#d8b4fe;font-size:12px;font-weight:700;text-decoration:none;border-bottom:1px solid #1e293b;transition:background .15s"
+            onmouseover="this.style.background='rgba(168,85,247,.15)'" onmouseout="this.style.background=''">
+            <span style="width:28px;height:28px;border-radius:8px;background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.4);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">&#x1F5C3;</span>
+            <div><div style="font-size:12px;font-weight:800;color:#d8b4fe">Data Migration Cycle 2</div><div style="font-size:10px;color:#475569;margin-top:1px">DM2 — Table Comparison Analysis</div></div>
+          </a>
+          <a href="Sempra_DM3_Dashboard.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;color:#86efac;font-size:12px;font-weight:700;text-decoration:none;transition:background .15s"
+            onmouseover="this.style.background='rgba(34,197,94,.15)'" onmouseout="this.style.background=''">
+            <span style="width:28px;height:28px;border-radius:8px;background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.4);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">&#x1F5C4;</span>
+            <div><div style="font-size:12px;font-weight:800;color:#86efac">Data Migration Cycle 3</div><div style="font-size:10px;color:#475569;margin-top:1px">DM3 — Reference Table Analysis</div></div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Independent Single File Manual Upload Modal -->
+<div id="sfiModal" style="display:none;position:fixed;inset:0;background:rgba(5,15,30,0.85);backdrop-filter:blur(8px);z-index:999999;overflow-y:auto;padding:24px 16px;">
+  <div style="max-width:1100px;margin:30px auto;background:#0d1b2e;border:1px solid #1e3a5f;border-radius:16px;box-shadow:0 24px 64px rgba(0,0,0,0.8);overflow:hidden;position:relative">
+    
+    <!-- Modal Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px;background:linear-gradient(90deg,#0e2340,#132f54);border-bottom:1px solid #1e3a5f">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(16,185,129,0.2);border:1px solid rgba(52,211,153,0.4);display:flex;align-items:center;justify-content:center;font-size:18px">&#x1F4C2;</div>
+        <div>
+          <h2 style="font-size:16px;font-weight:800;color:#f8fafc;margin:0">Independent Single File Manual Upload &amp; Inspector</h2>
+          <p style="font-size:11px;color:#94a3b8;margin:2px 0 0">Upload any Excel (.xlsx/.xls) or CSV file to instantly read, auto-detect columns, analyze volume, and inspect records independently.</p>
+        </div>
+      </div>
+      <button onclick="closeSingleFileInspector()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#94a3b8;width:32px;height:32px;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s"
+        onmouseover="this.style.background='rgba(239,68,68,0.25)';this.style.color='#fca5a5';this.style.borderColor='#ef4444'"
+        onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='#94a3b8';this.style.borderColor='rgba(255,255,255,0.15)'">&times;</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div style="padding:24px">
+      <!-- Drag & Drop Zone -->
+      <div id="sfiDropzone" style="border:2px dashed #2563eb;border-radius:12px;background:rgba(30,58,95,0.25);padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;position:relative"
+        onclick="document.getElementById('sfiFileInput').click()"
+        ondragover="event.preventDefault();this.style.borderColor='#38bdf8';this.style.background='rgba(37,99,235,0.2)'"
+        ondragleave="this.style.borderColor='#2563eb';this.style.background='rgba(30,58,95,0.25)'"
+        ondrop="event.preventDefault();this.style.borderColor='#2563eb';this.style.background='rgba(30,58,95,0.25)';if(event.dataTransfer.files.length){sfiProcessFile(event.dataTransfer.files[0]);}">
+        
+        <input type="file" id="sfiFileInput" accept=".xlsx,.xls,.csv,.tsv,.txt" style="display:none" onchange="if(this.files&&this.files[0])sfiProcessFile(this.files[0])"/>
+        <div style="font-size:32px;margin-bottom:8px">&#x1F4E5;</div>
+        <div style="font-size:14px;font-weight:700;color:#e2e8f0">Drag &amp; Drop your Excel / CSV file here, or <span style="color:#38bdf8;text-decoration:underline">browse</span></div>
+        <div style="font-size:11px;color:#64748b;margin-top:4px">Supports Reference Lists, SNP Export/Import Logs, Count Validations, or Custom Sheets (.xlsx, .xls, .csv)</div>
+      </div>
+
+      <!-- File Status & KPI Summary Area (Hidden initially) -->
+      <div id="sfiResultsArea" style="display:none;margin-top:20px">
+        <!-- Active File Badge & Actions -->
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;background:#132640;border:1px solid #1e3a5f;border-radius:10px;padding:12px 18px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:18px">&#x1F4C4;</span>
+            <div>
+              <div id="sfiFileName" style="font-size:13px;font-weight:800;color:#38bdf8">filename.xlsx</div>
+              <div id="sfiFileMeta" style="font-size:10px;color:#94a3b8">Size: 0 KB | Loaded in 0 ms</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button onclick="sfiExport('csv')" style="background:rgba(255,255,255,0.08);border:1px solid #334155;border-radius:6px;color:#cbd5e1;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px"
+              onmouseover="this.style.borderColor='#94a3b8'" onmouseout="this.style.borderColor='#334155'">&#x2B07; CSV</button>
+            <button onclick="sfiExport('xlsx')" style="background:rgba(16,185,129,0.2);border:1px solid #059669;border-radius:6px;color:#6ee7b7;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px"
+              onmouseover="this.style.background='rgba(16,185,129,0.35)'" onmouseout="this.style.background='rgba(16,185,129,0.2)'">&#x1F4CA; Excel</button>
+            <button onclick="sfiReset()" style="background:rgba(239,68,68,0.15);border:1px solid #b91c1c;border-radius:6px;color:#fca5a5;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer"
+              onmouseover="this.style.background='rgba(239,68,68,0.25)'" onmouseout="this.style.background='rgba(239,68,68,0.15)'">&#x21BB; Clear</button>
+          </div>
+        </div>
+
+        <!-- KPI Metrics Grid -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:14px">
+          <div style="background:#102238;border:1px solid #1e3a5f;border-radius:10px;padding:12px 16px">
+            <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase">Total Rows</div>
+            <div id="sfiTotalRows" style="font-size:20px;font-weight:800;color:#f8fafc;margin-top:4px">0</div>
+          </div>
+          <div style="background:#102238;border:1px solid #1e3a5f;border-radius:10px;padding:12px 16px">
+            <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase">Unique Tables / Keys</div>
+            <div id="sfiUniqueTables" style="font-size:20px;font-weight:800;color:#a5b4fc;margin-top:4px">0</div>
+          </div>
+          <div style="background:#102238;border:1px solid #1e3a5f;border-radius:10px;padding:12px 16px">
+            <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase">Total Volume / Records</div>
+            <div id="sfiTotalVolume" style="font-size:20px;font-weight:800;color:#34d399;margin-top:4px">0</div>
+          </div>
+          <div style="background:#102238;border:1px solid #1e3a5f;border-radius:10px;padding:12px 16px">
+            <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase">Detected Columns</div>
+            <div id="sfiColCount" style="font-size:20px;font-weight:800;color:#f59e0b;margin-top:4px">0</div>
+          </div>
+        </div>
+
+        <!-- Search & Filter Controls -->
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:8px;flex:1;max-width:400px">
+            <input type="text" id="sfiSearchInput" placeholder="🔍 Search in loaded records..." oninput="sfiRenderTable()"
+              style="width:100%;background:#091424;border:1px solid #1e3a5f;border-radius:8px;padding:8px 12px;color:#f8fafc;font-size:12px;outline:none"/>
+          </div>
+          <div id="sfiShowingInfo" style="font-size:11px;color:#94a3b8">Showing 0 of 0 records</div>
+        </div>
+
+        <!-- Interactive Data Table Container -->
+        <div style="margin-top:10px;max-height:420px;overflow:auto;border:1px solid #1e3a5f;border-radius:10px;background:#091424">
+          <table style="width:100%;border-collapse:collapse;font-size:11px;text-align:left">
+            <thead id="sfiTableHead" style="position:sticky;top:0;background:#0d223a;z-index:10;border-bottom:2px solid #1e3a5f"></thead>
+            <tbody id="sfiTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   var s=document.createElement('style');
@@ -621,7 +730,7 @@ body:not(.role-admin) .admin-only{display:none!important}
 })();
 
 function toggleCycleDrop() {
-  var btn = document.querySelector('#cycleDropWrap button');
+  var btn = document.getElementById('cycleDropBtn') || document.querySelector('#cycleDropWrap button');
   var menu = document.getElementById('cycleDropMenu');
   if (!menu || !btn) return;
   var isOpen = menu.classList.contains('cdm-open');
@@ -642,6 +751,200 @@ document.addEventListener('click', function(e) {
     if (menu) menu.classList.remove('cdm-open');
   }
 });
+
+/* ── INDEPENDENT SINGLE FILE MANUAL UPLOAD & INSPECTOR LOGIC ── */
+var _sfiData = [];
+var _sfiHeaders = [];
+var _sfiFilename = '';
+
+function openSingleFileInspector(){
+  var m = document.getElementById('sfiModal');
+  if(m) m.style.display = 'block';
+}
+
+function closeSingleFileInspector(){
+  var m = document.getElementById('sfiModal');
+  if(m) m.style.display = 'none';
+}
+
+function sfiReset(){
+  _sfiData = [];
+  _sfiHeaders = [];
+  _sfiFilename = '';
+  var inp = document.getElementById('sfiFileInput');
+  if(inp) inp.value = '';
+  var ra = document.getElementById('sfiResultsArea');
+  if(ra) ra.style.display = 'none';
+}
+
+function sfiProcessFile(file){
+  if(!file) return;
+  var t0 = performance.now();
+  _sfiFilename = file.name;
+  var ext = file.name.split('.').pop().toLowerCase();
+  
+  var reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      var rawRows = [];
+      if(ext === 'xlsx' || ext === 'xls'){
+        var wb = XLSX.read(e.target.result, {type:'array', dense:true});
+        var ws = wb.Sheets[wb.SheetNames[0]];
+        rawRows = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+      } else {
+        var text = (typeof e.target.result === 'string') ? e.target.result : new TextDecoder('utf-8').decode(e.target.result);
+        rawRows = text.split(/\r?\n/).filter(function(l){ return l.trim().length > 0; }).map(function(l){
+          return l.split(/,|\t/).map(function(c){ return c.trim().replace(/^"|"$/g,''); });
+        });
+      }
+
+      if(!rawRows || rawRows.length < 2){
+        alert('File is empty or has no data rows.');
+        return;
+      }
+
+      _sfiHeaders = rawRows[0].map(function(h){ return String(h||'').trim(); });
+      var normHdrs = _sfiHeaders.map(function(h){ return h.toUpperCase(); });
+      
+      _sfiData = [];
+      var tblColIdx = -1, cntColIdx = -1;
+      
+      for(var hi = 0; hi < normHdrs.length; hi++){
+        var nh = normHdrs[hi];
+        if(tblColIdx === -1 && (nh.indexOf('TABLE') !== -1 || nh.indexOf('NAME') !== -1 || nh.indexOf('OBJECT') !== -1)){
+          tblColIdx = hi;
+        }
+        if(cntColIdx === -1 && (nh.indexOf('RECORD') !== -1 || nh.indexOf('COUNT') !== -1 || nh.indexOf('DIFF') !== -1 || nh.indexOf('ROWS') !== -1)){
+          cntColIdx = hi;
+        }
+      }
+
+      var uniqueKeys = {};
+      var totalVol = 0;
+
+      for(var ri = 1; ri < rawRows.length; ri++){
+        var r = rawRows[ri];
+        var hasVal = false;
+        for(var ci = 0; ci < _sfiHeaders.length; ci++){
+          if(r[ci] !== '' && r[ci] !== null && r[ci] !== undefined){ hasVal = true; break; }
+        }
+        if(!hasVal) continue;
+        
+        var rowObj = {};
+        for(var j = 0; j < _sfiHeaders.length; j++){
+          rowObj[_sfiHeaders[j]] = (r[j] !== undefined && r[j] !== null) ? r[j] : '';
+        }
+        _sfiData.push(rowObj);
+
+        if(tblColIdx !== -1 && r[tblColIdx]){
+          uniqueKeys[String(r[tblColIdx]).trim().toUpperCase()] = true;
+        }
+        if(cntColIdx !== -1 && r[cntColIdx] !== undefined && r[cntColIdx] !== ''){
+          var num = parseFloat(String(r[cntColIdx]).replace(/,/g,''));
+          if(!isNaN(num)) totalVol += num;
+        }
+      }
+
+      var dur = Math.round(performance.now() - t0);
+      document.getElementById('sfiFileName').textContent = file.name;
+      document.getElementById('sfiFileMeta').textContent = 'Size: ' + Math.round(file.size/1024).toLocaleString() + ' KB | Parsed ' + _sfiData.length.toLocaleString() + ' rows in ' + dur + ' ms';
+      document.getElementById('sfiTotalRows').textContent = _sfiData.length.toLocaleString();
+      document.getElementById('sfiUniqueTables').textContent = Object.keys(uniqueKeys).length > 0 ? Object.keys(uniqueKeys).length.toLocaleString() : _sfiData.length.toLocaleString();
+      document.getElementById('sfiTotalVolume').textContent = totalVol > 0 ? Math.round(totalVol).toLocaleString() : '—';
+      document.getElementById('sfiColCount').textContent = _sfiHeaders.length.toString();
+      
+      document.getElementById('sfiResultsArea').style.display = 'block';
+      sfiRenderTable();
+
+    }catch(err){
+      alert('Error parsing file: ' + err.message);
+    }
+  };
+
+  if(ext === 'xlsx' || ext === 'xls'){
+    reader.readAsArrayBuffer(file);
+  } else {
+    reader.readAsText(file);
+  }
+}
+
+function sfiRenderTable(){
+  var term = (document.getElementById('sfiSearchInput').value || '').trim().toLowerCase();
+  var thead = document.getElementById('sfiTableHead');
+  var tbody = document.getElementById('sfiTableBody');
+  if(!thead || !tbody) return;
+
+  var headHtml = '<tr><th style="padding:10px 12px;color:#94a3b8;font-weight:700;border-bottom:1px solid #1e3a5f;background:#0d223a;white-space:nowrap">#</th>';
+  _sfiHeaders.forEach(function(h){
+    headHtml += '<th style="padding:10px 12px;color:#cbd5e1;font-weight:700;border-bottom:1px solid #1e3a5f;background:#0d223a;white-space:nowrap">' + h + '</th>';
+  });
+  headHtml += '</tr>';
+  thead.innerHTML = headHtml;
+
+  var filtered = _sfiData;
+  if(term){
+    filtered = _sfiData.filter(function(r){
+      return Object.values(r).some(function(v){ return String(v).toLowerCase().indexOf(term) !== -1; });
+    });
+  }
+
+  document.getElementById('sfiShowingInfo').textContent = 'Showing ' + Math.min(filtered.length, 500).toLocaleString() + ' of ' + filtered.length.toLocaleString() + ' records' + (filtered.length > 500 ? ' (capped at 500 for preview)' : '');
+
+  var bodyHtml = '';
+  var limit = Math.min(filtered.length, 500);
+  for(var i = 0; i < limit; i++){
+    var row = filtered[i];
+    var bg = (i % 2 === 0) ? 'rgba(15,23,42,0.4)' : 'rgba(30,41,59,0.2)';
+    bodyHtml += '<tr style="background:' + bg + ';border-bottom:1px solid rgba(30,58,95,0.4)">';
+    bodyHtml += '<td style="padding:8px 12px;color:#64748b;font-weight:600">' + (i + 1) + '</td>';
+    _sfiHeaders.forEach(function(h){
+      var val = row[h];
+      var isNum = typeof val === 'number' || (!isNaN(parseFloat(val)) && isFinite(val) && String(val).trim() !== '' && !String(val).startsWith('0') && String(val).length < 15);
+      var align = isNum ? 'right' : 'left';
+      var col = isNum ? '#38bdf8' : '#e2e8f0';
+      var formatted = isNum ? Number(val).toLocaleString() : String(val);
+      bodyHtml += '<td style="padding:8px 12px;color:' + col + ';text-align:' + align + ';white-space:nowrap">' + formatted + '</td>';
+    });
+    bodyHtml += '</tr>';
+  }
+  tbody.innerHTML = bodyHtml;
+}
+
+function sfiExport(type){
+  if(!_sfiData || !_sfiData.length) return;
+  var term = (document.getElementById('sfiSearchInput').value || '').trim().toLowerCase();
+  var exportRows = _sfiData;
+  if(term){
+    exportRows = _sfiData.filter(function(r){
+      return Object.values(r).some(function(v){ return String(v).toLowerCase().indexOf(term) !== -1; });
+    });
+  }
+
+  var baseName = (_sfiFilename ? _sfiFilename.replace(/\.[^/.]+$/, '') : 'manual_upload') + '_export';
+
+  if(type === 'csv'){
+    var lines = [_sfiHeaders.map(function(h){ return '"' + h.replace(/"/g,'""') + '"'; }).join(',')];
+    exportRows.forEach(function(r){
+      lines.push(_sfiHeaders.map(function(h){ return '"' + String(r[h]||'').replace(/"/g,'""') + '"'; }).join(','));
+    });
+    var blob = new Blob([lines.join('\r\n')], {type:'text/csv;charset=utf-8;'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = baseName + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } else if(type === 'xlsx'){
+    var aoa = [_sfiHeaders];
+    exportRows.forEach(function(r){
+      aoa.push(_sfiHeaders.map(function(h){ return r[h]; }));
+    });
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.aoa_to_sheet(aoa);
+    XLSX.utils.book_append_sheet(wb, ws, 'Data_Inspector');
+    XLSX.writeFile(wb, baseName + '.xlsx');
+  }
+}
 </script>
 
 <!-- TOOLTIP -->

@@ -1,0 +1,47 @@
+﻿# ── Data files (never commit real SAP / migration data) ──────────────────────
+*.xlsx
+*.xls
+*.csv
+*.xlsm
+
+# ── Python runtime ────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+.env
+.venv/
+venv/
+env/
+
+# ── Logs & generated output ───────────────────────────────────────────────────
+automation/logs/
+automation/output/
+*.log
+
+# ── Generated documents (reproducible via scripts) ────────────────────────────
+Sempra_DM_Dashboard_Documentation.pdf
+Sempra_DM_Dashboard_Documentation_FULL.pdf
+Sempra_DM_Dashboard_Documentation.docx
+
+# ── Backups (large, timestamped — not needed in repo) ─────────────────────────
+backup_*/
+
+# ── OS / editor noise ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.suo
+*.user
+
+# ── Windows temp files ────────────────────────────────────────────────────────
+~$*

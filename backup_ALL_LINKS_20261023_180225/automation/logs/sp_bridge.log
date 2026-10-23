@@ -1,0 +1,167 @@
+2026-10-09 08:40:13,424 [INFO] ================================================================
+2026-10-09 08:40:13,424 [INFO]   SharePoint File Bridge  — port 5004
+2026-10-09 08:40:13,424 [INFO]   Site: https://sempra.sharepoint.com/sites/OdysseyInternal
+2026-10-09 08:40:13,424 [INFO]   NTLM auth: True
+2026-10-09 08:40:13,424 [INFO] ================================================================
+2026-10-09 08:40:13,440 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5004
+2026-10-09 08:40:13,440 [INFO] [33mPress CTRL+C to quit[0m
+2026-10-09 08:40:58,064 [INFO] 127.0.0.1 - - [09/Oct/2026 08:40:58] "GET /ping HTTP/1.1" 200 -
+2026-10-09 08:43:09,083 [INFO] 127.0.0.1 - - [09/Oct/2026 08:43:09] "[35m[1mGET /scan?cycle=DM1 HTTP/1.1[0m" 500 -
+2026-10-09 08:49:45,123 [INFO] ================================================================
+2026-10-09 08:49:45,128 [INFO]   SharePoint File Bridge  port 5004
+2026-10-09 08:49:45,129 [INFO]   Site : https://sempra.sharepoint.com/sites/OdysseyInternal
+2026-10-09 08:49:45,129 [INFO]   Folder: Shared Documents/General/05-Odyssey Phase 1 (Official)/02- Explore/02- Technical Workstreams/Data Migration/Dashboard_file_reader
+2026-10-09 08:49:45,129 [INFO]   NOTE: On first run, a browser login prompt will appear.
+2026-10-09 08:49:45,129 [INFO]         Log in with KMarri@scgcontractor.com
+2026-10-09 08:49:45,129 [INFO] ================================================================
+2026-10-09 08:49:45,131 [INFO] Connecting to SharePoint (device-flow login)...
+2026-10-09 08:49:45,152 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5004
+2026-10-09 08:49:45,152 [INFO] [33mPress CTRL+C to quit[0m
+2026-10-09 08:49:45,758 [ERROR] Unhandled exception in listener <bound method SharePointRequest._authenticate_request of <office365.sharepoint.request.SharePointRequest object at 0x0000020095B03770>>
+Traceback (most recent call last):
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\msal\authority.py", line 98, in __init__
+    openid_config = tenant_discovery(
+        tenant_discovery_endpoint,
+        self._http_client)
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\msal\authority.py", line 298, in tenant_discovery
+    raise ValueError("OIDC Discovery failed on {}. HTTP status: {}, Error: {}".format(
+    ...<3 lines>...
+        ))
+ValueError: OIDC Discovery failed on https://login.microsoftonline.com/sempra.sharepoint.com/v2.0/.well-known/openid-configuration. HTTP status: 400, Error: {"error":"invalid_tenant","error_description":"AADSTS90002: Tenant 'sempra.sharepoint.com' not found. Check to make sure you have the correct tenant ID and are signing into the correct cloud. Check with your subscription administrator, this may happen if there are no active subscriptions for the tenant. Trace ID: 9673e339-d280-4261-a5b9-4e9e8e432700 Correlation ID: 36cd6bfa-bc32-4b99-b62d-63b94a17e64d Timestamp: 2026-10-09 03:19:43Z","error_codes":[90002],"timestamp":"2026-10-09 03:19:43Z","trace_id":"9673e339-d280-4261-a5b9-4e9e8e432700","correlation_id":"36cd6bfa-bc32-4b99-b62d-63b94a17e64d","error_uri":"https://login.microsoftonline.com/error?code=90002"}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\office365\runtime\types\event_handler.py", line 100, in notify
+    listener(*args, **kwargs)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\office365\sharepoint\request.py", line 82, in _authenticate_request
+    self._auth_context.authenticate_request(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\office365\runtime\auth\authentication_context.py", line 401, in authenticate_request
+    self._authenticate(request)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\office365\runtime\auth\authentication_context.py", line 252, in _authenticate
+    token_res = token_func()
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\office365\runtime\auth\authentication_context.py", line 186, in _acquire_token
+    app = msal.PublicClientApplication(
+        client_id,
+        authority=self._get_authority_url(tenant),
+        client_credential=None,
+    )
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\msal\application.py", line 2263, in __init__
+    super(PublicClientApplication, self).__init__(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        client_id, client_credential=None, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\msal\application.py", line 741, in __init__
+    self.authority = Authority(
+                     ~~~~~~~~~^
+        authority_to_use,
+        ^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        oidc_authority_url=oidc_authority,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        )
+        ^
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\msal\authority.py", line 114, in __init__
+    raise ValueError(error_message)
+ValueError: Unable to get authority configuration for https://login.microsoftonline.com/sempra.sharepoint.com. Authority would typically be in a format of https://login.microsoftonline.com/your_tenant or https://tenant_name.ciamlogin.com or https://tenant_name.b2clogin.com/tenant.onmicrosoft.com/policy.  Also please double check your tenant name or GUID is correct.
+2026-10-09 08:49:45,763 [WARNING] SharePoint warmup: Unable to get authority configuration for https://login.microsoftonline.com/sempra.sharepoint.com. Authority would typically be in a format of https://login.microsoftonline.com/your_tenant or https://tenant_name.ciamlogin.com or https://tenant_name.b2clogin.com/tenant.onmicrosoft.com/policy.  Also please double check your tenant name or GUID is correct.
+2026-10-09 08:49:56,683 [INFO] 127.0.0.1 - - [09/Oct/2026 08:49:56] "GET /ping HTTP/1.1" 200 -
+2026-10-09 08:50:06,486 [INFO] 127.0.0.1 - - [09/Oct/2026 08:50:06] "GET /ping HTTP/1.1" 200 -
+2026-10-09 08:50:06,509 [INFO] 127.0.0.1 - - [09/Oct/2026 08:50:06] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-10-09 08:51:11,573 [ERROR] Unhandled exception in listener <bound method SharePointRequest._authenticate_request of <office365.sharepoint.request.SharePointRequest object at 0x0000020095B03770>>
+Traceback (most recent call last):
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\msal\authority.py", line 98, in __init__
+    openid_config = tenant_discovery(
+        tenant_discovery_endpoint,
+        self._http_client)
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\msal\authority.py", line 298, in tenant_discovery
+    raise ValueError("OIDC Discovery failed on {}. HTTP status: {}, Error: {}".format(
+    ...<3 lines>...
+        ))
+ValueError: OIDC Discovery failed on https://login.microsoftonline.com/sempra.sharepoint.com/v2.0/.well-known/openid-configuration. HTTP status: 400, Error: {"error":"invalid_tenant","error_description":"AADSTS90002: Tenant 'sempra.sharepoint.com' not found. Check to make sure you have the correct tenant ID and are signing into the correct cloud. Check with your subscription administrator, this may happen if there are no active subscriptions for the tenant. Trace ID: aa353321-297a-4d79-a9ab-4ab40bc7ad00 Correlation ID: c712e7c5-5520-4439-b24d-ded3d8ba7adb Timestamp: 2026-10-09 03:21:09Z","error_codes":[90002],"timestamp":"2026-10-09 03:21:09Z","trace_id":"aa353321-297a-4d79-a9ab-4ab40bc7ad00","correlation_id":"c712e7c5-5520-4439-b24d-ded3d8ba7adb","error_uri":"https://login.microsoftonline.com/error?code=90002"}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\office365\runtime\types\event_handler.py", line 100, in notify
+    listener(*args, **kwargs)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\office365\sharepoint\request.py", line 82, in _authenticate_request
+    self._auth_context.authenticate_request(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\office365\runtime\auth\authentication_context.py", line 401, in authenticate_request
+    self._authenticate(request)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\office365\runtime\auth\authentication_context.py", line 252, in _authenticate
+    token_res = token_func()
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\office365\runtime\auth\authentication_context.py", line 186, in _acquire_token
+    app = msal.PublicClientApplication(
+        client_id,
+        authority=self._get_authority_url(tenant),
+        client_credential=None,
+    )
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\msal\application.py", line 2263, in __init__
+    super(PublicClientApplication, self).__init__(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        client_id, client_credential=None, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\msal\application.py", line 741, in __init__
+    self.authority = Authority(
+                     ~~~~~~~~~^
+        authority_to_use,
+        ^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        oidc_authority_url=oidc_authority,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        )
+        ^
+  File "C:\Users\KishorMarri\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\msal\authority.py", line 114, in __init__
+    raise ValueError(error_message)
+ValueError: Unable to get authority configuration for https://login.microsoftonline.com/sempra.sharepoint.com. Authority would typically be in a format of https://login.microsoftonline.com/your_tenant or https://tenant_name.ciamlogin.com or https://tenant_name.b2clogin.com/tenant.onmicrosoft.com/policy.  Also please double check your tenant name or GUID is correct.
+2026-10-09 08:51:11,576 [INFO] 127.0.0.1 - - [09/Oct/2026 08:51:11] "[35m[1mGET /scan?cycle=DM1 HTTP/1.1[0m" 500 -
+2026-10-09 08:51:53,847 [INFO] ================================================================
+2026-10-09 08:51:53,847 [INFO]   SharePoint File Bridge  port 5004
+2026-10-09 08:51:53,848 [INFO]   Site : https://sempra.sharepoint.com/sites/OdysseyInternal
+2026-10-09 08:51:53,848 [INFO]   Folder: Shared Documents/General/05-Odyssey Phase 1 (Official)/02- Explore/02- Technical Workstreams/Data Migration/Dashboard_file_reader
+2026-10-09 08:51:53,848 [INFO]   NOTE: On first run, a browser login prompt will appear.
+2026-10-09 08:51:53,848 [INFO]         Log in with KMarri@scgcontractor.com (Sempra tenant)
+2026-10-09 08:51:53,848 [INFO]   Tenant: a2e7980c-11ea-4838-8f1a-2f497d8c4072
+2026-10-09 08:51:53,848 [INFO] ================================================================
+2026-10-09 08:51:53,849 [INFO] Connecting to SharePoint (device-flow login)...
+2026-10-09 08:51:53,866 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5004
+2026-10-09 08:51:53,866 [INFO] [33mPress CTRL+C to quit[0m
+2026-10-09 08:51:54,184 [INFO] Open a browser on this device to visit: https://login.microsoftonline.com/a2e7980c-11ea-4838-8f1a-2f497d8c4072/oauth2/v2.0/authorize?client_id=31359c7f-bd7e-475c-86db-fdb8c937548e&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A54956&scope=https%3A%2F%2Fsempra.sharepoint.com%2F.default+offline_access+openid+profile&state=FkvkK088xVZk43X_3RKZ6w&response_mode=form_post&code_challenge=tA5hXkbKEZyrksjDvyx5m8tbuAPL4VREXQxQPpoerwM&code_challenge_method=S256&nonce=64aacfccbbc62703693f57fd558234e9245d5ee6cb69a69d52ca23aae52ee5dc&client_info=1
+2026-10-09 08:55:21,947 [INFO] ================================================================
+2026-10-09 08:55:21,962 [INFO]   SharePoint File Bridge  port 5004
+2026-10-09 08:55:21,963 [INFO]   Site : https://sempra.sharepoint.com/sites/OdysseyInternal
+2026-10-09 08:55:21,963 [INFO]   Folder: Shared Documents/General/05-Odyssey Phase 1 (Official)/02- Explore/02- Technical Workstreams/Data Migration/Dashboard_file_reader
+2026-10-09 08:55:21,963 [INFO]   NOTE: On first run, a browser login prompt will appear.
+2026-10-09 08:55:21,963 [INFO]         Log in with KMarri@scgcontractor.com (Sempra tenant)
+2026-10-09 08:55:21,963 [INFO]   Tenant: a2e7980c-11ea-4838-8f1a-2f497d8c4072
+2026-10-09 08:55:21,963 [INFO] ================================================================
+2026-10-09 08:55:21,964 [INFO] Connecting to SharePoint (device-flow login)...
+2026-10-09 08:55:21,985 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5004
+2026-10-09 08:55:21,985 [INFO] [33mPress CTRL+C to quit[0m
+2026-10-09 08:55:22,319 [INFO] Open a browser on this device to visit: https://login.microsoftonline.com/a2e7980c-11ea-4838-8f1a-2f497d8c4072/oauth2/v2.0/authorize?client_id=d3590ed6-52b3-4102-aeff-aad2292ab01c&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A51093&scope=https%3A%2F%2Fsempra.sharepoint.com%2F.default+offline_access+openid+profile&state=eEWehNkYIkqMY1MNLQ_wWA&response_mode=form_post&code_challenge=fEEj-4hxGo7a6TwwMxn8BuH6gFlhYpG-4Vo7vBl5mWA&code_challenge_method=S256&nonce=b046db2e6d665fc23e56863faa0af497e9f7caadf09a81b96ed85321e76335a2&client_info=1
+2026-10-09 08:55:33,313 [INFO] 127.0.0.1 - - [09/Oct/2026 08:55:33] "GET /ping HTTP/1.1" 200 -
+2026-10-09 09:00:16,713 [INFO] ================================================================
+2026-10-09 09:00:16,713 [INFO]   SharePoint File Bridge  port 5004
+2026-10-09 09:00:16,713 [INFO]   Site : https://sempra.sharepoint.com/sites/OdysseyInternal
+2026-10-09 09:00:16,714 [INFO]   Folder: Shared Documents/General/05-Odyssey Phase 1 (Official)/02- Explore/02- Technical Workstreams/Data Migration/Dashboard_file_reader
+2026-10-09 09:00:16,714 [INFO]   NOTE: On first run, a browser login prompt will appear.
+2026-10-09 09:00:16,714 [INFO]         Log in with KMarri@scgcontractor.com (Sempra tenant)
+2026-10-09 09:00:16,714 [INFO]   Tenant: a2e7980c-11ea-4838-8f1a-2f497d8c4072
+2026-10-09 09:00:16,714 [INFO] ================================================================
+2026-10-09 09:00:16,716 [INFO] Connecting to SharePoint (device-flow login)...
+2026-10-09 09:00:16,753 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5004
+2026-10-09 09:00:16,753 [INFO] [33mPress CTRL+C to quit[0m
+2026-10-09 09:00:17,088 [INFO] Open a browser on this device to visit: https://login.microsoftonline.com/a2e7980c-11ea-4838-8f1a-2f497d8c4072/oauth2/v2.0/authorize?client_id=d3590ed6-52b3-4102-aeff-aad2292ab01c&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A53844&scope=https%3A%2F%2Fsempra.sharepoint.com%2F.default+offline_access+openid+profile&state=6Zr-QwmDPaNFW3Lv_8VBWQ&response_mode=form_post&code_challenge=n62041biRCR0hz54bIz9JpH6VEUqNuyMicyti7x52jU&code_challenge_method=S256&nonce=72e9966555056dc693e79f9551916347045c4cd3034d97a31e5c57a4eaf611d9&client_info=1
+2026-10-09 09:00:19,681 [INFO] 127.0.0.1 - - [09/Oct/2026 09:00:19] "GET /ping HTTP/1.1" 200 -

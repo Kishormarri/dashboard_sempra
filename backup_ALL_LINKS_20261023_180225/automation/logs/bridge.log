@@ -1,0 +1,24 @@
+2026-10-19 09:37:41,819 [INFO] ================================================================
+2026-10-19 09:37:41,828 [INFO]   SE16N-style table count extraction
+2026-10-19 09:37:41,828 [INFO]   Endpoints:
+2026-10-19 09:37:41,828 [INFO]     POST /upload_ref     — upload Reference List Excel
+2026-10-19 09:37:41,828 [INFO]     POST /connect_sap    — start Source or Target extraction
+2026-10-19 09:37:41,829 [INFO]     GET  /progress       — live progress polling
+2026-10-19 09:37:41,829 [INFO]     GET  /results        — full results JSON
+2026-10-19 09:37:41,829 [INFO]     GET  /export_excel   — download Source+Target Excel
+2026-10-19 09:37:41,830 [INFO]     POST /reset          — clear state
+2026-10-19 09:37:41,830 [INFO] ================================================================
+2026-10-19 09:37:41,942 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2026-10-19 09:37:41,942 [INFO] [33mPress CTRL+C to quit[0m
+2026-10-19 09:38:05,927 [INFO] 127.0.0.1 - - [19/Oct/2026 09:38:05] "GET /ping HTTP/1.1" 200 -
+2026-10-21 10:15:25,824 [INFO] 127.0.0.1 - - [21/Oct/2026 10:15:25] "GET /ping HTTP/1.1" 200 -
+2026-10-21 10:23:03,219 [INFO] 127.0.0.1 - - [21/Oct/2026 10:23:03] "GET /ping HTTP/1.1" 200 -
+2026-10-22 20:33:53,638 [INFO] 127.0.0.1 - - [22/Oct/2026 20:33:53] "GET /ping HTTP/1.1" 200 -
+2026-10-22 20:41:49,015 [INFO] 127.0.0.1 - - [22/Oct/2026 20:41:49] "GET /ping HTTP/1.1" 200 -
+2026-10-22 21:06:48,552 [INFO] 127.0.0.1 - - [22/Oct/2026 21:06:48] "GET /ping HTTP/1.1" 200 -
+2026-10-22 21:50:12,534 [INFO] 127.0.0.1 - - [22/Oct/2026 21:50:12] "GET /ping HTTP/1.1" 200 -
+2026-10-22 22:03:19,720 [INFO] 127.0.0.1 - - [22/Oct/2026 22:03:19] "GET /ping HTTP/1.1" 200 -
+2026-10-22 22:08:13,247 [INFO] 127.0.0.1 - - [22/Oct/2026 22:08:13] "GET /ping HTTP/1.1" 200 -
+2026-10-22 22:23:47,414 [INFO] 127.0.0.1 - - [22/Oct/2026 22:23:47] "GET /ping HTTP/1.1" 200 -
+2026-10-23 16:13:06,640 [INFO] 127.0.0.1 - - [23/Oct/2026 16:13:06] "GET /ping HTTP/1.1" 200 -

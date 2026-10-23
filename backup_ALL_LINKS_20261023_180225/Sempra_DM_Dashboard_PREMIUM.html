@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sempra DM Dashboard — Client Presentation</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI",system-ui,sans-serif;font-size:14px;line-height:1.6;background:#f0f2f5;color:#1f2328}
+.wrap{max-width:900px;margin:0 auto;padding:32px 24px 80px}
+
+/* ── COVER ── */
+.cover{background:linear-gradient(135deg,#020d1a 0%,#0a1628 40%,#0f2d4a 70%,#164e63 100%);border-radius:18px;padding:60px 56px 52px;color:#fff;margin-bottom:36px;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(56,189,248,.15) 0%,transparent 70%);pointer-events:none}
+.cover-eyebrow{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#38bdf8;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.cover-eyebrow::before{content:'';display:inline-block;width:24px;height:2px;background:#38bdf8}
+.cover-title{font-size:40px;font-weight:900;letter-spacing:-.03em;line-height:1.15;color:#f8fafc;margin-bottom:10px}
+.cover-title span{color:#38bdf8}
+.cover-sub{font-size:16px;color:#94a3b8;max-width:560px;margin-bottom:36px;line-height:1.7}
+.cover-pills{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px}
+.pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:24px;padding:6px 18px;font-size:12px;font-weight:700;color:#e2e8f0}
+.pill.dm1{background:rgba(59,130,246,.2);border-color:rgba(59,130,246,.4);color:#93c5fd}
+.pill.dm2{background:rgba(168,85,247,.2);border-color:rgba(168,85,247,.4);color:#d8b4fe}
+.pill.dm3{background:rgba(34,197,94,.2);border-color:rgba(34,197,94,.4);color:#86efac}
+.cover-meta{display:flex;gap:32px;font-size:12px;color:#475569;border-top:1px solid rgba(255,255,255,.08);padding-top:20px}
+.cover-meta strong{color:#94a3b8;display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+
+/* ── SECTIONS ── */
+.section{background:#fff;border-radius:14px;padding:40px 44px;margin-bottom:28px;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid #e5e7eb}
+
+/* ── SECTION HEADER ── */
+.sec-hdr{display:flex;align-items:flex-start;gap:16px;margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid #f0f2f5}
+.sec-num{font-size:11px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--c1),var(--c2));width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:-.01em}
+.sec-titles .sec-title{font-size:22px;font-weight:900;color:#0f2d4a;letter-spacing:-.02em;line-height:1.2}
+.sec-titles .sec-sub{font-size:13px;color:#64748b;margin-top:3px}
+.sec-accent{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--c1),var(--c2));width:60px;margin-top:8px}
+
+/* ── KPI GRID ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+.kpi-card{background:linear-gradient(135deg,#f7f8fa,#fff);border:1px solid #e5e7eb;border-radius:12px;padding:20px 16px;text-align:center;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c1,#3b82f6),var(--c2,#0ea5e9))}
+.kpi-num{font-size:32px;font-weight:900;letter-spacing:-.04em;color:#0f2d4a;line-height:1}
+.kpi-label{font-size:11px;font-weight:800;color:#374151;text-transform:uppercase;letter-spacing:.05em;margin-top:6px}
+.kpi-sub{font-size:10px;color:#94a3b8;margin-top:2px}
+
+/* ── CALLOUT ── */
+.callout{border-radius:10px;padding:16px 20px;margin:16px 0;display:flex;gap:12px;align-items:flex-start}
+.callout-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.callout-body{font-size:13px;line-height:1.65}
+.callout-body strong{font-weight:800}
+.callout.info{background:#eff6ff;border:1px solid #bfdbfe}
+.callout.info .callout-body{color:#1e40af}
+.callout.success{background:#f0fdf4;border:1px solid #bbf7d0}
+.callout.success .callout-body{color:#15803d}
+.callout.warning{background:#fffbeb;border:1px solid #fde68a}
+.callout.warning .callout-body{color:#92400e}
+
+/* ── BEFORE/AFTER ── */
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+.ba-card{border-radius:12px;padding:22px 24px}
+.ba-card.before{background:#fff5f5;border:1.5px solid #fca5a5}
+.ba-card.after{background:#f0fdf4;border:1.5px solid #86efac}
+.ba-title{font-size:13px;font-weight:900;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ba-card.before .ba-title{color:#dc2626}
+.ba-card.after  .ba-title{color:#15803d}
+.ba-item{font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:8px;color:#374151}
+.ba-item:last-child{border-bottom:none}
+.ba-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ba-card.before .ba-dot{background:#ef4444}
+.ba-card.after  .ba-dot{background:#22c55e}
+
+/* ── STEPS ── */
+.steps-list{display:flex;flex-direction:column;gap:14px;margin:16px 0}
+.step{display:flex;gap:18px;align-items:flex-start;padding:20px 22px;border-radius:12px;border:1.5px solid;position:relative}
+.step-num{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff;flex-shrink:0}
+.step-body{}
+.step-title{font-size:14px;font-weight:800;margin-bottom:5px}
+.step-desc{font-size:13px;color:#374151;line-height:1.65}
+.step-desc code{background:rgba(0,0,0,.06);padding:1px 6px;border-radius:4px;font-size:12px;font-family:'Courier New',monospace}
+.step.s1{background:#eff6ff;border-color:#bfdbfe}.step.s1 .step-num{background:#3b82f6}.step.s1 .step-title{color:#1d4ed8}
+.step.s2{background:#faf5ff;border-color:#e9d5ff}.step.s2 .step-num{background:#9333ea}.step.s2 .step-title{color:#7e22ce}
+.step.s3{background:#f0fdf4;border-color:#bbf7d0}.step.s3 .step-num{background:#22c55e}.step.s3 .step-title{color:#15803d}
+.step.s4{background:#fff7ed;border-color:#fed7aa}.step.s4 .step-num{background:#f97316}.step.s4 .step-title{color:#c2410c}
+.step.s5{background:#fdf4ff;border-color:#f5d0fe}.step.s5 .step-num{background:#d946ef}.step.s5 .step-title{color:#a21caf}
+.step.s6{background:#ecfdf5;border-color:#a7f3d0}.step.s6 .step-num{background:#059669}.step.s6 .step-title{color:#065f46}
+.step.s7{background:#fff1f2;border-color:#fecdd3}.step.s7 .step-num{background:#e11d48}.step.s7 .step-title{color:#be123c}
+.step.s8{background:#f0f9ff;border-color:#bae6fd}.step.s8 .step-num{background:#0284c7}.step.s8 .step-title{color:#0369a1}
+
+/* ── FEATURE GRID ── */
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.feat{border-radius:12px;padding:18px 14px;text-align:center;border:1.5px solid;position:relative;overflow:hidden}
+.feat-icon{font-size:26px;margin-bottom:8px}
+.feat-name{font-size:12px;font-weight:800;margin-bottom:5px}
+.feat-desc{font-size:11px;color:#64748b;line-height:1.5}
+
+/* ── DASHBOARD MOCKUP ── */
+.mockup{background:#0a0a0a;border-radius:14px;overflow:hidden;margin:20px 0;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.mockup-bar{background:#111827;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1f2937}
+.mockup-title{font-size:12px;font-weight:700;color:#38bdf8}
+.mockup-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block}
+.mockup-live{font-size:10px;color:#22c55e;display:flex;align-items:center;gap:4px}
+.mockup-tabs{display:flex;gap:0;padding:10px 18px 0;background:#111827}
+.mockup-tab{padding:7px 20px;border-radius:8px 8px 0 0;font-size:11px;font-weight:700;cursor:default}
+.mockup-tab.biz{background:#0f766e;color:#fff}
+.mockup-tab.tech{background:transparent;color:#475569}
+.mockup-tab.perf{background:transparent;color:#475569}
+.mockup-body{padding:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cycle-card{border-radius:10px;overflow:hidden;background:#111827}
+.cycle-hdr{height:5px}
+.cycle-hdr.dm1{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+.cycle-hdr.dm2{background:linear-gradient(90deg,#9333ea,#c084fc)}
+.cycle-hdr.dm3{background:linear-gradient(90deg,#16a34a,#4ade80)}
+.cycle-inner{padding:14px 12px}
+.cycle-name{font-size:13px;font-weight:900;text-align:center;margin-bottom:2px}
+.cycle-name.dm1{color:#60a5fa}
+.cycle-name.dm2{color:#c084fc}
+.cycle-name.dm3{color:#4ade80}
+.cycle-wave{font-size:10px;color:#475569;text-align:center;margin-bottom:10px}
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;margin:8px 0}
+.gauge-circle{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;position:relative}
+.gauge-circle.dm1{background:conic-gradient(#3b82f6 338deg,#1f2937 338deg);box-shadow:0 0 0 4px #1f2937,0 0 20px rgba(59,130,246,.3)}
+.gauge-circle.dm2{background:conic-gradient(#9333ea 313deg,#1f2937 313deg);box-shadow:0 0 0 4px #1f2937,0 0 20px rgba(147,51,234,.3)}
+.gauge-circle.dm3{background:conic-gradient(#16a34a 263deg,#1f2937 263deg);box-shadow:0 0 0 4px #1f2937,0 0 20px rgba(22,163,74,.25)}
+.rag{border-radius:20px;padding:4px 14px;font-size:10px;font-weight:800;text-align:center;margin:8px auto;display:inline-block}
+.rag.green{background:#dcfce7;color:#15803d}
+.rag.amber{background:#fef9c3;color:#92400e}
+.rag.red  {background:#fee2e2;color:#dc2626}
+.cycle-stats{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px}
+.cstat{background:#1f2937;border-radius:6px;padding:5px 6px;text-align:center}
+.cstat-n{font-size:13px;font-weight:900;color:#f1f5f9}
+.cstat-l{font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.04em}
+
+/* ── COLOUR KEY ── */
+.colour-key{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0}
+.ck-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f7f8fa;border-radius:8px;border:1px solid #e5e7eb}
+.ck-badge{width:56px;border-radius:20px;padding:4px 0;text-align:center;font-size:10px;font-weight:900;flex-shrink:0}
+.ck-desc{font-size:12px;color:#374151}
+
+/* ── TABLE ── */
+table.std{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.5px}
+table.std thead th{background:#1e3a5f;color:#f8fafc;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:10px 14px;text-align:left}
+table.std tbody td{padding:9px 14px;border-bottom:1px solid #f0f2f5;vertical-align:top;color:#374151}
+table.std tbody tr:nth-child(even) td{background:#f9fafb}
+table.std tbody td:first-child{font-weight:700;color:#1f2328}
+
+/* ── ARCH BOX ── */
+.arch-box{background:#0f172a;border-radius:12px;padding:24px 28px;font-family:'Courier New',monospace;font-size:12px;color:#e2e8f0;line-height:1.8;margin:16px 0}
+.arch-box .kw{color:#38bdf8}
+.arch-box .str{color:#86efac}
+.arch-box .cm{color:#64748b}
+
+/* ── SIGN OFF ── */
+.signoff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0}
+.signoff-box{border:1.5px dashed #cbd5e1;border-radius:10px;padding:20px 16px;text-align:center}
+.signoff-role{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#64748b;margin-bottom:12px}
+.signoff-line{border-bottom:1px solid #94a3b8;margin:28px 0 8px}
+.signoff-label{font-size:10px;color:#94a3b8}
+
+/* ── FOOTER ── */
+footer{margin-top:40px;text-align:center;font-size:11px;color:#94a3b8;padding-top:16px;border-top:1px solid #e5e7eb}
+
+/* ── PRINT ── */
+@media print{
+  body{background:#fff;font-size:12px}
+  .wrap{padding:0;max-width:100%}
+  .cover{border-radius:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .section{box-shadow:none;page-break-inside:avoid}
+  .step{page-break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .kpi-card,.feat,.ba-card,.cycle-card{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .arch-box{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .callout{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  footer{display:block}
+  @page{margin:1.5cm 1.8cm;size:A4}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ══════════════════════════════════════════════════ COVER -->
+<div class="cover">
+  <div class="cover-eyebrow">Sempra Energy &nbsp;·&nbsp; Odyssey Phase 1</div>
+  <div class="cover-title">Data Migration<br/><span>Dashboard</span></div>
+  <div class="cover-sub">Client Presentation &amp; User Guide — SAP Migration Tracking across DM1, DM2 and DM3. Built for speed, accuracy and zero manual effort.</div>
+  <div class="cover-pills">
+    <span class="pill dm1">📘 DM1 — Cycle 1</span>
+    <span class="pill dm2">📗 DM2 — Cycle 2</span>
+    <span class="pill dm3">📙 DM3 — Cycle 3</span>
+    <span class="pill">⚡ Auto-Sync</span>
+    <span class="pill">🔐 Role-Based Access</span>
+    <span class="pill">📤 SAP RFC Automation</span>
+  </div>
+  <div class="cover-meta">
+    <div><strong>Version</strong>v1.0</div>
+    <div><strong>Date</strong>October 2026</div>
+    <div><strong>Prepared by</strong>Kishor Marri</div>
+    <div><strong>Project</strong>SAP Odyssey Phase 1</div>
+    <div><strong>Classification</strong>Internal Use Only</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ 01 EXECUTIVE SUMMARY -->
+<div class="section" style="--c1:#0f766e;--c2:#0ea5e9">
+  <div class="sec-hdr">
+    <div class="sec-num">01</div>
+    <div class="sec-titles">
+      <div class="sec-title">Executive Summary</div>
+      <div class="sec-sub">Business value and purpose — for leadership audiences</div>
+      <div class="sec-accent"></div>
+    </div>
+  </div>
+
+  <p style="font-size:14px;color:#374151;margin-bottom:20px;line-height:1.75">
+    The <strong>Sempra Data Migration Dashboard</strong> is Sempra's single source of truth for SAP migration health across all three waves. It replaces 30–60 minutes of manual Excel reconciliation <em>per cycle</em> with a single button click — delivering live, colour-coded health indicators in under 10 seconds.
+  </p>
+
+  <div class="kpi-grid">
+    <div class="kpi-card" style="--c1:#3b82f6;--c2:#0ea5e9"><div class="kpi-num">3</div><div class="kpi-label">Migration Cycles</div><div class="kpi-sub">DM1 → DM2 → DM3</div></div>
+    <div class="kpi-card" style="--c1:#0f766e;--c2:#22c55e"><div class="kpi-num">&lt;10s</div><div class="kpi-label">Full Sync Time</div><div class="kpi-sub">All 3 cycles at once</div></div>
+    <div class="kpi-card" style="--c1:#9333ea;--c2:#d946ef"><div class="kpi-num">100%</div><div class="kpi-label">Local Processing</div><div class="kpi-sub">Zero cloud dependency</div></div>
+    <div class="kpi-card" style="--c1:#f97316;--c2:#f59e0b"><div class="kpi-num">0</div><div class="kpi-label">Manual Steps</div><div class="kpi-sub">Fully automated sync</div></div>
+    <div class="kpi-card" style="--c1:#e11d48;--c2:#f97316"><div class="kpi-num">2 min</div><div class="kpi-label">Auto-Refresh</div><div class="kpi-sub">Always current data</div></div>
+    <div class="kpi-card" style="--c1:#0284c7;--c2:#6366f1"><div class="kpi-num">4</div><div class="kpi-label">User Roles</div><div class="kpi-sub">Viewer → Admin</div></div>
+  </div>
+
+  <div class="callout info">
+    <span class="callout-icon">💡</span>
+    <div class="callout-body">
+      <strong>What Leadership Needs to Know:</strong> This tool covers all three migration waves on one screen, flags mismatches and missing data automatically in colour, produces printable PDF reports with Ctrl+P, and never sends any Sempra data outside the local machine.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ 02 DASHBOARD LOOK -->
+<div class="section" style="--c1:#1d4ed8;--c2:#0ea5e9">
+  <div class="sec-hdr">
+    <div class="sec-num">02</div>
+    <div class="sec-titles">
+      <div class="sec-title">How the Dashboard Looks</div>
+      <div class="sec-sub">Visual walkthrough — what users see on screen</div>
+      <div class="sec-accent"></div>
+    </div>
+  </div>
+
+  <!-- Dashboard Mockup -->
+  <div class="mockup">
+    <div class="mockup-bar">
+      <span class="mockup-title">📊 Sempra Data Migration Dashboard — Executive Summary</span>
+      <span class="mockup-live"><span class="mockup-dot"></span> Bridge Online</span>
+    </div>
+    <div class="mockup-tabs">
+      <span class="mockup-tab biz">📊 Business View</span>
+      <span class="mockup-tab tech" style="margin-left:4px">🔧 Technical View</span>
+      <span class="mockup-tab perf" style="margin-left:4px">⚡ Performance</span>
+    </div>
+    <div class="mockup-body">
+      <!-- DM1 -->
+      <div class="cycle-card">
+        <div class="cycle-hdr dm1"></div>
+        <div class="cycle-inner">
+          <div class="cycle-name dm1">DM1</div>
+          <div class="cycle-wave">Migration Cycle 1</div>
+          <div class="gauge-wrap">
+            <div class="gauge-circle dm1">94%</div>
+          </div>
+          <div style="text-align:center"><span class="rag green">✓ ON TRACK</span></div>
+          <div class="cycle-stats">
+            <div class="cstat"><div class="cstat-n" style="color:#60a5fa">847</div><div class="cstat-l">Tables</div></div>
+            <div class="cstat"><div class="cstat-n" style="color:#4ade80">796</div><div class="cstat-l">Matched</div></div>
+            <div class="cstat"><div class="cstat-n" style="color:#f87171">51</div><div class="cstat-l">Mismatch</div></div>
+            <div class="cstat"><div class="cstat-n" style="color:#facc15">94%</div><div class="cstat-l">Rate</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- DM2 -->
+      <div class="cycle-card">
+        <div class="cycle-hdr dm2"></div>
+        <div class="cycle-inner">
+          <div class="cycle-name dm2">DM2</div>
+          <div class="cycle-wave">Migration Cycle 2</div>
+          <div class="gauge-wrap">
+            <div class="gauge-circle dm2">87%</div>
+          </div>
+          <div style="text-align:center"><span class="rag amber">⚠ REVIEW</span></div>
+          <div class="cycle-stats">
+            <div class="cstat"><div class="cstat-n" style="color:#c084fc">623</div><div class="cstat-l">Tables</div></div>
+            <div class="cstat"><div class="cstat-n" style="color:#4ade80">542</div><div class="cstat-l">Matched</div></div>
+            <div class="cstat"><div class="cstat-n" style="color:#f87171">81</div><div class="cstat-l">Mismatch</div></div>
+            <div class="cstat"><div class="cstat-n" style="color:#facc15">87%</div><div class="cstat-l">Rate</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- DM3 -->
+      <div class="cycle-card">
+        <div class="cycle-hdr dm3"></div>
+        <div class="cycle-inner">
+          <div class="cycle-name dm3">DM3</div>
+          <div class="cycle-wave">Migration Cycle 3</div>
+          <div class="gauge-wrap">
+            <div class="gauge-circle dm3">73%</div>
+          </div>
+          <div style="text-align:center"><span class="rag amber">🔄 IN PROGRESS</span></div>
+          <div class="cycle-stats">
+            <div class="cstat"><div class="cstat-n" style="color:#4ade80">412</div><div class="cstat-l">Tables</div></div>
+            <div class="cstat"><div class="cstat-n" style="color:#4ade80">301</div><div class="cstat-l">Matched</div></div>
+            <div class="cstat"><div class="cstat-n" style="color:#f87171">111</div><div class="cstat-l">Mismatch</div></div>
+            <div class="cstat"><div class="cstat-n" style="color:#facc15">73%</div><div class="cstat-l">Rate</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:11px;color:#94a3b8;text-align:center;margin-bottom:20px;font-style:italic">Figure 1 — Executive Summary dashboard showing all three migration cycles with live match gauges and RAG status badges</p>
+
+  <h3 style="font-size:15px;font-weight:800;color:#1e3a5f;margin-bottom:12px">Three Dashboard Views</h3>
+  <table class="std">
+    <thead><tr><th>View</th><th>Audience</th><th>What It Shows</th></tr></thead>
+    <tbody>
+      <tr><td style="color:#0f766e">📊 Business View</td><td>Project Managers · Sponsors · Client</td><td>RAG scorecards, match %, record volumes, auto-generated insight boxes highlighting key issues</td></tr>
+      <tr><td style="color:#1d4ed8">🔧 Technical View</td><td>Migration Leads · Analysts</td><td>Per-table breakdown — source vs target counts, EXP vs IMP gaps, variance columns, cross-cycle comparison</td></tr>
+      <tr><td style="color:#7c3aed">⚡ Performance View</td><td>Technical Team</td><td>Cycle-over-cycle metrics, timing data, cache hit rates, file sizes</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="font-size:15px;font-weight:800;color:#1e3a5f;margin:20px 0 12px">RAG Status — What Every Colour Means</h3>
+  <div class="colour-key">
+    <div class="ck-item"><div class="ck-badge" style="background:#dcfce7;color:#15803d;border:1px solid #86efac">● GREEN</div><div class="ck-desc"><strong>≥ 95% match rate</strong> — Migration on track, fully reconciled</div></div>
+    <div class="ck-item"><div class="ck-badge" style="background:#fef9c3;color:#92400e;border:1px solid #fde047">● AMBER</div><div class="ck-desc"><strong>80–94% match</strong> — Minor gaps, monitoring needed</div></div>
+    <div class="ck-item"><div class="ck-badge" style="background:#fee2e2;color:#dc2626;border:1px solid #fca5a5">● RED</div><div class="ck-desc"><strong>&lt; 80% match</strong> — Critical issues, action required</div></div>
+    <div class="ck-item"><div class="ck-badge" style="background:#f1f5f9;color:#475569;border:1px solid #cbd5e1">● GREY</div><div class="ck-desc"><strong>No data loaded</strong> — Awaiting file upload</div></div>
+    <div class="ck-item"><div class="ck-badge" style="background:#dbeafe;color:#1d4ed8;border:1px solid #93c5fd">● BLUE</div><div class="ck-desc"><strong>DM1 Cycle 1</strong> — All labels, borders, cards</div></div>
+    <div class="ck-item"><div class="ck-badge" style="background:#f3e8ff;color:#7e22ce;border:1px solid #d8b4fe">● PURPLE</div><div class="ck-desc"><strong>DM2 Cycle 2</strong> — All labels, borders, cards</div></div>
+    <div class="ck-item"><div class="ck-badge" style="background:#dcfce7;color:#15803d;border:1px solid #86efac">● GREEN</div><div class="ck-desc"><strong>DM3 Cycle 3</strong> — All labels, borders, cards</div></div>
+    <div class="ck-item"><div class="ck-badge" style="background:#fef9c3;color:#92400e;border:1px solid #fde047">🔄 AMBER</div><div class="ck-desc"><strong>In Progress</strong> — DM3 migration banner (REF only)</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ 03 BEFORE VS AFTER -->
+<div class="section" style="--c1:#dc2626;--c2:#16a34a">
+  <div class="sec-hdr">
+    <div class="sec-num">03</div>
+    <div class="sec-titles">
+      <div class="sec-title">The Problem It Solves</div>
+      <div class="sec-sub">Before vs After — the transformation in numbers</div>
+      <div class="sec-accent"></div>
+    </div>
+  </div>
+
+  <div class="ba-grid">
+    <div class="ba-card before">
+      <div class="ba-title">✗ &nbsp;BEFORE — Manual Process</div>
+      <div class="ba-item"><div class="ba-dot"></div>30–60 minutes per cycle to reconcile</div>
+      <div class="ba-item"><div class="ba-dot"></div>Double-counting inflated match numbers</div>
+      <div class="ba-item"><div class="ba-dot"></div>One cycle at a time — no cross view</div>
+      <div class="ba-item"><div class="ba-dot"></div>Files emailed between team members</div>
+      <div class="ba-item"><div class="ba-dot"></div>Manual SE16N queries per table</div>
+      <div class="ba-item"><div class="ba-dot"></div>Reports out-of-date before finished</div>
+      <div class="ba-item"><div class="ba-dot"></div>Easy to miss mismatches and gaps</div>
+    </div>
+    <div class="ba-card after">
+      <div class="ba-title">✓ &nbsp;AFTER — This Dashboard</div>
+      <div class="ba-item"><div class="ba-dot"></div>Under 10 seconds — all 3 cycles at once</div>
+      <div class="ba-item"><div class="ba-dot"></div>DISTINCT dedup algorithm — always correct</div>
+      <div class="ba-item"><div class="ba-dot"></div>3 cycles side-by-side on one screen</div>
+      <div class="ba-item"><div class="ba-dot"></div>Data never leaves the local machine</div>
+      <div class="ba-item"><div class="ba-dot"></div>Automated RFC batch queries — all tables</div>
+      <div class="ba-item"><div class="ba-dot"></div>Auto-refresh every 2 minutes</div>
+      <div class="ba-item"><div class="ba-dot"></div>Colour-coded flags — nothing missed</div>
+    </div>
+  </div>
+
+  <table class="std" style="margin-top:8px">
+    <thead><tr><th>Aspect</th><th style="color:#fca5a5">Manual (Before)</th><th style="color:#86efac">Dashboard (After)</th></tr></thead>
+    <tbody>
+      <tr><td>Reconciliation time</td><td>30–60 min per cycle</td><td style="color:#15803d;font-weight:700">&lt; 10 seconds — all 3 cycles</td></tr>
+      <tr><td>Accuracy</td><td>Double-counting + formula errors</td><td style="color:#15803d;font-weight:700">DISTINCT dedup — always correct</td></tr>
+      <tr><td>Coverage</td><td>One cycle at a time</td><td style="color:#15803d;font-weight:700">All 3 cycles simultaneously</td></tr>
+      <tr><td>Data freshness</td><td>Manual update only</td><td style="color:#15803d;font-weight:700">Auto-refresh every 2 minutes</td></tr>
+      <tr><td>Issue detection</td><td>Manual — easy to miss</td><td style="color:#15803d;font-weight:700">Auto colour-coded indicators</td></tr>
+      <tr><td>Leadership reports</td><td>Email attachments</td><td style="color:#15803d;font-weight:700">Live dashboard + instant PDF</td></tr>
+      <tr><td>SAP source counts</td><td>Manual SE16N per table</td><td style="color:#15803d;font-weight:700">Automated RFC — all tables</td></tr>
+      <tr><td>Data security</td><td>Files emailed between team</td><td style="color:#15803d;font-weight:700">Never leaves the local machine</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════ 04 HOW TO USE -->
+<div class="section" style="--c1:#7c3aed;--c2:#4f46e5">
+  <div class="sec-hdr">
+    <div class="sec-num">04</div>
+    <div class="sec-titles">
+      <div class="sec-title">Step-by-Step: How to Use</div>
+      <div class="sec-sub">Complete walkthrough — no technical knowledge required</div>
+      <div class="sec-accent"></div>
+    </div>
+  </div>
+
+  <div class="steps-list">
+    <div class="step s1">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">🚀 Launch the Dashboard</div>
+        <div class="step-desc">Open PowerShell in the project folder and run: <code>python launch_dashboard.py</code><br/>
+        Your browser opens automatically at <code>http://localhost:5003/Sempra_CrossCycle_Summary_MASTER.html</code><br/>
+        Two background services start silently — leave the PowerShell windows open while using the dashboard.</div>
+      </div>
+    </div>
+    <div class="step s2">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">🔐 Log In with Your Role</div>
+        <div class="step-desc">A secure login screen appears. Choose your role:<br/>
+        <strong>Admin</strong> — full access including SAP automation &nbsp;|&nbsp; <strong>Manager</strong> — view + PDF exports<br/>
+        <strong>Analyst</strong> — upload files + download CSV/Excel &nbsp;|&nbsp; <strong>Viewer</strong> — read-only access<br/>
+        Your session is saved automatically — you stay logged in across page reloads.</div>
+      </div>
+    </div>
+    <div class="step s3">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">⚡ Click "Auto-Sync All Cycles"</div>
+        <div class="step-desc">One click reads all 5 Excel files from the C: drive, parses them in the browser,
+        runs reconciliation for DM1, DM2, DM3 simultaneously, and updates all three cycle cards.<br/>
+        A <strong>rainbow animation</strong> plays on the button while running. Three coloured spinning sync circles appear — one per cycle — showing the match % when each completes. Entire process takes <strong>under 10 seconds</strong>.</div>
+      </div>
+    </div>
+    <div class="step s4">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">📊 Read the Business View Results</div>
+        <div class="step-desc">Each cycle card shows: an animated <strong>match % gauge</strong>, a <strong>RAG badge</strong> (GREEN ≥95% · AMBER 80–94% · RED &lt;80%), headline KPIs (total tables, matched, mismatched, missing), and auto-generated <strong>insight boxes</strong> that flag the most important issues automatically.</div>
+      </div>
+    </div>
+    <div class="step s5">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">🔧 Switch to Technical View for Per-Table Detail</div>
+        <div class="step-desc">Click the <strong>Technical View</strong> tab to see a full table-level breakdown:<br/>
+        <strong>Set 1</strong> — Tables in Reference List with migration data (EXP vs IMP counts compared)<br/>
+        <strong>Set 2</strong> — Tables NOT in the Reference List (unexpected data — investigate)<br/>
+        <strong>Set 3</strong> — Tables in Reference List with NO migration data (never migrated)<br/>
+        <strong>Set 4</strong> — Tables where Export count ≠ Import count (data loss risk)</div>
+      </div>
+    </div>
+    <div class="step s6">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <div class="step-title">🔍 Drill Down into Individual Cycles</div>
+        <div class="step-desc">Click <strong>DM1 / DM2 / DM3</strong> in the navigation to open that cycle's detail page.
+        Upload new Excel files via <strong>drag-and-drop</strong> anytime. Search and filter the full table list. 
+        Click any row to open a <strong>drill-down modal</strong> with record-level detail and visual chart. 
+        Download filtered subsets as <strong>CSV or Excel</strong> using the export buttons.</div>
+      </div>
+    </div>
+    <div class="step s7">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <div class="step-title">📤 Export for Leadership Presentations</div>
+        <div class="step-desc">Press <code>Ctrl+P</code> → Save as PDF for a clean, print-ready leadership report.
+        The dashboard switches to white background with all colours preserved for a professional output.
+        Or use the <strong>CSV / Excel</strong> export buttons per analysis set.
+        Full export (all cycles, all sets in one Excel file) available from the master dashboard.</div>
+      </div>
+    </div>
+    <div class="step s8">
+      <div class="step-num">8</div>
+      <div class="step-body">
+        <div class="step-title">🔄 Auto-Refresh Keeps Data Current</div>
+        <div class="step-desc">The dashboard <strong>auto-refreshes every 2 minutes</strong> — a countdown timer is shown in the toolbar.
+        A red dot appears when refresh is &lt;60 seconds away.
+        Click <strong>Pause</strong> to freeze the view during a presentation.
+        All results persist in browser localStorage — <strong>survive page reloads</strong> without re-syncing.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ 05 FEATURES -->
+<div class="section" style="--c1:#0369a1;--c2:#0284c7">
+  <div class="sec-hdr">
+    <div class="sec-num">05</div>
+    <div class="sec-titles">
+      <div class="sec-title">Complete Feature Catalogue</div>
+      <div class="sec-sub">Everything the dashboard can do — at a glance</div>
+      <div class="sec-accent"></div>
+    </div>
+  </div>
+
+  <div class="feat-grid">
+    <div class="feat" style="background:#eff6ff;border-color:#bfdbfe"><div class="feat-icon">⚡</div><div class="feat-name" style="color:#1d4ed8">Auto-Sync</div><div class="feat-desc">One click reads all 5 Excel files in &lt;10 seconds</div></div>
+    <div class="feat" style="background:#faf5ff;border-color:#e9d5ff"><div class="feat-icon">📊</div><div class="feat-name" style="color:#7e22ce">3 Views</div><div class="feat-desc">Business · Technical · Performance switchable tabs</div></div>
+    <div class="feat" style="background:#f0fdf4;border-color:#bbf7d0"><div class="feat-icon">🎯</div><div class="feat-name" style="color:#15803d">RAG Status</div><div class="feat-desc">Green/Amber/Red per cycle — auto-calculated always</div></div>
+    <div class="feat" style="background:#fff7ed;border-color:#fed7aa"><div class="feat-icon">🔍</div><div class="feat-name" style="color:#c2410c">Drill-Down</div><div class="feat-desc">Click any row for record-level detail + visual chart</div></div>
+    <div class="feat" style="background:#ecfdf5;border-color:#a7f3d0"><div class="feat-icon">🔄</div><div class="feat-name" style="color:#065f46">Auto Refresh</div><div class="feat-desc">Every 2 minutes with pause/resume countdown badge</div></div>
+    <div class="feat" style="background:#fff1f2;border-color:#fecdd3"><div class="feat-icon">📥</div><div class="feat-name" style="color:#be123c">Exports</div><div class="feat-desc">CSV · Excel · PDF per set or full dashboard export</div></div>
+    <div class="feat" style="background:#fdf4ff;border-color:#f5d0fe"><div class="feat-icon">🔐</div><div class="feat-name" style="color:#a21caf">Role Login</div><div class="feat-desc">Admin · Manager · Analyst · Viewer access levels</div></div>
+    <div class="feat" style="background:#f0f9ff;border-color:#bae6fd"><div class="feat-icon">🤖</div><div class="feat-name" style="color:#0369a1">SAP Automation</div><div class="feat-desc">RFC to SAP source + target — batch SE16N counts</div></div>
+  </div>
+
+  <table class="std">
+    <thead><tr><th>Feature</th><th>Where</th><th>Benefit to Team</th></tr></thead>
+    <tbody>
+      <tr><td>DISTINCT Deduplication</td><td>All 6 aggregation points</td><td>Prevents double-counting — EXP and IMP always processed separately</td></tr>
+      <tr><td>ETag 304 Caching</td><td>File Bridge (port 5002)</td><td>Zero re-read if files unchanged — dashboard responds instantly</td></tr>
+      <tr><td>Gzip Compression</td><td>All file transfers</td><td>60–70% smaller transfers — fast dashboard load every time</td></tr>
+      <tr><td>localStorage Persistence</td><td>All dashboards</td><td>Results survive page reloads — no need to re-sync every session</td></tr>
+      <tr><td>Print-Optimised CSS</td><td>Ctrl+P on any page</td><td>Clean white PDF output with all colours preserved — ready for leadership</td></tr>
+      <tr><td>DM3 REF-Only Mode</td><td>DM3 dashboard</td><td>Gracefully handles missing EXP/IMP file — amber banner shown automatically</td></tr>
+      <tr><td>Dynamic Bridge URL</td><td>JavaScript layer</td><td>Works on any machine or IP — no hardcoded paths to update</td></tr>
+      <tr><td>Bulk /files/all Endpoint</td><td>Bridge API</td><td>Manifest check before download — avoids wasted network requests</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════ 06 ARCHITECTURE -->
+<div class="section" style="--c1:#4f46e5;--c2:#7c3aed">
+  <div class="sec-hdr">
+    <div class="sec-num">06</div>
+    <div class="sec-titles">
+      <div class="sec-title">Technical Architecture</div>
+      <div class="sec-sub">How the system works — for technical reviewers</div>
+      <div class="sec-accent"></div>
+    </div>
+  </div>
+
+  <div class="arch-box">
+<span class="kw">YOUR BROWSER</span> (HTML + JavaScript + SheetJS v0.18.5)
+  Sempra_CrossCycle_Summary_MASTER.html  <span class="cm">← Main dashboard, all 3 cycles</span>
+  Sempra_DM1/DM2/DM3_Dashboard.html      <span class="cm">← Per-cycle detail pages</span>
+        │
+        │  <span class="str">fetch("http://localhost:5002/file?cycle=DM1&type=ref")</span>
+        │  gzip-compressed Excel bytes  ←  ETag 304 caching
+        ▼
+<span class="kw">FILE WATCHER BRIDGE</span>  (Python Flask — port 5002)
+  automation/file_watcher_bridge.py
+  ✔ In-memory cache    ✔ Gzip compression    ✔ ETag / 304 Not Modified
+        │
+        │  reads raw Excel bytes from disk
+        ▼
+<span class="kw">LOCAL FILE SYSTEM</span>  (C:\Users\KishorMarri\.bob\)
+  DM1\Reflist_m1.xlsx  +  DM1_ES2-SQ1 Export-Import.xlsx
+  DM2\DM2 REF.xlsx     +  EXPORT IMPORT_DM2.xlsx
+  DM3\ref dm31.xlsx    +  DM3_EXPORT_IMPORT_LOG.xlsx
+
+<span class="kw">SAP BRIDGE</span>  (Optional — Python Flask — port 5001)
+  automation/sap_bridge.py
+  Method 1: EM_GET_NUMBER_OF_ENTRIES  <span class="cm">(SE16N internal FM)</span>
+  Method 2: RFC_READ_TABLE            <span class="cm">(standard fallback)</span>
+  Method 3: BBP_RFC_READ_TABLE        <span class="cm">(alternative fallback)</span></div>
+
+  <div class="callout success">
+    <span class="callout-icon">🔒</span>
+    <div class="callout-body">
+      <strong>Security:</strong> All Flask servers bind to <code>127.0.0.1</code> (loopback only) — not reachable from the network. No Sempra data ever leaves the local machine. SAP credentials entered in-browser are never written to disk. No firewall changes required.
+    </div>
+  </div>
+
+  <table class="std">
+    <thead><tr><th>Layer</th><th>Technology</th><th>Port</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td>Browser Frontend</td><td>HTML5, Vanilla JS, SheetJS v0.18.5</td><td>5003</td><td>Excel parsing, reconciliation, rendering</td></tr>
+      <tr><td>File Bridge</td><td>Python 3.8+, Flask, Flask-CORS, gzip</td><td>5002</td><td>Serves Excel bytes with compression + caching</td></tr>
+      <tr><td>Static Server</td><td>Python http.server (built-in)</td><td>5003</td><td>Serves HTML over HTTP — avoids CORS issues</td></tr>
+      <tr><td>SAP Bridge (opt.)</td><td>Python, Flask, pyrfc, openpyxl</td><td>5001</td><td>RFC to SAP for table counts + Excel export</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════ 07 QUICK REFERENCE -->
+<div class="section" style="--c1:#1e3a5f;--c2:#0f2d4a">
+  <div class="sec-hdr">
+    <div class="sec-num">07</div>
+    <div class="sec-titles">
+      <div class="sec-title">Quick Reference</div>
+      <div class="sec-sub">URLs, file locations, login credentials</div>
+      <div class="sec-accent"></div>
+    </div>
+  </div>
+
+  <h3 style="font-size:14px;font-weight:800;color:#1e3a5f;margin-bottom:10px">Dashboard URLs</h3>
+  <table class="std">
+    <thead><tr><th>Page</th><th>URL</th></tr></thead>
+    <tbody>
+      <tr><td>Executive Summary (MASTER)</td><td><code style="font-size:11px">http://localhost:5003/Sempra_CrossCycle_Summary_MASTER.html</code></td></tr>
+      <tr><td>DM1 Cycle Dashboard</td><td><code style="font-size:11px">http://localhost:5003/Sempra_DM1_Dashboard.html</code></td></tr>
+      <tr><td>DM2 Cycle Dashboard</td><td><code style="font-size:11px">http://localhost:5003/Sempra_DM2_Dashboard.html</code></td></tr>
+      <tr><td>DM3 Cycle Dashboard</td><td><code style="font-size:11px">http://localhost:5003/Sempra_DM3_Dashboard.html</code></td></tr>
+      <tr><td>Bridge Health Check</td><td><code style="font-size:11px">http://localhost:5002/ping</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="font-size:14px;font-weight:800;color:#1e3a5f;margin:20px 0 10px">Data Files — C: Drive</h3>
+  <table class="std">
+    <thead><tr><th>Cycle</th><th>File Path</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr><td style="color:#3b82f6">DM1</td><td><code style="font-size:10px">C:\Users\KishorMarri\.bob\DM1\Reflist_m1.xlsx</code></td><td>Reference List</td></tr>
+      <tr><td style="color:#3b82f6">DM1</td><td><code style="font-size:10px">C:\Users\KishorMarri\.bob\DM1\DM1_ES2-SQ1 Export-Import.xlsx</code></td><td>Export/Import</td></tr>
+      <tr><td style="color:#9333ea">DM2</td><td><code style="font-size:10px">C:\Users\KishorMarri\.bob\DM2\DM2 REF.xlsx</code></td><td>Reference List</td></tr>
+      <tr><td style="color:#9333ea">DM2</td><td><code style="font-size:10px">C:\Users\KishorMarri\.bob\DM2\EXPORT IMPORT_DM2.xlsx</code></td><td>Export/Import</td></tr>
+      <tr><td style="color:#16a34a">DM3</td><td><code style="font-size:10px">C:\Users\KishorMarri\.bob\DM3\ref dm31.xlsx</code></td><td>Reference List</td></tr>
+      <tr><td style="color:#16a34a">DM3</td><td><code style="font-size:10px">C:\Users\KishorMarri\.bob\DM3\DM3_EXPORT_IMPORT_LOG.xlsx</code></td><td>Export/Import</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="font-size:14px;font-weight:800;color:#1e3a5f;margin:20px 0 10px">User Roles</h3>
+  <table class="std">
+    <thead><tr><th>Role</th><th>Username</th><th>Permissions</th></tr></thead>
+    <tbody>
+      <tr><td><span style="background:#fee2e2;color:#dc2626;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:800">Admin</span></td><td><code>admin</code></td><td>Full access — upload, refresh, download, SAP automation panel, manage paths</td></tr>
+      <tr><td><span style="background:#fef9c3;color:#92400e;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:800">Manager</span></td><td><code>manager</code></td><td>View dashboards, download PDF reports, view RAG scorecards</td></tr>
+      <tr><td><span style="background:#dbeafe;color:#1d4ed8;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:800">Analyst</span></td><td><code>analyst</code></td><td>Upload files, view all analysis, download CSV/Excel</td></tr>
+      <tr><td><span style="background:#f1f5f9;color:#475569;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:800">Viewer</span></td><td><code>viewer</code></td><td>Read-only — view dashboards and charts only</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════ 08 SIGN OFF -->
+<div class="section" style="--c1:#0f766e;--c2:#0284c7">
+  <div class="sec-hdr">
+    <div class="sec-num">08</div>
+    <div class="sec-titles">
+      <div class="sec-title">Approval &amp; Sign-Off</div>
+      <div class="sec-sub">Leadership approval section — print and sign</div>
+      <div class="sec-accent"></div>
+    </div>
+  </div>
+
+  <div class="callout warning">
+    <span class="callout-icon">📋</span>
+    <div class="callout-body">
+      <strong>Approval Request:</strong> This document provides full visibility into the Sempra SAP Data Migration Tracking Dashboard — its purpose, functionality, technical design, security posture, and risk profile. The undersigned confirm they have reviewed this document and approve the solution for continued use in the SAP migration programme.
+    </div>
+  </div>
+
+  <div class="signoff-grid" style="margin-top:24px">
+    <div class="signoff-box">
+      <div class="signoff-role">Project Sponsor</div>
+      <div class="signoff-line"></div>
+      <div class="signoff-label">Signature &amp; Date</div>
+    </div>
+    <div class="signoff-box">
+      <div class="signoff-role">Programme / IT Manager</div>
+      <div class="signoff-line"></div>
+      <div class="signoff-label">Signature &amp; Date</div>
+    </div>
+    <div class="signoff-box">
+      <div class="signoff-role">Security / Compliance</div>
+      <div class="signoff-line"></div>
+      <div class="signoff-label">Signature &amp; Date</div>
+    </div>
+  </div>
+
+  <table class="std" style="margin-top:24px">
+    <thead><tr><th>Document Metadata</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Document Title</td><td>Sempra SAP Data Migration Tracking Dashboard — Client Presentation</td></tr>
+      <tr><td>Version</td><td>v1.0 — October 2026</td></tr>
+      <tr><td>Project</td><td>SAP Odyssey Phase 1 — Sempra Energy</td></tr>
+      <tr><td>Components</td><td>1× MASTER + 3× Cycle Dashboards + 2× Python Bridges + 1× Launcher</td></tr>
+      <tr><td>Technology Stack</td><td>HTML5, Vanilla JS, SheetJS v0.18.5, Python 3.8+, Flask, openpyxl</td></tr>
+      <tr><td>Deployment</td><td>Local laptop only — no cloud, no network dependencies, no licences</td></tr>
+      <tr><td>Classification</td><td>Internal Use Only</td></tr>
+      <tr><td>Prepared by</td><td>Kishor Marri — SAP Migration Team, Sempra Energy</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<footer>
+  Sempra Data Migration Dashboard v1.0 &nbsp;·&nbsp; Odyssey Phase 1 &nbsp;·&nbsp; Internal Use Only &nbsp;·&nbsp; October 2026<br/>
+  Made with IBM Bob
+</footer>
+
+</div>
+</body>
+</html>

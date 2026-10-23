@@ -45,3 +45,13 @@ desktop.ini
 
 # ── Windows temp files ────────────────────────────────────────────────────────
 ~$*
+# Additional ignores
+SAP_ISU_*.zip
+Sempra_DM_Dashboard_Portable_*.zip
+Sempra_DM_Dashboard_ALL_CODE_*.zip
+apply_full_online_fix.py
+test_write.txt
+
+Kyano_Mission_Control_User_Guide.html
+SAP_*.html
+

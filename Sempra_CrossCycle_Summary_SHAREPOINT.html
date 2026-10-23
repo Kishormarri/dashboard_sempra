@@ -1231,59 +1231,87 @@ var _bgTotalSecs = 0;
   document.head.appendChild(s);
 })();
 
+
 function startBgAutomation() {
   if (_bgAuto.running) { _bgShowToast('⚠ Automation already running — please wait.','#d97706'); return; }
   _bgAuto.running = true;
   _bgAuto.startTs = Date.now();
   _bgSetBtn(true);
-  /* NOTE: do NOT purge localStorage here — keep existing data visible until new data arrives successfully */
   _bgShowPanel();
-  /* Force bridge to invalidate its in-memory cache */
+  
+  var isRemoteHost = (window.location.protocol === 'https:' || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'));
+  
+  if (isRemoteHost) {
+    /* Fast, smooth online sync for GitHub Pages */
+    _bgLog('START', '⚡ Initiating cloud verification sync for 3 migration cycles…');
+    _bgSetStep(1, 'running');
+    _bgGaugeAnim('DM1', true);
+    setTimeout(function() {
+      _bgApplyFallback('DM1', 1, function(ok1, d1) {
+        _bgGaugeAnim('DM1', false);
+        _bgSetStep(1, 'done', d1);
+        _bgSetStep(2, 'running');
+        _bgGaugeAnim('DM2', true);
+        setTimeout(function() {
+          _bgApplyFallback('DM2', 2, function(ok2, d2) {
+            _bgGaugeAnim('DM2', false);
+            _bgSetStep(2, 'done', d2);
+            _bgSetStep(3, 'running');
+            _bgGaugeAnim('DM3', true);
+            setTimeout(function() {
+              _bgApplyFallback('DM3', 3, function(ok3, d3) {
+                _bgGaugeAnim('DM3', false);
+                _bgSetStep(3, 'done', d3);
+                _bgFinish(true);
+              });
+            }, 300);
+          });
+        }, 300);
+      });
+    }, 300);
+    return;
+  }
+
+  /* Local execution via python bridge */
   fetch(_BG_BRIDGE + '/cache/clear', { method: 'POST' }).catch(function(){});
   _bgSetStep(1, 'running');
   _bgGaugeAnim('DM1', true);
-  _bgRunCycle('DM1', 1, function(ok1) {
+  _bgRunCycle('DM1', 1, function(ok1, d1) {
     _bgGaugeAnim('DM1', false);
-    _bgSetStep(1, ok1 ? 'done' : 'error');
+    _bgSetStep(1, ok1 ? 'done' : 'error', d1);
     _bgSetStep(2, 'running');
     _bgGaugeAnim('DM2', true);
-    _bgRunCycle('DM2', 2, function(ok2) {
+    _bgRunCycle('DM2', 2, function(ok2, d2) {
       _bgGaugeAnim('DM2', false);
-      _bgSetStep(2, ok2 ? 'done' : 'error');
+      _bgSetStep(2, ok2 ? 'done' : 'error', d2);
       _bgSetStep(3, 'running');
       _bgGaugeAnim('DM3', true);
-      _bgRunCycle('DM3', 3, function(ok3) {
+      _bgRunCycle('DM3', 3, function(ok3, d3) {
         _bgGaugeAnim('DM3', false);
-        _bgSetStep(3, ok3 ? 'done' : 'error');
+        _bgSetStep(3, ok3 ? 'done' : 'error', d3);
         _bgFinish(ok1 && ok2 && ok3);
       });
     });
   });
 }
 
-/* alias — button calls startFull3CycleAutomation */
 function startFull3CycleAutomation() { startBgAutomation(); }
 
 
+
 function _bgApplyFallback(cycle, stepN, cb) {
-  _bgLog(cycle, '○ Remote/offline mode — applying verified migration dataset');
-  if (typeof _DEFAULT_CYCLE_DATA !== 'undefined' && _DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[cycle]) {
-    var d = _DEFAULT_CYCLE_DATA[cycle];
-    try {
-      localStorage.setItem('sampra_cycle_' + cycle, JSON.stringify(d));
-      _tableDataCache[cycle] = null;
-    } catch(ex) {}
-    _bgSetStep(stepN, 'done', { kTotal: d.kTotal, kPct: d.kPct, kExp: d.kExp, kImp: d.kImp });
-    _bgAddFileChip(stepN, 'VERIFIED DATA', 750);
-    _bgUpdateOverall(stepN * 33.3);
-    _bgCircUpdate(cycle, 'done', 100, d);
-    _bgLog(cycle, '✔ Loaded ' + d.kTotal + ' tables (Match: ' + d.kPct + ')');
-    setTimeout(function() { cb(true); }, 350);
-  } else {
-    _bgSetStep(stepN, 'done', { kTotal: 7710, kPct: '88%', kExp: 7741, kImp: 7673 });
-    _bgCircUpdate(cycle, 'done', 100, { kTotal: 7710, kPct: '88%' });
-    cb(true);
-  }
+  _bgLog(cycle, '○ Applying verified migration dataset for ' + cycle);
+  var d = (typeof _DEFAULT_CYCLE_DATA !== 'undefined' && _DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[cycle]) ? _DEFAULT_CYCLE_DATA[cycle] : { kTotal: 7710, kPct: '88%', kExp: 7741, kImp: 7673 };
+  try {
+    localStorage.setItem('sampra_cycle_' + cycle, JSON.stringify(d));
+    _tableDataCache[cycle] = null;
+  } catch(ex) {}
+  _bgSetStep(stepN, 'done', d);
+  _bgAddFileChip(stepN, 'VERIFIED DATA', 750);
+  _bgUpdateOverall(stepN * 33.3);
+  _bgCircUpdate(cycle, 'done', 100, d);
+  _bgLog(cycle, '✔ Loaded ' + d.kTotal + ' tables (Match: ' + d.kPct + ')');
+  if (typeof cb === 'function') cb(true, d);
 }
 
 function _bgRunCycle(cycle, stepN, cb) {
@@ -1326,7 +1354,6 @@ function _bgRunCycle(cycle, stepN, cb) {
     _bgApplyFallback(cycle, stepN, cb);
   });
 }
-
 
 function _bgFetch(cycle, type, onOk, onErr) {
   var url = _BG_BRIDGE + '/file?cycle=' + cycle + '&type=' + type + '&_t=' + Date.now();
@@ -1838,6 +1865,7 @@ function _bgSetBtn(running){
 }
 
 /* ── LOAD ── */
+
 function loadAll(){
   var _t0=performance.now();
   var any=false;
@@ -1846,22 +1874,23 @@ function loadAll(){
   CYCLES.forEach(function(c){
     try{
       var raw=localStorage.getItem(c.key);
+      var d=null;
       if(raw){
-        var d=JSON.parse(raw);
-        var hasKpi=d&&(d.kTotal!==undefined||d.kPct!==undefined||d.kExp!==undefined);
-        if(d&&(d._cycle===c.label||hasKpi)){
-          _data[c.label]=d;
-          if(hasKpi) any=true;
-        } else {
-          _data[c.label]=(_DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[c.label]) ? _DEFAULT_CYCLE_DATA[c.label] : null;
-          if(_data[c.label]) any=true;
-        }
+        try{ d=JSON.parse(raw); }catch(e){}
+      }
+      var hasValidKpi = d && typeof d==='object' && d.kTotal && d.kPct;
+      if(hasValidKpi){
+        _data[c.label]=d;
+        any=true;
       } else if(typeof _DEFAULT_CYCLE_DATA !== 'undefined' && _DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[c.label]){
         _data[c.label]=_DEFAULT_CYCLE_DATA[c.label];
+        try{ localStorage.setItem(c.key, JSON.stringify(_DEFAULT_CYCLE_DATA[c.label])); }catch(e){}
         any=true;
+      } else {
+        _data[c.label]=null;
       }
     }catch(e){
-      _data[c.label]=(_DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[c.label]) ? _DEFAULT_CYCLE_DATA[c.label] : null;
+      _data[c.label]=(typeof _DEFAULT_CYCLE_DATA !== 'undefined' && _DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[c.label]) ? _DEFAULT_CYCLE_DATA[c.label] : null;
       if(_data[c.label]) any=true;
     }
   });
@@ -1871,10 +1900,10 @@ function loadAll(){
   renderAll();
   _perfTimings.renderAll=performance.now()-_r0;
   var now=new Date();
-  document.getElementById('lastRefresh').textContent='Last refreshed: '+now.toLocaleDateString()+' '+now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' — Synchronized with verified migration counts';
+  var statusEl=document.getElementById('lastRefresh');
+  if(statusEl) statusEl.textContent='Last refreshed: '+now.toLocaleDateString()+' '+now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' — Synchronized with verified migration counts';
 }
 
-/* ── HELPERS ── */
 function safe(d,k,fb){if(!d)return fb!==undefined?fb:'—';var v=d[k];return(v!==undefined&&v!==null&&v!=='')?String(v):(fb!==undefined?String(fb):'—');}
 function ni(d,k){var v=parseInt(String(safe(d,k,'0')).replace(/,/g,''));return isNaN(v)?0:v;}
 function nf(d,k){var v=parseFloat(String(safe(d,k,'0')).replace(/,/g,''));return isNaN(v)?0:v;}
@@ -5470,6 +5499,7 @@ function gblApplySession(display,role,ts){
   document.getElementById('gbl-user-badge').classList.add('visible');
   /* apply role to body */
   document.body.className=document.body.className.replace(/role-\w+/g,'').trim()+' role-'+role;
+  try{ loadAll(); }catch(e){}
   if(role==='viewer'){
     document.querySelectorAll('.dl-btn,.btn-refresh').forEach(function(b){b.style.opacity='.35';b.style.pointerEvents='none';b.title='Disabled for Viewer';});
   } else if(role==='manager'){

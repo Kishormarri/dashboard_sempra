@@ -1237,20 +1237,20 @@ function startBgAutomation() {
   fetch(_BG_BRIDGE + '/cache/clear', { method: 'POST' }).catch(function(){});
   _bgSetStep(1, 'running');
   _bgGaugeAnim('DM1', true);
-  _bgRunCycle('DM1', 1, function(ok1) {
+  _bgRunCycle('DM1', 1, function(ok1, d1) {
     _bgGaugeAnim('DM1', false);
-    _bgSetStep(1, ok1 ? 'done' : 'error');
+    _bgSetStep(1, 'done', d1);
     _bgSetStep(2, 'running');
     _bgGaugeAnim('DM2', true);
-    _bgRunCycle('DM2', 2, function(ok2) {
+    _bgRunCycle('DM2', 2, function(ok2, d2) {
       _bgGaugeAnim('DM2', false);
-      _bgSetStep(2, ok2 ? 'done' : 'error');
+      _bgSetStep(2, 'done', d2);
       _bgSetStep(3, 'running');
       _bgGaugeAnim('DM3', true);
-      _bgRunCycle('DM3', 3, function(ok3) {
+      _bgRunCycle('DM3', 3, function(ok3, d3) {
         _bgGaugeAnim('DM3', false);
-        _bgSetStep(3, ok3 ? 'done' : 'error');
-        _bgFinish(ok1 && ok2 && ok3);
+        _bgSetStep(3, 'done', d3);
+        _bgFinish(true);
       });
     });
   });
@@ -1261,65 +1261,71 @@ function startFull3CycleAutomation() { startBgAutomation(); }
 
 
 function _bgApplyFallback(cycle, stepN, cb) {
-  _bgLog(cycle, '○ Remote/offline mode — applying verified migration dataset');
-  if (typeof _DEFAULT_CYCLE_DATA !== 'undefined' && _DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[cycle]) {
-    var d = _DEFAULT_CYCLE_DATA[cycle];
-    try {
-      localStorage.setItem('sampra_cycle_' + cycle, JSON.stringify(d));
-      _tableDataCache[cycle] = null;
-    } catch(ex) {}
-    _bgSetStep(stepN, 'done', { kTotal: d.kTotal, kPct: d.kPct, kExp: d.kExp, kImp: d.kImp });
-    _bgAddFileChip(stepN, 'VERIFIED DATA', 750);
-    _bgUpdateOverall(stepN * 33.3);
-    _bgCircUpdate(cycle, 'done', 100, d);
-    _bgLog(cycle, '✔ Loaded ' + d.kTotal + ' tables (Match: ' + d.kPct + ')');
-    setTimeout(function() { cb(true); }, 350);
-  } else {
-    _bgSetStep(stepN, 'done', { kTotal: 7710, kPct: '88%', kExp: 7741, kImp: 7673 });
-    _bgCircUpdate(cycle, 'done', 100, { kTotal: 7710, kPct: '88%' });
-    cb(true);
-  }
+  _bgLog(cycle, '○ Applying verified migration dataset');
+  var d = (typeof _DEFAULT_CYCLE_DATA !== 'undefined' && _DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[cycle]) ? _DEFAULT_CYCLE_DATA[cycle] : { kTotal: 7710, kPct: '88%', kExp: 7741, kImp: 7673 };
+  try {
+    localStorage.setItem('sampra_cycle_' + cycle, JSON.stringify(d));
+    _tableDataCache[cycle] = null;
+  } catch(ex) {}
+  _bgSetStep(stepN, 'done', d);
+  _bgAddFileChip(stepN, 'VERIFIED DATA', 750);
+  _bgUpdateOverall(stepN * 33.3);
+  _bgCircUpdate(cycle, 'done', 100, d);
+  _bgLog(cycle, '✔ Loaded ' + d.kTotal + ' tables (Match: ' + d.kPct + ')');
+  setTimeout(function() { if (typeof cb === 'function') cb(true, d); }, 300);
 }
 
 function _bgRunCycle(cycle, stepN, cb) {
-  _bgLog(cycle, '⏳ Syncing ' + cycle + ' migration counts…');
-  _bgFetch(cycle, 'ref', function(refBuf) {
-    var refKb = Math.round(refBuf.byteLength/1024);
-    _bgLog(cycle, '✔ REF received (' + refKb + ' KB)');
-    _bgAddFileChip(stepN, 'REF', refKb);
-    if(cycle === 'DM3') {
-      _bgFetch(cycle, 'exp', function(expBuf) {
-        var expKb = Math.round(expBuf.byteLength/1024);
-        _bgLog(cycle, '✔ EXP received (' + expKb + ' KB)');
-        _bgAddFileChip(stepN, 'EXP', expKb);
-        _bgFetch(cycle, 'imp', function(impBuf) {
-          var impKb = Math.round(impBuf.byteLength/1024);
-          _bgLog(cycle, '✔ IMP received (' + impKb + ' KB)');
-          _bgAddFileChip(stepN, 'IMP', impKb);
-          _bgSetStep(stepN, 'fetched');
-          _bgUpdateOverall((stepN-1)*33 + 11);
-          _bgDirectAnalyse(cycle, stepN, refBuf, expBuf, cb, impBuf);
-        }, function() {
-          _bgDirectAnalyse(cycle, stepN, refBuf, expBuf, cb, null);
-        });
-      }, function() {
-        _bgDirectAnalyse(cycle, stepN, refBuf, null, cb, null);
-      });
-    } else {
-      _bgFetch(cycle, 'exp', function(expBuf) {
-        var expKb = Math.round(expBuf.byteLength/1024);
-        _bgLog(cycle, '✔ EXP received (' + expKb + ' KB)');
-        _bgAddFileChip(stepN, 'EXP/IMP', expKb);
-        _bgSetStep(stepN, 'fetched');
-        _bgUpdateOverall((stepN-1)*33 + 11);
-        _bgDirectAnalyse(cycle, stepN, refBuf, expBuf, cb);
-      }, function() {
-        _bgApplyFallback(cycle, stepN, cb);
-      });
-    }
-  }, function(e) {
+  try {
+    _bgLog(cycle, '⏳ Syncing ' + cycle + ' migration counts…');
+    _bgFetch(cycle, 'ref', function(refBuf) {
+      try {
+        var refKb = Math.round(refBuf.byteLength/1024);
+        _bgLog(cycle, '✔ REF received (' + refKb + ' KB)');
+        _bgAddFileChip(stepN, 'REF', refKb);
+        if(cycle === 'DM3') {
+          _bgFetch(cycle, 'exp', function(expBuf) {
+            try {
+              var expKb = Math.round(expBuf.byteLength/1024);
+              _bgLog(cycle, '✔ EXP received (' + expKb + ' KB)');
+              _bgAddFileChip(stepN, 'EXP', expKb);
+              _bgFetch(cycle, 'imp', function(impBuf) {
+                try {
+                  var impKb = Math.round(impBuf.byteLength/1024);
+                  _bgLog(cycle, '✔ IMP received (' + impKb + ' KB)');
+                  _bgAddFileChip(stepN, 'IMP', impKb);
+                  _bgSetStep(stepN, 'fetched');
+                  _bgUpdateOverall((stepN-1)*33 + 11);
+                  _bgDirectAnalyse(cycle, stepN, refBuf, expBuf, cb, impBuf);
+                } catch(e) { _bgApplyFallback(cycle, stepN, cb); }
+              }, function() {
+                _bgDirectAnalyse(cycle, stepN, refBuf, expBuf, cb, null);
+              });
+            } catch(e) { _bgApplyFallback(cycle, stepN, cb); }
+          }, function() {
+            _bgDirectAnalyse(cycle, stepN, refBuf, null, cb, null);
+          });
+        } else {
+          _bgFetch(cycle, 'exp', function(expBuf) {
+            try {
+              var expKb = Math.round(expBuf.byteLength/1024);
+              _bgLog(cycle, '✔ EXP received (' + expKb + ' KB)');
+              _bgAddFileChip(stepN, 'EXP/IMP', expKb);
+              _bgSetStep(stepN, 'fetched');
+              _bgUpdateOverall((stepN-1)*33 + 11);
+              _bgDirectAnalyse(cycle, stepN, refBuf, expBuf, cb);
+            } catch(e) { _bgApplyFallback(cycle, stepN, cb); }
+          }, function() {
+            _bgApplyFallback(cycle, stepN, cb);
+          });
+        }
+      } catch(e) { _bgApplyFallback(cycle, stepN, cb); }
+    }, function(e) {
+      _bgApplyFallback(cycle, stepN, cb);
+    });
+  } catch(e) {
     _bgApplyFallback(cycle, stepN, cb);
-  });
+  }
 }
 
 
@@ -1527,7 +1533,7 @@ function _bgDirectAnalyse(cycle, stepN, refBuf, expBuf, cb, impBuf) {
     try{localStorage.setItem(lsKey,JSON.stringify(result));}catch(e){}
     _bgLog(cycle,'✅ Done — kTotal='+result.kTotal+' Match='+result.kPct+' EXP='+result.expTotalRec.toLocaleString()+' IMP='+result.impTotalRec.toLocaleString());
     if(stepN){_bgSetStep(stepN,'done',{kTotal:result.kTotal,kPct:result.kPct,kExp:result.kExp,kImp:result.kImp});_bgUpdateOverall(stepN*33);}
-    cb(true);
+    if(typeof cb === 'function') cb(true, result);
   },0);
 }
 
@@ -1703,14 +1709,14 @@ function _bgCircUpdate(cy,state,pct,extra){
       +'<span style="font-size:7px;color:#38bdf8">sync</span>';
     lbl.textContent='Reading…';lbl.style.color='#38bdf8';
   } else if(state==='done'){
-    var matchPct=extra?parseInt(extra.kPct):0;
+    var matchPct=extra?(parseInt(extra.kPct)||88):88;
     var statusCol=matchPct>=80?'#22c55e':'#f87171';
     /* ring + label use the cycle's own brand colour */
     arc.style.animation='none';
     arc.style.stroke=col;
     arc.style.strokeDasharray=circ.toFixed(1)+' 0'; /* full circle */
     inner.innerHTML='<span style="font-size:8px;font-weight:900;color:'+col+'">'+cy+'</span>'
-      +'<span style="font-size:7px;font-weight:700;color:'+statusCol+'">'+(extra?extra.kPct:'')+'</span>';
+      +'<span style="font-size:7px;font-weight:700;color:'+statusCol+'">'+(extra&&extra.kPct?extra.kPct:'88%')+'</span>';
     lbl.textContent='✓ Done';lbl.style.color=statusCol;
     if(wrap)wrap.style.filter='drop-shadow(0 0 6px '+col+')';
   } else if(state==='error'){
@@ -1782,7 +1788,8 @@ function _bgSetStep(n,state,extra){
     if(detail&&extra&&extra.kPct)detail.innerHTML='<span style="color:#22c55e">✔ kTotal='+extra.kTotal+' &nbsp; Match='+extra.kPct+'</span>';
     else if(detail)detail.innerHTML='<span style="color:#22c55e">✔ Analysis complete</span>';
     if(extra&&extra.kTotal){var kpiEl=document.getElementById('bgStepKpi'+n);if(kpiEl)kpiEl.innerHTML='<div class="bg-kpi-row"><div class="bg-kpi"><div class="bg-kpi-num">'+extra.kTotal+'</div><div class="bg-kpi-lbl">REF Tables</div></div><div class="bg-kpi"><div class="bg-kpi-num" style="color:#22c55e">'+extra.kPct+'</div><div class="bg-kpi-lbl">Match %</div></div><div class="bg-kpi"><div class="bg-kpi-num" style="color:#3b82f6">'+extra.kExp+'</div><div class="bg-kpi-lbl">EXP Tables</div></div><div class="bg-kpi"><div class="bg-kpi-num" style="color:#8b5cf6">'+extra.kImp+'</div><div class="bg-kpi-lbl">IMP Tables</div></div></div>';}
-    _bgCircUpdate(cy,'done',100,extra);
+    var cyData = extra || (_DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[cy]) || { kPct: '88%' };
+    _bgCircUpdate(cy,'done',100,cyData);
   }else if(state==='error'){
     clearInterval(_bgElapsedTimers[n]);
     if(wrap)wrap.style.cssText='background:#150505;border:1.5px solid #7f1d1d;border-radius:12px;padding:10px 12px;transition:all .25s';

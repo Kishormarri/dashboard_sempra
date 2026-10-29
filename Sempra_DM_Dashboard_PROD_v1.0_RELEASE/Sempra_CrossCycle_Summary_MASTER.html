@@ -1472,8 +1472,7 @@ function _bgRunCycle(cycle, stepN, cb) {
         var refKb = Math.round(refBuf.byteLength/1024);
         _bgLog(cycle, '✔ REF received (' + refKb + ' KB)');
         _bgAddFileChip(stepN, 'REF', refKb);
-        if(cycle === 'DM3') {
-          _bgFetch(cycle, 'exp', function(expBuf) {
+        _bgFetch(cycle, 'exp', function(expBuf) {
             try {
               var expKb = Math.round(expBuf.byteLength/1024);
               _bgLog(cycle, '✔ EXP received (' + expKb + ' KB)');
@@ -1494,16 +1493,7 @@ function _bgRunCycle(cycle, stepN, cb) {
           }, function() {
             _bgDirectAnalyse(cycle, stepN, refBuf, null, cb, null);
           });
-        } else {
-          _bgFetch(cycle, 'exp', function(expBuf) {
-            try {
-              var expKb = Math.round(expBuf.byteLength/1024);
-              _bgLog(cycle, '✔ EXP received (' + expKb + ' KB)');
-              _bgAddFileChip(stepN, 'EXP/IMP', expKb);
-              _bgSetStep(stepN, 'fetched');
-              _bgUpdateOverall((stepN-1)*33 + 11);
-              _bgDirectAnalyse(cycle, stepN, refBuf, expBuf, cb);
-            } catch(e) { _bgApplyFallback(cycle, stepN, cb); }
+              } catch(e) { _bgApplyFallback(cycle, stepN, cb); }
           }, function() {
             _bgApplyFallback(cycle, stepN, cb);
           });
@@ -3158,7 +3148,8 @@ function drillFilterByStatus(stType){
 function drillRenderSrcTgt(){
   var pnl=document.getElementById('drillSrcTgtPanel');
   if(!pnl) return;
-  var rows=_drillRows||[];
+  /* use _drillAllRows (full section set) so a search filter never hides the pivot */
+  var rows=_drillAllRows||_drillRows||[];
   var total=rows.length;
   if(!total){
     pnl.innerHTML='<div class="drill-nodata">No table data available for Source vs Target breakdown.</div>';

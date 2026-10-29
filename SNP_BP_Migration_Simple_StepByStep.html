@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SNP BP Migration — Simple Step-by-Step</title>
+<style>
+@media print {
+  body { font-size: 12px; padding: 10px; }
+  .page { max-width: 100%; }
+  .step { break-inside: avoid; }
+  .phase { break-before: auto; }
+  .no-print { display: none; }
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI",system-ui,sans-serif;font-size:14px;line-height:1.7;color:#1f2328;background:#fff;padding:30px 20px}
+.page{max-width:760px;margin:0 auto}
+
+/* print button */
+.print-bar{background:#f7f8fa;border:1px solid #e5e7eb;border-radius:6px;padding:10px 16px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#57606a}
+.print-btn{background:#3b82d4;color:#fff;border:none;padding:7px 18px;border-radius:5px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.02em}
+.print-btn:hover{background:#2563eb}
+
+/* header */
+.hdr{border-bottom:3px solid #3b82d4;padding-bottom:14px;margin-bottom:26px}
+.pill{display:inline-block;background:#3b82d4;color:#fff;font-size:10px;font-weight:700;letter-spacing:.1em;padding:2px 9px;border-radius:20px;margin-bottom:8px;text-transform:uppercase}
+.hdr h1{font-size:22px;font-weight:800;line-height:1.25;color:#1f2328}
+.hdr p{color:#57606a;font-size:13px;margin-top:5px}
+
+/* phase header */
+.phase{display:flex;align-items:flex-start;gap:10px;margin:30px 0 6px}
+.phase-num{width:36px;height:36px;border-radius:50%;background:#3b82d4;color:#fff;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.phase-num.p2{background:#7c5cd8}
+.phase-num.p3{background:#d97706}
+.phase-num.p4{background:#0891b2}
+.phase-num.p5{background:#16a34a}
+.phase-num.p6{background:#dc2626}
+.phase-num.p7{background:#1f2328}
+.phase h2{font-size:17px;font-weight:800;color:#1f2328}
+.phase p{font-size:12.5px;color:#57606a;margin-top:1px}
+.phase-wrap{margin-left:46px}
+
+/* step card */
+.step{border:1px solid #e5e7eb;border-radius:6px;margin-bottom:10px;overflow:hidden}
+.step-hdr{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;background:#f7f8fa}
+.step-n{font-size:11px;font-weight:700;color:#3b82d4;background:#dbeafe;padding:2px 7px;border-radius:10px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.step-title{font-size:13.5px;font-weight:700;color:#1f2328}
+.step-sub{font-size:12px;color:#57606a;margin-top:1px}
+.step-body{padding:11px 14px;border-top:1px solid #e5e7eb;font-size:13px}
+.step-body p{margin-bottom:8px}
+.step-body p:last-child{margin-bottom:0}
+.step-body ul{padding-left:16px;margin-bottom:8px}
+.step-body ul li{margin-bottom:4px}
+
+/* callouts */
+.eg{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:5px;padding:9px 13px;margin-top:9px;font-size:12.5px}
+.eg strong{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#15803d;margin-bottom:4px}
+.warn{background:#fffbeb;border:1px solid #fde68a;border-radius:5px;padding:9px 13px;margin-top:9px;font-size:12.5px}
+.warn strong{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#b45309;margin-bottom:4px}
+.danger{background:#fef2f2;border:1px solid #fecaca;border-radius:5px;padding:9px 13px;margin-top:9px;font-size:12.5px}
+.danger strong{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#b91c1c;margin-bottom:4px}
+.info{background:#eff6ff;border:1px solid #bfdbfe;border-radius:5px;padding:9px 13px;margin-top:9px;font-size:12.5px}
+.info strong{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#1d4ed8;margin-bottom:4px}
+
+/* mono */
+.m{font-family:"Consolas","Courier New",monospace;font-size:11.5px;background:#f1f5f9;padding:1px 5px;border-radius:3px;white-space:nowrap}
+
+/* tables */
+.ba{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.ba th{background:#1e293b;color:#e2e8f0;padding:5px 9px;text-align:left;font-weight:700}
+.ba td{border:1px solid #e5e7eb;padding:5px 9px;vertical-align:top}
+.ba tr:nth-child(even) td{background:#f7f8fa}
+
+/* flow */
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:8px 0;font-size:12.5px}
+.fb{background:#f7f8fa;border:1px solid #e5e7eb;padding:5px 10px;border-radius:4px;font-weight:700;text-align:center;font-size:12px}
+.fb.hi{border-color:#3b82d4;border-width:2px;background:#eff6ff}
+.fa{color:#3b82d4;font-weight:800;font-size:14px}
+
+/* checklist */
+.chk{list-style:none;margin-top:6px}
+.chk li{display:flex;gap:8px;padding:4px 0;border-bottom:1px solid #f1f5f9;font-size:13px}
+.chk li:last-child{border-bottom:none}
+.chk .ok{color:#16a34a;font-weight:700;flex-shrink:0}
+
+/* divider */
+hr{border:none;border-top:2px solid #e5e7eb;margin:28px 0}
+
+/* summary table */
+.sum-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+.sum-table th{background:#1e293b;color:#e2e8f0;padding:6px 9px;text-align:left;font-weight:700}
+.sum-table td{border:1px solid #e5e7eb;padding:5px 9px;vertical-align:top}
+.sum-table tr:nth-child(even) td{background:#f7f8fa}
+.ph-tag{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;white-space:nowrap}
+.ph1{background:#dbeafe;color:#1d4ed8}
+.ph2{background:#ede9fe;color:#6d28d9}
+.ph3{background:#fef3c7;color:#b45309}
+.ph4{background:#cffafe;color:#0e7490}
+.ph5{background:#dcfce7;color:#15803d}
+.ph6{background:#fee2e2;color:#b91c1c}
+.ph7{background:#f1f5f9;color:#475569}
+
+footer{margin-top:40px;padding-top:11px;border-top:1px solid #e5e7eb;text-align:center;font-size:11.5px;color:#57606a}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- PRINT BAR -->
+<div class="print-bar no-print">
+  <span>💡 To save as PDF: click Print → change printer to <strong>Save as PDF</strong> → Save</span>
+  <button class="print-btn" onclick="window.print()">🖨 Print / Save as PDF</button>
+</div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="pill">SNP CrystalBridge · BP Migration</div>
+  <h1>Business Partner Migration<br>ECC → S/4HANA — Simple Step-by-Step</h1>
+  <p>Plain language · Every step explained · Real examples at each stage · Sempra Migration Team · October 2026</p>
+</div>
+
+<!-- ═══ CONCEPT ═══ -->
+<div class="phase">
+  <div class="phase-num">★</div>
+  <div><h2>Before You Start — What Is Changing and Why</h2>
+  <p>Understand the change in one minute before touching any tool</p></div>
+</div>
+<div class="phase-wrap">
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">CONCEPT</span>
+      <div><div class="step-title">ECC has two separate objects. S/4HANA has one.</div>
+      <div class="step-sub">Customer (KNA1) + Vendor (LFA1) → Business Partner (BUT000)</div></div>
+    </div>
+    <div class="step-body">
+      <p>In ECC, a Customer and a Vendor are completely separate — even if they are the same real company. In S/4HANA they collapse into <strong>one Business Partner (BP)</strong> record with roles attached.</p>
+      <div class="flow">
+        <div class="fb">ECC Customer<br><span style="font-weight:400;font-size:11px">KNA1 · KNB1 · KNVV</span></div>
+        <div class="fa">+</div>
+        <div class="fb">ECC Vendor<br><span style="font-weight:400;font-size:11px">LFA1 · LFB1 · LFM1</span></div>
+        <div class="fa">→</div>
+        <div class="fb hi">S/4 Business Partner<br><span style="font-weight:400;font-size:11px">BUT000 + BP Roles</span></div>
+      </div>
+      <div class="eg">
+        <strong>Real example — Siemens AG</strong>
+        In ECC: Customer 100045 (they buy from us) AND Vendor 200078 (we buy from them) — two separate records, no link between them.<br><br>
+        In S/4HANA: ONE Business Partner BP# 100045 with roles FLCU00 (customer-general), FLCU01 (customer-CoCode), FLVN00 (vendor-general), FLVN01 (vendor-CoCode).<br><br>
+        A/R posts via Customer 100045 → routed to BP 100045. A/P posts via Vendor 200078 → also routed to BP 100045. Treasury sees the net exposure in one place.
+      </div>
+      <table class="ba" style="margin-top:10px">
+        <thead><tr><th>BP Role</th><th>What it activates</th><th>Source table</th><th>Example value</th></tr></thead>
+        <tbody>
+          <tr><td><strong>FLCU00</strong></td><td>Customer — general data</td><td>KNA1</td><td>Name=Siemens AG, Country=DE</td></tr>
+          <tr><td><strong>FLCU01</strong></td><td>Customer — per company code</td><td>KNB1</td><td>Recon acct 140000, terms Z030</td></tr>
+          <tr><td><strong>FLVN00</strong></td><td>Vendor — general data</td><td>LFA1</td><td>Name=Siemens AG (same record)</td></tr>
+          <tr><td><strong>FLVN01</strong></td><td>Vendor — per company code</td><td>LFB1</td><td>Recon acct 210000, pay method T</td></tr>
+          <tr><td><strong>BUP001</strong></td><td>Generic BP role (always present)</td><td>—</td><td>Every BP gets this automatically</td></tr>
+        </tbody>
+      </table>
+      <div class="info"><strong>The CVI link</strong>
+      CVI (Customer-Vendor Integration) keeps KNA1, KNB1, LFA1, LFB1 alive in S/4 and in sync with BUT000. Old T-codes like XD01 and XK01 still work — they redirect through CVI to the BP screen. The migration must create CVI_CUST_LINK and CVI_VEND_LINK rows for every record.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">CONCEPT</span>
+      <div><div class="step-title">How SNP CrystalBridge moves the BP data — 5 stages</div>
+      <div class="step-sub">Source is never modified. All changes happen between export and import.</div></div>
+    </div>
+    <div class="step-body">
+      <div class="flow">
+        <div class="fb">1 PLAN<br><span style="font-weight:400;font-size:11px">Mission Control</span></div><div class="fa">→</div>
+        <div class="fb">2 EXPORT<br><span style="font-weight:400;font-size:11px">read ECC tables</span></div><div class="fa">→</div>
+        <div class="fb">3 PACKAGES<br><span style="font-weight:400;font-size:11px">files on share</span></div><div class="fa">→</div>
+        <div class="fb">4 IMPORT<br><span style="font-weight:400;font-size:11px">map + write S/4</span></div><div class="fa">→</div>
+        <div class="fb hi">5 CHECK<br><span style="font-weight:400;font-size:11px">BUPT · DCV</span></div>
+      </div>
+      <ul>
+        <li><strong>Export</strong> — SNP reads KNA1, KNB1, KNVV, LFA1, LFB1, LFM1 from ECC. Nothing in ECC is ever changed.</li>
+        <li><strong>Packages</strong> — compressed files sit on a shared file system. Files are never overwritten — every run is traceable.</li>
+        <li><strong>Import</strong> — mapping (e.g. BUKRS 1000→2000) and rules are applied on the way in. BAPI calls create BUT000 + BP roles on the S/4 side.</li>
+        <li><strong>Check</strong> — BUPT (BP Consistency Check) must show 0 errors. CVI link reports confirm every customer and vendor has a BP.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+<hr>
+
+<!-- ═══ PHASE 1 ═══ -->
+<div class="phase">
+  <div class="phase-num">1</div>
+  <div><h2>Phase 1 — Prepare the Data</h2>
+  <p>Do this before opening any SNP tool. Fix problems in the source, not mid-migration.</p></div>
+</div>
+<div class="phase-wrap">
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 1</span>
+      <div><div class="step-title">Profile the customer and vendor master data</div>
+      <div class="step-sub">Find blanks, duplicates and invalid values in KNA1 and LFA1 before extraction</div></div>
+    </div>
+    <div class="step-body">
+      <p>Run SE16N on KNA1 and LFA1 in ECC. Check for:</p>
+      <ul>
+        <li><strong>Blank NAME1</strong> — name cannot be blank; BP creation will fail</li>
+        <li><strong>Invalid LAND1</strong> — country must exist in table T005</li>
+        <li><strong>Missing KTOKD / KTOKK</strong> — account group drives BP grouping and number range</li>
+        <li><strong>Missing SPRAS</strong> — language key must exist in T002</li>
+      </ul>
+      <div class="eg">
+        <strong>Example check</strong>
+        SE16N on KNA1 → filter NAME1 = ' ' (blank). Any rows returned = those customers will fail BP creation. Fix in ECC before the first export.
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 2</span>
+      <div><div class="step-title">Find customers who are also vendors (dual-role)</div>
+      <div class="step-sub">These must become ONE BP — most complex scenario, plan early</div></div>
+    </div>
+    <div class="step-body">
+      <p>Use SNP tool <span class="m">/N/SNP/CW_MDA</span> to compare KNA1 and LFA1. Match on STCD1 (tax number) or NAME1 + LAND1.</p>
+      <div class="eg">
+        <strong>Real example — dual-role detection</strong>
+        KNA1-STCD1 = 'DE123456789' on Customer 100045 AND LFA1-STCD1 = 'DE123456789' on Vendor 200078 → same company.<br>
+        Decision: use Customer# as BP#. Result: BP 100045 gets all four roles: FLCU00 + FLCU01 + FLVN00 + FLVN01. Vendor 200078 links to BP 100045 via CVI_VEND_LINK.
+      </div>
+      <div class="warn"><strong>Needs Professional Services</strong>
+      Dual-role harmonisation is NOT an out-of-the-box SNP unit. Identify all cases before design phase — cannot be fixed easily after go-live.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 3</span>
+      <div><div class="step-title">Convert bank account numbers to IBAN</div>
+      <div class="step-sub">ECC stores BANKN — S/4HANA requires IBAN. Must convert before migration.</div></div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Run SAP program <strong>RFFMIBAN</strong> — converts KNBK/LFBK BANKN → IBAN for all records</li>
+        <li>Manually fix any records RFFMIBAN cannot convert</li>
+        <li>Ensure all bank keys (BANKL) exist in BNKA with a BIC code</li>
+      </ul>
+      <div class="eg">
+        <strong>Before and after</strong>
+        ECC LFBK: BANKS=DE, BANKL=37040044, BANKN=0532013000<br>
+        S/4 TIBAN: IBAN = DE89 3704 0044 0532 0130 00
+      </div>
+      <div class="danger"><strong>If IBAN conversion is skipped</strong>
+      Every F110 payment run and every direct debit fails on day one. There is no quick fix — all bank records must be re-loaded.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 4</span>
+      <div><div class="step-title">Validate reconciliation accounts exist in S/4HANA</div>
+      <div class="step-sub">KNB1-AKONT (type D) and LFB1-AKONT (type K) must exist on target before import</div></div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Customer recon accounts: type <strong>D</strong> in SKA1 (e.g. account 140000)</li>
+        <li>Vendor recon accounts: type <strong>K</strong> in SKA1 (e.g. account 210000)</li>
+        <li>Check in S/4: SE16N → SKA1 → KTOPL = your chart of accounts → SAKNR = 140000 → verify KTOKS = D</li>
+        <li>If missing: create in S/4 with FS00 before running the BP import</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+<hr>
+
+<!-- ═══ PHASE 2 ═══ -->
+<div class="phase">
+  <div class="phase-num p2">2</div>
+  <div><h2>Phase 2 — Configure CVI in S/4HANA (SPRO)</h2>
+  <p>Do this before loading any BP data. Wrong sequence = wrong BP numbers = full data cleanup required.</p></div>
+</div>
+<div class="phase-wrap">
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 5</span>
+      <div><div class="step-title">Set up BP number ranges (BUCF / SNRO)</div>
+      <div class="step-sub">Most critical config step — keep ECC numbers where possible (external range)</div></div>
+    </div>
+    <div class="step-body">
+      <table class="ba">
+        <thead><tr><th>Object</th><th>Type</th><th>From</th><th>To</th><th>BP Grouping</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>Migrated customers</td><td>External</td><td>1000000</td><td>1999999</td><td>CUST</td><td>Keep ECC KUNNR as BP#</td></tr>
+          <tr><td>Migrated vendors</td><td>External</td><td>2000000</td><td>2999999</td><td>VEND</td><td>Keep ECC LIFNR as BP#</td></tr>
+          <tr><td>One-time customers</td><td>External</td><td>9000000</td><td>9099999</td><td>CPD</td><td>Single CPD BP record</td></tr>
+          <tr><td>One-time vendors</td><td>External</td><td>9100000</td><td>9199999</td><td>CPD</td><td>Single CPD BP record</td></tr>
+          <tr><td>New BPs (post go-live)</td><td>Internal</td><td>9200000</td><td>9999999</td><td>CUST/VEND</td><td>Auto-assigned after go-live</td></tr>
+        </tbody>
+      </table>
+      <div class="danger"><strong>Overlap check — before go-live</strong>
+      SE16N on BUT000 — confirm no PARTNER value exists in both KNA1 (KUNNR) and LFA1 (LIFNR). Any overlap = those records must be merged into one BP before migration.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 6</span>
+      <div><div class="step-title">Configure BP Groupings and Roles (BUCF)</div>
+      <div class="step-sub">Groupings link account groups to ranges. Roles activate master data screens.</div></div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Create groupings: <strong>CUST, VEND, CPD, INTE</strong> — assign each to its number range</li>
+        <li>Verify BP Roles exist: <strong>FLCU00, FLCU01</strong> (customer), <strong>FLVN00, FLVN01</strong> (vendor)</li>
+        <li>Assign each role to its BP Role Category: FLCU = Customer category, FLVN = Vendor category</li>
+        <li>Set field status per role: STCD1 = Required for FLCU00; ZWELS = Required for FLVN01</li>
+      </ul>
+      <div class="eg">
+        <strong>Example</strong>
+        OBD2: Customer account group KUNA (range 1000–1999999) → BP grouping CUST<br>
+        OBD3: Vendor account group 0001 (domestic) → BP grouping VEND
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 7</span>
+      <div><div class="step-title">Map account groups to BP roles in CVI (SPRO)</div>
+      <div class="step-sub">SPRO → Cross-Application → Master Data Synchronization → Customer/Vendor Integration</div></div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li><strong>CVI → Customer → Assign Roles:</strong> account group KUNA → roles FLCU00 + FLCU01</li>
+        <li><strong>CVI → Vendor → Assign Roles:</strong> account group 0001 → roles FLVN00 + FLVN01</li>
+        <li><strong>CVI → Number Range Mapping:</strong> link KUNNR range to BP external range (keeps ECC numbers)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 8</span>
+      <div><div class="step-title">Configure CVI field mapping (KNA1 / LFA1 → BUT000)</div>
+      <div class="step-sub">SPRO → CVI → Field Mapping → Customer / Vendor</div></div>
+    </div>
+    <div class="step-body">
+      <table class="ba">
+        <thead><tr><th>Source field</th><th>From table</th><th>Target field</th><th>Target table</th></tr></thead>
+        <tbody>
+          <tr><td>NAME1</td><td>KNA1</td><td>NAME_ORG1</td><td>BUT000</td></tr>
+          <tr><td>LAND1</td><td>KNA1</td><td>COUNTRY</td><td>BUT020</td></tr>
+          <tr><td>STCD1</td><td>KNA1</td><td>STCD1</td><td>BUT000</td></tr>
+          <tr><td>SPRAS</td><td>KNA1</td><td>LANGU</td><td>BUT000</td></tr>
+          <tr><td>NAME1</td><td>LFA1</td><td>NAME_ORG1</td><td>BUT000</td></tr>
+          <tr><td>STCD1</td><td>LFA1</td><td>STCD1</td><td>BUT000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 9</span>
+      <div><div class="step-title">Activate CVI sync — this is the last config step</div>
+      <div class="step-sub">SPRO → CVI → Activate Synchronization</div></div>
+    </div>
+    <div class="step-body">
+      <div class="danger"><strong>Config sequence is non-negotiable</strong>
+      Number Ranges → BP Groupings → BP Roles → Account Groups → CVI Mapping → Activate.<br>
+      Activating CVI before number ranges are aligned creates BPs with wrong numbers — there is no partial fix. Full data cleanup required.</div>
+    </div>
+  </div>
+
+</div>
+<hr>
+
+<!-- ═══ PHASE 3 ═══ -->
+<div class="phase">
+  <div class="phase-num p3">3</div>
+  <div><h2>Phase 3 — Set Up the SNP TC Scenario</h2>
+  <p>Build the migration blueprint in the Transformation Cockpit (<span class="m">/N/SNP/TC</span>) on the control system.</p></div>
+</div>
+<div class="phase-wrap">
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 10</span>
+      <div><div class="step-title">Create the Bluefield scenario (Scenario Configurator — 5 steps)</div>
+      <div class="step-sub">/N/SNP/TC → /SNP/TE02_SCEN_CONFIGURATOR</div></div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li><strong>Step 1 — Add file:</strong> upload SNP_MIG* template (delivery content uploaded manually at project start)</li>
+        <li><strong>Step 2 — Scoping:</strong> select Bluefield type; enter Scenario ID (max 30 chars, e.g. <span class="m">BP_ECC_S4_BLUE</span>)</li>
+        <li><strong>Step 3 — Target system:</strong> assign S/4HANA target; set parameters TGT_SYS_CREA_TYPE_TC, TGT_S4CORE_VERSN</li>
+        <li><strong>Step 4 — Import preview:</strong> review what will be created</li>
+        <li><strong>Step 5 — Cleanup:</strong> confirm and finish</li>
+      </ul>
+      <div class="eg">
+        <strong>Result</strong>
+        Scenario ID: BP_ECC_S4_BLUE stored as Mission Control variable TC_SCENARIO. Every MC task reads {M:GET_VARIABLE TC_SCENARIO} to know which scenario to run.
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 11</span>
+      <div><div class="step-title">Assign systems and test all RFC connections</div>
+      <div class="step-sub">Systems tab → add source ECC + target S/4 → test connections</div></div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Add source system: alias <span class="m">ECC</span>, role SOURCE, RFC destination to ECC</li>
+        <li>Add target system: alias <span class="m">S4H</span>, role TARGET, RFC destination to S/4HANA</li>
+        <li>Test all connections: <span class="m">/SNP/TE02_API_CHECK_SYS_CONS</span> — all must be green</li>
+        <li>Check file paths: <span class="m">/SNP/TE02_API_CHECK_FILE_PATHS</span> — share accessible from all systems</li>
+      </ul>
+      <div class="warn"><strong>Never rename the system alias after setup</strong>
+      The alias is embedded in global selection values. Renaming it breaks all selection maintenance already done.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 12</span>
+      <div><div class="step-title">Run Table Analysis on all BP tables</div>
+      <div class="step-sub">/SNP/TE02_UPDATE_TABLE_INFO — mandatory before any data object can run</div></div>
+    </div>
+    <div class="step-body">
+      <p>Table Analysis scans source and target — collects DDIC structure and record counts into <span class="m">/SNP/CE00TABINFO</span>. Without this the cockpit refuses to process any data object.</p>
+      <p>Run on: KNA1, KNB1, KNVV, KNVP, LFA1, LFB1, LFM1, ADRC, BUT000, TIBAN — and re-run after any transport that changes table structures.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 13</span>
+      <div><div class="step-title">Define global selections — what scope moves</div>
+      <div class="step-sub">Selections tab → one global selection applies to every table with that field domain</div></div>
+    </div>
+    <div class="step-body">
+      <table class="ba">
+        <thead><tr><th>Selection</th><th>Domain</th><th>Example values</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>SEL_BUKRS</td><td>BUKRS</td><td>IBT 1000 2000 / EEQ 1500</td><td>CoCs 1000–2000, except 1500</td></tr>
+          <tr><td>SEL_KUNNR</td><td>KUNNR</td><td>IBT 1000000 1999999</td><td>All customers in range</td></tr>
+          <tr><td>SEL_LIFNR</td><td>LIFNR</td><td>IBT 2000000 2999999</td><td>All vendors in range</td></tr>
+          <tr><td>SEL_GJAHR</td><td>GJAHR</td><td>IEQ 2024 / IEQ 2025</td><td>Open items for these years</td></tr>
+        </tbody>
+      </table>
+      <div class="warn"><strong>Two silent traps — check before every export</strong>
+      (1) Global selection with NO values → zero records transferred — looks like it ran fine.<br>
+      (2) Field selection on one table with NO value → the entire table is exported — too much data.<br>
+      Always run <span class="m">/SNP/TE02_SELECTION_OVERVIEW</span> and check for empties before Export.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 14</span>
+      <div><div class="step-title">Set up mapping — what changes on the way in</div>
+      <div class="step-sub">Mapping tab → activate objects → enter source / target values → validate → regenerate blocks</div></div>
+    </div>
+    <div class="step-body">
+      <p>Mapping is applied between export and import. The source file stays raw. Only the target gets the new values.</p>
+      <table class="ba">
+        <thead><tr><th>Mapping object</th><th>What it maps</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>MAP_KUNNR</td><td>Customer number → BP number</td><td>1001234 → 1001234 (keep ECC number, 1:1)</td></tr>
+          <tr><td>MAP_LIFNR</td><td>Vendor number → BP number</td><td>2000078 → 2000078 (keep ECC number, 1:1)</td></tr>
+          <tr><td>MAP_BUKRS</td><td>Company code</td><td>1000 → 2000 AND 1100 → 2000 (N:1 merge)</td></tr>
+          <tr><td>MAP_WAERS</td><td>Currency</td><td>DEM → EUR</td></tr>
+          <tr><td>MAP_HKONT</td><td>G/L account (recon accounts)</td><td>140000 → 140000</td></tr>
+        </tbody>
+      </table>
+      <div class="eg">
+        <strong>Example — N:1 company code merge</strong>
+        Source ECC has CoC 1000 and CoC 1100. Target S/4 has only CoC 2000.<br>
+        MAP_BUKRS: Row 1 → Source=1000, Target=2000. Row 2 → Source=1100, Target=2000.<br>
+        KNB1 records with BUKRS=1000 AND BUKRS=1100 both arrive as BUKRS=2000 in S/4.
+      </div>
+      <p>After entering all values: run <span class="m">/SNP/TE02_VALIDATE_MAPPINGS</span> → fix all gaps → regenerate blocks with <span class="m">/SNP/TE02_API_CREATE_BLOCKS</span>. New mapping entries are NOT used until blocks are regenerated.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 15</span>
+      <div><div class="step-title">Add BP data objects from the catalog</div>
+      <div class="step-sub">Data Objects tab → Adopt → select each object; configure import sequence header-before-item</div></div>
+    </div>
+    <div class="step-body">
+      <table class="ba">
+        <thead><tr><th>Data object</th><th>Header table</th><th>Dependent tables (import order)</th><th>Special rule</th></tr></thead>
+        <tbody>
+          <tr><td>Customer Master</td><td>KNA1</td><td>KNB1 (10) → KNVV (20) → KNVP (30) → KNVI (40) → KNB5 (50)</td><td>—</td></tr>
+          <tr><td>Vendor Master</td><td>LFA1</td><td>LFB1 (10) → LFM1 (20) → LFM2 (30) → LFBW (40) → LFB5 (50)</td><td>—</td></tr>
+          <tr><td>BP Bank Details</td><td>TIBAN</td><td>BNKA</td><td>IBAN mandatory (convert in Step 3)</td></tr>
+          <tr><td>Address object</td><td>ADRC</td><td>ADR6, BUT020, BUT021_FS</td><td><strong>Export LAST, Import FIRST</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="eg">
+        <strong>Example — Customer Master table hierarchy</strong>
+        Selection on KNA1: KUNNR IBT 1000000 1999999.<br>
+        KNB1 is found automatically via KNA1-KUNNR = KNB1-KUNNR (Scout Reader, FOR ALL ENTRIES).<br>
+        Select one customer → all its company code and sales area records come along automatically.
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 16</span>
+      <div><div class="step-title">Create export and import blocks — set address order</div>
+      <div class="step-sub">/SNP/TE02_API_CREATE_BLOCKS → set Address block: export LAST, import FIRST</div></div>
+    </div>
+    <div class="step-body">
+      <div class="flow">
+        <div class="fb">Export<br><span style="font-weight:400;font-size:11px">KNA1 · LFA1</span></div><div class="fa">→</div>
+        <div class="fb">Export ADR<br><span style="font-weight:400;font-size:11px">ADRC last</span></div><div class="fa">→</div>
+        <div class="fb hi">Import ADR<br><span style="font-weight:400;font-size:11px">ADRC first</span></div><div class="fa">→</div>
+        <div class="fb">Import<br><span style="font-weight:400;font-size:11px">KNA1 · LFA1<br>· BUT000</span></div>
+      </div>
+      <ul>
+        <li><strong>Block mode INSERT</strong> for the first clean load. MODIFY only for delta top-up after business agreement.</li>
+        <li><strong>Restart</strong> = continues from last good package. <strong>Reset</strong> = clears everything and re-extracts. Only use Reset when a full re-run is intended.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+<hr>
+
+<!-- ═══ PHASE 4 ═══ -->
+<div class="phase">
+  <div class="phase-num p4">4</div>
+  <div><h2>Phase 4 — Pre-Execution Checks</h2>
+  <p>Run all of these before pressing Execute. Errors found now cost minutes; errors mid-run cost hours.</p></div>
+</div>
+<div class="phase-wrap">
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 17</span>
+      <div><div class="step-title">Run the 8 pre-execution validation checks — all must pass</div>
+      <div class="step-sub">0 errors on all checks before the first export starts</div></div>
+    </div>
+    <div class="step-body">
+      <ul class="chk">
+        <li><span class="ok">✓</span><div><span class="m">/SNP/TE02_API_CHECK_SYS_CONS</span> — all RFC connections green</div></li>
+        <li><span class="ok">✓</span><div><span class="m">/SNP/TE02_VALIDATE_SELECTIONS</span> — no empty global selections, no orphan field selections</div></li>
+        <li><span class="ok">✓</span><div><span class="m">/SNP/TE02_VALIDATE_MAPPINGS</span> — every KUNNR, LIFNR, BUKRS source value has a target</div></li>
+        <li><span class="ok">✓</span><div><span class="m">/SNP/TE02_VALIDATE_OBJECTS</span> — all data objects valid</div></li>
+        <li><span class="ok">✓</span><div><span class="m">/SNP/TE02_API_REMOTE_DDIC_ANA</span> — DDIC matches source and target</div></li>
+        <li><span class="ok">✓</span><div><span class="m">/SNP/TE02_API_EXEC_SYNTAX_CHK</span> — 0 syntax errors (transform terminates on any error)</div></li>
+        <li><span class="ok">✓</span><div><span class="m">/SNP/TE02_API_VIOLATION_CHECK</span> — referential integrity and mandatory fields clean</div></li>
+        <li><span class="ok">✓</span><div>Role <span class="m">/SNP/XX_MIG_BAPI_SAT_700_ALL</span> assigned on S/4 target (separately installed — BP BAPI will fail without it)</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 18</span>
+      <div><div class="step-title">Simulate the import block before the first real run</div>
+      <div class="step-sub">Block → Execute → Simulation mode — writes nothing, checks for duplicates and key conflicts</div></div>
+    </div>
+    <div class="step-body">
+      <div class="eg">
+        <strong>Example — what simulation catches</strong>
+        Simulation on BLK_CUST_IMP reports: "Duplicate key on BUT000-PARTNER 1001234." BP 1001234 already exists from a previous test load. Fix: reset the target QA system before the next mock cycle.
+      </div>
+      <div class="warn"><strong>Simulation cannot start once a real import has run on that block.</strong>
+      Always simulate before the first real run of each block.</div>
+    </div>
+  </div>
+
+</div>
+<hr>
+
+<!-- ═══ PHASE 5 ═══ -->
+<div class="phase">
+  <div class="phase-num p5">5</div>
+  <div><h2>Phase 5 — Execute and Test (Mock Cycles)</h2>
+  <p>Run at least two full mock loads in QA before touching production.</p></div>
+</div>
+<div class="phase-wrap">
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 19</span>
+      <div><div class="step-title">Run the export block — reads ECC, writes packages</div>
+      <div class="step-sub">MC Task 1 → EXP block → KNA1, KNB1, KNVV, LFA1, LFB1, LFM1 extracted to file share</div></div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Scout Reader reads KNA1 → then KNB1 (FOR ALL ENTRIES on KNA1 export) → then KNVV, etc.</li>
+        <li>Packages written to: <span class="m">[share]/BP_ECC_S4_BLUE/BLK_CUST_EXP/KNA1/</span></li>
+        <li>Files are never overwritten — restart exports only failed tables</li>
+      </ul>
+      <div class="eg">
+        <strong>After export — count check</strong>
+        Log tab: KNA1 = 45,000 records. Compare to SE16N on ECC source — must match the selection scope. KNB1 ≥ KNA1 (multiple CoC records per customer). If counts differ: check selection, connection key, or reader type.
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 20</span>
+      <div><div class="step-title">Run the import block — writes to S/4HANA</div>
+      <div class="step-sub">MC Task 2 → IMP block → mapping applied → BUT000 written → BAPI creates BP roles</div></div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Mapping applied on the way in: BUKRS 1000→2000, KUNNR 1001234→BP 1001234, DEM→EUR</li>
+        <li>Import sequence: KNA1 written before KNB1, LFA1 before LFB1 (header always before item)</li>
+        <li>BAPI call creates BUT000 + assigns BP roles FLCU00/FLCU01 and/or FLVN00/FLVN01</li>
+      </ul>
+      <div class="eg">
+        <strong>After import — check</strong>
+        Log tab: written = exported (minus records skipped by rules). Remote SE16 (<span class="m">/SNP/CN_SE16</span>) on BUT000 — count should match KNA1 count.
+      </div>
+      <div class="warn"><strong>If the block crashes mid-run</strong>
+      1. Read the log — find the error (e.g. "no target value for BUKRS=1200").<br>
+      2. Fix the cause — add the missing mapping entry.<br>
+      3. Regenerate blocks (<span class="m">/SNP/TE02_API_CREATE_BLOCKS</span>).<br>
+      4. Click Restart — continues from last good package. Do NOT click Reset unless you want full re-extraction from source.
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 21</span>
+      <div><div class="step-title">Validate — run all post-import checks</div>
+      <div class="step-sub">All checks must pass before going to the next cycle or approving go-live</div></div>
+    </div>
+    <div class="step-body">
+      <table class="ba">
+        <thead><tr><th>Check</th><th>Tool</th><th>Pass = </th></tr></thead>
+        <tbody>
+          <tr><td>BP consistency</td><td>BUPT</td><td><strong>0 errors</strong> — hard gate</td></tr>
+          <tr><td>Customer↔BP link</td><td>CVI_CUST_LINK report</td><td>Count = KNA1 record count</td></tr>
+          <tr><td>Vendor↔BP link</td><td>CVI_VEND_LINK report</td><td>Count = LFA1 record count</td></tr>
+          <tr><td>Foreign key check</td><td><span class="m">/N/SNP/FKC</span> → <span class="m">/SNP/FK02_SUMMARY</span></td><td>0 FK violations</td></tr>
+          <tr><td>FI balance comparison</td><td>RFBILA00 + <span class="m">/SNP/CW02_VR_API_BALANCE_CMP</span></td><td>Balances match ECC</td></tr>
+          <tr><td>Test FI customer invoice</td><td>FB70 → FBL5N</td><td>A/R hits recon acct 140000</td></tr>
+          <tr><td>Test FI vendor invoice</td><td>FB60 → FBL1N</td><td>A/P hits recon acct 210000</td></tr>
+          <tr><td>Test sales order</td><td>VA01</td><td>Partner functions SP/SH/BP/PY resolve</td></tr>
+          <tr><td>Test purchase order</td><td>ME21N</td><td>Vendor master data resolves correctly</td></tr>
+        </tbody>
+      </table>
+      <div class="danger"><strong>Hard go-live gate</strong>
+      ALL checks above must be green. A single BUPT error or failed test posting means NOT ready. No exceptions — fix, re-load, re-validate.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 22</span>
+      <div><div class="step-title">Repeat mock cycles — minimum 2 full dress rehearsals</div>
+      <div class="step-sub">/SNP/TE02_API_COPY_RUNS_BLOCKS — copy runs for each new cycle</div></div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Copy existing runs: <span class="m">/SNP/TE02_API_COPY_RUNS_BLOCKS</span></li>
+        <li>Each cycle must pass ALL Step 21 checks before proceeding</li>
+        <li>Never carry known errors into the next cycle or into production</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+<hr>
+
+<!-- ═══ PHASE 6 ═══ -->
+<div class="phase">
+  <div class="phase-num p6">6</div>
+  <div><h2>Phase 6 — Production Load &amp; Cutover</h2>
+  <p>Only after all mock cycles pass with 0 errors. Source stays live during initial load (Bluefield / RBNZD).</p></div>
+</div>
+<div class="phase-wrap">
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 23</span>
+      <div><div class="step-title">Lock NRIV → run production initial load → unlock → BUPT</div>
+      <div class="step-sub">Background mode via Mission Control — never dialog for production runs</div></div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Lock NRIV BP number ranges on S/4 target (prevents parallel BP creation conflicts)</li>
+        <li>Execute production initial load — background mode via MC (run as background job, never dialog)</li>
+        <li>Unlock NRIV immediately after import block completes</li>
+        <li>Run BUPT immediately — 0 errors gate before any delta runs start</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 24</span>
+      <div><div class="step-title">Run RBNZD delta loads daily until cutover</div>
+      <div class="step-sub">Each delta shrinks the volume for the final cutover window</div></div>
+    </div>
+    <div class="step-body">
+      <table class="ba">
+        <thead><tr><th>Run</th><th>Source state</th><th>Volume</th><th>Downtime</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Initial load</td><td>Live</td><td>100%</td><td>None</td><td>Full export + import of all BP scope</td></tr>
+          <tr><td>Delta 1</td><td>Live</td><td>~20%</td><td>None</td><td>New/changed BPs since initial load; BUPT after</td></tr>
+          <tr><td>Delta 2</td><td>Live</td><td>~5%</td><td>None</td><td>Changes since delta 1; DCV + BUPT</td></tr>
+          <tr><td>Delta n</td><td>Live</td><td>~1–2%</td><td>None</td><td>Repeat until delta fits in cutover window</td></tr>
+          <tr><td>Final delta</td><td><strong>Locked</strong></td><td>&lt;1%</td><td><strong>Short</strong></td><td>Lock source → final delta → validate → go-live</td></tr>
+        </tbody>
+      </table>
+      <ul>
+        <li>Lock NRIV before every delta import; unlock after. DCV + BUPT after every delta.</li>
+        <li>Execute delta as MC task: <span class="m">/SNP/ZD01_CL_MC_EXECUTE_TASK</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 25</span>
+      <div><div class="step-title">Final cutover delta → validate → go-live sign-off</div>
+      <div class="step-sub">Lock source → final delta → BUPT + test postings → all workstreams sign off</div></div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Lock ECC source (no new postings)</li>
+        <li>Run final delta — only records changed since last delta</li>
+        <li>Run BUPT (0 errors), CVI_CUST_LINK, CVI_VEND_LINK, DCV</li>
+        <li>Post test FI invoices (customer + vendor) — confirm A/R and A/P postings succeed</li>
+        <li>FI, SD, MM, Basis leads all sign the validation sheet</li>
+        <li>Go-live approved only when all of the above are green</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+<hr>
+
+<!-- ═══ PHASE 7 ═══ -->
+<div class="phase">
+  <div class="phase-num p7">7</div>
+  <div><h2>Phase 7 — Post Go-Live</h2>
+  <p>Activate CVI sync, run post-processing, monitor daily for 2 weeks.</p></div>
+</div>
+<div class="phase-wrap">
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 26</span>
+      <div><div class="step-title">Activate CVI bidirectional sync</div>
+      <div class="step-sub">SPRO → CVI → Activate (now live for ongoing use)</div></div>
+    </div>
+    <div class="step-body">
+      <p>After go-live, any change to a BP syncs automatically to KNA1/LFA1 and vice versa. Users changing an address in the BP screen → appears in KNA1 automatically. Use <span class="m">CVI_CUST_CENTRAL</span> / <span class="m">CVI_VEND_CENTRAL</span> to force a resync if any drift is detected.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 27</span>
+      <div><div class="step-title">Run S/4HANA post-processing (XPRA · XCLA · SDM)</div>
+      <div class="step-sub">Adjusts migrated data to the S/4HANA data model</div></div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li><strong>XPRA</strong> — post-processing routines adjusting migrated data structures</li>
+        <li><strong>XCLA</strong> — classification and characteristic value assignments</li>
+        <li><strong>SDM</strong> — Selective Data Migration programs for Finance and Logistics; requires role <span class="m">/SNP/TF_TC_PP_SAT_754_ALL</span> (separately installed)</li>
+        <li>Authorization for post-processing: <span class="m">/SNP/TF_TC_PP_700_ALL</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <span class="step-n">STEP 28</span>
+      <div><div class="step-title">Hypercare — monitor BUPT daily for 2 weeks</div>
+      <div class="step-sub">Any new BP consistency error post go-live = immediate investigation</div></div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Run BUPT every morning for 2 weeks — any new error is investigated immediately</li>
+        <li>Monitor <span class="m">/SNP/TCPROT</span> for anomalies in import logs</li>
+        <li>Run <span class="m">CVI_VEND_CENTRAL</span> / <span class="m">CVI_CUST_CENTRAL</span> if any sync drift is found</li>
+        <li>Close the MC project only after hypercare passes with 0 issues</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+<hr>
+
+<!-- SUMMARY TABLE -->
+<div class="phase">
+  <div class="phase-num" style="background:#1f2328">★</div>
+  <div><h2>All 28 Steps — Quick Reference</h2></div>
+</div>
+<div class="phase-wrap">
+<table class="sum-table">
+  <thead><tr><th>#</th><th>Phase</th><th>Step</th><th>Key tool / action</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><span class="ph-tag ph1">Prepare</span></td><td>Profile KNA1/LFA1 — fix blanks, invalids</td><td>SE16N on ECC</td></tr>
+    <tr><td>2</td><td><span class="ph-tag ph1">Prepare</span></td><td>Find dual-role duplicates (Cust = Vend)</td><td>/N/SNP/CW_MDA</td></tr>
+    <tr><td>3</td><td><span class="ph-tag ph1">Prepare</span></td><td>Convert BANKN → IBAN</td><td>RFFMIBAN</td></tr>
+    <tr><td>4</td><td><span class="ph-tag ph1">Prepare</span></td><td>Validate recon accounts in SKA1 (D/K)</td><td>SE16N on S/4</td></tr>
+    <tr><td>5</td><td><span class="ph-tag ph2">CVI Config</span></td><td>Set BP number ranges — no overlap</td><td>BUCF / SNRO</td></tr>
+    <tr><td>6</td><td><span class="ph-tag ph2">CVI Config</span></td><td>Configure BP Groupings and Roles</td><td>BUCF</td></tr>
+    <tr><td>7</td><td><span class="ph-tag ph2">CVI Config</span></td><td>Map account groups → BP roles</td><td>SPRO → CVI</td></tr>
+    <tr><td>8</td><td><span class="ph-tag ph2">CVI Config</span></td><td>Configure field mapping KNA1/LFA1 → BUT000</td><td>SPRO → CVI → Field Mapping</td></tr>
+    <tr><td>9</td><td><span class="ph-tag ph2">CVI Config</span></td><td>Activate CVI sync — last config step</td><td>SPRO → CVI → Activate</td></tr>
+    <tr><td>10</td><td><span class="ph-tag ph3">TC Setup</span></td><td>Create Bluefield scenario (5-step Configurator)</td><td>/SNP/TE02_SCEN_CONFIGURATOR</td></tr>
+    <tr><td>11</td><td><span class="ph-tag ph3">TC Setup</span></td><td>Assign systems + test RFC connections</td><td>/SNP/TE02_API_CHECK_SYS_CONS</td></tr>
+    <tr><td>12</td><td><span class="ph-tag ph3">TC Setup</span></td><td>Run Table Analysis on all BP tables</td><td>/SNP/TE02_UPDATE_TABLE_INFO</td></tr>
+    <tr><td>13</td><td><span class="ph-tag ph3">TC Setup</span></td><td>Define global selections (BUKRS, KUNNR, LIFNR)</td><td>Selections tab in TC</td></tr>
+    <tr><td>14</td><td><span class="ph-tag ph3">TC Setup</span></td><td>Set up mapping objects → validate → regenerate</td><td>MAP_KUNNR/LIFNR/BUKRS · VALIDATE_MAPPINGS</td></tr>
+    <tr><td>15</td><td><span class="ph-tag ph3">TC Setup</span></td><td>Add data objects (Cust, Vend, Bank, Address)</td><td>Data Objects tab → Adopt</td></tr>
+    <tr><td>16</td><td><span class="ph-tag ph3">TC Setup</span></td><td>Create blocks — address export last, import first</td><td>/SNP/TE02_API_CREATE_BLOCKS</td></tr>
+    <tr><td>17</td><td><span class="ph-tag ph4">Pre-Exec</span></td><td>Run 8 validation reports — 0 errors each</td><td>VALIDATE_SELECTIONS/MAPPINGS/OBJECTS + roles</td></tr>
+    <tr><td>18</td><td><span class="ph-tag ph4">Pre-Exec</span></td><td>Simulate import block before first real run</td><td>Block → Execute → Simulation mode</td></tr>
+    <tr><td>19</td><td><span class="ph-tag ph5">Execute</span></td><td>Run export block</td><td>MC Task 1 → EXP block</td></tr>
+    <tr><td>20</td><td><span class="ph-tag ph5">Execute</span></td><td>Run import block</td><td>MC Task 2 → IMP block</td></tr>
+    <tr><td>21</td><td><span class="ph-tag ph5">Execute</span></td><td>Validate: BUPT + CVI links + DCV + test postings</td><td>BUPT · /N/SNP/FKC · FB70 · FB60 · VA01</td></tr>
+    <tr><td>22</td><td><span class="ph-tag ph5">Execute</span></td><td>Repeat ≥ 2 mock cycles until all checks pass</td><td>/SNP/TE02_API_COPY_RUNS_BLOCKS</td></tr>
+    <tr><td>23</td><td><span class="ph-tag ph6">Production</span></td><td>Lock NRIV → initial load → unlock → BUPT</td><td>NRIV control + MC background job</td></tr>
+    <tr><td>24</td><td><span class="ph-tag ph6">Production</span></td><td>RBNZD delta loads daily</td><td>/SNP/ZD01_CL_MC_EXECUTE_TASK</td></tr>
+    <tr><td>25</td><td><span class="ph-tag ph6">Production</span></td><td>Lock source → final delta → validate → sign-off</td><td>BUPT + FI test postings + workstream sign-off</td></tr>
+    <tr><td>26</td><td><span class="ph-tag ph7">Post Go-Live</span></td><td>Activate CVI bidirectional sync</td><td>SPRO → CVI → Activate</td></tr>
+    <tr><td>27</td><td><span class="ph-tag ph7">Post Go-Live</span></td><td>Run XPRA / XCLA / SDM post-processing</td><td>/SNP/TF_TC_PP_700_ALL</td></tr>
+    <tr><td>28</td><td><span class="ph-tag ph7">Post Go-Live</span></td><td>Hypercare — BUPT daily for 2 weeks</td><td>BUPT · /SNP/TCPROT monitoring</td></tr>
+  </tbody>
+</table>
+</div>
+
+<footer>Sempra Migration Team · SNP CrystalBridge BP Migration — Simple Step-by-Step · October 2026 · Made with IBM Bob</footer>
+</div>
+</body>
+</html>

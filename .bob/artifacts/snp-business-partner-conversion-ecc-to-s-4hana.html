@@ -1,0 +1,724 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SNP BP S/4 Conversion — ECC to S/4HANA</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 32px 16px;
+  }
+  .page { max-width: 760px; margin: 0 auto; }
+
+  /* ── Header ── */
+  .header {
+    border-bottom: 3px solid #3b82d4;
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: #3b82d4;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1f2328;
+    line-height: 1.25;
+  }
+  .header .sub {
+    color: #57606a;
+    font-size: 13px;
+    margin-top: 6px;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: #57606a;
+  }
+  .meta-row span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 32px; }
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #3b82d4;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+  }
+  h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1f2328;
+    margin: 14px 0 8px;
+  }
+  p { margin-bottom: 10px; color: #1f2328; }
+
+  /* ── Callout boxes ── */
+  .callout {
+    border-left: 4px solid #3b82d4;
+    background: #f0f6ff;
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+  .callout.warn {
+    border-color: #d97706;
+    background: #fffbeb;
+  }
+  .callout.danger {
+    border-color: #dc2626;
+    background: #fef2f2;
+  }
+  .callout.success {
+    border-color: #16a34a;
+    background: #f0fdf4;
+  }
+  .callout strong { display: block; margin-bottom: 3px; }
+
+  /* ── Tables ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    margin-bottom: 14px;
+  }
+  th {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    padding: 7px 9px;
+    text-align: left;
+    font-weight: 700;
+    color: #1f2328;
+  }
+  td {
+    border: 1px solid #e5e7eb;
+    padding: 6px 9px;
+    vertical-align: top;
+    color: #1f2328;
+  }
+  tr:nth-child(even) td { background: #f7f8fa; }
+  .mono { font-family: "Consolas", "Courier New", monospace; font-size: 11.5px; }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+  .badge-blue  { background: #dbeafe; color: #1d4ed8; }
+  .badge-green { background: #dcfce7; color: #15803d; }
+  .badge-red   { background: #fee2e2; color: #b91c1c; }
+  .badge-amber { background: #fef3c7; color: #b45309; }
+  .badge-gray  { background: #f1f5f9; color: #475569; }
+
+  /* ── Phase ribbon ── */
+  .phases {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .phase-box {
+    flex: 1;
+    min-width: 110px;
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-top: 3px solid #3b82d4;
+    padding: 10px 12px;
+  }
+  .phase-box .ph-num { font-size: 11px; color: #57606a; font-weight: 600; }
+  .phase-box .ph-name { font-size: 13px; font-weight: 700; color: #1f2328; margin: 2px 0 4px; }
+  .phase-box .ph-note { font-size: 11.5px; color: #57606a; }
+
+  /* ── Flow arrows ── */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    font-size: 12.5px;
+  }
+  .flow-box {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .flow-arrow { color: #3b82d4; font-size: 16px; font-weight: 700; }
+
+  /* ── Checklist ── */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 13px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .chk { color: #16a34a; font-weight: 700; flex-shrink: 0; }
+  .chkn { color: #57606a; font-weight: 700; flex-shrink: 0; }
+
+  /* ── Two-column grid ── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+  .card {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .card h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #1f2328; }
+  .card ul { padding-left: 14px; font-size: 12.5px; }
+  .card ul li { margin-bottom: 3px; }
+
+  /* ── Footer ── */
+  footer {
+    margin-top: 40px;
+    padding-top: 12px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+    font-size: 12px;
+    color: #57606a;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  
+  <div class="header">
+    <div class="tag">SNP CrystalBridge</div>
+    <h1>Business Partner Conversion — SAP ECC to S/4HANA</h1>
+    <div class="sub">Complete best-practice process: all migration approaches · CVI configuration · SNP toolchain · mapping strategy · validation · go-live checklist</div>
+    <div class="meta-row">
+      <span>Source: Sempra Migration Team · October 2026</span>
+      <span>Tool: SNP CrystalBridge + Mission Control</span>
+      <span>Scope: ECC Customer/Vendor → S/4HANA Business Partner</span>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-title">01 — What Changes and Why</div>
+    <p>In SAP ECC, Customers (KNA1/KNB1/KNVV) and Vendors (LFA1/LFB1/LFM1) are completely separate master data objects. In S/4HANA they collapse into a single <strong>Business Partner (BUT000)</strong> record with role assignments. The CVI (Customer-Vendor Integration) layer keeps ECC tables in sync.</p>
+    <div class="flow">
+      <div class="flow-box">ECC Customer<br /><span style="font-size:11px;font-weight:400">KNA1 · KNB1 · KNVV</span></div>
+      <div class="flow-arrow">+</div>
+      <div class="flow-box">ECC Vendor<br /><span style="font-size:11px;font-weight:400">LFA1 · LFB1 · LFM1</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#3b82d4;border-width:2px">S/4 Business Partner<br /><span style="font-size:11px;font-weight:400">BUT000 · BP Roles · CVI</span></div>
+    </div>
+    <table>
+      <thead><tr><th>BP Role</th><th>ECC Object</th><th>Tables Created / Retained</th><th>Activated By</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mono">FLCU00</span></td><td>Customer – General</td><td>BUT000 (created)</td><td>CVI sync from KNA1</td></tr>
+        <tr><td><span class="mono">FLCU01</span></td><td>Customer – Co.Code</td><td>KNB1 retained via CVI</td><td>CVI sync from KNB1</td></tr>
+        <tr><td><span class="mono">FLVN00</span></td><td>Vendor – General</td><td>BUT000 (shared record)</td><td>CVI sync from LFA1</td></tr>
+        <tr><td><span class="mono">FLVN01</span></td><td>Vendor – Co.Code</td><td>LFB1 retained via CVI</td><td>CVI sync from LFB1</td></tr>
+        <tr><td><span class="mono">BUP001</span></td><td>Business Partner (Gen)</td><td>BUT000 default</td><td>Auto on BP creation</td></tr>
+      </tbody>
+    </table>
+    <div class="callout warn">
+      <strong>Key constraint</strong>
+      KNB1, KNVV, LFB1, LFM1 are <em>retained</em> in S/4HANA and kept in sync by CVI — they are NOT deleted. But BUT000 becomes the master. All new transactions use the BP screen. Old T-codes (XD01, XK01) redirect via CVI.
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-title">02 — Three SNP Migration Approaches for BP</div>
+    <table>
+      <thead><tr><th>Approach</th><th>What Moves</th><th>BP Number Strategy</th><th>Typical Use</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Greenfield</strong></td>
+          <td>Open master data + open items only; no history</td>
+          <td>New internal BP numbers from a fresh range</td>
+          <td>New S/4 implementation, processes redesigned</td>
+        </tr>
+        <tr>
+          <td><strong>Bluefield</strong></td>
+          <td>Selective: per company code / entity; source stays live (RBNZD)</td>
+          <td>External range = keep ECC number (preferred) OR separate range</td>
+          <td>Selective harmonising migration; recommended for Sempra</td>
+        </tr>
+        <tr>
+          <td><strong>Brownfield</strong></td>
+          <td>Full system converted in-place (SUM + CVI)</td>
+          <td>Customer/Vendor numbers kept 1:1 as BP numbers</td>
+          <td>System upgrade; target = converted source</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout success">
+      <strong>Bluefield best-practice (SNP recommended for Sempra)</strong>
+      Business Partner creation is a built-in SNP out-of-the-box unit in Mission Control. Each customer and vendor record is migrated as a BP automatically. Dual-role records (same company is Customer AND Vendor) require professional-services harmonisation.
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-title">03 — SNP CrystalBridge Toolchain for BP Migration</div>
+    <div class="grid2">
+      <div class="card">
+        <h4>CrystalBridge Analysis (AN)</h4>
+        <ul>
+          <li><span class="mono">/N/SNP/SC</span> – System scan (extended)</li>
+          <li><span class="mono">/N/SNP/CW_MDA</span> – Master data comparison: find Cust/Vend duplicates across systems</li>
+          <li><span class="mono">/N/SNP/CW_CUST_COMP</span> – Customising comparison</li>
+          <li><span class="mono">/N/SNP/CW_PRESELECTION</span> – Master data preselection per source</li>
+          <li>Enterprise structure analysis: unused company codes, module usage</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Transformation Cockpit (TC)</h4>
+        <ul>
+          <li><span class="mono">/N/SNP/TC</span> – Scenario: Bluefield type</li>
+          <li>Selections: BUKRS, KUNNR, LIFNR, KOKRS</li>
+          <li>Mapping objects: MAP_KUNNR, MAP_LIFNR, MAP_BUKRS, MAP_WAERS</li>
+          <li>Data objects: Customer master, Vendor master, Address (ADRNR last/first)</li>
+          <li>Post-processing: XPRA, XCLA, SDM (BP creation routines)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Mission Control (MC)</h4>
+        <ul>
+          <li><span class="mono">/N/SNP/MC</span> – Project orchestration</li>
+          <li>Built-in Bluefield unit: BP creation per customer/vendor</li>
+          <li>Variable: <span class="mono">TC_SCENARIO</span> drives all TC API calls</li>
+          <li>Automated tickets on mapping errors</li>
+          <li>Dependency chain: Export → Import → BP create → Validate</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Validation (DCV)</h4>
+        <ul>
+          <li><span class="mono">/N/SNP/FKC</span> – Foreign key + domain checks</li>
+          <li><span class="mono">/SNP/FK02_SUMMARY</span> – DCV summary per table</li>
+          <li>CVI_CUST_LINK / CVI_VEND_LINK – every record linked</li>
+          <li>BUPT – BP consistency check (target = 0 errors)</li>
+          <li>Balance comparison: RFBILA00 + <span class="mono">/SNP/CW02_VR_API_BALANCE_CMP</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>SNP-Specific BP Data Objects in the Scenario</h3>
+    <table>
+      <thead><tr><th>Data Object</th><th>Module</th><th>Tables Covered</th><th>Special Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Customer Master</td><td>FI/SD</td><td>KNA1, KNB1, KNVV, KNVP, KNVI, KNB5, KNVS</td><td>KNB5 dunning; KNVP partner functions retained</td></tr>
+        <tr><td>Vendor Master</td><td>FI/MM</td><td>LFA1, LFB1, LFM1, LFM2, LFBW, LFB5, WYT3</td><td>LFBW withholding tax; LFM2 plant data</td></tr>
+        <tr><td>Business Partner Create</td><td>FI</td><td>BUT000, BUT020, BUT100, BUT050</td><td>BAPI-based; role <span class="mono">/SNP/XX_MIG_BAPI_SAT_700_ALL</span> required on target</td></tr>
+        <tr><td>BP Bank Details</td><td>FI/TR</td><td>TIBAN, BNKA</td><td>IBAN mandatory — convert KNBK/LFBK first (RFFMIBAN)</td></tr>
+        <tr><td>Address Object</td><td>ALL</td><td>ADRC, ADR6, BUT020, BUT021_FS</td><td>Export LAST; import FIRST. SEL_ADRNR collects all address numbers</td></tr>
+        <tr><td>One-Time (CPD)</td><td>FI</td><td>BUT000 (single record CP000001)</td><td>Name/Address entered at posting — no master enrichment needed</td></tr>
+        <tr><td>CVI Link Tables</td><td>FI</td><td>CVI_CUST_LINK, CVI_VEND_LINK</td><td>Auto-created by CVI sync; verify with report post-import</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-title">04 — CVI Configuration (20-Step Complete Setup)</div>
+    <p>CVI must be configured <em>before</em> migration runs. Wrong sequence = wrong BP numbers = full data cleanup required.</p>
+    <table>
+      <thead><tr><th>#</th><th>SPRO Node / T-Code</th><th>What to Set</th><th>Sempra Example</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>BUCF / SNRO</td><td>Define BP number ranges (internal + external)</td><td>Ext 1000000–1999999 = Customers; Ext 2000000–2999999 = Vendors</td></tr>
+        <tr><td>2</td><td>BUCF</td><td>Define BP Groupings: CUST, VEND, CPD, INTE</td><td>Assign each grouping to its number range</td></tr>
+        <tr><td>3</td><td>BUCF</td><td>Define BP Roles: FLCU00, FLCU01, FLVN00, FLVN01</td><td>Standard SAP-delivered roles — verify they exist</td></tr>
+        <tr><td>4</td><td>BUCF → BP Role Category</td><td>Assign BP Role to BP Role Category: FLCU=Customer, FLVN=Vendor</td><td>Links role to screen layout fields</td></tr>
+        <tr><td>5</td><td>BUCF → Field Grouping</td><td>Set field status (REQ/OPT/HIDE) per role</td><td>STCD1 = REQ for FLCU00; ZWELS = REQ for FLVN01</td></tr>
+        <tr><td>6</td><td>OBD2</td><td>Customer Account Groups with number ranges + field status</td><td>KUNA (1000–1999999), CPD (9000–9099999)</td></tr>
+        <tr><td>7</td><td>OBD3</td><td>Vendor Account Groups with number ranges + field status</td><td>0001 Domestic (1–999999), CPD (9100–9199999)</td></tr>
+        <tr><td>8</td><td>SPRO → CVI → Customer → Assign Roles</td><td>Map customer account group → BP roles</td><td>KUNA → FLCU00 + FLCU01</td></tr>
+        <tr><td>9</td><td>SPRO → CVI → Vendor → Assign Roles</td><td>Map vendor account group → BP roles</td><td>0001 → FLVN00 + FLVN01</td></tr>
+        <tr><td>10</td><td>SPRO → CVI → Number Range Mapping</td><td>Sync customer/vendor range to BP range (external = keep ECC#)</td><td>KUNNR 1000000–1999999 ↔ BP range 01</td></tr>
+        <tr><td>11</td><td>SPRO → CVI → Field Mapping → Customer</td><td>Map KNA1 → BUT000 (critical fields)</td><td>NAME1→NAME_ORG1, LAND1→COUNTRY, STCD1→STCD1</td></tr>
+        <tr><td>12</td><td>SPRO → CVI → Field Mapping → Vendor</td><td>Map LFA1 → BUT000</td><td>Same fields; conflicts resolved by CVI priority rules</td></tr>
+        <tr><td>13</td><td>SPRO → CVI → Activate</td><td>Switch on bidirectional sync (ECC↔BP)</td><td>Activate only after steps 1–12 are confirmed</td></tr>
+        <tr><td>14</td><td>SPRO → SD → Partner Determination</td><td>SP/SH/BP/PY partner functions work with BP</td><td>Check procedure assigned to each customer account group</td></tr>
+        <tr><td>15</td><td>UKM_BP / SPRO → FSCM</td><td>Migrate credit limits FD32 → UKM_BP</td><td>S/4 Credit Management replaces KNB1-KLIMK</td></tr>
+        <tr><td>16</td><td>SPRO → SD → Taxes</td><td>Tax classification from KNVI → S/4 condition record</td><td>Map ECC TAXKD → S/4 condition type</td></tr>
+        <tr><td>17</td><td>FBMP / SPRO → FI → AR</td><td>Dunning: verify KNB1-MAHNA migrated correctly</td><td>Test dunning run on pilot BPs</td></tr>
+        <tr><td>18</td><td>FBZP</td><td>Payment methods LFB1-ZWELS must match config</td><td>T=transfer, C=cheque, B=bill active per CoCode</td></tr>
+        <tr><td>19</td><td>SPRO → MM → LIV</td><td>GR-based IV flag LFM1-XGRED migrated</td><td>Controls 3-way match (PO + GR + Invoice)</td></tr>
+        <tr><td>20</td><td>SPRO → FI → WHT</td><td>WHT: LFBW and KNBK data migrated</td><td>Verify WHT types/codes match S/4 config</td></tr>
+      </tbody>
+    </table>
+    <div class="callout danger">
+      <strong>Configuration order is non-negotiable</strong>
+      Number Ranges → BP Groupings → BP Roles → Account Groups → CVI Mapping → Activate Sync. Activating CVI before number ranges are aligned creates BPs with wrong numbers requiring a full data cleanup — there is no partial fix.
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-title">05 — SNP Transformation Cockpit Mapping for BP</div>
+    <h3>Key Mapping Objects to Activate in the TC Scenario</h3>
+    <table>
+      <thead><tr><th>TC Mapping Object</th><th>Field</th><th>Scope</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mono">MAP_KUNNR</span></td><td>KUNNR</td><td>SD/FI (all customer tables)</td><td>Cust 100045 → BP 100045 (1:1 external) OR Cust 100045 → BP 9100045 (new range)</td></tr>
+        <tr><td><span class="mono">MAP_LIFNR</span></td><td>LIFNR</td><td>MM/FI (all vendor tables)</td><td>Vend 200078 → BP 200078 (1:1 external)</td></tr>
+        <tr><td><span class="mono">MAP_BUKRS</span></td><td>BUKRS</td><td>All modules</td><td>Source CoCode 1000 → Target CoCode 1000 (or mapped)</td></tr>
+        <tr><td><span class="mono">MAP_WAERS</span></td><td>WAERS</td><td>FI/SD/MM</td><td>DEM → EUR (currency conversion)</td></tr>
+        <tr><td><span class="mono">MAP_HKONT</span></td><td>HKONT</td><td>FI</td><td>Recon account 140000 → 140000 (or new CoA mapping)</td></tr>
+        <tr><td><span class="mono">MAP_VKORG</span></td><td>VKORG</td><td>SD</td><td>Sales org 1000 → 1000 (or consolidated)</td></tr>
+        <tr><td><span class="mono">MAP_EKORG</span></td><td>EKORG</td><td>MM</td><td>Purchasing org 1000 → 1000</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Number Range Strategy in the TC Scenario</h3>
+    <table>
+      <thead><tr><th>Object Range</th><th>Type</th><th>From</th><th>To</th><th>BP Grouping</th><th>Strategy</th></tr></thead>
+      <tbody>
+        <tr><td>Customer (migrated)</td><td>External</td><td>1000000</td><td>1999999</td><td>CUST</td><td>1:1 — keep ECC KUNNR as BP number</td></tr>
+        <tr><td>Vendor (migrated)</td><td>External</td><td>2000000</td><td>2999999</td><td>VEND</td><td>1:1 — keep ECC LIFNR as BP number</td></tr>
+        <tr><td>One-Time Cust (CPD)</td><td>External</td><td>9000000</td><td>9099999</td><td>CPD</td><td>Single BP CP000001 per account group</td></tr>
+        <tr><td>One-Time Vend (CPD)</td><td>External</td><td>9100000</td><td>9199999</td><td>CPD</td><td>Single BP per account group</td></tr>
+        <tr><td>New BP (post go-live)</td><td>Internal</td><td>9200000</td><td>9999999</td><td>CUST/VEND</td><td>SAP auto-assigns after go-live</td></tr>
+        <tr><td>Intercompany</td><td>Internal</td><td>8000000</td><td>8999999</td><td>INTE</td><td>Internal cross-company BPs</td></tr>
+      </tbody>
+    </table>
+    <div class="callout warn">
+      <strong>NRIV lock/unlock for BP during delta runs (RBNZD)</strong>
+      Lock number ranges on the target before each delta import using TC NRIV area control. Unlock immediately after the import block completes. Failure to lock causes duplicate key errors on BP creation during concurrent production use.
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-title">06 — Four Concrete BP Migration Scenarios</div>
+
+    <h3>Scenario A — Simple Customer (Customer only)</h3>
+    <table>
+      <thead><tr><th>Step</th><th>Action</th><th>ECC Data</th><th>S/4 Result</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Extract KNA1</td><td>NAME1=Pacific Gas, KTOKD=KUNA, LAND1=US</td><td>Source for BUT000 general data</td></tr>
+        <tr><td>2</td><td>Extract KNB1</td><td>AKONT=140000, ZTERM=Z030, KLIMK=1,000,000</td><td>Source for FLCU01 role data</td></tr>
+        <tr><td>3</td><td>Extract KNVV</td><td>VKORG=3000, VTWEG=10, INCO1=CIF</td><td>Loaded to KNVV in S/4 unchanged</td></tr>
+        <tr><td>4</td><td>Create BP via BAPI</td><td>BP# = Cust# (external 1:1)</td><td>BUT000 created; FLCU00 + FLCU01 assigned</td></tr>
+        <tr><td>5</td><td>Validate</td><td>CVI_CUST_LINK check</td><td>Cust 1001234 ↔ BP 1001234 confirmed</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Scenario B — Dual-Role (Same company = Customer AND Vendor)</h3>
+    <div class="callout">
+      <strong>Challenge (Requires Professional Services)</strong>
+      Siemens AG = Customer 100045 AND Vendor 200078. Must become ONE BP with both roles. Harmonisation is NOT an out-of-the-box SNP unit.
+    </div>
+    <table>
+      <thead><tr><th>Step</th><th>Action</th><th>Data / Config</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Identify duplicates</td><td>Match on STCD1=DE123456789 or Name+Country via /N/SNP/CW_MDA</td><td>Found: Cust 100045 = Vend 200078</td></tr>
+        <tr><td>2</td><td>Choose master BP#</td><td>Policy: use Customer# as BP#</td><td>BP# = 100045</td></tr>
+        <tr><td>3</td><td>Create BP</td><td>Name/address from KNA1</td><td>BUT000 BP 100045 created</td></tr>
+        <tr><td>4</td><td>Assign FLCU roles</td><td>From KNA1 + KNB1</td><td>FLCU00 + FLCU01 assigned</td></tr>
+        <tr><td>5</td><td>Assign FLVN roles</td><td>From LFA1 + LFB1</td><td>FLVN00 + FLVN01 assigned</td></tr>
+        <tr><td>6</td><td>Link old Vendor#</td><td>CVI_VENDOR_LINK table</td><td>Vend 200078 → BP 100045</td></tr>
+        <tr><td>7</td><td>Redirect postings</td><td>A/P still uses Vend 200078 key</td><td>S/4 routes all postings via BP 100045</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Scenario C — One-Time / CPD</h3>
+    <table>
+      <thead><tr><th>Field</th><th>ECC (KNA1)</th><th>S/4 (BUT000)</th><th>Migration Action</th></tr></thead>
+      <tbody>
+        <tr><td>Account Group</td><td>CPDA (one-time)</td><td>BP Group = CPD</td><td>Map CPDA → CPD grouping in CVI</td></tr>
+        <tr><td>One-Time Flag</td><td>XCPDK = X</td><td>XCPD indicator on BP</td><td>Migrate flag 1:1</td></tr>
+        <tr><td>BP#</td><td>Entered at posting</td><td>Single BP: CP000001</td><td>Create once; all CPD transactions use it</td></tr>
+        <tr><td>Name/Address</td><td>Entered at posting</td><td>Entered at posting</td><td>No enrichment required on master</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Scenario D — Blocked Records</h3>
+    <table>
+      <thead><tr><th>Block Type</th><th>ECC Field/Table</th><th>S/4 Equivalent</th><th>SNP Migration Action</th></tr></thead>
+      <tbody>
+        <tr><td>All Co.Codes block</td><td>KNB1-SPERR = X</td><td>BP Central Block</td><td>Migrate block indicator via import rule</td></tr>
+        <tr><td>Posting block (A/R)</td><td>KNB1-ZAHLS = X</td><td>BP Role FLCU01 block</td><td>Retain on KNB1 — no mapping needed</td></tr>
+        <tr><td>Sales block</td><td>KNVV-AUFSD = Z1</td><td>KNVV retained</td><td>No change — table migrates as-is</td></tr>
+        <tr><td>Vendor payment block</td><td>LFB1-ZAHLS = B</td><td>LFB1 retained</td><td>Retain on LFB1</td></tr>
+        <tr><td>Deletion flag</td><td>KNA1-LOEVM = X</td><td>BUT000-BU_DCIND</td><td>Map via import rule to BP deletion indicator</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-title">07 — Near-Zero Downtime for BP (RBNZD)</div>
+    <p>For large BP volumes or live-source scenarios (Bluefield), SNP RBNZD keeps the ECC source live while bulk BP data migrates in advance. Only the final delta runs during the cutover window.</p>
+    <div class="flow">
+      <div class="flow-box">Initial Load<br /><span style="font-size:11px;font-weight:400">source live · all BPs</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">Delta 1<br /><span style="font-size:11px;font-weight:400">new/changed BPs</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">Delta n<br /><span style="font-size:11px;font-weight:400">repeat to shrink</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#dc2626;border-width:2px">Final Delta<br /><span style="font-size:11px;font-weight:400">source locked · go-live</span></div>
+    </div>
+    <table>
+      <thead><tr><th>Step</th><th>Action</th><th>Transaction / Class</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Assign role and activate NZD_ACTIVE parameter</td><td><span class="mono">/SNP/TF_DO_RBNZD_700_DIA_ALL</span>; run parameter NZD_ACTIVE</td></tr>
+        <tr><td>2</td><td>Create RBNZD scenario for BP objects</td><td><span class="mono">/SNP/ZD02_TC_CREATE_SCENARIO</span></td></tr>
+        <tr><td>3</td><td>Configure delta detection rules per BP data object</td><td>Delta rules in TC scenario (changed-since-timestamp logic)</td></tr>
+        <tr><td>4</td><td>Execute initial load (full export + import)</td><td>Standard TC export/import blocks</td></tr>
+        <tr><td>5</td><td>Create and execute delta loads (repeat daily or more)</td><td><span class="mono">/SNP/ZD02_MC_CREATE_DELTA_LOAD</span>; <span class="mono">/SNP/ZD01_CL_MC_EXECUTE_TASK</span></td></tr>
+        <tr><td>6</td><td>DCV after each delta (BUPT + CVI_CUST/VEND_LINK)</td><td><span class="mono">/SNP/FK02_SUMMARY</span>; BUPT</td></tr>
+        <tr><td>7</td><td>Lock number ranges before each delta; unlock after</td><td>NRIV area control in TC + target system</td></tr>
+        <tr><td>8</td><td>Final cutover: lock source, run final delta, go-live</td><td>Cutover manager executes; target validated within window</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-title">08 — End-to-End SNP BP Migration Workflow (16 Steps)</div>
+    <div class="phases">
+      <div class="phase-box"><div class="ph-num">Steps 1–2</div><div class="ph-name">Analyze</div><div class="ph-note">System scan · MDA · preselection</div></div>
+      <div class="phase-box" style="border-top-color:#7c5cd8"><div class="ph-num">Steps 3–6</div><div class="ph-name">Design</div><div class="ph-note">Scenario · selections · CVI config</div></div>
+      <div class="phase-box" style="border-top-color:#d97706"><div class="ph-num">Steps 7–10</div><div class="ph-name">Implement</div><div class="ph-note">Mapping · rules · syntax check</div></div>
+      <div class="phase-box" style="border-top-color:#16a34a"><div class="ph-num">Steps 11–13</div><div class="ph-name">Test</div><div class="ph-note">Mock loads · DCV · BUPT</div></div>
+      <div class="phase-box" style="border-top-color:#dc2626"><div class="ph-num">Steps 14–16</div><div class="ph-name">Go-Live</div><div class="ph-note">Prod load · delta · post-process</div></div>
+    </div>
+    <table>
+      <thead><tr><th>#</th><th>Action</th><th>Tool / Transaction</th><th>Owner</th><th>BP-Specific Note</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>System scan (extended) — BP volume + duplicate analysis</td><td><span class="mono">/N/SNP/SC</span>, <span class="mono">/N/SNP/CW_MDA</span></td><td>Technical</td><td>Flag Cust/Vend same-company duplicates for harmonisation</td></tr>
+        <tr><td>2</td><td>Preselect master data by source system</td><td><span class="mono">/N/SNP/CW_PRESELECTION</span></td><td>Functional</td><td>Decide which source record is golden for shared BPs</td></tr>
+        <tr><td>3</td><td>Create Bluefield scenario; assign systems</td><td><span class="mono">/N/SNP/TC</span>; <span class="mono">/SNP/TE02_API_SYNC_SYSTEMS</span></td><td>Migration lead</td><td>Scenario ID stored as MC variable TC_SCENARIO</td></tr>
+        <tr><td>4</td><td>Define selections (BUKRS, KUNNR, LIFNR, GJAHR ranges)</td><td>Selections tab; <span class="mono">/SNP/TE02_API_FILL_SEL_FROM_BP</span></td><td>Functional</td><td>Use IEQ/IBT range notation; validate with VALIDATE_SELECTIONS</td></tr>
+        <tr><td>5</td><td>Activate BP mapping objects (MAP_KUNNR, MAP_LIFNR, MAP_BUKRS …)</td><td>Mapping tab in TC</td><td>Functional + Business</td><td>CSV bulk import for large GL account / org unit tables</td></tr>
+        <tr><td>6</td><td>Add BP data objects from catalog; configure table properties</td><td>Data Objects tab; <span class="mono">/SNP/TE02_VALIDATE_OBJECTS</span></td><td>Migration lead</td><td>Address object: export LAST, import FIRST (SEL_ADRNR)</td></tr>
+        <tr><td>7</td><td>DDIC analysis on source and target</td><td><span class="mono">/SNP/TE02_API_REMOTE_DDIC_ANA</span></td><td>Technical</td><td>Check S/4 structural differences in BUT000 vs KNA1/LFA1</td></tr>
+        <tr><td>8</td><td>Syntax check all rules</td><td><span class="mono">/SNP/TE02_API_EXEC_SYNTAX_CHK</span></td><td>Technical</td><td>BAPI-based BP creation rules require shadow DDIC alignment</td></tr>
+        <tr><td>9</td><td>Validate mappings; resolve all gaps</td><td><span class="mono">/SNP/TE02_VALIDATE_MAPPINGS</span></td><td>Migration lead</td><td>Every unmapped KUNNR/LIFNR value = import failure</td></tr>
+        <tr><td>10</td><td>Create blocks; simulate execution</td><td><span class="mono">/SNP/TE02_API_CREATE_BLOCKS</span>; simulate mode</td><td>Technical</td><td>Confirm BAPI role <span class="mono">/SNP/XX_MIG_BAPI_SAT_700_ALL</span> on target</td></tr>
+        <tr><td>11</td><td>Full mock load into QA target</td><td>Export + Import blocks in background</td><td>Migration team</td><td>Run BUPT immediately after — target 0 errors</td></tr>
+        <tr><td>12</td><td>Validate QA results (DCV + balance check)</td><td>BUPT; <span class="mono">/SNP/FK02_SUMMARY</span>; CVI_CUST/VEND_LINK reports</td><td>Functional + QA</td><td>Post test FI invoice (Cust + Vend) to verify recon accounts</td></tr>
+        <tr><td>13</td><td>Repeat mock cycles until 0 errors</td><td><span class="mono">/SNP/TE02_API_COPY_RUNS_BLOCKS</span> for new cycle</td><td>Migration team</td><td>Minimum 2 dress-rehearsal cycles before production</td></tr>
+        <tr><td>14</td><td>Production initial load</td><td>Export + Import blocks in background via MC</td><td>Migration team</td><td>Lock NRIV before; run BUPT immediately after</td></tr>
+        <tr><td>15</td><td>Delta runs (RBNZD) — repeat until cutover</td><td><span class="mono">/SNP/ZD01_CL_MC_EXECUTE_TASK</span></td><td>Migration team</td><td>DCV after every delta; lock/unlock NRIV each time</td></tr>
+        <tr><td>16</td><td>Post-processing: XPRA, XCLA, SDM (BP create routines)</td><td><span class="mono">/SNP/TF_TC_PP_700_ALL</span>; S/4HANA Cockpit</td><td>Technical</td><td>SDM activates BP-specific S/4 post-processing programs</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-title">09 — Roles and Authorizations Required for BP Migration</div>
+    <table>
+      <thead><tr><th>Role</th><th>Purpose</th><th>System</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mono">/SNP/TF_DIA_ALL</span></td><td>Composite — dialog users for TF and AN</td><td>Control + satellites</td></tr>
+        <tr><td><span class="mono">/SNP/TF_TC_TC_700_DIA_ALL</span></td><td>Transformation Cockpit full access</td><td>Control</td></tr>
+        <tr><td><span class="mono">/SNP/TF_TC_TC_700_DIA_BUSI</span></td><td>Business users maintain mapping values (CVI mappings)</td><td>Control</td></tr>
+        <tr><td><span class="mono">/SNP/MC_700_DIA_ALL</span></td><td>Mission Control</td><td>Control</td></tr>
+        <tr><td><span class="mono">/SNP/XX_MIG_700_RFC</span> (+ 751, 755)</td><td>Cross-component RFC user on source/target</td><td>Source, Target</td></tr>
+        <tr><td><span class="mono">/SNP/XX_MIG_BAPI_SAT_700_ALL</span></td><td><strong>BAPI-based BP creation (mandatory for BP objects)</strong></td><td>Target only</td></tr>
+        <tr><td><span class="mono">/SNP/TF_TC_PP_700_ALL</span></td><td>S/4 post-processing (XPRA, XCLA, SDM)</td><td>Control, Target</td></tr>
+        <tr><td><span class="mono">/SNP/TF_TC_S4_SAT_751_ALL</span></td><td>S/4HANA Cockpit (Bluefield import-side)</td><td>Target</td></tr>
+        <tr><td><span class="mono">/SNP/TF_DO_RBNZD_700_DIA_ALL</span></td><td>Rule-Based Near-Zero Downtime (if RBNZD used)</td><td>Control</td></tr>
+        <tr><td><span class="mono">/SNP/TF_DC_DCV_700_DIA_ALL</span></td><td>Data Consistency Verification</td><td>Control, satellites</td></tr>
+        <tr><td><span class="mono">/SNP/SC</span></td><td>CrystalBridge Analysis system scan</td><td>Scanned (source)</td></tr>
+      </tbody>
+    </table>
+    <div class="callout danger">
+      <strong>Role gap most commonly missed</strong>
+      <span class="mono">/SNP/XX_MIG_BAPI_SAT_700_ALL</span> must be installed separately on the S/4HANA target. It is NOT included in the composite role. Without it, all BAPI-based BP creation calls will fail silently or with authority check errors.
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-title">10 — Validation: Post-Migration Checks</div>
+    <table>
+      <thead><tr><th>Check</th><th>Tool / Transaction</th><th>Pass Criteria</th></tr></thead>
+      <tbody>
+        <tr><td>BP consistency check</td><td>BUPT</td><td><strong>0 errors</strong> for all migrated BPs — role completeness, address, bank, CVI links</td></tr>
+        <tr><td>Customer ↔ BP link</td><td>CVI_CUST_LINK report</td><td>Every KUNNR has exactly one PARTNER row in CVI_CUST_LINK</td></tr>
+        <tr><td>Vendor ↔ BP link</td><td>CVI_VEND_LINK report</td><td>Every LIFNR has exactly one PARTNER row in CVI_VEND_LINK</td></tr>
+        <tr><td>DCV foreign key check</td><td><span class="mono">/N/SNP/FKC</span>; <span class="mono">/SNP/FK02_SUMMARY</span></td><td>Domain fixed values, FK checks, value-table checks all pass</td></tr>
+        <tr><td>Balance comparison</td><td>RFBILA00 + <span class="mono">/SNP/CW02_VR_API_BALANCE_CMP</span></td><td>FI balances equal between ECC and S/4 (with VR_IS_MAP_ACTIVE)</td></tr>
+        <tr><td>Test FI posting — Customer</td><td>FB70 / F-22</td><td>A/R hits recon account 140000 via BP 100045</td></tr>
+        <tr><td>Test FI posting — Vendor</td><td>FB60 / F-43</td><td>A/P hits recon account 210000 via BP 200078</td></tr>
+        <tr><td>Test SD sales order</td><td>VA01</td><td>Partner functions SP/SH/BP/PY resolve correctly</td></tr>
+        <tr><td>Test MM purchase order</td><td>ME21N</td><td>Vendor data, purchasing org, payment terms resolve correctly</td></tr>
+        <tr><td>IBAN validity</td><td>RFFMIBAN</td><td>All TIBAN records have valid IBAN format per country</td></tr>
+        <tr><td>Violation check</td><td><span class="mono">/SNP/TE02_API_VIOLATION_CHECK</span></td><td>Referential integrity and mandatory fields — 0 violations</td></tr>
+      </tbody>
+    </table>
+    <div class="callout success">
+      <strong>Go-live gate: ALL checks above must be green before cutover</strong>
+      A single BUPT error on a reconciliation account or a failed test posting means the migration is NOT ready. No exceptions — fix in QA and revalidate.
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-title">11 — BP-Specific Troubleshooting &amp; Risk Register</div>
+    <table>
+      <thead><tr><th>Issue / Error</th><th>Root Cause</th><th>Resolution</th></tr></thead>
+      <tbody>
+        <tr><td>BP does not exist for Customer 100045</td><td>CVI sync not run or number range gap</td><td>Run FLCU00/01 CVI sync; check BP number range config in BUCF</td></tr>
+        <tr><td>IBAN invalid for bank account</td><td>ECC BANKN not converted to IBAN</td><td>Run RFFMIBAN or convert manually; IBAN format is country-specific</td></tr>
+        <tr><td>Duplicate BP name warning</td><td>Same company migrated twice (cust + vend)</td><td>Merge records; assign both FLCU and FLVN roles to one BP</td></tr>
+        <tr><td>Tax number already exists on BP 9000045</td><td>Shared VAT# between two customer records</td><td>Investigate parent/subsidiary relationship; may be legitimate</td></tr>
+        <tr><td>Role FLCU01 missing in CoCode 2000</td><td>KNB1 record existed but not migrated (selection gap)</td><td>Re-run LTMC / TC import for 'BP Customer CoCode' object</td></tr>
+        <tr><td>Address data mismatch (KNA1 vs BUT020)</td><td>CVI field mapping missing for STRAS, ORT01</td><td>Check CVI field mapping config for street/city fields</td></tr>
+        <tr><td>Unmapped KUNNR/LIFNR value at import</td><td>MAP_KUNNR/MAP_LIFNR entry missing</td><td>Add entry; re-generate blocks; re-run <span class="mono">VALIDATE_MAPPINGS</span></td></tr>
+        <tr><td>BAPI authority error during BP creation</td><td>Missing <span class="mono">/SNP/XX_MIG_BAPI_SAT_700_ALL</span> on target</td><td>Install and assign the role on the S/4HANA target</td></tr>
+        <tr><td>Stale mapping cache — new entries not effective</td><td>Blocks not regenerated after mapping change</td><td>Re-generate blocks via <span class="mono">/SNP/TE02_API_CREATE_BLOCKS</span></td></tr>
+        <tr><td>MC task blocked on BP ticket</td><td>Mapping error auto-created ticket</td><td>Resolve root cause; close ticket as FIXED with comment</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Risk Register</h3>
+    <table>
+      <thead><tr><th>Risk</th><th>Impact</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td>Incomplete value mappings for KUNNR/LIFNR</td><td><span class="badge badge-red">HIGH</span> Import errors, rework at cutover</td><td>Validate mappings before every cycle; business sign-off on values</td></tr>
+        <tr><td>Dual-role (Customer = Vendor) not identified pre-migration</td><td><span class="badge badge-red">HIGH</span> Duplicate BPs, CVI link errors</td><td>Run /N/SNP/CW_MDA duplicate analysis in Analyze phase</td></tr>
+        <tr><td>IBAN not converted from ECC BANKN</td><td><span class="badge badge-red">HIGH</span> All payment runs fail post go-live</td><td>Run RFFMIBAN in Prepare phase; validate all TIBAN records</td></tr>
+        <tr><td>BAPI role missing on target</td><td><span class="badge badge-amber">MED</span> BP creation silent failures</td><td>Role checklist verified in every test cycle</td></tr>
+        <tr><td>Number range overlap (Cust# = Vend# in same range)</td><td><span class="badge badge-red">HIGH</span> Duplicate key errors, wrong BP routing</td><td>SE16N overlap check before go-live; separate ranges by design</td></tr>
+        <tr><td>Delta timestamp gap or overlap</td><td><span class="badge badge-amber">MED</span> Missing or duplicated BP records</td><td>Track timestamps; DCV after each delta run</td></tr>
+        <tr><td>CVI activated before number ranges aligned</td><td><span class="badge badge-red">HIGH</span> Wrong BP numbers requiring full cleanup</td><td>Strict config sequence: Number Ranges → Groups → Roles → Activate</td></tr>
+        <tr><td>SNP license not requested for new MC project</td><td><span class="badge badge-amber">MED</span> Tasks cannot be executed</td><td>Request license via SNP support before first test cycle execution</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-title">12 — Master BP Migration Checklist (Phase-by-Phase)</div>
+    <ul class="checklist">
+      <li><span class="chkn">PREP</span> Extract all KNA1 records — profile for blanks, duplicates, invalid country codes</li>
+      <li><span class="chkn">PREP</span> Extract all LFA1 records — profile for blanks, duplicates, STCD1 conflicts</li>
+      <li><span class="chkn">PREP</span> Run /N/SNP/CW_MDA — identify Customer + Vendor same-company duplicates (match on STCD1 + NAME1)</li>
+      <li><span class="chkn">PREP</span> Convert KNBK/LFBK bank accounts to IBAN format using RFFMIBAN or manual fix</li>
+      <li><span class="chkn">PREP</span> Validate all reconciliation accounts (AKONT) exist in SKA1 with correct type (D=Cust, K=Vend)</li>
+      <li><span class="chkn">CONF</span> Configure BP number ranges in BUCF/SNRO — no overlap between customer and vendor ranges</li>
+      <li><span class="chkn">CONF</span> Configure BP Groupings (CUST, VEND, CPD, INTE) in BUCF</li>
+      <li><span class="chkn">CONF</span> Verify BP Roles FLCU00/01, FLVN00/01 exist and assigned to correct category</li>
+      <li><span class="chkn">CONF</span> CVI: Assign customer account groups to BP roles (OBD2 → FLCU)</li>
+      <li><span class="chkn">CONF</span> CVI: Assign vendor account groups to BP roles (OBD3 → FLVN)</li>
+      <li><span class="chkn">CONF</span> CVI: Number range mapping — external ranges for migrated records (keep ECC numbers)</li>
+      <li><span class="chkn">CONF</span> CVI: Field mapping KNA1/LFA1 → BUT000 — validate all critical fields (NAME1, LAND1, STCD1)</li>
+      <li><span class="chkn">CONF</span> Assign role /SNP/XX_MIG_BAPI_SAT_700_ALL on S/4HANA target (separately delivered)</li>
+      <li><span class="chkn">SNP</span> Create Bluefield scenario in TC; define KUNNR/LIFNR/BUKRS selections</li>
+      <li><span class="chkn">SNP</span> Activate MAP_KUNNR, MAP_LIFNR, MAP_BUKRS, MAP_WAERS, MAP_HKONT mapping objects</li>
+      <li><span class="chkn">SNP</span> Run Table Analysis (/SNP/TE02_UPDATE_TABLE_INFO) on all BP data objects</li>
+      <li><span class="chkn">SNP</span> DDIC analysis, syntax check, violation check — 0 errors before first test load</li>
+      <li><span class="chkn">SNP</span> Validate mappings (/SNP/TE02_VALIDATE_MAPPINGS) — resolve all gaps</li>
+      <li><span class="chkn">SNP</span> Configure address object: export LAST, import FIRST; SEL_ADRNR in global selection</li>
+      <li><span class="chkn">TEST</span> Run full mock load into QA — export + import blocks in background via MC</li>
+      <li><span class="chkn">TEST</span> Run BUPT (BP Consistency Check) — target: 0 errors for all migrated BPs</li>
+      <li><span class="chkn">TEST</span> Run CVI_CUST_LINK + CVI_VEND_LINK — every record has exactly one BP link</li>
+      <li><span class="chkn">TEST</span> Post test customer invoice (FB70) — verify A/R hits recon account 140000</li>
+      <li><span class="chkn">TEST</span> Post test vendor invoice (FB60) — verify A/P hits recon account 210000</li>
+      <li><span class="chkn">TEST</span> Create test sales order (VA01) — partner functions SP/SH/BP/PY resolve</li>
+      <li><span class="chkn">TEST</span> Create test purchase order (ME21N) — vendor data resolves correctly</li>
+      <li><span class="chkn">TEST</span> Balance comparison RFBILA00 — FI balances equal between systems</li>
+      <li><span class="chkn">TEST</span> Repeat mock cycles (minimum 2) — copy runs with /SNP/TE02_API_COPY_RUNS_BLOCKS</li>
+      <li><span class="chkn">PROD</span> Lock number ranges (NRIV) before production initial load</li>
+      <li><span class="chkn">PROD</span> Execute production initial load — background mode via Mission Control</li>
+      <li><span class="chkn">PROD</span> Unlock number ranges; run BUPT immediately — 0 errors gate</li>
+      <li><span class="chkn">PROD</span> Execute RBNZD delta runs daily until cutover (validate each delta)</li>
+      <li><span class="chkn">PROD</span> Final cutover: lock source, execute final delta, validate, go-live sign-off</li>
+      <li><span class="chkn">POST</span> Activate CVI bidirectional sync — BP ↔ Customer/Vendor changes sync automatically</li>
+      <li><span class="chkn">POST</span> Run XPRA / XCLA / SDM post-processing on target</li>
+      <li><span class="chkn">POST</span> Hypercare: run BUPT daily for first 2 weeks post go-live</li>
+      <li><span class="chkn">POST</span> Cutover sign-off — all workstream leads (FI, SD, MM, Basis) confirm validation passed</li>
+    </ul>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-title">13 — Quick Reference: Tables · Transactions · Reports</div>
+    <div class="grid2">
+      <div class="card">
+        <h4>Key ECC → S/4 Table Changes</h4>
+        <ul>
+          <li>KNA1/LFA1 → BUT000 (general — CVI synced)</li>
+          <li>KNBK/LFBK → TIBAN (IBAN replaces BANKN)</li>
+          <li>KNB1, KNVV, LFB1, LFM1 → retained + CVI</li>
+          <li>KNKD/FD32 → UKM_CASE, UKM_BP_ATTR</li>
+          <li>KNVK → BUT051/BUT052 (contact persons)</li>
+          <li>CVI_CUST_LINK, CVI_VEND_LINK → new in S/4</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>T-Code Cross-Reference</h4>
+        <ul>
+          <li>XD01/XK01 → BP (CVI redirect still works)</li>
+          <li>XD99 → MASS_BP (mass BP change)</li>
+          <li>FD32 → UKM_BP (credit management)</li>
+          <li>ME61 → ME61 unchanged (vendor evaluation)</li>
+          <li>CVI_CUST_CENTRAL / CVI_VEND_CENTRAL → force resync</li>
+          <li>BUPT → BP consistency check (critical)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>SNP API Reports for BP</h4>
+        <ul>
+          <li><span class="mono">/SNP/TE02_VALIDATE_SELECTIONS</span></li>
+          <li><span class="mono">/SNP/TE02_VALIDATE_MAPPINGS</span></li>
+          <li><span class="mono">/SNP/TE02_VALIDATE_OBJECTS</span></li>
+          <li><span class="mono">/SNP/TE02_API_CREATE_BLOCKS</span></li>
+          <li><span class="mono">/SNP/TE02_API_EXECUTE_BLOCKS</span></li>
+          <li><span class="mono">/SNP/TE02_API_EXEC_SYNTAX_CHK</span></li>
+          <li><span class="mono">/SNP/TE02_API_VIOLATION_CHECK</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Validation &amp; DCV Reports</h4>
+        <ul>
+          <li>BUPT – BP Consistency Check</li>
+          <li><span class="mono">/N/SNP/FKC</span> – Foreign Key Check on target</li>
+          <li><span class="mono">/SNP/FK02_SUMMARY</span> – DCV summary</li>
+          <li>CVI_CUST_LINK / CVI_VEND_LINK reports</li>
+          <li>RFBILA00 – Balance sheet comparison</li>
+          <li><span class="mono">/SNP/CW02_VR_API_BALANCE_CMP</span></li>
+          <li>SE16N BUT000 – overlap check (Cust# = Vend#)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Made with IBM Bob  ·  Sempra Migration Team · SNP CrystalBridge BP S/4 Conversion Guide · October 2026
+  </footer>
+
+</div>
+</body>
+</html>

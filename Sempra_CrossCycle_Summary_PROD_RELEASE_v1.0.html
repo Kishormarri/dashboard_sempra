@@ -732,6 +732,159 @@ document.addEventListener('click', function(e) {
         <div id="apRefPreviewList" style="background:#0a0a0a;border:1px solid #1e293b;border-radius:6px;padding:8px 12px;font-family:'Courier New',monospace;font-size:10px;color:#64748b;max-height:100px;overflow-y:auto"></div>
       </div>
 
+      <!-- ── Step 1B: DM1 EXP / IMP manual upload ── -->
+      <div style="margin-top:20px;border-top:1px solid #1e293b;padding-top:16px">
+        <div style="font-size:11px;font-weight:700;color:#7dd3fc;margin-bottom:10px">&#x1F4E4; Step 1B — DM1: Upload Export &amp; Import Files</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <!-- DM1 EXP -->
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#fbbf24;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em">&#x2B06; Export File (TYPE=EXP)</div>
+            <div id="apDm1ExpDz" onclick="document.getElementById('apDm1ExpFile').click()"
+              style="border:2px dashed #78350f;border-radius:8px;padding:14px;text-align:center;cursor:pointer;background:#0c1a2e;transition:border-color .15s">
+              <div style="font-size:18px;margin-bottom:4px">&#x1F4C4;</div>
+              <div style="font-size:11px;color:#94a3b8">Click to upload DM1 Export file</div>
+              <div style="font-size:10px;color:#334155;margin-top:2px">.xlsx / .xls / .csv</div>
+            </div>
+            <input type="file" id="apDm1ExpFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="apDm1UploadExp(event)"/>
+            <div id="apDm1ExpStatus" style="margin-top:5px;font-size:10px;color:#64748b"></div>
+            <div id="apDm1ExpPreviewWrap" style="display:none;margin-top:5px">
+              <div style="font-size:10px;color:#475569;margin-bottom:3px">EXP tables: <strong id="apDm1ExpTotal">0</strong></div>
+              <div style="background:#0a0a0a;border:1px solid #1e293b;border-radius:5px;max-height:80px;overflow-y:auto">
+                <table style="width:100%;border-collapse:collapse;font-size:10px">
+                  <tbody id="apDm1ExpBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- DM1 IMP -->
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#34d399;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em">&#x2B07; Import File (TYPE=IMP)</div>
+            <div id="apDm1ImpDz" onclick="document.getElementById('apDm1ImpFile').click()"
+              style="border:2px dashed #065f46;border-radius:8px;padding:14px;text-align:center;cursor:pointer;background:#0c1a2e;transition:border-color .15s">
+              <div style="font-size:18px;margin-bottom:4px">&#x1F4C4;</div>
+              <div style="font-size:11px;color:#94a3b8">Click to upload DM1 Import file</div>
+              <div style="font-size:10px;color:#334155;margin-top:2px">.xlsx / .xls / .csv</div>
+            </div>
+            <input type="file" id="apDm1ImpFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="apDm1UploadImp(event)"/>
+            <div id="apDm1ImpStatus" style="margin-top:5px;font-size:10px;color:#64748b"></div>
+            <div id="apDm1ImpPreviewWrap" style="display:none;margin-top:5px">
+              <div style="font-size:10px;color:#475569;margin-bottom:3px">IMP tables: <strong id="apDm1ImpTotal">0</strong></div>
+              <div style="background:#0a0a0a;border:1px solid #1e293b;border-radius:5px;max-height:80px;overflow-y:auto">
+                <table style="width:100%;border-collapse:collapse;font-size:10px">
+                  <tbody id="apDm1ImpBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <button id="apDm1RunBtn" class="ap-btn-primary" onclick="apDm1RunAnalysis()" style="display:none;background:#1d4ed8;border-color:#1d4ed8">&#x25B6; Run DM1 Analysis</button>
+          <span id="apDm1RunStatus" style="font-size:10px;color:#64748b"></span>
+        </div>
+      </div>
+
+      <!-- ── Step 1C: DM2 EXP / IMP manual upload ── -->
+      <div style="margin-top:20px;border-top:1px solid #1e293b;padding-top:16px">
+        <div style="font-size:11px;font-weight:700;color:#c084fc;margin-bottom:10px">&#x1F4E4; Step 1C — DM2: Upload Export &amp; Import Files</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <!-- DM2 EXP -->
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#fbbf24;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em">&#x2B06; Export File (TYPE=EXP)</div>
+            <div id="apDm2ExpDz" onclick="document.getElementById('apDm2ExpFile').click()"
+              style="border:2px dashed #78350f;border-radius:8px;padding:14px;text-align:center;cursor:pointer;background:#0c1a2e;transition:border-color .15s">
+              <div style="font-size:18px;margin-bottom:4px">&#x1F4C4;</div>
+              <div style="font-size:11px;color:#94a3b8">Click to upload DM2 Export file</div>
+              <div style="font-size:10px;color:#334155;margin-top:2px">.xlsx / .xls / .csv</div>
+            </div>
+            <input type="file" id="apDm2ExpFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="apDm2UploadExp(event)"/>
+            <div id="apDm2ExpStatus" style="margin-top:5px;font-size:10px;color:#64748b"></div>
+            <div id="apDm2ExpPreviewWrap" style="display:none;margin-top:5px">
+              <div style="font-size:10px;color:#475569;margin-bottom:3px">EXP tables: <strong id="apDm2ExpTotal">0</strong></div>
+              <div style="background:#0a0a0a;border:1px solid #1e293b;border-radius:5px;max-height:80px;overflow-y:auto">
+                <table style="width:100%;border-collapse:collapse;font-size:10px">
+                  <tbody id="apDm2ExpBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- DM2 IMP -->
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#34d399;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em">&#x2B07; Import File (TYPE=IMP)</div>
+            <div id="apDm2ImpDz" onclick="document.getElementById('apDm2ImpFile').click()"
+              style="border:2px dashed #065f46;border-radius:8px;padding:14px;text-align:center;cursor:pointer;background:#0c1a2e;transition:border-color .15s">
+              <div style="font-size:18px;margin-bottom:4px">&#x1F4C4;</div>
+              <div style="font-size:11px;color:#94a3b8">Click to upload DM2 Import file</div>
+              <div style="font-size:10px;color:#334155;margin-top:2px">.xlsx / .xls / .csv</div>
+            </div>
+            <input type="file" id="apDm2ImpFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="apDm2UploadImp(event)"/>
+            <div id="apDm2ImpStatus" style="margin-top:5px;font-size:10px;color:#64748b"></div>
+            <div id="apDm2ImpPreviewWrap" style="display:none;margin-top:5px">
+              <div style="font-size:10px;color:#475569;margin-bottom:3px">IMP tables: <strong id="apDm2ImpTotal">0</strong></div>
+              <div style="background:#0a0a0a;border:1px solid #1e293b;border-radius:5px;max-height:80px;overflow-y:auto">
+                <table style="width:100%;border-collapse:collapse;font-size:10px">
+                  <tbody id="apDm2ImpBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <button id="apDm2RunBtn" class="ap-btn-primary" onclick="apDm2RunAnalysis()" style="display:none;background:#7c3aed;border-color:#7c3aed">&#x25B6; Run DM2 Analysis</button>
+          <span id="apDm2RunStatus" style="font-size:10px;color:#64748b"></span>
+        </div>
+      </div>
+
+      <!-- ── Step 1D: DM3 EXP / IMP manual upload ── -->
+      <div style="margin-top:20px;border-top:1px solid #1e293b;padding-top:16px">
+        <div style="font-size:11px;font-weight:700;color:#86efac;margin-bottom:10px">&#x1F4E4; Step 1D — DM3: Upload Export &amp; Import Files</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <!-- DM3 EXP -->
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#fbbf24;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em">&#x2B06; Export File (TYPE=EXP)</div>
+            <div id="apDm3ExpDz" onclick="document.getElementById('apDm3ExpFile').click()"
+              style="border:2px dashed #78350f;border-radius:8px;padding:14px;text-align:center;cursor:pointer;background:#0c1a2e;transition:border-color .15s">
+              <div style="font-size:18px;margin-bottom:4px">&#x1F4C4;</div>
+              <div style="font-size:11px;color:#94a3b8">Click to upload DM3 Export file</div>
+              <div style="font-size:10px;color:#334155;margin-top:2px">.xlsx / .xls / .csv</div>
+            </div>
+            <input type="file" id="apDm3ExpFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="apDm3UploadExp(event)"/>
+            <div id="apDm3ExpStatus" style="margin-top:5px;font-size:10px;color:#64748b"></div>
+            <div id="apDm3ExpPreviewWrap" style="display:none;margin-top:5px">
+              <div style="font-size:10px;color:#475569;margin-bottom:3px">EXP tables: <strong id="apDm3ExpTotal">0</strong></div>
+              <div style="background:#0a0a0a;border:1px solid #1e293b;border-radius:5px;max-height:80px;overflow-y:auto">
+                <table style="width:100%;border-collapse:collapse;font-size:10px">
+                  <tbody id="apDm3ExpBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- DM3 IMP -->
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#34d399;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em">&#x2B07; Import File (TYPE=IMP)</div>
+            <div id="apDm3ImpDz" onclick="document.getElementById('apDm3ImpFile').click()"
+              style="border:2px dashed #065f46;border-radius:8px;padding:14px;text-align:center;cursor:pointer;background:#0c1a2e;transition:border-color .15s">
+              <div style="font-size:18px;margin-bottom:4px">&#x1F4C4;</div>
+              <div style="font-size:11px;color:#94a3b8">Click to upload DM3 Import file</div>
+              <div style="font-size:10px;color:#334155;margin-top:2px">.xlsx / .xls / .csv</div>
+            </div>
+            <input type="file" id="apDm3ImpFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="apDm3UploadImp(event)"/>
+            <div id="apDm3ImpStatus" style="margin-top:5px;font-size:10px;color:#64748b"></div>
+            <div id="apDm3ImpPreviewWrap" style="display:none;margin-top:5px">
+              <div style="font-size:10px;color:#475569;margin-bottom:3px">IMP tables: <strong id="apDm3ImpTotal">0</strong></div>
+              <div style="background:#0a0a0a;border:1px solid #1e293b;border-radius:5px;max-height:80px;overflow-y:auto">
+                <table style="width:100%;border-collapse:collapse;font-size:10px">
+                  <tbody id="apDm3ImpBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <button id="apDm3RunBtn" class="ap-btn-primary" onclick="apDm3RunAnalysis()" style="display:none;background:#2f9e44;border-color:#2b8a3e">&#x25B6; Run DM3 Analysis</button>
+          <span id="apDm3RunStatus" style="font-size:10px;color:#64748b"></span>
+        </div>
+      </div>
+
       <button id="apStep1Btn" class="ap-btn-primary" onclick="apGoStep(2)" style="display:none;margin-top:16px">&#x2192; Next: SAP Source Login</button>
     </div>
 
@@ -4442,7 +4595,264 @@ function apUploadSnp(event){
 }
 
 
-/* ── DM3: separate EXP / IMP manual upload (Step 1C) ── */
+/* ── DM1: separate EXP / IMP manual upload (Step 1B) ── */
+var _apDm1ExpMap = {};
+var _apDm1ImpMap = {};
+
+function _apDm1ShowRunBtn(){
+  var btn=document.getElementById('apDm1RunBtn');
+  if(btn) btn.style.display='inline-block';
+}
+
+function apDm1UploadExp(event){
+  var file=event.target.files[0]; if(!file) return;
+  _apDm3ParseAndRender(file,'EXP','apDm1ExpStatus','apDm1ExpDz','apDm1ExpPreviewWrap',
+    'apDm1ExpCount','apDm1ExpTotal','apDm1ExpBody',_apDm1ExpMap,_apExpMap);
+  _apDm1ShowRunBtn();
+  event.target.value='';
+}
+
+function apDm1UploadImp(event){
+  var file=event.target.files[0]; if(!file) return;
+  _apDm3ParseAndRender(file,'IMP','apDm1ImpStatus','apDm1ImpDz','apDm1ImpPreviewWrap',
+    'apDm1ImpCount','apDm1ImpTotal','apDm1ImpBody',_apDm1ImpMap,_apImpMap);
+  _apDm1ShowRunBtn();
+  event.target.value='';
+}
+
+/* ── Run DM1 analysis from manually uploaded EXP + IMP files ── */
+function apDm1RunAnalysis(){
+  var statusEl = document.getElementById('apDm1RunStatus');
+  var btn      = document.getElementById('apDm1RunBtn');
+
+  if(!_apRefTables || !_apRefTables.length){
+    if(statusEl) statusEl.textContent = '✘ Upload a Reference List first (Step 1A).';
+    return;
+  }
+  var expMap = _apDm1ExpMap;
+  var impMap = _apDm1ImpMap;
+
+  if(!Object.keys(expMap).length && !Object.keys(impMap).length){
+    if(statusEl) statusEl.textContent = '✘ Upload at least one EXP or IMP file first.';
+    return;
+  }
+
+  if(btn){ btn.disabled=true; btn.textContent='⏳ Running…'; }
+  if(statusEl){ statusEl.textContent=''; }
+
+  setTimeout(function(){
+    try{
+      var refKeys = _apRefTables;
+      var rklen = refKeys.length;
+      var eiSeen = {}, tdata = [], compactRows = [];
+      for(var rki=0;rki<rklen;rki++){
+        var k = refKeys[rki];
+        eiSeen[k] = true;
+        var e  = expMap[k]!==undefined ? expMap[k] : null;
+        var im = impMap[k]!==undefined ? impMap[k] : null;
+        var eiD = (e!==null&&im!==null)?(e-im):null;
+        var eiOk = eiD!==null?(eiD===0):null;
+        var ov = 'PARTIAL';
+        if(eiOk===true) ov='EI_OK';
+        else if(eiOk===false) ov='EXP_IMP_DIFF';
+        else if(e!==null&&im===null) ov='EXP_ONLY';
+        else if(e===null&&im!==null) ov='IMP_ONLY';
+        tdata.push({eiOk:eiOk, overall:ov, exp:e, imp:im});
+        compactRows.push([k, k, null, null, e, im, 1]);
+      }
+      var expOnlyN=0, impOnlyN=0;
+      var xkeys = Object.keys(expMap).concat(Object.keys(impMap));
+      var xSeen = {};
+      for(var xi=0;xi<xkeys.length;xi++){
+        var xk=xkeys[xi]; if(xSeen[xk]) continue; xSeen[xk]=true;
+        var inRef = (eiSeen[xk]!==undefined);
+        var xe  = expMap[xk]!==undefined ? expMap[xk] : null;
+        var xim = impMap[xk]!==undefined ? impMap[xk] : null;
+        if(!inRef){ if(xe!==null) expOnlyN++; if(xim!==null) impOnlyN++; }
+        if(eiSeen[xk]) continue; eiSeen[xk]=true;
+        var xeiD=(xe!==null&&xim!==null)?(xe-xim):null;
+        var xeiOk=xeiD!==null?(xeiD===0):null;
+        tdata.push({eiOk:xeiOk, overall:'EXP_ONLY', exp:xe, imp:xim});
+        if(!inRef) compactRows.push([xk,xk,null,null,xe,xim,0]);
+      }
+      var eiOkN=0, eiFaN=0, reconN=0;
+      for(var ki=0;ki<tdata.length;ki++){
+        var kr=tdata[ki];
+        if(kr.eiOk===true){eiOkN++;reconN++;}
+        else if(kr.eiOk===false) eiFaN++;
+      }
+      var hasExp = Object.keys(expMap).length>0;
+      var hasImp = Object.keys(impMap).length>0;
+      if(!hasExp||!hasImp) reconN=0;
+      var n=tdata.length;
+      var pct = n>0&&hasExp&&hasImp ? Math.round((reconN/n)*100) : 0;
+      var expTot=0; for(var ek in expMap) expTot+=expMap[ek];
+      var impTot=0; for(var ik in impMap) impTot+=impMap[ik];
+      var refInExpN=0, refInImpN=0;
+      for(var rfi=0;rfi<rklen;rfi++){
+        var rfk=refKeys[rfi];
+        if(expMap[rfk]!==undefined) refInExpN++;
+        if(impMap[rfk]!==undefined) refInImpN++;
+      }
+      var result = {
+        kTotal: rklen, kPct: pct+'%',
+        kExp: Object.keys(expMap).length, kImp: Object.keys(impMap).length,
+        kExpOnly: expOnlyN, kImpOnly: impOnlyN,
+        kSTok: 0, kSTfail: 0,
+        kEIok: eiOkN, kEIfail: eiFaN,
+        cvSeOk: 0, cvSeTot: rklen, cvTiOk: 0, cvTiTot: rklen,
+        refInExp: refInExpN, refInImp: refInImpN,
+        refMissExp: rklen-refInExpN, refMissImp: rklen-refInImpN,
+        expTotalRec: expTot, impTotalRec: impTot,
+        srcTotalRec: 0, tgtTotalRec: 0,
+        reconN: reconN, tableN: n,
+        _refOnly: (!hasExp&&!hasImp),
+        _cycle: 'DM1',
+        _savedAt: Date.now(),
+        runStamp: new Date().toLocaleString()
+      };
+      try{ localStorage.setItem('sampra_cycle_DM1', JSON.stringify(result)); }catch(ex){}
+      try{ localStorage.setItem('sampra_DM1_tableData', JSON.stringify(compactRows)); }catch(ex){}
+      if(statusEl){ statusEl.textContent='✔ DM1 Analysis complete — '+rklen+' REF tables, '+pct+'% match.'; statusEl.style.color='#22c55e'; }
+      if(btn){ btn.disabled=false; btn.textContent='▶ Run DM1 Analysis'; }
+      if(typeof loadAll==='function') setTimeout(loadAll, 100);
+    }catch(err){
+      if(statusEl){ statusEl.textContent='✘ Error: '+err.message; statusEl.style.color='#ef4444'; }
+      if(btn){ btn.disabled=false; btn.textContent='▶ Run DM1 Analysis'; }
+    }
+  }, 0);
+}
+
+/* ── DM2: separate EXP / IMP manual upload (Step 1C) ── */
+var _apDm2ExpMap = {};
+var _apDm2ImpMap = {};
+
+function _apDm2ShowRunBtn(){
+  var btn=document.getElementById('apDm2RunBtn');
+  if(btn) btn.style.display='inline-block';
+}
+
+function apDm2UploadExp(event){
+  var file=event.target.files[0]; if(!file) return;
+  _apDm3ParseAndRender(file,'EXP','apDm2ExpStatus','apDm2ExpDz','apDm2ExpPreviewWrap',
+    'apDm2ExpCount','apDm2ExpTotal','apDm2ExpBody',_apDm2ExpMap,_apExpMap);
+  _apDm2ShowRunBtn();
+  event.target.value='';
+}
+
+function apDm2UploadImp(event){
+  var file=event.target.files[0]; if(!file) return;
+  _apDm3ParseAndRender(file,'IMP','apDm2ImpStatus','apDm2ImpDz','apDm2ImpPreviewWrap',
+    'apDm2ImpCount','apDm2ImpTotal','apDm2ImpBody',_apDm2ImpMap,_apImpMap);
+  _apDm2ShowRunBtn();
+  event.target.value='';
+}
+
+/* ── Run DM2 analysis from manually uploaded EXP + IMP files ── */
+function apDm2RunAnalysis(){
+  var statusEl = document.getElementById('apDm2RunStatus');
+  var btn      = document.getElementById('apDm2RunBtn');
+
+  if(!_apRefTables || !_apRefTables.length){
+    if(statusEl) statusEl.textContent = '✘ Upload a Reference List first (Step 1A).';
+    return;
+  }
+  var expMap = _apDm2ExpMap;
+  var impMap = _apDm2ImpMap;
+
+  if(!Object.keys(expMap).length && !Object.keys(impMap).length){
+    if(statusEl) statusEl.textContent = '✘ Upload at least one EXP or IMP file first.';
+    return;
+  }
+
+  if(btn){ btn.disabled=true; btn.textContent='⏳ Running…'; }
+  if(statusEl){ statusEl.textContent=''; }
+
+  setTimeout(function(){
+    try{
+      var refKeys = _apRefTables;
+      var rklen = refKeys.length;
+      var eiSeen = {}, tdata = [], compactRows = [];
+      for(var rki=0;rki<rklen;rki++){
+        var k = refKeys[rki];
+        eiSeen[k] = true;
+        var e  = expMap[k]!==undefined ? expMap[k] : null;
+        var im = impMap[k]!==undefined ? impMap[k] : null;
+        var eiD = (e!==null&&im!==null)?(e-im):null;
+        var eiOk = eiD!==null?(eiD===0):null;
+        var ov = 'PARTIAL';
+        if(eiOk===true) ov='EI_OK';
+        else if(eiOk===false) ov='EXP_IMP_DIFF';
+        else if(e!==null&&im===null) ov='EXP_ONLY';
+        else if(e===null&&im!==null) ov='IMP_ONLY';
+        tdata.push({eiOk:eiOk, overall:ov, exp:e, imp:im});
+        compactRows.push([k, k, null, null, e, im, 1]);
+      }
+      var expOnlyN=0, impOnlyN=0;
+      var xkeys = Object.keys(expMap).concat(Object.keys(impMap));
+      var xSeen = {};
+      for(var xi=0;xi<xkeys.length;xi++){
+        var xk=xkeys[xi]; if(xSeen[xk]) continue; xSeen[xk]=true;
+        var inRef = (eiSeen[xk]!==undefined);
+        var xe  = expMap[xk]!==undefined ? expMap[xk] : null;
+        var xim = impMap[xk]!==undefined ? impMap[xk] : null;
+        if(!inRef){ if(xe!==null) expOnlyN++; if(xim!==null) impOnlyN++; }
+        if(eiSeen[xk]) continue; eiSeen[xk]=true;
+        var xeiD=(xe!==null&&xim!==null)?(xe-xim):null;
+        var xeiOk=xeiD!==null?(xeiD===0):null;
+        tdata.push({eiOk:xeiOk, overall:'EXP_ONLY', exp:xe, imp:xim});
+        if(!inRef) compactRows.push([xk,xk,null,null,xe,xim,0]);
+      }
+      var eiOkN=0, eiFaN=0, reconN=0;
+      for(var ki=0;ki<tdata.length;ki++){
+        var kr=tdata[ki];
+        if(kr.eiOk===true){eiOkN++;reconN++;}
+        else if(kr.eiOk===false) eiFaN++;
+      }
+      var hasExp = Object.keys(expMap).length>0;
+      var hasImp = Object.keys(impMap).length>0;
+      if(!hasExp||!hasImp) reconN=0;
+      var n=tdata.length;
+      var pct = n>0&&hasExp&&hasImp ? Math.round((reconN/n)*100) : 0;
+      var expTot=0; for(var ek in expMap) expTot+=expMap[ek];
+      var impTot=0; for(var ik in impMap) impTot+=impMap[ik];
+      var refInExpN=0, refInImpN=0;
+      for(var rfi=0;rfi<rklen;rfi++){
+        var rfk=refKeys[rfi];
+        if(expMap[rfk]!==undefined) refInExpN++;
+        if(impMap[rfk]!==undefined) refInImpN++;
+      }
+      var result = {
+        kTotal: rklen, kPct: pct+'%',
+        kExp: Object.keys(expMap).length, kImp: Object.keys(impMap).length,
+        kExpOnly: expOnlyN, kImpOnly: impOnlyN,
+        kSTok: 0, kSTfail: 0,
+        kEIok: eiOkN, kEIfail: eiFaN,
+        cvSeOk: 0, cvSeTot: rklen, cvTiOk: 0, cvTiTot: rklen,
+        refInExp: refInExpN, refInImp: refInImpN,
+        refMissExp: rklen-refInExpN, refMissImp: rklen-refInImpN,
+        expTotalRec: expTot, impTotalRec: impTot,
+        srcTotalRec: 0, tgtTotalRec: 0,
+        reconN: reconN, tableN: n,
+        _refOnly: (!hasExp&&!hasImp),
+        _cycle: 'DM2',
+        _savedAt: Date.now(),
+        runStamp: new Date().toLocaleString()
+      };
+      try{ localStorage.setItem('sampra_cycle_DM2', JSON.stringify(result)); }catch(ex){}
+      try{ localStorage.setItem('sampra_DM2_tableData', JSON.stringify(compactRows)); }catch(ex){}
+      if(statusEl){ statusEl.textContent='✔ DM2 Analysis complete — '+rklen+' REF tables, '+pct+'% match.'; statusEl.style.color='#22c55e'; }
+      if(btn){ btn.disabled=false; btn.textContent='▶ Run DM2 Analysis'; }
+      if(typeof loadAll==='function') setTimeout(loadAll, 100);
+    }catch(err){
+      if(statusEl){ statusEl.textContent='✘ Error: '+err.message; statusEl.style.color='#ef4444'; }
+      if(btn){ btn.disabled=false; btn.textContent='▶ Run DM2 Analysis'; }
+    }
+  }, 0);
+}
+
+/* ── DM3: separate EXP / IMP manual upload (Step 1D) ── */
+
 var _apDm3ExpMap = {};
 var _apDm3ImpMap = {};
 
@@ -5093,7 +5503,27 @@ function apReset(){
   var snpAgg = document.getElementById('apSnpAggWrap');
   if(snpAgg) snpAgg.style.display = 'none';
 
-  /* reset Step 1C — DM3 separate EXP/IMP */
+  /* reset Step 1B — DM1 separate EXP/IMP */
+  _apDm1ExpMap = {}; _apDm1ImpMap = {};
+  ['apDm1ExpStatus','apDm1ImpStatus'].forEach(function(id){ var el=document.getElementById(id); if(el){el.textContent='';el.style.color='';} });
+  var dm1ExpDz=document.getElementById('apDm1ExpDz'); if(dm1ExpDz) dm1ExpDz.style.borderColor='#78350f';
+  var dm1ImpDz=document.getElementById('apDm1ImpDz'); if(dm1ImpDz) dm1ImpDz.style.borderColor='#065f46';
+  ['apDm1ExpPreviewWrap','apDm1ImpPreviewWrap'].forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; });
+  ['apDm1ExpTotal','apDm1ImpTotal'].forEach(function(id){ var el=document.getElementById(id); if(el) el.textContent='0'; });
+  var dm1RunBtn=document.getElementById('apDm1RunBtn'); if(dm1RunBtn){dm1RunBtn.style.display='none';dm1RunBtn.disabled=false;dm1RunBtn.textContent='▶ Run DM1 Analysis';}
+  var dm1RunSt=document.getElementById('apDm1RunStatus'); if(dm1RunSt){dm1RunSt.textContent='';dm1RunSt.style.color='';}
+
+  /* reset Step 1C — DM2 separate EXP/IMP */
+  _apDm2ExpMap = {}; _apDm2ImpMap = {};
+  ['apDm2ExpStatus','apDm2ImpStatus'].forEach(function(id){ var el=document.getElementById(id); if(el){el.textContent='';el.style.color='';} });
+  var dm2ExpDz=document.getElementById('apDm2ExpDz'); if(dm2ExpDz) dm2ExpDz.style.borderColor='#78350f';
+  var dm2ImpDz=document.getElementById('apDm2ImpDz'); if(dm2ImpDz) dm2ImpDz.style.borderColor='#065f46';
+  ['apDm2ExpPreviewWrap','apDm2ImpPreviewWrap'].forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; });
+  ['apDm2ExpTotal','apDm2ImpTotal'].forEach(function(id){ var el=document.getElementById(id); if(el) el.textContent='0'; });
+  var dm2RunBtn=document.getElementById('apDm2RunBtn'); if(dm2RunBtn){dm2RunBtn.style.display='none';dm2RunBtn.disabled=false;dm2RunBtn.textContent='▶ Run DM2 Analysis';}
+  var dm2RunSt=document.getElementById('apDm2RunStatus'); if(dm2RunSt){dm2RunSt.textContent='';dm2RunSt.style.color='';}
+
+  /* reset Step 1D — DM3 separate EXP/IMP */
   _apDm3ExpMap = {}; _apDm3ImpMap = {};
   ['apDm3ExpStatus','apDm3ImpStatus'].forEach(function(id){ var el=document.getElementById(id); if(el){el.textContent='';el.style.color='';} });
   var dm3ExpDz=document.getElementById('apDm3ExpDz'); if(dm3ExpDz) dm3ExpDz.style.borderColor='#78350f';

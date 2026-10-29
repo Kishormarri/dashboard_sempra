@@ -1351,6 +1351,130 @@ function printPanel(panelId){
 var _bgAuto = { running: false, startTs: 0 };
 var _BG_BRIDGE = 'http://' + (window.location.hostname || 'localhost') + ':5002';
 var _bgStepTs = {1:0,2:0,3:0};
+
+/* ── Online / GitHub Pages detection ── */
+var _IS_GITHUB_PAGES = (window.location.hostname.indexOf('github.io') !== -1);
+
+/* ══════════════════════════════════════════════════════════════
+   ONLINE UPLOAD MODAL — shown when bridge is offline (GitHub Pages)
+   Users upload Excel files directly → analysis runs in browser
+   ══════════════════════════════════════════════════════════════ */
+(function(){
+  var modal = document.createElement('div');
+  modal.id = 'onlineUploadModal';
+  modal.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:99999;overflow-y:auto;padding:20px';
+  modal.innerHTML = [
+    '<div style="max-width:680px;margin:40px auto;background:#0f172a;border:1px solid #1e3a5f;border-radius:16px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.8)">',
+    // Header
+    '<div style="background:linear-gradient(135deg,#0c1a2e,#0f2d4a);padding:18px 24px;border-bottom:1px solid #1e3a5f;display:flex;align-items:center;justify-content:space-between">',
+    '<div><div style="font-size:15px;font-weight:800;color:#38bdf8">📂 Upload Excel Files — All 3 Cycles</div>',
+    '<div style="font-size:11px;color:#475569;margin-top:3px">Running on GitHub Pages — upload your files directly to run analysis in the browser</div></div>',
+    '<button onclick="document.getElementById(\'onlineUploadModal\').style.display=\'none\'" style="background:none;border:none;color:#475569;font-size:22px;cursor:pointer;line-height:1">✕</button>',
+    '</div>',
+    '<div style="padding:20px 24px">',
+    // Info banner
+    '<div style="background:#0c1a2e;border:1px solid #1e3a5f;border-left:4px solid #f59e0b;border-radius:8px;padding:10px 14px;margin-bottom:18px;font-size:11px;color:#94a3b8">',
+    '⚡ <strong style="color:#f59e0b">Tip:</strong> Upload your Ref List + Export/Import Excel files for each cycle. Analysis runs 100% in your browser — no data leaves your machine.',
+    '</div>',
+    // DM1
+    _ouCycleBlock('DM1','#3b82f6','blue'),
+    // DM2
+    _ouCycleBlock('DM2','#a855f7','purple'),
+    // DM3
+    _ouCycleBlock('DM3','#22c55e','green'),
+    // Run button
+    '<div style="margin-top:20px;display:flex;gap:10px;justify-content:flex-end">',
+    '<button onclick="document.getElementById(\'onlineUploadModal\').style.display=\'none\'" style="background:#1e293b;border:1px solid #334155;color:#94a3b8;border-radius:8px;padding:9px 20px;font-size:12px;cursor:pointer">Cancel</button>',
+    '<button onclick="_ouRunAll()" style="background:linear-gradient(135deg,#065f46,#0f766e);color:#a7f3d0;border:none;border-radius:8px;padding:10px 28px;font-size:13px;font-weight:800;cursor:pointer">⚡ Run Analysis on Uploaded Files</button>',
+    '</div>',
+    '</div></div>'
+  ].join('');
+  document.body.appendChild(modal);
+
+  function _ouCycleBlock(cy, col, shade) {
+    return [
+      '<div style="background:#0a1628;border:1px solid #1e3a5f;border-top:3px solid '+col+';border-radius:10px;padding:14px 16px;margin-bottom:12px">',
+      '<div style="font-size:12px;font-weight:800;color:'+col+';margin-bottom:10px">'+cy+' — Data Migration Cycle '+(cy==='DM1'?'1':cy==='DM2'?'2':'3')+'</div>',
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">',
+      // Ref
+      '<div>',
+      '<label style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">📋 Reference List (.xlsx)</label>',
+      '<div id="ouRef_'+cy+'_zone" onclick="document.getElementById(\'ouRef_'+cy+'\').click()" style="border:1.5px dashed #1e3a5f;border-radius:7px;padding:10px;text-align:center;cursor:pointer;background:#0c1a2e;transition:border-color .15s" onmouseover="this.style.borderColor=\''+col+'\'" onmouseout="this.style.borderColor=\'#1e3a5f\'">',
+      '<div style="font-size:11px;color:#64748b" id="ouRef_'+cy+'_lbl">Click to choose file</div></div>',
+      '<input type="file" id="ouRef_'+cy+'" accept=".xlsx,.xls,.csv" style="display:none" onchange="_ouSetFile(\''+cy+'\',\'ref\',this)"/>',
+      '</div>',
+      // Exp
+      '<div>',
+      '<label style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">📤 Export / Import (.xlsx)</label>',
+      '<div id="ouExp_'+cy+'_zone" onclick="document.getElementById(\'ouExp_'+cy+'\').click()" style="border:1.5px dashed #1e3a5f;border-radius:7px;padding:10px;text-align:center;cursor:pointer;background:#0c1a2e;transition:border-color .15s" onmouseover="this.style.borderColor=\''+col+'\'" onmouseout="this.style.borderColor=\'#1e3a5f\'">',
+      '<div style="font-size:11px;color:#64748b" id="ouExp_'+cy+'_lbl">Click to choose file</div></div>',
+      '<input type="file" id="ouExp_'+cy+'" accept=".xlsx,.xls,.csv" style="display:none" onchange="_ouSetFile(\''+cy+'\',\'exp\',this)"/>',
+      '</div>',
+      '</div>',
+      '<div id="ouStatus_'+cy+'" style="font-size:10px;color:#64748b;margin-top:6px"></div>',
+      '</div>'
+    ].join('');
+  }
+
+  window._ouFiles = { DM1:{ref:null,exp:null}, DM2:{ref:null,exp:null}, DM3:{ref:null,exp:null} };
+
+  window._ouSetFile = function(cy, type, inp) {
+    var f = inp.files[0]; if(!f) return;
+    _ouFiles[cy][type] = f;
+    var lbl = document.getElementById('ou'+(type==='ref'?'Ref':'Exp')+'_'+cy+'_lbl');
+    var zone = document.getElementById('ou'+(type==='ref'?'Ref':'Exp')+'_'+cy+'_zone');
+    if(lbl) lbl.innerHTML = '<span style="color:#22c55e;font-weight:700">✔ ' + f.name + '</span>';
+    if(zone) zone.style.borderColor = '#22c55e';
+  };
+
+  window._ouRunAll = function() {
+    var hasSomething = false;
+    ['DM1','DM2','DM3'].forEach(function(cy){ if(_ouFiles[cy].ref || _ouFiles[cy].exp) hasSomething=true; });
+    if(!hasSomething) {
+      alert('Please upload at least one Reference List file before running analysis.');
+      return;
+    }
+    document.getElementById('onlineUploadModal').style.display = 'none';
+    _bgAuto.running = true;
+    _bgAuto.startTs = Date.now();
+    _bgSetBtn(true);
+    _bgShowPanel();
+    var cycles = ['DM1','DM2','DM3'];
+    var idx = 0;
+    function runNext() {
+      if(idx >= cycles.length) { _bgFinish(true); return; }
+      var cy = cycles[idx]; var stepN = idx+1; idx++;
+      var refFile = _ouFiles[cy].ref;
+      var expFile = _ouFiles[cy].exp;
+      _bgSetStep(stepN,'running');
+      _bgGaugeAnim(cy,true);
+      var statusEl = document.getElementById('ouStatus_'+cy);
+      if(!refFile && !expFile) {
+        _bgLog(cy, '⚠ No files uploaded for '+cy+' — using verified dataset');
+        _bgApplyFallback(cy, stepN, function(){ _bgGaugeAnim(cy,false); runNext(); });
+        return;
+      }
+      function readBuf(file, cb) {
+        if(!file) { cb(null); return; }
+        var fr = new FileReader();
+        fr.onload = function(e){ cb(e.target.result); };
+        fr.readAsArrayBuffer(file);
+      }
+      readBuf(refFile, function(refBuf){
+        if(refBuf) { _bgLog(cy,'✔ REF loaded: '+refFile.name+' ('+Math.round(refBuf.byteLength/1024)+' KB)'); _bgAddFileChip(stepN,'REF',Math.round(refBuf.byteLength/1024)); }
+        readBuf(expFile, function(expBuf){
+          if(expBuf) { _bgLog(cy,'✔ EXP loaded: '+expFile.name+' ('+Math.round(expBuf.byteLength/1024)+' KB)'); _bgAddFileChip(stepN,'EXP',Math.round(expBuf.byteLength/1024)); }
+          _bgSetStep(stepN,'fetched');
+          _bgDirectAnalyse(cy, stepN, refBuf||new ArrayBuffer(0), expBuf, function(ok,d){
+            _bgGaugeAnim(cy,false);
+            runNext();
+          }, null);
+        });
+      });
+    }
+    runNext();
+  };
+})();
 var _bgElapsedTimers = {};
 var _bgTotalTimer = null;
 var _bgTotalSecs = 0;
@@ -1380,13 +1504,28 @@ var _bgTotalSecs = 0;
 
 function startBgAutomation() {
   if (_bgAuto.running) { _bgShowToast('⚠ Automation already running — please wait.','#d97706'); return; }
+
+  /* ── If on GitHub Pages or bridge unreachable → show upload modal ── */
+  if (_IS_GITHUB_PAGES) {
+    document.getElementById('onlineUploadModal').style.display = 'block';
+    return;
+  }
+
+  /* ── If not GitHub Pages but bridge might be offline → check first ── */
+  fetch(_BG_BRIDGE + '/ping', { signal: AbortSignal.timeout(2500) })
+    .then(function(r){ if(!r.ok) throw new Error('offline'); return r; })
+    .then(function(){ _startBgAutomationCore(); })
+    .catch(function(){
+      /* Bridge offline on local machine — show upload modal as fallback */
+      document.getElementById('onlineUploadModal').style.display = 'block';
+    });
+}
+
+function _startBgAutomationCore() {
   _bgAuto.running = true;
   _bgAuto.startTs = Date.now();
   _bgSetBtn(true);
-  /* Purge all stale cycle data before starting fresh run */
-  /* Preserve data during sync transition */
   _bgShowPanel();
-  /* Force bridge to invalidate its in-memory cache */
   fetch(_BG_BRIDGE + '/cache/clear', { method: 'POST' }).catch(function(){});
   _bgSetStep(1, 'running');
   _bgGaugeAnim('DM1', true);

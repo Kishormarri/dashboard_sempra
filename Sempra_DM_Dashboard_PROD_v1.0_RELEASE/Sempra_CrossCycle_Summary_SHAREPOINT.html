@@ -2948,8 +2948,8 @@ function openDrillPopup(dmLabel,section){
 
   if(!raw){
     bodyEl.innerHTML='<div class="drill-nodata">&#x26A0; Table-level data not available for <strong>'+c.name+'</strong>.<br>'
-      +'Open the '+c.name+' dashboard, upload files and click <strong>Run '+dmLabel+' Analysis</strong>,<br>'
-      +'then return here and click Refresh.</div>';
+      +'Click the <strong>Automation</strong> button above, open the Advanced Panel,<br>'
+      +'upload the Reference List + EXP/IMP files for <strong>'+dmLabel+'</strong>, then click <strong>Run '+dmLabel+' Analysis</strong>.</div>';
     countEl.textContent='';footerEl.textContent='';loadBtn.style.display='none';
     overlay.style.display='flex';document.body.style.overflow='hidden';
     return;

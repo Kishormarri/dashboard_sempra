@@ -1924,6 +1924,7 @@ function exportXLS(rows,sheetName,filename){
   var wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([EI_HDRS].concat(rowsToCols(rows))),sheetName);
   XLSX.writeFile(wb,filename);
+}],filename);
 }
 /* ── RAINBOW COLOUR HELPER ── */
 /* Returns CSS class based on percentage value: 100=green, ≥80=hi, ≥60=mid, ≥40=lo, <40=bad */

@@ -1237,11 +1237,29 @@ function _bgSeedBakedData() {
 function startBgAutomation() {
   if (_bgAuto.running) { _bgShowToast('⚠ Automation already running — please wait.','#d97706'); return; }
 
-  /* ── GitHub Pages: no bridge available — use baked data directly ── */
+  /* ── GitHub Pages: no bridge — run identical animation using baked real data ── */
   if (_IS_GITHUB_PAGES) {
-    _bgSeedBakedData();
-    loadAll();
-    _bgShowToast('✅ Dashboard loaded from latest data snapshot.','#065f46');
+    _bgSeedBakedData(); /* force-write latest data into localStorage */
+    _bgAuto.running = true;
+    _bgAuto.startTs = Date.now();
+    _bgSetBtn(true);
+    _bgShowPanel();
+    _bgSetStep(1, 'running');
+    _bgGaugeAnim('DM1', true);
+    _bgApplyFallback('DM1', 1, function(ok1, d1) {
+      _bgGaugeAnim('DM1', false);
+      _bgSetStep(2, 'running');
+      _bgGaugeAnim('DM2', true);
+      _bgApplyFallback('DM2', 2, function(ok2, d2) {
+        _bgGaugeAnim('DM2', false);
+        _bgSetStep(3, 'running');
+        _bgGaugeAnim('DM3', true);
+        _bgApplyFallback('DM3', 3, function(ok3, d3) {
+          _bgGaugeAnim('DM3', false);
+          _bgFinish(true);
+        });
+      });
+    });
     return;
   }
 
@@ -1278,7 +1296,10 @@ function startFull3CycleAutomation() { startBgAutomation(); }
 
 function _bgApplyFallback(cycle, stepN, cb) {
   _bgLog(cycle, '○ Applying verified migration dataset');
-  var d = (typeof _DEFAULT_CYCLE_DATA !== 'undefined' && _DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[cycle]) ? _DEFAULT_CYCLE_DATA[cycle] : { kTotal: 7710, kPct: '88%', kExp: 7741, kImp: 7673 };
+  /* Prefer localStorage (populated by _bgSeedBakedData) over hardcoded defaults */
+  var d = null;
+  try { var _ls=localStorage.getItem('sampra_cycle_'+cycle); if(_ls) d=JSON.parse(_ls); } catch(e){}
+  if(!d) d = (typeof _DEFAULT_CYCLE_DATA !== 'undefined' && _DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[cycle]) ? _DEFAULT_CYCLE_DATA[cycle] : { kTotal: 7710, kPct: '88%', kExp: 7741, kImp: 7673 };
   try {
     localStorage.setItem('sampra_cycle_' + cycle, JSON.stringify(d));
     _tableDataCache[cycle] = null;

@@ -1,0 +1,3246 @@
+=====PAGE 1=====
+SNP3[TC] Transformation Cockpit for Advanced Learners
+
+=====PAGE 2=====
+COMPANY
+Titel
+September 2019 
+TC Version: 19.03 
+Service Pack: SP00
+SNP3[TC]
+Transformation Cockpit 
+For Advanced Learners
+
+=====PAGE 3=====
+Transformation 
+Cockpit
+05.02.2018
+3
+SNP 3 [TC] Transformation Cockpit © SNP
+Prerequisites
+
+SNP2[TC]
+
+SAP application consultants with
+profound knowledge of technical
+implementation of at least one
+SAP module
+
+Knowledge of ABAP and SQL.
+
+Experience in data migration
+using the SNP standard tool TC
+Duration
+
+3 days
+
+Documentation
+http://service.snp.de/help/tc/en/
+
+Support 
+support-tc@snpgroup.com
+Target Group
+
+Users of the Transformation 
+Cockpit 
+
+=====PAGE 4=====
+05.02.2018
+Agenda
+SNP 3 [TC] Transformation Cockpit © SNP
+1
+Create RET Scenario
+Save Tables
+2
+Global Selection
+Fill and Use During Runtime
+3
+Own Tables
+Set up and Transform
+4
+Global Events
+Application Examples
+5
+Global Rules
+Invoking Global Functions
+6
+Global Functions
+Parameter Transferral,
+number_get_next
+4
+
+=====PAGE 5=====
+05.02.2018
+Agenda
+SNP 3 [TC] Transformation Cockpit © SNP
+7
+Offsets
+Maintain Parameters and 
+Segmentations
+8
+Differing Target Table
+Transform a Table into any Table in 
+the DDIC
+9
+Multiple Satellite Systems
+Multiple Source and Target 
+Systems
+10
+Transfer Export Files Without a 
+Mutual File Share
+Report: /SNP/TE02-FILE-TRANSFER
+11
+Forerunners
+Create, Assign Tables, 
+Maintain Coding, Global 
+Rules, Transfom
+5
+
+=====PAGE 6=====
+05.02.2018
+Agenda
+SNP 3 [TC] Transformation Cockpit © SNP
+13
+Lock Tables
+Lock Tables for Editing with
+Multiple Processes
+14
+Restore Tables
+Delete and Restore Saved Tables in 
+Target
+15
+BEST PRACTICE
+Table Statistics
+Selections
+Rule Coding
+Events
+6
+Select Export Files for Import
+Manual Procedure
+12
+
+=====PAGE 7=====
+01 RET Scenario
+Save and Restore
+Table Contents
+7
+
+=====PAGE 8=====
+RET Scenario
+Chapter Learning Goal
+You will learn how to use RET scenarios.
+You will learn how to save and restore tables individually.
+Creating a RET Scenario
+Saving tables
+Resetting tables
+Restoring tables
+8
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 9=====
+RET Scenario 
+Sales document including dependent
+material, addresses and debtors
+Table contents of the RET scenario
+File System
+File System
+Rules
+Rules
+RFC
+RFC
+RFC
+Rules
+Rules
+Rules
+RET
+Rules
+RET
+DIA
+DIA
+9
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 10=====
+RET Scenario
+Create
+(Source = Target)
+Required modules 
+RET objects to be 
+saved
+Tables to be saved
+No selections
+No dependencies
+No export rules
+No import rules
+Save
+Export entire table 
+contents without 
+limitations
+The export files are 
+the data back-up
+Reset
+Create deletion object
+Insert tables to be 
+deleted
+No selections
+No dependencies
+No export rules
+No import rules
+Delete
+Export all table 
+contents
+Import in block mode 
+DELETE
+Restore
+Import saved tables in 
+block mode INSERT and 
+without rule base
+10
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 11=====
+Live Demo
+
+Create RET scenario and 
+maintain settings
+
+Save tables
+11
+
+=====PAGE 12=====
+Exercise 01
+| 12
+12
+
+Create RET scenario and 
+maintain settings
+
+Save tables
+
+=====PAGE 13=====
+RET Scenario
+Chapter Summary
+You have learned about the various usage options of RET Scenarios. They can be used to successfully back-up 
+and restore tables you wish to save before transformation, should this be required. 
+Create RET Scenario before transformation. 
+Back-up tables according to the requirements
+Restore tables (if required)
+Create deletion-object, add table to be deleted
+Export deletion-object/table
+Delete deletion-object/table by creating an import block with the block mode DELETE.
+Import saved tables without using rules(block mode: without rulebase:) 
+Repeat original import with updated rulebase
+Check results
+13
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 14=====
+02 Global Selection
+Fill and Use 
+During Runtime
+14
+
+=====PAGE 15=====
+Global Selection
+Chapter Learning Goal
+You will learn the usage of global selections which are filled via coding during runtime, and fill global 
+selections by yourself.
+Creation of a global selection
+Filling a global selection via API call
+Resetting a global selection (event: before object export)
+Export forerunners
+Start object for resetting of global selections
+15
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 16=====
+05.02.2018
+16
+Global Selction
+– Example: Controlling Area Split [V_KOEP_TRAINING]
+SNP 3 [TC] Transformation Cockpit © SNP
+STRUCTURE
+1.
+The tables that generate CO 
+documents are selected via the
+organizational units BUKRS, 
+WERKS and VKORG
+2.
+For the selected data records
+the object numbers in the
+global selection
+SEL_KOEP_OBJNR are now
+collected
+3.
+For this selection the CO tables
+for the CO documents are
+selected
+4.
+All selected CO document
+numbers are entered into the
+own table /SNP/TE_CO_BELNR 
+together with the controlling
+area
+5.
+With these collected CO 
+document numbers it is
+possible to select the relevant 
+CO documents in the object
+KOEP
+1. Sel: BUKRS, WERKS, VKORG
+3. Sel:Object numbers
+4. Collection of
+relevant CO 
+document numbers
+2. Collection of
+relevant object
+numbers
+_TRAINING
+
+=====PAGE 17=====
+Global Selections
+– Fill During Runtime
+Collect entries for 
+selection in the 
+object
+As export forerunner
+Can also be 
+addressed in target 
+systems via API calls
+API call 
+API_SELECTION_CLEAR
+delete automatically added 
+entries of a global selection
+Event on object level
+„before object export“
+PERFORM api_selection_clear
+USING 'SEL_KOEP_OBJNR’.
+API call
+API_SELECTION_ADD
+Event (e.g.)
+„after data record processing“
+Possible in events and 
+rules
+IF NOT cs_csks-objnr IS INITIAL.
+PERFORM api_selection_add
+USING 'SEL_KOEP_OBJNR‘
+cs_csks-objnr.
+ENDIF.
+Select using global 
+selection
+Query whether 
+available
+PERFORM api_selection_exists
+USING 'SEL_KOEP_OBJNR'
+cs_csks-objnr. "Wert
+IF sy-subrc = 0.
+”Value found
+ELSE.
+”Value not found
+ENDIF.
+17
+SNP 3 [TC] Transformation Cockpit © SNP
+Initialization
+Collect entries
+Application
+Usage cases
+05.02.2018
+
+=====PAGE 18=====
+18
+Global Selection 
+– Coding Proposals
+The entry which was last recorded remains
+Event: Before data record processing
+IF NOT cs_csks-objnr IS INITIAL.
+PERFORM api_selection_add
+USING 'SEL_KOEP_OBJNR' cs_csks-objnr.
+ENDIF.
+The entry which was first recorded remains
+Event: Before data record processing
+IF NOT cs_csks-objnr IS INITIAL.
+PERFORM api_selection_exists
+USING 'SEL_KOEP_OBJNR' cs_csks-objnr.
+if sy-subrc ne 0.
+PERFORM api_selection_add
+USING 'SEL_KOEP_OBJNR' cs_csks-objnr.
+ENDIF.
+ENDIF.
+SNP 3 [TC] Transformation Cockpit © SNP
+This refers to the table and the object with which entries were recorded.
+05.02.2018
+Global selections are generated using SUBSELECTS in export statements and not using INNER JOINS.
+
+=====PAGE 19=====
+Global Selection
+–View of Automatically
+Added Entries
+
+Select the tab Selections in the area 
+Global.
+
+Double-click on desired global selection.
+
+Click button ‘table in source system’; 
+Remote-SE16 opens.
+
+Click F8 or
+and the content of global 
+selection is displayed.
+Global Selection
+Select Entries
+19
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+Button „Change fields“ REF_TABNAME
+
+Entries are added with MODIFY
+
+=====PAGE 20=====
+Global Selection
+– Functions: Overview of Selections
+
+The contents (values) of global 
+selections which are filled during
+runtime can only be displayed after 
+the run.
+
+The contents (SQL statement) of the
+free selection (SQL) is displayed in 
+extra columns (display if needed).
+
+Download in Excel is possible.
+Overview of all Selections
+Select Overview (SQL)
+20
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 21=====
+Live Demo
+
+Setup of start object with global selections
+
+Manually fill global selection SEL_VBELN 
+
+Fill global selection SEL_KOEP_OBJNR 
+per API call
+
+Reset global selection
+21
+
+=====PAGE 22=====
+Exercise 02
+| 22
+
+Upload and prepare project scenario
+
+Manually fill global selection SEL_VBELN 
+
+Fill global selection SEL_KOEP_OBJNR per 
+API call
+
+Reset variable
+22
+
+=====PAGE 23=====
+Global Selection
+Chapter Summary
+You have learned how to fill global selections during runtime using an API call.
+How to create objects for which the global selections are reset (initialized) before the export
+The usage of export forerunners
+Creation of a global selection
+Filling a global selection using an API call
+Resetting the global selection before object export
+Export forerunners
+Start object for resetting global selections
+23
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 24=====
+03 Own Tables
+Set up and 
+Transform
+24
+
+=====PAGE 25=====
+Own Tables
+Chapter Learning Goal
+You will learn the usage of own tables:
+Creation of an own table, including definition of fields
+Announce the own tables to the remote DDIC
+Filling of own tables
+Selection using own tables
+Transformation of own tables
+25
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 26=====
+Create Own Tables
+Select the tab ‘Own tables’ in the area Global.
+Namespace for table names is prescribed: /SNP/TE_<....> .
+Only tables for source and/or target system can be created.
+Any structure can be defined within the limits of ABAP.
+The table can be used just as any other DDIC table in the objects.
+26
+Own Tables
+– Setup
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+In the scenario tree a CSV 
+template can be 
+downloaded for own 
+tables.
+
+=====PAGE 27=====
+Own Table
+– Usage
+Create
+Define own tables
+Define name (unambiguous for 
+clients and scenarios)
+Maintain description
+Define system(s) for generation
+Maintain table structure
+Currency and unit keys for 
+currency and amount fields can 
+refer to fields of this table
+Optional: Insert table in objects 
+Remote DDIC
+Announce own table to Remote 
+DDIC.
+This way, the own table can be 
+inserted into the objects.
+For the usage of field rules
+Transform
+If the own table was generated for 
+the source and target system the 
+contents can also be transformed 
+into one of the systems
+
+Transformation: Source Target
+
+Transformation: Target Source
+27
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 28=====
+Own Tables
+–Example: Controlling Area Split [V_KOEP_TRAINING]
+Export of the object
+V_KOEP_TRAINING must be 
+exported before object 
+KOEP_TRAINING
+Export before KOEP_TRAINING
+Fill Own Tables
+Selection KOEP_TRAINING 
+Own Tables
+Export
+Selection
+Export Forerunner
+All relevant CO document numbers are 
+collected for selection of object
+V_KOEP_
+TRAINING
+28
+Select
+
+Company code
+
+Plant
+
+Sales 
+organization
+Collect
+Object numbers 
+and document 
+numbers
+05.02.2018 SNP 3 [TC] Transformation Cockpit © SNP
+KOEP_TRAINING.
+
+=====PAGE 29=====
+29
+Own Tables
+– Example: Controlling Area Split[KOEP]
+SNP 3 [TC] Transformation Cockpit © SNP
+Filling of Own Table
+Object:    V_KOEP_TRAINING
+Table:   COEP
+Event: After package processing
+Coding:
+DATA ls_data TYPE /snp/te_co_belnr.
+DATA lt_data TYPE TABLE OF /snp/te_co_belnr.
+FIELD-SYMBOLS <ls_coep> LIKE LINE OF ct_coep.
+LOOP AT ct_coep ASSIGNING <ls_coep>.
+ls_data-kokrs = <ls_coep>-kokrs.
+ls_data-co_belnr = <ls_coep>-belnr.
+APPEND ls_data TO lt_data.
+ENDLOOP.
+INSERT /snp/te_co_belnr
+FROM TABLE lt_data
+ACCEPTING DUPLICATE KEYS.
+Selection in Object KOEP
+The Table /SNP/TE_CO_BELNR is 
+inserted as header table into object 
+KOEP_TRAINING and thereby 
+tables are selected via the CO 
+documents.
+Select with Own Tables
+
+The own table can be set before the original 
+header table as a selection table (e.g. connected by 
+controlling area and CO document number).
+05.02.2018
+Standard
+With V_KOEP
+
+=====PAGE 30=====
+Own Table
+– Transform
+No Transformation Desired
+Own tables for selection in objects:
+Import_Mode: NO_IMPORT 
+Generate own tables only for source system
+Own tables for documentation:
+Own table does not need to be in an object
+Generate own table only for the system in 
+which the data should be documented
+Transformation Desired
+Enter own table into an object:
+Own table is transformed into the same own 
+table in the target system
+Generate own table for source and target
+system
+Import_Mode:   FROM_BLOCK
+INSERT
+INSERT_ADK
+MODIFY
+Own table is transformed into any other table in 
+the DDIC of the target system
+Differing target table must be filled
+Generate own tables only for source 
+system
+30
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 31=====
+Selections
+– Comparison Global Selections and Own Tables 
+Global Selection
+Select with individual values:
+Simple application
+API calls for filling, query and initialization
+Only one column can be used
+Can be used declarative (assign global selection)
+List upload possible
+Own Tables
+Select with dependent values:
+Planning required
+Highly flexible
+Global rules applicable to values
+Can be integrated into scenario tree
+Selection via dependent values possible
+Applicable with multiple scenarios
+Table for documentation of entries usable
+14.01.2020
+31
+Präsentationstitel © SNP
+
+=====PAGE 32=====
+Live Demo
+
+Create own tables
+
+Assign own table as selection table
+
+Create coding for filling own table
+32
+
+=====PAGE 33=====
+Exercise 03
+
+Create own table
+
+Assign own table as selection table
+
+Adjust coding for filling of own table
+33
+
+=====PAGE 34=====
+Own Tables
+Chapter Summary
+You have learned how to handle own tables in scenarios:
+How to create own tables
+How to fill own tables
+How to select using own tables
+How to transform own tables
+34
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 35=====
+04 Global Events
+35
+Usage Examples
+
+=====PAGE 36=====
+Global Events
+Chapter Learning Goal
+You will learn how to use global events.
+Enter company code with table names into own table 
+Create and fill global event  
+Invoking functions in global events 
+Create global event for incorporating Automated Testing according to transformation scope
+36
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 37=====
+37
+Global Events
+– Enter Company Code with Table Names into Own Table
+SNP 3 [TC] Transformation Cockpit © SNP
+Implementation
+Create own tables with desired structure (in this 
+example the table is called /snp/te_bukrstab and 
+contains the key fields CLIENT, SCEN_ID, 
+OBJECT, TABNAME and BUKRS).
+Implement coding in global event.
+The global event is executed for all tables of the 
+scope and all company codes with the according 
+object and table name written into the 
+generated table in this example.
+ACCEPTING DUPLICATE KEYS is necessary 
+because we write per package into the own 
+table.
+DATA lt_table TYPE TABLE OF /snp/te_bukrstab.
+DATA ls_table TYPE /snp/te_bukrstab.
+FIELD-SYMBOLS <ls_data> TYPE any.
+FIELD-SYMBOLS <lv_data> TYPE any.
+LOOP AT ct_data ASSIGNING <ls_data>.
+ASSIGN COMPONENT 'BUKRS' OF STRUCTURE <ls_data> TO <lv_data>.
+IF sy-subrc = 0.
+IF NOT <lv_data> IS INITIAL. "nur ausführen wenn der
+“BUKRS auch gefüllt ist
+ls_table-CLIENT
+= sy-mandt.
+ls_table-SCEN_ID
+= te-scen_id.
+ls_table-TABNAME
+= te-tabname.
+ls_table-BUKRS
+= <lv_data>.
+ls_table-OBJECT
+= te-object_id.
+*
+ls_table-MODUL
+= te-modul_id.
+APPEND ls_table TO lt_table.
+ENDIF.
+ENDIF.
+ENDLOOP.
+SORT lt_table.
+DELETE ADJACENT DUPLICATES FROM lt_table.
+INSERT /snp/te_bukrstab FROM TABLE lt_table
+ACCEPTING DUPLICATE KEYS. „Prevent cross package ADK
+05.02.2018
+
+=====PAGE 38=====
+38
+Global Events
+– Enter Company Code With Table Names Into Own Table
+SNP 3 [TC] Transformation Cockpit © SNP
+Own Table
+
+Structure of 
+own table in 
+order to adopt 
+data from 
+global event.
+Variant
+
+Field OBJECT is 
+a key field, 
+because tables 
+can be found 
+multiple times 
+in a scenario.
+/SNP/TE_BUKRSTAB
+05.02.2018
+Example content of own table after import
+
+=====PAGE 39=====
+39
+Global Events
+– Maintain Scope
+SNP 3 [TC] Transformation Cockpit © SNP
+Maintain Scope
+A created global event is effective for all tables.
+By limiting the scope, you can determine for 
+which modules, objects or tables the global event 
+should be effective.
+Maintaining can be done by right-clicking on the 
+global event in the scenario tree or under global 
+events using the button Maintain Scope. 
+If no module, object or table is entered, the scope 
+is the entire scenario (all tables). 
+
+The functionality Delete deletes the 
+entire event for all tables.
+05.02.2018
+
+=====PAGE 40=====
+Global Events
+– Testing for the Migration Scope Using AT
+Prerequisite
+TC Version 17.02 
+SP03 
+AT Version 17.06 
+SP00
+Migration CHECK
+Add-on on target 
+system
+Global Function 
+SAVE_DATA_FOR_AT
+Starting with TC 
+Version 17.11 SP00 
+TC and AT are one 
+transport
+Preparation
+Creation or Extension of 
+the global event ”Event: 
+after package 
+processing” (Import)
+Coding
+PERFORM
+SAVE_DATA_FOR_A
+T USING ct_data.
+Global Function: 
+Remove commenting 
+out function
+Testing of the Data
+Target system
+Transaction 
+/n/SNP/AT_mig_check
+Select test objects
+Button Execute
+Test Settings:
+Description
+Scope: random/ 
+selected/ 
+complete
+Select amount
+Protocol? Errors/ 
+Warning/ Info
+Result
+Display protocol
+The number of 
+tested data can 
+deviate from the 
+number of migrated 
+data in the header 
+table
+40
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 41=====
+Live Demo
+
+Create global event to integrate
+Automated Testing
+
+Call a function in a global event 
+
+Write company code with table names
+into a generated table
+41
+
+=====PAGE 42=====
+Exercise 04
+| 42
+
+Create global event for incorporating 
+Automated Testing
+
+Call a function in a global event
+42
+
+=====PAGE 43=====
+Global Events
+Chapter Summary
+You have learned how to use global events: 
+Write company code with table names into own tables
+Create and fill global event
+Invoke functions in global events
+Create global event for incorporating Automated Testing according to Transformation Scope
+43
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 44=====
+05 Global Rules
+Invoking Global
+Function
+
+=====PAGE 45=====
+Global Rules
+Chapter Learning Goal
+You will learn how to use global rules.
+You will learn how to maintain global rules:
+Create global rules
+Fill global selections using global rules
+45
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 46=====
+Global Rules
+Create
+Scope
+Domain
+Data element
+Table field
+Parameter
+Maximum of 20 
+parameters possible
+Parameter name
+used in interface and 
+rule
+Indication of domain
+only necessary for
+field usage
+Assignment and 
+filling is controlled
+via field usage
+Field Usage
+The field usage 
+determines from which 
+field the parameter is 
+filled per table
+Field from which 
+parameter is filled
+Fixed value with 
+which parameter is 
+filled for table
+Empty; parameter is 
+not filled for table
+Global Functions
+With a PERFORM call a 
+global function can be 
+invoked
+The global function
+must be activated for
+the export or import
+depending on the rule
+to be called
+All required
+parameters must be
+delivered during
+calling
+Multiple embedding is
+possible
+46
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 47=====
+47
+Global Rules
+– Important Global Import Rules
+SNP 3 [TC] Transformation Cockpit © SNP
+Global Import Rule Client MANDT
+
+Changes the client to the value of the
+target system
+Global Import Rule Logical System 
+LOGSYS
+
+Changes the logical system to the entry
+on the target system
+Global Import Rule Address Numbers 
+ADRNR
+
+Calling of global function to invoke
+function module NUMBER_GET_NEXT 
+CHECK NOT iv_value IS INITIAL.
+"falls MANDT auch mal
+nicht im KEY
+MOVE sy-mandt TO ev_value .
+IF te-source_logsys EQ space
+OR te-target_logsys EQ space.
+PERFORM api_message_add
+USING 'A' 'S_LOGSYS
+oder T_LOGSYS fehlt'.
+ELSE.
+IF iv_value = te-source_logsys.
+ev_value = te-target_logsys.
+ENDIF.
+ENDIF.
+PERFORM
+umschl_number_get_next_char
+USING
+'MAP_ADRNR'
+iv_value
+'ADRNR'
+space
+'01'
+'0000'
+CHANGING
+ev_value
+ev_skip.
+05.02.2018
+
+=====PAGE 48=====
+Live Demo
+
+Examples of global rules
+
+Create global rules
+
+Maintain parameters
+
+Fill global selection via global export rule
+48
+
+=====PAGE 49=====
+Exercise 05
+| 49
+
+Create global rule
+
+Maintain parameters
+
+Fill global selection via global export rule
+49
+
+=====PAGE 50=====
+Global Rule
+Chapter Summary
+You have learned how to maintain global rules:  
+Creation of global rules
+Maintenance and usage of parameters
+Filling of global selections via global rules
+50
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 51=====
+06 Global Functions
+Parameter 
+Transferral
+
+=====PAGE 52=====
+Global Functions
+Chapter Learning Goal
+You will learn the usage of global functions.
+You will learn how to create global functions:
+Create global function
+Create interface of a global function
+Call global function
+52
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 53=====
+53
+Global Functions
+– Call from Global Import Rule
+SNP 3 [TC] Transformation Cockpit © SNP
+Global Import Rule Address Numbers ADRNR
+Calling a global function in order to call
+NUMBER_GET_NEXT 
+Global Function
+UMSCHL_NUMBER_GET_NEXT_CHAR
+Interface
+PERFORM umschl_number_get_next_char
+USING
+'MAP_ADRNR'
+iv_value
+'ADRNR'
+space
+'01'
+'0000'
+CHANGING
+ev_value
+ev_skip.
+Type
+Parameter
+Typification Description
+MAPPING
+ANY
+Mapping
+INFELD
+ANY
+Old value
+OBJECT
+CHAR(10)
+Number range object
+SUBOBJECT CHAR(6)
+Value of subobject
+NRRANGENR CHAR(2)
+Number range number
+TOYEAR
+NUMC(4)
+To fiscal year
+OUTFELD
+ANY
+New value
+DO_SKIP
+ANY
+Output value
+05.02.2018
+
+=====PAGE 54=====
+54
+Global Functions
+– UMSCHL_NUMBER_GET_NEXT_CHAR
+SNP 3 [TC] Transformation Cockpit © SNP
+Global Function
+UMSCHL_NUMBER_GET_NEXT_CHAR
+Calling global function DO_NRIV in order to
+invoke function module NUMBER_GET_NEXT 
+Global Function
+DO_NRIV
+Interface
+* This routine can be invoked
+* - if INFELD has type CHAR
+* - if INFELD if of type NUMC (initial compared with 0)
+data: rc_do_nriv.
+check not infeld is initial.
+PERFORM api_mapping_get
+USING mapping infeld
+CHANGING outfeld.
+if sy-subrc = 0.
+* NOVALUE after Do_skip, if field in UMSCHL
+do_skip = space.
+else.
+Perform do_nriv
+using OBJECT
+subobject
+NRRANGENR
+toyear
+changing outfeld
+rc_do_nriv.
+if rc_do_nriv is initial.
+PERFORM api_mapping_add
+USING mapping infeld outfeld.
+endif.
+endif.
+Art
+Parameter
+Typification
+Description
+OBJECT
+TYPE NROBJ
+Number range object
+SUBOBJECT TYPE NRSOBJ Value of suboject
+NRRANGENR TYPE NRNR
+Number range number
+TOYEAR
+TYPE NRYEAR To fiscal year
+OUTFELD
+ANY
+Not available
+RC_RETURN CHAR(1)
+Not available
+05.02.2018
+
+=====PAGE 55=====
+55
+Global Functions
+– DO_NRIV 1/2
+SNP 3 [TC] Transformation Cockpit © SNP
+DO_NRIV (Part1)
+Calling function module NUMBER_GET_NEXT.
+Interface
+data lv_text TYPE String.
+rc_return = 'X’. ”Assumption: erroneous
+CALL FUNCTION 'NUMBER_GET_NEXT'
+EXPORTING
+nr_range_nr
+= nrrangenr
+object
+= object
+*
+QUANTITY
+=
+SUBOBJECT
+= subobject
+TOYEAR
+= toyear
+*
+IGNORE_BUFFER
+= ' '
+IMPORTING
+NUMBER
+= outfeld
+*
+QUANTITY
+=
+*
+RETURNCODE
+=
+EXCEPTIONS
+INTERVAL_NOT_FOUND
+= 1
+NUMBER_RANGE_NOT_INTERN 
+= 2
+OBJECT_NOT_FOUND
+= 3
+QUANTITY_IS_0
+= 4
+QUANTITY_IS_NOT_1
+= 5
+INTERVAL_OVERFLOW
+= 6
+BUFFER_OVERFLOW
+= 7
+OTHERS
+= 8
+.
+Part 2 see next slide
+Art
+Parameter
+Typification
+Description
+OBJECT
+TYPE NROBJ
+Name of Number range
+object
+SUBOBJECT TYPE NRSOBJ Value of subobject of
+number range object
+NRRANGENR TYPE NRNR
+Number range number
+TOYEAR
+TYPE NRYEAR To fiscal year
+OUTFELD
+ANY
+Not available
+RC_RETURN CHAR(1)
+Not available
+05.02.2018
+
+=====PAGE 56=====
+56
+Global Functions
+– DO_NRIV 2/2
+SNP 3 [TC] Transformation Cockpit © SNP
+DO_NRIV (Part 2)
+In the second part the message output is raised to
+a comprehensible level.
+Of course, one wants to maintain this only once. 
+Therefore, the invoking of the function module was 
+packed into its own global function.
+case sy-subrc.
+when 0 OR space.
+* move nrlevel to outfeld.
+clear rc_return.
+when 1.
+perform api_message_add using 'A'
+'INTERVAL_NOT_FOUND - NUMBER_GET_NEXT'.
+when 2.
+perform api_message_add using 'A'
+'NUMBER_RANGE_NOT_INTERN - NUMBER_GET_NEXT'.
+when 3.
+CONCATENATE 'OBJECT_NOT_FOUND - NUMBER_GET_NEXT ' object nrrangenr
+Into lv_text RESPECTING BLANKS.
+PERFORM api_message_add
+USING
+'A'"iv_msg_type "[TYPE bapi_mtype]
+lv_text."iv_msg_text. "[TYPE any]
+when 4.
+perform api_message_add using 'A'
+'QUANTITY_IS_0 - NUMBER_GET_NEXT'.
+when 5.
+perform api_message_add using 'A'
+'QUANTITY_IS_NOT_1 - NUMBER_GET_NEXT'.
+when 6.
+perform api_message_add using 'A'
+'INTERVAL_OVERFLOW - NUMBER_GET_NEXT'.
+when 7.
+perform api_message_add using 'A'
+'BUFFER_OVERFLOW - NUMBER_GET_NEXT'.
+when others.
+perform api_message_add using 'A'
+’General error when usinger beim Aufruf von NUMBER_GET_NEXT‘.
+endcase.
+05.02.2018
+
+=====PAGE 57=====
+57
+Global Functions
+– Interface
+SNP 3 [TC] Transformation Cockpit © SNP
+Maintain parameters:
+
+Type
+
+Importing
+
+Changing
+
+Parameter
+
+Unambiguous
+description
+
+Origin
+
+DDIC-Objekt
+
+Mapping
+
+Native Type
+
+Data type
+
+Valid data element
+
+Length
+
+Valid value
+
+Decimal places
+
+Valid value
+
+Description
+
+Helpful text
+05.02.2018
+
+=====PAGE 58=====
+Live Demo
+
+Create global function
+
+Create mapping
+
+Maintain interface of a specific
+global function
+
+Call global function
+58
+
+=====PAGE 59=====
+Exercise 06
+| 59
+
+Analysis of global import rule and 
+global function
+
+Create mapping
+
+Maintain interface of a global function
+
+Call global function
+59
+
+=====PAGE 60=====
+Global Functions
+Chapter Summary
+You have learned how to use global functions:
+Call functions in global rules
+Create global functions
+Maintenance of interfaces of global functions
+Call within global functions
+60
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 61=====
+07 Offset
+Maintain
+Parameters and
+Segmentation
+
+=====PAGE 62=====
+Offset
+Chapter Learning Goal
+You will learn how to use offsets.
+You will learn how to create offsets.
+Functionalities of offsets
+Create offsets
+Maintain parameters
+Structure segmentation
+Generate offset
+62
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 63=====
+Offset 
+05.02.2018
+| 63
+SNP 3 [TC] Transformation Cockpit © SNP
+Cond.Rec.No
+U
+Tab
+APP
+CnT
+Variable Key [VAKEY]
+to
+from
+0000011144
+A
+017
+M
+PB00
+0000001000T-20100                100013000
+…
+…
+Table: KONH
+Material info record(plant specific)
+Conditions (Head)
+Parameter: IV_KVEWE
+Domain: KVEWE
+Parameter: 
+IV_KOTABNR
+Domain: KOTABNR
+SEGMENTATION
+Valid
+Valid
+APP
+CnT
+Vendor
+Material
+POrg
+Plant
+Cat
+to
+from
+Cond.Rec.No
+M
+PB00
+1000
+T-20100
+1000
+1300
+0
+…
+…
+0000011144
+Table: A017
+Concatenation
+(OFF_VAKEY)
+
+=====PAGE 64=====
+Offset 
+05.02.2018
+| 64
+SNP 3 [TC] Transformation Cockpit © SNP
+Define segmentation
+ID
+Parameter name
+Parameter value
+IV_KVEWE
+IV_KOTABNR
+Rel. Position
+Split length
+Domain names
+Physical Position
+0
+0
+0
+0
+A
+017
+0
+10
+28
+32
+10
+18
+4
+4
+LIFNR
+MATNR
+EKORG
+WERKS
+A017
+Segmentation –
+(OFF_VAKEY)
+Abserve the difference
+•
+Rel. Offset Position
+•
+typically 0
+•
+No spaces
+between the
+segments
+•
+Can be changed
+acc. to domain
+length changes
+in a higher SAP 
+Release (e.g. 
+domain MATNR 
+in S/4HANA)
+•
+Physical Position
+•
+Not visible in 
+the system
+•
+Determined
+automaticlaly
+•
+Mentioned for
+visualization
+purpose only
+
+=====PAGE 65=====
+Tabelle
+Feld
+PARAM_SPEZI
+PARAM_UNTER
+KONDH
+VAKEY
+KONH
+VAKEY
+NACH
+VAKEY
+Table
+Field
+IV_KVEWE
+IV_KOTABNR
+KONDH
+VAKEY
+KVEWE
+KOTABNR
+KONH
+VAKEY
+KVEWE
+KOTABNR
+NACH
+VAKEY
+KVEWE
+KOTABNR
+Offset 
+05.02.2018
+| 65
+SNP 3 [TC] Transformation Cockpit © SNP
+Title
+Segmentation
+Value 
+IV_KVEWE
+Value 
+IV_KOTABNR
+LIFNR(0,10),MATNR(10,18),EKORG(28,4),WERKS(32,4)
+A
+017
+LIFNR(0,10),MATNR(10,18),EKORG(28,4)
+A
+018
+EBELN(0,10)
+A
+019
+Parameter 
+name
+Domain
+Description
+IV_KVEWE
+KVEWE
+Usage cond. table
+IV_KOTABNR
+KOTABNR
+No. cond. table
+Element Type
+Element Name
+Data element
+VAKEY
+Scope
+Scope
+Field usage
+Field usage
+Parameter definition for rule
+Parameter definition for rule
+Global Import 
+Rule(OFF_VAKEY)
+
+=====PAGE 66=====
+Offset 
+– Function –
+(OFF_VAKEY)
+05.02.2018
+| 66
+SNP 3 [TC] Transformation Cockpit © SNP
+A017
+KONH
+Source
+Mapping via Offset
+Mapping
+KNUMB
+Offset
+EKORG
+WERKS
+Import rules
+Field
+Contents
+KNUMH
+Globale Import Rule
+WERKS
+Globale Import Rule
+EKORG
+Globale Import Rule
+VAKEY
+Offset
+Target
+A017
+KONH
+
+=====PAGE 67=====
+Live Demo
+
+Create offset
+
+Maintain parameters
+
+Set up segmentation
+
+Generate offset
+67
+
+=====PAGE 68=====
+Exercise 07
+| 68
+68
+
+Create offset
+
+Maintain parameters
+
+Set up segmentation
+
+Generate offset 
+
+=====PAGE 69=====
+Offset
+Chapter Summary
+You have learned how to create and use offsets:
+Offset functionalities
+Create offset
+Maintain parameters
+Set up segmentation
+Generate offset
+69
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 70=====
+08 Differing Target Table
+Transform 
+a Table into Any 
+Table in the DDIC of
+the Target System
+
+=====PAGE 71=====
+Differing Target Table
+Chapter Learning Goal
+You will learn the usage of differing target tables.
+You will learn to individually fill fields of differing target tables:
+Enter differing target table
+Fill tables of differing target table
+Transform into differing target table
+71
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 72=====
+Differing Target Table
+The differing target
+table must be existent 
+in the DDIC of the target
+system.
+Corresponding fields are
+assigned automatically.
+Contents of not assigned
+fields are lost.
+Fields of the source table
+can be assigned via 
+MOVE command within
+the limits of ABAP to
+fields of the differing
+target table.
+Fields of the differing
+target table can be filled
+using coding.
+72
+SNP 3 [TC] Transformation Cockpit © SNP
+Field Assignment
+Assign Fields
+Fill Fields
+Differing Target Table
+The transformation consultant is responsible for data consistency.
+05.02.2018
+
+=====PAGE 73=====
+05.02.2018
+73
+Differing Target Table
+– Application Example
+SNP 3 [TC] Transformation Cockpit © SNP
+Generate entries in table
+A418 from records from
+A503.
+
+Via the A503 select all entries
+on sales organizations
+
+All corresponding fields are
+automatically assigned
+
+The field rule A418-KSCHL is
+applied dependent on the
+source system.
+
+Caution, invalid values can
+also be set.
+
+Foreign Key Check finds the
+errors
+(Condition type: SNP/SAP) 
+
+The transformation consultant
+is responsible for data
+consistency.
+The field rule A418-KSCHL is applied dependent on the
+source system. 
+
+The data records with the application V* originate
+from the source SOURCE. 
+
+The data records with the application J* originate
+from the source SOURCE_2. 
+Source: A503
+Source_2: A503
+Target: A418
+
+=====PAGE 74=====
+05.02.2018
+74
+Differing Target Table
+– Pass on Table Fields Within the Structure
+SNP 3 [TC] Transformation Cockpit © SNP
+Table Extension
+Using the table extension, the material type 
+MARA-MTART can be passed on to target table
+MARC and checked.
+Example coding from the field rule GZOLX from
+the check of material type: 
+CASE is_marc-mtart.
+WHEN 'ABF'.
+MOVE 'EU' TO cv_gzolx.
+WHEN OTHERS.
+MOVE 'SNP' TO cv_gzolx.
+ENDCASE.
+
+=====PAGE 75=====
+Live Demo
+
+Enter differing target table
+
+Fill fields of differing target table
+
+Transform into the differing target table
+75
+
+=====PAGE 76=====
+Exercise 08
+| 76
+76
+
+Enter differing target table
+
+Fill fields of differing target table
+
+Transform into the differing target table
+
+=====PAGE 77=====
+Differing Target Table
+Chapter Summary
+You have learned the usage of differing target tables.
+You have learned how to fill fields of the differing target table individually.
+Enter differing target table
+Fill fields of the differing target table
+Transform into the differing target table
+77
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 78=====
+09 Multiple Satellite Systems
+Multiple Source 
+and Target Systems
+
+=====PAGE 79=====
+Multiple Satellite Systems
+Chapter Learning Goal
+You will learn the usage and handling of multiple source systems:
+Create and assign multiple source systems
+Maintain global selection per source system
+Parallelization of exports of multiple source systems
+79
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 80=====
+Multiple Satellite Systems
+– Multiple Source Systems for a Scenario
+05.02.2018
+| 80
+SNP 3 [TC] Transformation Cockpit © SNP
+Rules
+File System
+Table contents data
+RFC
+RFC
+DIA
+RFC
+Import per source 
+system
+Import per source 
+system
+
+=====PAGE 81=====
+Multiple Satellite Systems
+Configuration
+These parameters must only be
+maintained for source and target
+system. Parameters of the
+control system are set
+automatically:
+Logical system
+Codepage
+File path (For reading and 
+writing export files)
+Data type of generated tables
+Default: [APPL1] 
+Application server and server
+group
+Standard System
+The standard system is used if no
+explicit selection or indication of
+the system is possible. 
+Maintenance of objects, tables, 
+rules: as a basis for value helps
+and validation the DDIC of the
+standard source system is used.
+The syntax check runs on the
+standard source or standard
+target system depending on the
+selection.
+Dialog executions also use the
+according standard system if no
+Alias was assigned.
+Alias
+Each system must be
+assigned an unambiguous
+Alias.
+The Alias serves the selection
+and identification of a system
+to be used within the
+application.  
+Aliases were introduced to
+enable flexible exchanging of 
+systems without the need to 
+adjust the usage in the rule 
+base.
+If the global selection for
+Aliases was maintained, the
+Aliases should not be
+changed anymore.
+81
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 82=====
+Multiple Satellite Systems
+Global Selections
+Values in global selections
+now have to be maintained
+per Alias.
+In the detail view of a global 
+selection all source system
+Aliases of the scenario are
+automatically displayed.
+When executing on a specific
+system only those values are
+adopted during generating
+process which were
+maintained under the
+according Alias.
+Mappings
+Mappings are also transferred to
+the according system during
+execution as before.
+If a mapping in the target system
+is to occur depending on the
+source system, the environment
+variable te-source_system_alias
+can be used in the import coding
+for the identification of the
+original source system and the
+setup of the mapping.
+Mappings that were added on a 
+specific system using API calls
+are not transfered between the
+systems.
+Transformation
+When planning and executing
+within the transformation, the
+system must be defined for the
+execution on block level (Right-
+click > Properties > System 
+Alias).
+Several objects can be assigned
+to multiple blocks/ duplicated
+simultaneously.
+82
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 83=====
+Multiple Satellite Systems
+–Maintenance of Global Selections
+05.02.2018
+83
+SNP 3 [TC] Transformation Cockpit © SNP
+Global 
+Selections
+Maintain per 
+System Alias
+
+=====PAGE 84=====
+05.02.2018
+84
+Multiple Satellite Systems
+– Mapping
+SNP 3 [TC] Transformation Cockpit © SNP
+Automatically
+added mappings
+The number of
+automatically
+added mappings
+is displayed in 
+the overview for
+all systems (as a 
+sum). 
+Also, the system
+selection for
+relevant 
+locations is
+displayed and all 
+other available
+actions follow for
+all systems.
+1
+3
+2
+
+=====PAGE 85=====
+Live Demo
+
+Set up multiple source system
+within the scenario
+
+Maintain selection per source system
+
+Export per source system
+85
+
+=====PAGE 86=====
+Exercise 09
+| 86
+
+Set up multiple source systems in a scenario
+
+Maintain selection per source system
+
+Export per source system
+
+Check filled global selection
+per source system
+86
+
+=====PAGE 87=====
+Multiple Satellite Systems
+Chapter Summary
+You have learned how to use multiple source systems within a scenario: 
+How to assign multiple source systems
+How to maintain global selections per source systems
+How to execute the export from specific source systems
+How to parallelize the exports of multiple source systems
+87
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 88=====
+10 Transfer Export Files Without Mutual File Share
+Report: 
+/SNP/TE02_FILE_TRANSFER 
+and
+Export Based
+Customizing 
+Analysis
+
+=====PAGE 89=====
+Transfer Export Files Without Mutual File Share
+Chapter Learning Goal
+You will learn the usage and execution of the Report /SNP/TE02_FILE_TRANSFER:
+Transfer files from a source share into the target share
+You will learn how to execute the export-based customizing analysis:
+Execute analysis
+Perform detail comparison
+89
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 90=====
+90
+Transfer Export Files Without Mutual File Share
+– Report: /SNP/TE02_FILE_TRANSFER
+SNP 3 [TC] Transformation Cockpit © SNP
+Without mutual share between source and target:
+Via RFC connections between source control
+system target the files can be transferred. 
+A connection between source and target is not 
+necessary.
+The duration of the transfer depends on the
+performance of the shares, the amount and size
+of the files and the performance of the RFC 
+connections.
+Files are only transferred once.
+If files were not transferred yet, you receive a 
+termination with the message that the files were
+not found during import.
+The selections of the files (module of a scenario, 
+object and table) are meant for post migrations. 
+Recommended: transfer files of a 
+scenario simultaneously
+05.02.2018
+„Observe „Select export files for
+import“!
+
+=====PAGE 91=====
+05.02.2018
+91
+Export-Based Customizing Analysis
+SNP 3 [TC] Transformation Cockpit © SNP
+Analyze project scope
+On the basis of the
+export the relevant 
+customizing tables are
+analyzed.
+The result are all 
+relevant conflicts.
+Application
+We recommend
+executing an export
+with all relevant 
+objects with largely
+maintained global 
+selections
+(organizational units).
+If necessary in a 
+separate scenario.
+
+=====PAGE 92=====
+05.02.2018
+92
+Export-Based Customizing Analysis
+SNP 3 [TC] Transformation Cockpit © SNP
+Analyze project scope
+The result is an 
+overview of all 
+analyzed
+customizing tables.
+Color code: 
+Green
+
+Table is filled
+identically
+Yellow
+
+Table is missing
+in source or
+target
+Red
+
+Table is filled
+with deviances
+in the target
+
+=====PAGE 93=====
+93
+Export-Based Customizing Analysis
+– Detailed Comparison
+
+=====PAGE 94=====
+Live Demo
+
+Invoke report and maintain settings
+
+Execute repirt and move files
+
+Execute export-based customizing analysis
+94
+
+=====PAGE 95=====
+Exercise 10
+| 95
+95
+
+Invoke report and maintain settings
+
+Execute report and move files
+
+Execute export-based customizing analysis
+
+=====PAGE 96=====
+Transfer Export Files Without Mutual File Share
+Chapter Summary
+You have learned the usage of the report /SNP/TE02_FILE_TRANSFER. 
+Transfer files from source share to target share
+You have learned how to execute the export-based customizing analysis.
+Execute analysis
+Execute detailed comparison
+96
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 97=====
+11 Forerunners
+Create, 
+Assign Tables, 
+Maintain Coding, 
+Global Rules
+
+=====PAGE 98=====
+Forerunners
+Chapter Learning Goal
+You will learn the usage of forerunner objects and that under certain circumstances they are not 
+necessary. 
+You will maintain forerunners individually.
+Strategies to maintain number ranges
+Create forerunner objects
+Link tables
+Invoke global import rule in event „After data record processing“
+Import (Simulation)
+Check generated entries in the mapping
+Difference calculation for new numbers in target
+Adjusting number range statuses in target
+98
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 99=====
+05.02.2018
+99
+Forerunners
+– Application Case
+SNP 3 [TC] Transformation Cockpit © SNP
+Number ranges
+
+If during a 
+migration
+internal number
+ranges are
+already used in 
+the target
+system, and if
+the strategy
+increment was 
+determined for
+the number
+ranges, you
+need
+forerunners to
+increment the
+numbers in the
+target again. 
+
+Source client
+800
+
+Target client
+900
+
+=====PAGE 100=====
+05.02.2018
+100
+Forerunners
+– Set up Number Range Strategy
+SNP 3 [TC] Transformation Cockpit © SNP
+Increment [internal number ranges in target]
+
+Numbers are re-incremented in the target using the
+function module Number_Get_Next.
+
+Mappings are needed for the documentation of the old and 
+new numbers.
+
+For a smooth execution forerunners are needed.
+Difference calculation [internal number ranges]
+
+Before, number range statuses must be saved.
+
+The relevant source systems must be maintained.
+
+The two factors buffer in % (NRIV OFFSET factor) and fixer 
+buffer (safety factor) are to be maintained for RBNZD.
+
+The global import rules may have to be adjusted.
+
+Mappings are needed for the case that the difference
+calculation does not calculate a valid result (then increment
+is used).
+
+In the target the number range statuses are updated.
+1:1 [internal number ranges]
+
+The numbers are adopted into the system without
+changes.
+
+The number statuses are updated in the target.
+Inactiv (1:1 adoption) [external number ranges in target]
+
+External numbers are adopted unchanged.
+
+=====PAGE 101=====
+Forerunner
+– Application Case [Increment]
+Export of the linked object
+The forerunner has no own 
+export
+Export of the linked object
+Function module
+NUMBER_GET_NEXT
+Build Mapping
+Transformation
+Export
+Mapping
+Forerunner
+Only the mapping is created.
+No data import is executed.
+SNP
+TRANSFORMATION
+Cockpit
+101
+The export of the
+linked tables (objects) 
+must have been
+successfully
+completed
+As a result we receive a 
+built mapping which is
+used by the normal 
+objects during import. 
+05.02.2018 SNP 3 [TC] Transformation Cockpit © SNP
+
+=====PAGE 102=====
+| 102
+Forerunner
+– (VORLFR_TRAINING) [Increment]
+SNP 3 [TC] Transformation Cockpit © SNP
+Process
+transformation
+1.
+Export of
+linked objects
+2.
+Import 
+(Simulation) 
+of forerunners
+Maintenance in the
+transformation
+
+Simultaneous
+adoption of
+objects and 
+forerunners in 
+the according
+blocks possible
+05.02.2018
+Global import rule
+
+=====PAGE 103=====
+| 103
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+Call global 
+import rule
+KNUMB
+Call global 
+import rule
+KNUMB
+Globale Importregel
+
+=====PAGE 104=====
+| 104
+05.02.2018 SNP 3 [TC] Transformation Cockpit © SNP
+
+=====PAGE 105=====
+| 105
+Forerunner
+– Increment in Storage; Forerunner – (VORLFR_TRAINING) 
+SNP 3 [TC] Transformation Cockpit © SNP
+KNUMH
+0000000531
+0000001267
+0000001268
+0000001275
+VKONA_TRAINING
+File: KONH
+Storage
+is_konh/ 
+it_konh
+Rule: Mapping:
+number_get_nex
+t
+(n+1)
+cs_konh
+KNUMH
+DB: KONH
+Import method: Simulation
+Per File (Package): Commit Work
+Processing with just one process
+KNUMH
+0000000531
+0000001267
+0000001268
+0000001275
+KNUMH
+0000002771
+0000002772
+0000002773
+0000002774
+Source
+Target
+0000000531 0000002771
+0000001267 0000002772
+0000001268 0000002773
+0000001275 0000002774
+DB: Mapping table
+After data record processing:
+PERFORM grule_imp_knumb
+USING
+is_konv-knumh
+CHANGING
+cs_konv-knumh
+ev_skip
+.„dot
+05.02.2018
+
+=====PAGE 106=====
+Forerunners
+– Difference Calculation – (API_NUMBER_GET_NEXT)
+Advantages (ideally)
+Crucially faster. 
+No Forerunners
+No Mapping 
+No posting using function module
+NUMBER_GET_NEXT
+Observe
+No preparation necessary.
+Area number ranges
+Set number range strategy.
+Save analysis with NRIV.
+(Multiple times in an appropriate timeframe for
+RBNZD so the progress of the number range
+status can be determined.)
+Execute NRIV update before import.
+Create mapping, for exceptions use the function
+module NUMBER_GET_NEXT.
+The global rules must be adjusted.
+(If it was not premeditated in the delivery content.)
+The API call API_NUMBER_GET_NEXT outputs the
+number range strategy.
+106
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+KNUMV
+0000000531
+0000001267
+0000001268
+0000001275
+Difference
+calculation
++ 2555
+KNUMV
+0000003086
+0000003822
+0000003823
+0000003830
+
+=====PAGE 107=====
+Forerunners
+– Difference Calculation – (API_NUMBER_GET_NEXT) 
+Preparation
+The API call can always be used in 
+new numbers are to be created from
+internal number ranges in the target.
+Determine number range strategy
+difference calculation.
+Assign source systems to the
+number range.
+Save NRIV (In multiple intervals for
+RBNZD.). 
+Before Import, using the button, 
+update NRIV, update the number
+range statuses in the target system
+and calculate the NRIV offset
+definitions. 
+Difference Identification
+Use the function
+API_NUMBER_GET_NEXT, to
+create a new number from an 
+internal number range.
+As a priority it is attempted to
+calculate a new number using
+the NRIV offset definition and 
+the old number.
+Should no reserved numbers 
+be available in the definition, 
+or no definition be existent, a 
+new number is generated
+using the function module
+NUMBER_GET_NEXT.
+Application
+API_NUMBER_GET_NEXT sets the 
+system field sy-subrc and outputs 
+the Strategy.
+0: The new value was calculated.
+4: The new value was generated
+using NUMBER_GET_NEXT.
+perform api_number_get_next
+using
+'ADRNR'
+’ '
+'01'
+'0000'
+iv_addrnumber
+changing
+ev_addrnumber
+ev_strategy.
+107
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 108=====
+108
+Forerunners
+– Difference Calculation – (API_NUMBER_GET_NEXT) Update NRIV 
+SNP 3 [TC] Transformation Cockpit © SNP
+1.
+
+By clicking on the green check mark
+you adopt the settings for the
+transformation.
+2.
+
+After confirming the number range
+switch the result for the number ranges
+for which an action is necessary, is
+displayed.
+05.02.2018
+3.
+
+During the transformation (import) the
+NRIV offsets are added onto the old
+numbers from the source.
+
+=====PAGE 109=====
+109
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 110=====
+110
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 111=====
+Live Demo
+
+Create forerunners
+
+Invoke the global import rule
+in the event „After data record
+processing“
+
+Import (Simulation)
+
+Check mapping
+111
+
+=====PAGE 112=====
+Exercise 11
+
+Create forerunners
+
+Invoke the global import rule in the event
+„After data record processing“
+112
+
+=====PAGE 113=====
+Forerunners
+Chapter Summary
+You have learned how to maintain the strategy for the number ranges, how to use a forerunner object
+and apply the strategy difference calculation.
+Maintain number range strategy
+Create forerunner object
+Assign tables
+Maintain rule
+Import (Simulation)
+Check result
+Save number range statuses
+Adjust number range statuses in target
+113
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 114=====
+12 Select Export Files for Import
+Manual 
+Intervention
+
+=====PAGE 115=====
+Select Export Files for Import
+Chapter Learning Goal
+You will learn how to use the function „Select export“.
+You will learn how to assign various export files to import on your own.
+Invoke the function by right-clicking on the import block
+Assign exports to an import
+115
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 116=====
+| 116
+Select Export Files for Import
+SNP 3 [TC] Transformation Cockpit © SNP
+Allocation
+
+Missing relation
+to a specific
+export – here
+the last 
+exported
+version of the
+table would run, 
+independent of
+the system.
+
+If you assign
+the exports
+manually to an 
+import, you are
+responsible for
+data
+consistency.
+An import can be manually assigned various exports of the same table, even
+from other systems assigned to the scenario. For scenarios with multiple source 
+systems the import block must be manually assigned to an export.
+05.02.2018
+
+=====PAGE 117=====
+117
+Select Export Files for Import
+– Exception
+SNP 3 [TC] Transformation Cockpit © SNP
+Agenda
+
+[green]: 
+Assignment to
+expected
+system.
+
+[blue]:
+Assignement to
+a differing
+system.
+
+An assignment
+across system
+boundaries can
+lead to
+inconsistent
+data on the
+target system.
+
+An assignment
+of not exported
+tables is not 
+possible.
+05.02.2018
+If exported data are chosen from different systems, we must ensure 
+data consistency in the target 
+
+=====PAGE 118=====
+Live Demo
+
+Assign export files to an import block 
+
+Create import
+118
+
+=====PAGE 119=====
+Exercise 12
+| 119
+119
+
+Assign export files to an import block 
+
+Create import
+
+=====PAGE 120=====
+Global Selection
+Chapter Summary
+You have learned how to use the function “Select export“:
+Call function by right-clicking on the import block
+Assign exports to an import
+120
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 121=====
+13 Lock Tables
+Lock Tables for
+Editiing with
+Several Processes
+Execute 
+Automated Testing
+
+=====PAGE 122=====
+Lock Tables
+Chapter Learning Goal
+You will learn the usage of the functionality lock tables, as well as set up locks yourself.
+Lock table (so it can only be edited with one process)
+Additionally, you will learn the usage of Automated Testing for the Transformation Scope: 
+Execute AT with data filled from the TC transformation
+View AT testing results (messages)
+122
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 123=====
+Lock Tables
+05.02.2018
+| 123
+SNP 3 [TC] Transformation Cockpit © SNP
+Lock Table (Can only be edited with one process)
+Lock is set for:
+
+Cluster tables
+
+Tables with option „Summarize“
+Lock not set if mode is block/table DELETE.
+The lock can also be set in the surface (Transformation Right-click on table
+Features).
+If the lock is not necessary, it can still be deactivated (Cluster/Summarize). 
+The lock is only needed with an n:1 Mapping.
+When changing the mode on the block the table lock is removed on all 
+subsequent tables, where it is not needed and set where it is.
+Lock Table (Can only be edited with one process)
+Lock is set for:
+
+Cluster tables
+
+Tables with option „Summarize“
+Lock not set if mode is block/table DELETE.
+The lock can also be set in the surface (Transformation Right-click on table
+Features).
+If the lock is not necessary, it can still be deactivated (Cluster/Summarize). 
+The lock is only needed with an n:1 Mapping.
+When changing the mode on the block the table lock is removed on all 
+subsequent tables, where it is not needed and set where it is.
+Area Transformation
+Import block
+Right-click on the
+table
+
+=====PAGE 124=====
+05.02.2018
+| 124
+Cluster Locks
+SNP 3 [TC] Transformation Cockpit © SNP
+Cluster Locks 
+To save runtime during import, you can disable 
+cluster locks. 
+Risky Example:
+If a cluster table BSEG is imported with several 
+processes, different processes could attempt to 
+write the same data record to the table cluster 
+RFBLG; this would lead to a dead lock.
+
+=====PAGE 125=====
+05.02.2018
+125
+Execute Automated Testing
+SNP3[TC] Transformation Cockpit © SNP
+
+=====PAGE 126=====
+Live Demo
+
+Set table lock
+
+Execute import
+
+Execute Automated Testing according to
+transformation scope
+
+Display results
+126
+
+=====PAGE 127=====
+Exercise 13
+| 127
+127
+
+Set table lock
+
+Execute import
+
+Execute Automated Testing according to  
+transformation scope 
+
+Display results 
+
+=====PAGE 128=====
+Lock Tables
+Chapter Summary
+You have learned how to apply the table lock so a table is only edited with a background process.
+Lock tables
+Deactivate parallelization and only edit table with one process
+Additionally, you have learned how AT cooperates with the TC:
+Execute AT
+Display the result of AT (notifications)
+128
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 129=====
+14 Restore Tables
+Delete Saved
+Tables in Target and #
+Restore 
+(RET Scenario)
+
+=====PAGE 130=====
+Restore Tables
+Chapter Learning Goal
+You will learn how to use RET scenarios.
+You will learn how to restore tables yourself:
+Delete tables in target with RET scenario
+Restore tables in target with RET scenario
+130
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 131=====
+Restore Tables
+
+=====PAGE 132=====
+Live Demo
+
+Delete tables in target
+
+Restore tables in target
+132
+
+=====PAGE 133=====
+Exercise 14
+| 133
+133
+
+Delete tables in target
+
+Restore tables in target
+
+=====PAGE 134=====
+Restore Tables
+Chapter Summary
+You have learned what you can use a RET scenario for. Using it, you can successfully save and restore 
+tables you wish to save prior to transformation, should this be necessary.
+Create RET scenario prior to transformation
+Save tables depending on the requirements
+Restore tables (if necessary)
+Create delete object, insert tables to be deleted
+Export delete object
+Delete delete object table by creating an import block with block mode DELETE.
+Import saved tables without using the rule base (block mode: Without rule base: )
+Import with updated rule base
+Check result
+134
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 135=====
+15 BEST PRACTICE
+View as Source, 
+Table Statistics, 
+CSV Upload, 
+PO Query, 
+Events
+
+=====PAGE 136=====
+BEST PRACTICE
+Chapter Learning Goal
+You will learn useful tips:
+View as source
+CSV upload
+Update table statistics
+Selections using tools
+Mass changes of table events
+PO query
+136
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 137=====
+View as Source
+– View
+05.02.2018
+137
+SNP 3 [TC] Transformation Cockpit © SNP
+View:
+A database view displays
+an inner join over multiple 
+tables. The joined data
+remain in the database
+tables and are not 
+persistently stored in the
+database, but are linked
+during the execution of the
+join.
+
+Database management
+system calculates the
+data when invoked.
+
+Good performance is
+not guaranteed.
+S B C
+1 2 3
+4 5 6
+S N E
+1 8 9
+4 1 2
+A N P
+3 8 5
+2 1 8
+S N P
+1 8 5
+4 1 8
+View
+
+=====PAGE 138=====
+05.02.2018
+138
+View as Source
+– Condition for NewTab
+SNP 3 [TC] Transformation Cockpit © SNP
+View
+
+Can be
+deployed like 
+tables in 
+objects.
+
+Usage
+
+NO_IMPORT
+
+NewTAB
+Import
+
+Own table
+following model
+View. 
+
+=====PAGE 139=====
+05.02.2018
+139
+View as Source
+– Condition for NewTab
+SNP 3 [TC] Transformation Cockpit © SNP
+Notification
+
+For the view
+CDS_KNA1_NAME 
+without differing
+target table only
+import mode
+NO_IMPORT 
+permitted. 
+Export
+
+Same as with
+tables
+File
+
+Same as with
+tables
+
+=====PAGE 140=====
+05.02.2018
+140
+CSV Upload
+– Template
+SNP 3 [TC] Transformation Cockpit © SNP
+Process
+
+Download 
+template CSV 
+file.
+
+Customer fills
+with data.
+
+Upload CSV 
+file.
+Application
+
+SAP table
+requires the
+same format in 
+CSV upload.
+
+Virtual ($)table
+takes on the
+format of CSV 
+upload.
+
+=====PAGE 141=====
+CSV Upload
+– Upload File
+05.02.2018
+141
+SNP 3 [TC] Transformation Cockpit © SNP
+Export methods
+Export View
+Upload 
+available table
+CSV file
+$ Upload 
+virtual table
+CSV file
+The transformation consultant is
+responsible for data consistency.
+
+=====PAGE 142=====
+05.02.2018
+142
+Table Statistics
+– Refresh
+SNP 3 [TC] Transformation Cockpit © SNP
+In the area systems
+To prepare the source system
+for the export.
+
+After the export program
+was generated, it can make
+sense to update the SNP 
+tables for global selections
+and mappings.
+
+For filled own tables a 
+refresh can make sense for
+increasing performance.
+
+After export forerunners a 
+refresh is recommended.
+In the area system monitor
+If many rules are maintained and objects created in 
+TC, an updates keeps performance high.
+Daemon
+Table statistics can be refreshed automatically using the daemon. As a 
+standard, SNP tables are refreshed starting with 100% of change. The default
+setting for the updating interval is 30 minutes.
+
+=====PAGE 143=====
+05.02.2018
+143
+Analyze DB Indexes
+SNP3[TC] Transformation Cockpit © SNP
+Invoking
+
+Via the menu
+functions in the
+area data
+objects
+Selektion 
+
+In the example
+the table NAST 
+was selected
+Indexes of database tables
+The index of a database table supports a faster
+selection of rows. 
+It comprises of selected fields of a database table, of
+which a copy is created in a sorted order.
+An additional field contains an indicator to the actual
+table rows.
+The sorting enables fast access to the rows in the
+table, e.g. via a binary search.  
+A database table has at least one primary index
+defined by the key fields and can optionally have one
+or multiple secondary indexes.  
+
+=====PAGE 144=====
+Analyze DB Indexes
+05.02.2018
+144
+SNP3[TC] Transformation Cockpit © SNP
+Select 
+correctly
+Coverage of the selection
+for the index fields is 60%
+The table is evaluated for
+all entered source 
+systems
+The table appears multiple 
+times in the object
+Only those indexes with the largest coverage are displayed
+
+=====PAGE 145=====
+Analyze DB Indexes
+05.02.2018
+145
+SNP3[TC] Transformation Cockpit © SNP
+Select 
+correctly
+All indexes are displayed
+
+=====PAGE 146=====
+Analyze DB Indexes
+14.01.2020
+146
+Detailed coverage by
+selection
+
+=====PAGE 147=====
+05.02.2018
+147
+PO Query
+– /n/SNP/CN_PO_QUERY Invoking
+SNP 3 [TC] Transformation Cockpit © SNP
+Parameters of the selection picture
+PO class:
+Class coming from which shall
+be selected (Examples): 
+/SNP/TE01_CL_SCENARIO, 
+/SNP/TE01_CL_MODULE, 
+/SNP/TE01_Cl_OBJECT, 
+/SNP/TE01_CL_TABLE).
+Queries on POOBJ possible?
+This flag enables the query of
+change information
+(User/Date/Version) which are
+only written into the mutual 
+header table of every object.
+Queries on POHIST possible?
+This flag enables the search of
+protocoled changes (not active
+for all object types).
+Load saves query:
+Here queries that were
+previously saved can be loaded.
+Select Class
+
+Only classes for TC [/SNP/TE*] are helpful
+
+Evaluation: Analysis from scenario
+/SNP/TE01_CL_SCENARIO
+F4-Hilfe
+
+=====PAGE 148=====
+05.02.2018
+148
+PO Query
+– /n/SNP/CN_PO_QUERY Selection
+SNP 3 [TC] Transformation Cockpit © SNP
+Selection
+
+Check what should be
+selected.
+
+Using „Execute Query“ you
+call the selection screen 
+and can enter your
+selections.
+
+If a useful selection was 
+chosen, the data for the
+checked fields of the
+framework are displayed. 
+
+Continue to the next step
+
+Outgoing relation
+
+Incoming relation
+
+An understanding of the
+framework is very helpful
+
+Click-simulations of
+common evaluations are
+being created in an e-
+learning.
+Selection screen
+
+For most analyses: Select scenario
+
+Further limitations of all selected nodes are
+possible
+
+Please observe: Maximum number of data records
+is set to 500 as a default
+
+=====PAGE 149=====
+05.02.2018
+149
+PO Query
+– /n/SNP/CN_PO_QUERY Result
+SNP 3 [TC] Transformation Cockpit © SNP
+Result
+
+Display of result in tab Data 
+
+The selection that has led to the
+result can be viewed in the tab SQL 
+executed
+
+The coding for this can be viewed in 
+tab Coding
+
+All business object to the data
+objects were output in the scenario
+Selection recommendation
+
+Begin selection simply and keep
+checking whether you still receive a 
+result
+
+Gradually become more detailed
+until you reach the desired result
+Example
+
+Assignment of business objects to
+data objects of a scenario
+
+=====PAGE 150=====
+05.02.2018
+150
+Objects without DDIC reference
+– Functionality in Area Data Objects
+SNP 3 [TC] Transformation Cockpit © SNP
+Result
+
+It is displayed for
+which system the
+exception persists
+
+The affected object
+can be deactivated
+Selection Screen
+
+=====PAGE 151=====
+Live Demo
+
+View as source
+
+CSV upload
+
+Refresh table statistics
+
+Selection using tools
+
+Mass changes of table results
+
+PO query
+151
+
+=====PAGE 152=====
+BEST PRACTICE
+Chapter Summary
+You have learned useful tips:
+View as source
+CSV upload
+Refresh table statistics
+Selections using tools
+Mass changes of table results
+PO query
+152
+SNP 3 [TC] Transformation Cockpit © SNP
+05.02.2018
+
+=====PAGE 153=====
+Certification
+05.02.2018
+| 153
+SNP 3 [TC] Transformation Cockpit © SNP
+
+In order to take the
+certification exam, sign
+into ILIAS on the SNP 
+Service Portal.
+
+The access data (user
+and password) are
+provided to you by you
+SNP trainer.
+
+Link: https://service.snp-
+ag.com/ilias
+Certification
+
+=====PAGE 154=====
+Follow us
+Thank you.
+SNP Schneider-Neureither & Partner SE 
+Dossenheimer Landstr. 100 
+69121 Heidelberg
++49 6221 64 25 - 0
++49 6221 64 25 - 20
+info@snpgroup.com
+www.snpgroup.com
+
+=====PAGE 155=====
+© 2019 SNP SE oder ein mit SNP verbundenes Unternehmen. Alle Rechte vorbehalten. Kein 
+Teil dieser Publikation darf ohne ausdrückliche Genehmigung durch SNP SE oder ein mit 
+SNP verbundenes Unternehmen in irgendeiner Form für irgendeinen Zweck vervielfältigt 
+oder weitergegeben werden. 
+Die hierin enthaltenen Informationen können jederzeit ohne Vorankündigung geändert 
+werden. Einige von SNP SE oder Vertriebspartnern vermarkteten Softwareprodukte können 
+Softwarekomponenten anderer Softwarehersteller enthalten.
+Das vorliegende Dokument ist eine vorläufige Version und nicht Teil Ihrer 
+Lizenzvereinbarung oder jeglicher anderen Vereinbarung mit SNP. Das vorliegende 
+Dokument enthält lediglich geplante Strategien, Entwicklungen und Funktionalitäten des 
+SNP-Produkts und ist für SNP nicht bindend, einen bestimmten Geschäftsweg, eine 
+Produktstrategie und/oder -entwicklung einzuschlagen.
+SAP und weitere im vorliegenden Text erwähnte SAP-Produkte und -Dienstleistungen sowie 
+die entsprechenden Logos sind Marken oder eingetragene Marken der SAP SE (oder eines 
+mit SAP verbundenen Unternehmens) in Deutschland und anderen Ländern.
+Alle weiteren hier erwähnten Produkt- und Dienstleistungsnamen sind Marken der 
+entsprechenden Unternehmen.
+Heidelberg, 2019
+Haftungsausschluss
+SNP 3 [TC] Transformation Cockpit © SNP
+155
+05.02.2018
+

@@ -1,0 +1,5501 @@
+=====PAGE 1=====
+SNP2[TC] Transformation Cockpit 
+
+=====PAGE 2=====
+COMPANY
+Titel
+SNP2[TC]
+October 2019 
+TC Version: 19.03 
+Service Pack: SP00
+Transformation Cockpit 
+
+=====PAGE 3=====
+Transformation Cockpit 
+03.02.2020
+3
+Prerequisites
+
+SNP1
+
+SAP application consultants with 
+solid knowledge in the 
+implementation of at least one 
+SAP module
+
+ABAP and SQL skills
+
+Basic knowledge in data 
+migration with SAP Standard 
+tools (LSMW, Batch Input, etc.)
+Duration
+
+4 days
+
+Support: 
+•
+support-tc@snpgroup.com
+Target Group
+
+Future users of Transformation 
+Cockpit
+
+=====PAGE 4=====
+03.02.2020
+Agenda 
+01
+Transformation Cockpit –
+Introduction
+02
+Prerequisites 
+03
+Scenario  
+04
+Tasks 
+05
+Data Objects 
+06
+Number Ranges
+4
+07
+Rule Concept and Syntax 
+Check
+
+=====PAGE 5=====
+03.02.2020
+Agenda 
+14
+Certification
+08
+Import Rules
+09
+Programming
+10
+Creating and Executing
+Transformation
+11
+Data Consistency Verification
+12
+Tools and Additional Features
+5
+Export Rules 
+13
+
+=====PAGE 6=====
+01 Transformation Cockpit – Introduction
+6
+
+=====PAGE 7=====
+01 Transformation Cockpit – Introduction
+03.02.2020
+7
+Learning Goal 
+In this chapter you will learn what transformation scenarios 
+exist and how your transformation can be successful with 
+the SNP Bluefield Approach.
+Furthermore, you will learn how transformation projects are 
+carried out technically as well as on the project side using 
+Transformation Backbone with SAP LT and gain an initial 
+insight into the structure of the transformation software 
+Transformation Cockpit.    
+
+=====PAGE 8=====
+Transformation 
+Scenarios 
+SNP Transformation Backbone with SAP LT
+Multiple SAP Transformation Projects in ONE STEP
+S/4HANA
+03.02.2020
+8
+MERGE
+SPLIT
+MOVE
+HARMONIZE
+
+=====PAGE 9=====
+SNP Bluefield Approach 
+03.02.2020
+9
+SNP
+BLUEFIELD
+APPROACH
+ANALYZE
+CREATE
+MIGRATE
+VALIDATE
+Convert
+
+=====PAGE 10=====
+S/4HANA 
+TRANSFORMATION 
+APPROACHES
+SNP Transformation Backbone with SAP LT
+GREENFIELD
+New implementation of SAP S/4HANA
+Re-(new) design of business processes
+Migration of master data and open 
+positions
+BLUEFIELD
+Harmonization & Consolidation into a 
+(global) SAP S/4HANA system or 
+selective data migration
+Selective data migration per entity as an 
+option 
+Combination of GREENFIELD and 
+BROWNFIELD
+BROWNFIELD
+Upgrade of current system to S/4HANA 
+system
+Keep business processes wherever 
+possible
+Changes limited to SAP S/4HANA 
+architecture requirements
+SAP ERP System
+OnPremise
+S/4 Cloud
+Non-SAP System
+ERP System A
+ERP System B
+ERP System C
+S/4 Cloud
+OnPremise
+ERP System
+OnPremise
+03.02.2020
+10
+
+=====PAGE 11=====
+03.02.2020
+11
+SNP Bluefield Approach – Analyze 
+Trans-
+formation
+Org. Unit 1
+Org. Unit 2
+Org. Unit 3
+Org. Unit 2
+Org. Unit 3
+Master
+Data
+Analysis +
+Harmon-
+ization with
+Golden
+Record
+Customizing
+Analysis
+TARGET
+Blueprint
+System Scan/
+Interface 
+Scanner
+SOURCE
+Customizing Analysis
+Repository Analysis
+
+=====PAGE 12=====
+SNP Bluefield Approach – Create and Convert 
+03.02.2020
+12
+Data Migration
+Technical conversion 
+based on new table 
+structures in S/4HANA
+Build S/4HANA
+Customizing 
+restructured 
+processes in 
+S/4HANA 
+System Shell 
+Copy (RESC)
+Upgrade/Unicode
+Shell Conversion
+to S/4HANA
+Use of the built-up 
+system as target system 
+for data migration and 
+transformation with 
+SNP Transformation 
+Backbone with SAP LT
+Data migration on the 
+basis of functional 
+rules (e.g. introduce 
+business partner, new 
+general ledger) 
+
+=====PAGE 13=====
+SNP Bluefield Approach – Migrate
+03.02.2020
+13
+Data
+Selections
+Mappings
+1. Data export
+2. Data import
+3. Verification
+File system with compressed data 
+Source Client
+Data
+Interfaces
+Customizing
+Repository
+Target Client
+Data
+Interfaces
+Customizing
+Repository
+Data
+Data
+Data
+Data
+Data
+Data
+Data
+Data
+Data
+Data
+Data
+Data
+Data
+Data
+Data
+Data
+SNP TRANSFORMATION 
+BACKBONE with SAP LT 
+SNP | Transformation Backbone 
+Cockpits on the control system
+Selection rules
+Selection rules
+Selection rules
+Import rules
+Import rules
+Import rules
+1
+2
+3
+Log
+
+=====PAGE 14=====
+SNP Bluefield Approach – Validate
+03.02.2020
+14
+Automated
+Testing
+Automated tests 
+with Transformation 
+Scope 
+Data Consistency 
+Verification
+Foreign key check, 
+domain fixed values, 
+value tables
+Visual data
+verification
+Number of 
+records, table fill 
+levels 
+Transactional 
+tests via test 
+units 
+Random tests
+within transactions
+Technical data 
+validation and 
+consistency check 
+Functional tests
+customer
+
+=====PAGE 15=====
+Project phases
+Project Setup
+Analysis
+Implemen-
+tation
+Test
+Go-Live
+Design
+03.02.2020
+Hypercare
+Review
+Present SNP 
+procedure 
+Determine the 
+system 
+landscape 
+Project planning
+Perform system 
+scan 
+Delivery 
+Transformation 
+Backbone 
+Kick-off
+Detailed 
+Analysis Crystal 
+Bridge 
+Creating data 
+object list 
+Analysis 
+interfaces
+Customizing, 
+Repository 
+Analysis 
+Scoping
+Workshops 
+Adjust data 
+object list 
+Ruleset 
+definition 
+Create blueprint 
+Rule-set 
+implementation 
+Maintaining and 
+checking 
+selections 
+Maintaining and 
+checking 
+mappings
+Perform and 
+protocol 
+individual tests 
+Validate data 
+Perform mass 
+tests 
+Transactional 
+data check
+Data 
+Consistency 
+Verification
+Automated 
+Testing 
+Go Live 
+simulation 
+according to 
+migration script
+Go Live 
+Cut Over 
+Data Validation 
+Approval
+Support by 
+project team 
+If necessary, 
+post-migrations 
+Lessons learned
+Questionnaire
+QM 
+Project review
+
+=====PAGE 16=====
+Project Schedule
+03.02.2020
+16
+
+=====PAGE 17=====
+Transformation Using theTransformation Cockpit 
+03.02.2020
+17
+• Set Up Scenario
+• Select/Adapt
+Rules
+Scenario
+(Tables&Rules)
+• Selections/ 
+Connections
+• Global Export 
+Rules/Functions
+Export Rules
+• Maintain 
+Mappings
+• Global Import 
+Rules/Offsets/ 
+Functions
+Import Rules
+• Export
+• Import
+• Single Rules
+Syntax-Check
+• Mass Tests 
+(Export/Import)
+• Productive
+Migration 
+Trans-
+formation
+• Data Consistency 
+Verification
+• Automated
+Testing/Test Units
+Data 
+Validation
+Optimization
+
+=====PAGE 18=====
+Transformation Process
+03.02.2020
+18
+Source DB
+Master/
+Transactional Data
+Target DB
+Master/
+Transactional Data
+SAP Source
+SAP Target
+Table 
+Contents
+Table 
+Contents
+SNP TC requires
+•
+ABAP™ knowledge,
+•
+SQL skills and
+•
+Module experience
+Transaction
+/n/SNP/TC
+Transaction
+/n/SNP/TC
+Files 
+compressed
+SNP 
+Control System
+Rules
+
+=====PAGE 19=====
+Target System
+Technical Process
+03.02.2020
+19
+Control System
+Source System
+Export Programs
+Import Programs
+Files
+Worklist
+Worklist
+writes
+reads
+DB
+DB
+reads
+writes
+reads out DDIC
+reads out DDIC
+Rule Base
+Controller
+Shadow DDIC
+creates & monitors
+creates & monitors
+
+=====PAGE 20=====
+Technical Process
+03.02.2020
+20
+Control System
+Source System
+Export Programs
+Files
+Worklist
+writes
+reads
+DB
+reads
+reads out DDIC
+Rule Base
+Controller
+Shadow DDIC
+creates & monitors
+Target System calls
+Import Programs
+Worklist
+DB
+writes
+reads out DDIC
+creates & monitors
+SAP 
+LT 
+Switch from TC to MWB is
+feasible on scenario level
+
+=====PAGE 21=====
+Use of Satellite Systems | Test Migration/Productive Migration 
+03.02.2020
+21
+System copy
+System copy
+File System
+File System
+
+=====PAGE 22=====
+Use of Satellite Systems | Test Conversion/Productive Conversion 
+03.02.2020
+22
+File System
+System copy
+File System
+
+=====PAGE 23=====
+Excercise
+Scenario 
+03.02.2020
+23
+Objective
+The objective of this exercise is gaining knowledge of usage and functions of the SNP Transformation 
+Cockpit.
+Task
+The exercises include the usage of a provided exercise scenario in order to transfer sales documents 
+from source client 800 to target client 9XX. All relevant sales document data has to be transferred and 
+partly changed using mapping rules. The data of the sales document must be consistent in the target 
+system. 
+Challenge
+In order to display the sales order, not only data of the sales order need to be migrated, but also 
+master data for customers, materials and addresses.
+
+=====PAGE 24=====
+03.02.2020
+24
+Exercise – Relevant Tables
+
+=====PAGE 25=====
+03.02.2020
+25
+License  
+Information 
+Information 
+Product Vers.:
+SNP Transformation 
+Backbone 
+Basic License
+
+=====PAGE 26=====
+03.02.2020
+26
+Transformation Cockpit – Structure
+Systems
+Central/Source/Target System 
+Connections/Table Analysis
+Tasks
+Task List/Tasks
+(Status/Dependencies)
+Data Objects
+Scenario/Modules/Objects/Tables/Rules/Events
+Number
+Ranges  
+Save NRIV/Check NRIV/Update NRIV/Mass Maintenance
+Global
+Selections/Mappings/Export/Import Rules/ 
+Offsets/Events/Functions/Table Definitions
+Trans-
+formation
+Runs [Blocks] (Export/Predecessors/Import)/Protocols)
+System-
+Monitor
+Shortdumps/Jobs/File System/Lock Entries/ Logged on 
+Users/Process Overview/System Log
+
+=====PAGE 27=====
+01 Transformation Cockpit – Introduction
+03.02.2020
+27
+Summary 
+This chapter has given you an initial insight into 
+transformations using SNP Transformation Backbone with 
+SAP LT. 
+You have learned: 
+Which transformation scenarios exist
+What steps the SNP Bluefield Approach includes
+Which project steps a transformation project has
+How the transformation is carried out technically 
+How the Transformation Cockpit is structured
+
+=====PAGE 28=====
+02 Prerequisites
+28
+
+=====PAGE 29=====
+02 Prerequisites 
+03.02.2020
+29
+Learning Goal 
+In this chapter, you will learn which prerequisites must be 
+created for the transformation with the Transformation 
+Cockpit. 
+You learn: 
+Which system constellations are possible for the 
+transformation 
+Which steps are necessary to set up the system 
+connections
+How to maintain whitelist entries in the system 
+
+=====PAGE 30=====
+System Constellation Migration/Conversion
+Migration 
+Rules
+File System
+RFC
+RFC
+RFC
+DIA
+DIA
+03.02.2020
+30
+
+=====PAGE 31=====
+03.02.2020
+31
+System Constellation Migration/Conversion
+Rules
+File System
+RFC
+RFC
+DIA
+Conversion
+
+=====PAGE 32=====
+03.02.2020
+32
+System Constellation with no Separate Control System
+Rules
+File System
+RFC
+RFC
+DIA
+Source and target system can be used as control systems (source 
+system is recommended) 
+The transport request received includes all components for control
+and satellite systems
+Disadvantages:
+Resource allocationTC becomes significantly slower when the
+system has more load
+Rule maintenance is not possible during the reconstruction of the 
+source/target system 
+Saving and reimporting of the ruleset is necessary for system refresh
+Reports: 
+/SNP/TE02_SCENARIO_XML_EXPORT  
+/SNP/TE02_SCENARIO_XML_IMPORT
+
+=====PAGE 33=====
+03.02.2020
+33
+Several Source Systems for one Scenario
+Rules
+File System
+Table Content/Data
+RFC
+RFC
+DIA
+RFC
+y
+Import per 
+Source 
+System
+
+=====PAGE 34=====
+03.02.2020
+34
+Maintenance of Whitelist Entries for RFC-Connections
+*          
+To use RFC-connections within the transformation, you must enter them in a whitelist
+Attention: The whitelist entries must be maintained on all systems for all clients to be used
+•
+
+=====PAGE 35=====
+System-ID
+Client
+IP-Adresse
+Description
+RFC Destination
+Callback RFC
+Destination
+Dialog RFC Destination
+TRA
+001
+123.45.678.901
+Control System
+SNP_TB_TRA_001
+SNP_TB_TRA_001
+SNP_TB_TRA_001_DIA
+SRC
+800
+234.56.789.012
+Source System 800
+SNP_TB_SRC_800
+SNP_TB_TRA_001
+SNP_TB_SRC_800_DIA
+TAR
+900
+345.67.890.123
+Target System 900
+SNP_TB_TAR_900
+SNP_TB_TRA_001
+SNP_TB_TAR_900_DIA
+RFC Destination            
+SNP_TB_TAR_900
+Callback RFC Destination  SNP_TB_TRA_001
+Dialog RFC Destination     SNP_TB_TAR_900_DIA
+Description               
+Target System 900
+System-ID                  
+TAR
+Client                    
+900
+IP-Address
+345.67.890.123
+System No.              
+00
+Installation No.               0020703987
+Fingerprint                
+8E5B81170329833C5D46ACED1968988E
+System-Fingerprint         0CA510E5103707BDBC897FA7AA0F7634
+Printer                    
+LP01
+Database-System
+ORACLE
+03.02.2020
+35
+System Maintenance in Transformation Cockpit
+Go to System Maintenance 
+resp. /SNP/TCSYS  
+Update System Details
+
+=====PAGE 36=====
+36
+Aufbau Transformation Cockpit
+RFC connections
+System Maintenance
+Whitelist Entries
+
+=====PAGE 37=====
+37
+EXERCISE 1
+Check the RFC 
+connections and 
+whitelist entries
+Maintain systems
+on Transformation 
+Cockpit
+
+=====PAGE 38=====
+02 Prerequisites
+03.02.2020
+38
+Summary 
+In this chapter, you have learned which prerequisites are 
+necessary for the transformation with the Transformation 
+Cockpit. 
+You are able to: 
+•
+Describe possible system constellations for the 
+transformation   
+•
+Set up system connections 
+•
+Maintain whitelist entries in the system 
+
+=====PAGE 39=====
+03 Scenario 
+39
+
+=====PAGE 40=====
+03 Scenario 
+03.02.2020
+40
+Learning Goal 
+In this chapter, you learn what role the scenario plays within 
+the Transformation Cockpit. 
+You learn: 
+•
+Which options are available when working with scenarios 
+and how to apply them  
+•
+How to assign systems to the scenario
+•
+Which function the table analysis has
+•
+At which point run parameters for the scenario can be 
+maintained and what their meaning is 
+
+=====PAGE 41=====
+03.02.2020
+41
+Scenario – Delivery Content
+1. Delivery Content must be uploaded manually
+Existing content is not currently delivered, it must be uploaded separately with the beginning of the project.
+2. Automated Configuration of Scenario (In Planning)
+In CrystalBridge project relevant data objects can be determined via the selection. These can be transferred into the 
+TC using an XML-File. Additionally, selections and mappings can be transferred.
+Content TC
+release-
+dependent
+Scenario TC
+Control System
+XML-File
+CrystalBridge
+Scenario TC
+Control System
+XML-File
+
+=====PAGE 42=====
+Manage Scenario
+03.02.2020
+42
+Scenario active 
+in TC 
+(Tables & Rule 
+Base)
+Switch 
+Scenario
+Create 
+Scenario
+Download 
+Scenario
+Copy 
+Scenario
+Upload 
+Scenario
+
+=====PAGE 43=====
+Manage Scenario – Scenario Upload 
+03.02.2020
+43
+Import 
+Import of single objects
+Link to
+•
+Global selections
+•
+Global rules
+•
+Offsets
+•
+Functions
+will not be validated.
+
+=====PAGE 44=====
+Execute in        
+background can
+be scheduled
+on the server
+Manage Scenario – Scenario Download
+03.02.2020
+44
+Content of the zipped XML-File
+ZSNP_SALES_ORDER_20160719_161530.xml
+ZSNP_SALES_ORDER_20160719_161530.xml
+Example Size:
+zipped:
+168 KB
+unzipped: 
+5.252 KB
+Scenario _   Date  _  Time
+Scenario _   Date  _  Time
+
+=====PAGE 45=====
+Assigning Systems to Scenario
+03.02.2020
+45
+
+=====PAGE 46=====
+Table Analysis
+03.02.2020
+46
+Rules
+The table analysis collects information about the 
+DDIC and the number of data records in the tables 
+from the source and target systems and stores it in 
+the control system
+The data objects cannot be processed without table 
+analysis
+Results will be saved in the spool of the job as well
+as in table /SNP/CE00TABINFO
+The shadow DDIC on the control system can be 
+generated/refreshed for any desired tables and 
+systems (Report: /SNP/TE02_UPDATE_TABLE_INFO)
+123456789
+123456789
+
+=====PAGE 47=====
+Basic Settings Scenario – Run Parameter
+03.02.2020
+47
+Description
+Value
+Parameter
+E-mail interval (minutes)
+60
+EMAIL_INTERVAL_MIN
+Enable e-mail dispatch
+EMAIL_NOTIFICATIONS
+Encryption password
+ENCRYPTION_PASS
+No. of process restarts
+0
+EXEC_PROC_RETRY_CNT
+Global functions export
+X
+GLOBAL_FUNCTION_EXPORT
+Global functions import
+X
+GLOBAL_FUNCTION_IMPORT
+In-memory generation
+IN_MEMORY_GENERATION
+Max. number of log entries
+100
+LOG_MAX_ENTRIES
+Max. no. of in-memory prog
+5
+MAX_IN_MEMORY_PROGRAMS
+Max. package size (MB)
+50MB
+MAX_PACKAGE_SIZE_MB
+Max. package size (records)
+200000
+MAX_PACKAGE_SIZE_REC
+NZD active?
+NZD_ACTIVE
+Pack. size for other tasks
+30
+TASK_PACKAGE_SIZE
+Proc. for other tasks
+4
+TASK_PROC_COUNT
+
+=====PAGE 48=====
+Run Parameter – E-Mail Interval (Minutes)
+03.02.2020
+48
+Discription
+Value
+Parameter
+E-Mail interval (minutes) 
+60
+EMAIL_INTERVAL_MIN
+Enable e-mail dispatch
+EMAIL_NOTIFICATIONS
+From the Transformation Cockpit, you can send e-mails about the 
+transformation status, mini-system monitor information, and 
+syntax-check-runs
+In the e-mail interval parameter, the interval for the sending of e-
+mails is indicated. The standard setting is 60 minutes
+The above-mentioned functionality is switched on via the Enable e-
+mail dispatch running parameter 
+Note: To be able to use this function, SAP must be configured to send 
+e-mails (SMTP server, etc.) 
+
+=====PAGE 49=====
+Run Parameter – Encryption Password
+03.02.2020
+49
+Description
+Value
+Parameter
+Encryption Password
+ENCRYPTION_PASS
+The entry of an encryption password serves the protection of 
+personal data prior to export and the decryption of data during 
+import
+The encryption is activated by entering a password in the scenario 
+and requires additional run time of approximately 30%
+The table that is to be encrypted must be maintained in 
+/SNP/TE00TABENCR
+Note: If you use encryption, you should define the password only 
+once, otherwise problems will occur with data that has already been 
+exported
+
+=====PAGE 50=====
+Run Parameter – Number of Process Restarts
+03.02.2020
+50
+Description
+Value
+Parameter
+No. of process restarts
+0
+EXEC_PROC_RETRY_CNT
+This parameter is used to restart processes within a block X times if 
+these terminate for example due to an exhausted roll back segment, 
+storage shortage on the app server or deadlocks
+
+=====PAGE 51=====
+Run Parameter – Functions
+03.02.2020
+51
+Description
+Value
+Parameter
+Global functions export
+X
+GLOBAL_FUNCTION_EXPORT
+Global functions import
+X
+GLOBAL_FUNCTION_IMPORT
+Determines where functions are generated, on the source and/or on 
+the target system
+The indicator can be activated for each function separately in the 
+global area 
+Helps avoid syntax errors during syntax check if data structures do 
+not exist on one of the systems in scope
+
+=====PAGE 52=====
+Run Parameter – In-Memory Generation 
+03.02.2020
+52
+Description
+Value
+Parameter
+In-Memory Generation
+IN_MEMORY_GENERATION
+Max. no. of in-memory prog
+5
+MAX_IN_MEMORY_PROGRAMS
+In-memory generation shortens the generation time of the 
+programs and can be activated using this parameter
+The Max no. of in-memory prog parameter adjusts the number of 
+programs that are held in the storage simultaneously. An increase 
+of the parameter can achieve an improved runtime, if many small 
+tables are processed. The value range is between 2 and 35.
+Note: Increasing the value can lead to short dumps in connection with 
+the program buffer (memory overflow).
+
+=====PAGE 53=====
+In-Memory Generation 
+03.02.2020
+53
+In-Memory Generation
+Persistent Generation
+Programs/source texts are saved in the SNP table 
+/SNP/PX0XMEMREP and are only loaded into the 
+storage during run time
+Advantage:
+Generation can be parallelized and thus greatly 
+shortened (up to 1/6)
+Disadvantage: 
+Export/import programs cannot be viewed in SE38 
+Currently not yet applicable across the board
+Standard Version 
+Reports are created on the satellite system
+Advantage: 
+Programs can be viewed in SE38 and debugged, if 
+necessary 
+Disadvantage:
+Only partially parallelizable The start of many tables 
+is subject to severe delays 
+
+=====PAGE 54=====
+Run Parameter – Number Log Entries
+03.02.2020
+54
+Description
+Value
+Parameter
+Max. no. log entries
+100
+LOG_MAX_ENTRIES
+The parameter LOG_MAX_ENTRIES defines how many log entries 
+can be logged per table or object as maximum
+The parameter is valid for the usage of the API-Call 
+API_MESSAGE_ADD as well as for checks regarding duplicate keys 
+in internal tables and database tables
+
+=====PAGE 55=====
+Run Parameter – Package Size
+03.02.2020
+55
+Description
+Value
+Parameter
+Max. package size (MB)
+50MB
+MAX_PACKAGE_SIZE_MB
+Max. package size (records)
+200000
+MAX_PACKAGE_SIZE_REC
+Datasets are stored up to a memory size of 50 MB or 200,000 
+records per file – whichever comes sooner
+This package size can be overwritten per table in an object
+The number of files per table is not limited
+
+=====PAGE 56=====
+Run Parameter – NZD active
+03.02.2020
+56
+Description
+Value
+Parameter
+NZD active?
+NZD_ACTIVE
+Determines whether a scenario runs with NZD. At the moment, the 
+parameter must be activated manually. Forthcoming, it is to be set 
+automatically in the NZD workflow
+It is used for delta-migrations to identify delta runs in the rule set. 
+Access is granted via the environment variable te-nzd_active
+
+=====PAGE 57=====
+Run Parameter – Other Tasks
+03.02.2020
+57
+Description
+Value
+Parameter
+Pack. size for other tasks
+30
+TASK_PACKAGE_SIZE
+Proc. for other tasks
+4
+TASK_PROC_COUNT
+Other tasks include rule set generation in the static export and 
+import programs for source and target as well as syntax checks 
+TASK_PACKAGE_SIZE determines the maximum number of objects 
+per process 
+TASK_PROC_COUNT specifies the available processes and thus, 
+among other things, the degree of parallelism for other tasks 
+Note: Too many parallel processes can lead to performance losses 
+
+=====PAGE 58=====
+58
+Manage scenario (create, upload 
+etc.) 
+Assigning systems to scenario
+Checking system connections
+Checking and maintaining scenario 
+parameters
+
+=====PAGE 59=====
+59
+Exercise 2
+Creating a scenario
+Assigning systems 
+to the scenario
+Upload parts from 
+an existing scenario
+
+=====PAGE 60=====
+03 Scenario 
+03.02.2020
+60
+Summary 
+In this chapter, you have learned what role the scenario 
+plays within the Transformation Cockpit. 
+You are able to: 
+•
+Create, download, upload, and select scenarios
+•
+Assign systems to the scenario and maintain additional 
+settings 
+•
+Describe how the table analysis works 
+•
+Explain and maintain run parameters 
+
+=====PAGE 61=====
+04 Tasks 
+61
+
+=====PAGE 62=====
+04 Tasks 
+03.02.2020
+62
+Learning Goal 
+In this chapter you will get to know the tasks area.
+You learn: 
+•
+How to create task lists 
+•
+How to assign tasks and define dependencies between 
+tasks 
+•
+Which possible statuses can be assigned to the tasks 
+
+=====PAGE 63=====
+Tasks
+03.02.2020
+63
+ID
+Title
+Description
+Status
+01
+Set up satellite system
+Setup source and target system, 
+check logical system, maintain 
+whitelist entries
+Done
+Task List
+Title
+Description
+Status
+Source system
+Maintain RFC destination
+Done
+Target system
+Maintain RFC destination
+Done
+Source system
+Add to whitelist
+Done
+Target system
+Add to whitelist
+Done
+Tasks (Set up satellite systems)
+Status Name
+Erroneous
+In Progress
+Unprocessed
+Done
+Status
+Status
+Multiple dependencies feasible: 1,2,3
+
+=====PAGE 64=====
+64
+Maintaining a task list
+Creating tasks
+Defining dependencies 
+
+=====PAGE 65=====
+65
+Exersice 3
+Creating task list 
+and tasks
+Defining 
+dependencies
+
+=====PAGE 66=====
+04 Tasks 
+03.02.2020
+66
+Summary
+In this chapter, you have learned how to navigate within the 
+tasks area.
+You are capable of:
+•
+Creating task lists 
+•
+Assigning tasks and define dependencies between tasks 
+•
+Assigning a status to the defined tasks 
+
+=====PAGE 67=====
+05 Data Objects 
+67
+
+=====PAGE 68=====
+05 Data Objects 
+03.02.2020
+68
+Learning Goals 
+In this chapter, you will learn what a data object is and what 
+functions are available to you in this area.
+You will learn: 
+•
+Which properties data objects have 
+•
+How to create and copy them 
+•
+Which properties can be determined at table level and 
+what meaning they have 
+•
+What business objects are and how they relate to data 
+objects 
+
+=====PAGE 69=====
+Data Object – Structure
+03.02.2020
+69
+VBAK
+Alias: VBAK
+• #1
+• Sales document: header data
+• Predecessor: 
+VBAP
+Alias: VBAP
+• #2
+• Sales document: Item data
+• Predecessor: 1
+STXH
+Alias: STXH2
+• #3
+• SD – Texts
+• Predecessor: 2 
+Status: Inactive
+Mode: No_Import
+Status: Inactive
+VBAU
+No.
+Table 
+name
+Predecessor
+No.
+Selection
+tables
+Differing
+target
+Status
+Export 
+predecessor
+Export 
+method
+Import 
+sequence
+Mode 
+Option
+Sum
+fields
+1
+VBAK
+0
+Active
+SR
+10
+FROM_BLOCK
+APPEND
+2
+VBAP
+1
+VBAK
+Active
+SR
+10
+FROM_BLOCK
+APPEND
+3
+STXH
+2
+VBAK/VBAP
+Active
+SR
+10
+FROM_BLOCK
+APPEND
+Mass maintenance
+Mass maintenance
+Maint.
+Maint.
+Report to export all active 
+tables into a CSV file: 
+/SNP/TE02_TABLES_TO_CSV
+
+Data objects represent 
+business-related data 
+(usually separated into 
+master data and 
+transactional data) of an SAP 
+system at table level. They 
+contain tables and their 
+dependencies on each other. 
+
+=====PAGE 70=====
+Data Object – Table Connections
+70
+VBAK
+• Sales document: 
+Header data
+VBAP
+• Sales document: 
+Line items
+Key
+Field from VBAK
+Field from VBAP
+VBELN
+VBELN
+POSNR
+SELECT *
+FROM VBAP
+FOR ALL ENTRIES IN <lt_seltab>
+WHERE
+VBAP~VBELN = <lt_seltab>-VBELN
+%_HINTS
+ORACLE '&prefer_in_itab_opt 1&'
+ORACLE '&prefer_union_all 0&'
+ORACLE '&max_in_blocking_factor 10&'
+ORACLE '&max_blocking_factor 10&'.
+SQL Preview
+03.02.2020
+Tables can also be connected via  
+parts of fields (Offset and length) 
+e.g. OBJNR(2)
+
+=====PAGE 71=====
+Data Objects – Adding Tables
+03.02.2020
+71
+Tables
+MA*
+Without tables from object
+Modules
+Development class
+Table class
+Delivery class
+Client-independent tables?
+X
+Only filled tables?
+X
+Add from DDIC
+Table 
+name
+Description
+SAP
+Mod.
+
+MABW
+Management of Differently 
+Maintained Mat. Data Retail
+MM
+
+MACID
+Run-time Object "Matchcode. ID"
+BC
+
+MACOB
+Run-Time Object "Matchcode
+Object"
+BC
+
+MAEX
+Material Master: Legal Control
+MM
+
+MAHNS
+Accounts blocked by dunning 
+selection
+FI
+
+MAKG
+Material Cost Distribution Groups
+PP
+
+MAKT
+Material Descriptions
+MM
+Example result search
+
+
+
+
+=====PAGE 72=====
+MARA
+MAPE
+MARC
+MARCH
+MARD
+MARDH
+MBEW
+Data Object – Copying Tables from Data Object
+Copy Data Objects
+Copy from data object
+1:1 Copy 
+Within the selected scenario 
+Is duplicated via the context 
+menu of the data object 
+Duplicate
+Tables and selections are 
+transferred 1:1 
+03.02.2020
+72
+Copy can be made cross-scenario 
+Selection of tables to be transferred 
+Copy Tables from Data Object 
+Scenario
+Data Object
+Copy export rules?
+Copy import rules?
+Next
+SNP_SALES_ORDER
+MARA
+
+
+
+=====PAGE 73=====
+Data Object - Transfer Export Rules when Copying 
+03.02.2020
+73
+MARA
+MAPE
+MARC
+Source object
+Scenario: SNP_SALES_ORDER
+Target object
+Scenario: SNP_EXERCISE 
+Global Selections
+Copying Data Objects Cross-Scenario with Export Rules 
+MARA
+MAPE
+MARC
+= Z-03, Z-04
+= 1000
+Before copy:
+SEL_MATNR = Z-03, Z-04 
+After copy:
+SEL_MATNR = Z-03, Z-04 
+SEL_WERKS = 1000
+= M-01, M-02
+SEL_MATNR
+SEL_WERKS
+= 1000
+SEL_MATNR
+SEL_WERKS
+Field Selection
+Field Selection
+
+=====PAGE 74=====
+Data Object - Table Properties Export 
+74
+VBAK
+Status/
+Export method
+DKP disabled/ 
+Selection mode
+Blocking Factor (FAE)/ 
+FAE Package Size 
+(records)
+Package Size/Parallel 
+Hint (Oracle)
+
+Status: Active (A) or 
+inactive (I)
+
+Export method: Scout 
+Reader, Direct Reader 
+
+Duplicate Key 
+Prevention = 
+avoidance of 
+duplicate keys on the 
+import side during 
+export already
+
+Selection mode: Field 
+selection (declarative) 
+or S (free selection) 
+for complex 
+selections in SQL 
+expert mode 
+
+Package size can be 
+determined for each 
+table; otherwise, the 
+package size at 
+scenario level applies  
+
+Parallel Hint is the 
+specification for the 
+degree of 
+parallelization of SQL 
+statements on Oracle
+
+The blocking factor 
+determines the 
+maximum number of 
+rows to be processed 
+in the internal table 
+
+The FAE package size 
+specifies the size of 
+the segmentation of a 
+package into 
+subpackages
+Table Properties Export
+Table 
+name/Alias
+
+Name of the currently 
+selected table and its 
+alias
+
+Aliases must be 
+unique within an 
+object 
+
+They are used to 
+identify the table in 
+the coding
+03.02.2020
+VBAK_1
+A
+DR
+X
+F
+10
+0
+4
+
+=====PAGE 75=====
+Scout Reader versus Direct Reader 
+03.02.2020
+75
+Scout Reader     
+Direct Reader
+FOR ALL ENTRIES procedure is used, which means 
+that dependent tables can only be processed after 
+the selection table has been processed
+Selection table may have been processed in same 
+or different block Last export is used
+Attention when changing the rules of the selection 
+table; if necessary, a new export is required
+Two-level processing of start tables (Scout and 
+Reader) 
+Table links are represented via INNER JOINs A table 
+is processed with exactly one statement 
+Dependent table can be processed independently of the 
+status of the selection table
+Note: Events of superordinate tables cannot be 
+processed; however, free selections and declarative 
+selections will be taken into consideration 
+SELECT *
+FROM VBAP
+FOR ALL ENTRIES IN <lt_seltab>
+WHERE
+VBAP~VBELN = <lt_seltab>-VBELN
+SELECT VBAP~MANDT VBAP~VBELN 
+VBAP~POSNR VBAP~MATNR […] 
+FROM VBAP
+INNER JOIN vbak AS vbak
+ON vbak~vbeln = vbap~vbeln
+
+=====PAGE 76=====
+03.02.2020
+76
+DKP – Duplicate Key Prevention
+Problem:
+•
+Multiple selection of data records in dependent 
+tables with Scout Reader export method by 
+processing them in packages 
+•
+DKP is necessary if the selection table has more 
+key fields than are used for selecting the 
+dependent table (automatic recognition) 
+•
+DKP is very slow due to lack of parallelization 
+and runtime-intensive determination and 
+logging of the exported keys 
+Export File MARC 1        Export File MARC 2
+WERKS
+MATNR
+1000
+M-01
+2000
+M-02
+1000
+M-02
+WERKS
+MATNR
+2000
+M-03
+2000
+M-01
+1000
+M-04
+MARC
+MARA
+MATNR
+M-01
+M-02
+MATNR
+M-03
+M-01
+M-04
+Example: 
+Solution options:
+•
+Direct Reader 
+•
+Adapting the object structure (table hierarchy, 
+collecting values) 
+•
+Completing the table connection 
+Export
+
+=====PAGE 77=====
+Deactivate empty tables
+Data Object – Deactivate Empty Tables
+03.02.2020
+77
+Filled
+Status
+Table type
+X
+Active
+TRANSP
+X
+Active
+TRANSP
+X
+Active
+TRANSP
+X
+Active
+TRANSP
+X
+Active
+CLUSTER
+X
+Active
+TRANSP
+X
+Active
+TRANSP
+X
+Active
+TRANSP
+X
+Active
+TRANSP
+inactive
+TRANSP
+MARA
+
+MARC
+
+MLEA
+
+MAPE
+
+MARA
+
+CDHDR
+
+CDPOS
+
+DRAD
+
+KSSK
+
+AUSP
+
+INOB
+The function can 
+no longer be used 
+with multiple 
+source systems.
+
+=====PAGE 78=====
+Data Object – Relation to Business Objects
+03.02.2020
+78
+VBAU
+[VBAK-VBTYP]
+B
+C
+G
+
+=====PAGE 79=====
+Data Object – Generation from Business Objects
+03.02.2020
+79
+Identical copies of VBAU_TRAINING are generated
+
+=====PAGE 80=====
+80
+Structure of the area data objects
+Creating tables, copying and 
+connect them
+Deactivating tables
+Business Objects
+
+=====PAGE 81=====
+81
+Exercise 4
+Creating module, data 
+object, table
+Copying tables from 
+data object
+Checking table 
+connections
+
+=====PAGE 82=====
+05 Data Objects 
+03.02.2020
+82
+Summary 
+In this chapter, you have learned what a data object is and 
+how to use functions in this area.
+You are able to: 
+•
+Describe properties of data objects  
+•
+Create and copy data objects 
+•
+Define properties at table level and describe their 
+meaning
+•
+Define business objects and their meaning 
+
+=====PAGE 83=====
+06 Number Ranges
+83
+
+=====PAGE 84=====
+06 Number Ranges 
+03.02.2020
+84
+Learning Goal 
+In this chapter, you will learn how the number range area is 
+structured and what it means.
+You learn: 
+•
+Which strategies there are for dealing with number ranges 
+within the transformation project 
+•
+Which additional functions are important for handling 
+number ranges
+
+=====PAGE 85=====
+Number Ranges – Structure and Functions 
+03.02.2020
+85
+
+Enables mass maintenance of number range objects using various procedures: 
+
+Increment [internal number ranges in target]
+
+Difference Calculation [Internal Number Ranges]
+
+1:1 [internal number ranges]
+
+Inactive (adopt 1:1) [external number ranges in target]
+
+Various functions for saving 
+and analyzing number 
+ranges 
+
+=====PAGE 86=====
+86
+Saving NRIV
+Checking NRIV
+Updating NRIV
+Strategies for processing number 
+ranges
+
+=====PAGE 87=====
+06 Number Ranges 
+03.02.2020
+87
+Summary 
+In this chapter you have learned about number ranges. 
+You are able to: 
+•
+Describe number range strategies 
+•
+Explain saving NRIV, updating NRIV and checking NRIV
+
+=====PAGE 88=====
+07 Rule Concept and Syntax Check 
+88
+
+=====PAGE 89=====
+07 Rule Concept and Syntax Check 
+03.02.2020
+89
+Learning Goal 
+In this chapter, you will learn about the concept of rule 
+maintenance in the Transformation Cockpit.
+You will learn: 
+•
+How rules are defined and implemented 
+•
+What role the Global area plays
+•
+The significance of global rules with regard to data 
+consistency during transformation 
+•
+At which levels the syntax check can be performed 
+
+=====PAGE 90=====
+03.02.2020
+90
+General Rule Concept
+The project scope will be defined as selection for data export
+Rules are split into export and import rules
+The domain concept enables consistent adaptations to the data
+SNP Transformation Cockpit
+Transformation
+Cockpit with SAP LT
+Import 
+rules
+Migration 
+specialist
+01011001
+11011001
+11010101
+Workshops
+Export rules
+Business 
+Consultant/Key 
+User
+
+=====PAGE 91=====
+Process of Rule Maintenance and Implementation
+Develop Rules
+Rule maintenance in 
+Transformation Cockpit 
+Define Rules
+Implement Rules
+Design Rule Base
+Functional Test of Results
+03.02.2020
+91
+Test Migration
+Validate Results
+
+=====PAGE 92=====
+Global 
+03.02.2020
+92
+Global
+Export Rules
+Selections
+Import Rules
+Functions
+Mappings
+Events
+Own Tables
+Offsets
+
+=====PAGE 93=====
+Global Rules
+03.02.2020
+93
+Domain
+Table Field
+Data Element
+Scope:
+On every field of 
+the domain
+Scope:
+On one field of the 
+table
+Scope:
+On every field with 
+the data element
+1
+2
+3
+Table 
+Field
+1
+2
+3
+1
+2
+3
+1
+2
+3
+Domain
+z
+Data 
+Element
+STXH
+STXH
+STXH
+STXH
+STXH
+STXH
+STXH
+STXH
+
+=====PAGE 94=====
+03.02.2020
+94
+Domain Concept – Scope
+RESWK 
+(procurement plant)
+BEWRK
+(procurement plant)
+BEWRK
+(Plant from which
+material is procured)
+WERKS
+(CHAR 4) 
+WERKS 
+(Plant)
+WERKS 
+(Plant) 
+Table
+Table Field
+Fields are always consistent 
+with regard to data type and 
+length 
+Data Element
+In addition to technical type 
+properties (such as built-in data 
+type or reference type), it 
+contains the semantic meaning 
+(short text, documentation, etc.) 
+of an object. 
+Domain
+Defines technical attributes 
+(data type, length, number of 
+decimal places). 
+Can contain value range or 
+value table 
+EORD (Purchasing Source List)
+EQUP (Quota File: Item)
+EKPO (Purchasing Document Item)
+
+=====PAGE 95=====
+Syntax Check 
+03.02.2020
+95
+Export
+Export
+Import
+Import
+DIA
+BTC
+
+Syntax checks are used to statically check the ABAP source 
+code for formal correctness according to the following syntax 
+rules
+
+Can be executed manually or is executed automatically on the 
+affected system after the start of an export or import 
+Termination of the transformation on error 
+What is checked?
+
+The test is performed against the shadow DDIC of the standard 
+system  
+
+Completeness of the field usages of global rules can be 
+executed separately 
+Functional Scope: 
+Forward navigation with editing possibility
+Execution in dialog and background possible 
+Check across different levels (scenario to individual rule) 
+
+=====PAGE 96=====
+96
+Navigating in the Global area  
+Performing Syntax Check 
+
+=====PAGE 97=====
+07 Rule Concept and Syntax Check 
+03.02.2020
+97
+Summary
+In this chapter, you have learned which rule maintenance 
+options you have in the Transformation Cockpit.
+You are able to: 
+•
+Name basic steps for definition and implementation 
+•
+Navigate within the Global area 
+•
+Describe the meaning of global rules for transformation 
+•
+Perform syntax checks at different levels and in the 
+background 
+
+=====PAGE 98=====
+08 Export Rules 
+98
+
+=====PAGE 99=====
+08 Export Rules 
+03.02.2020
+99
+Learning Goals 
+In this chapter you will learn important functions for 
+selecting and exporting data. 
+You learn: 
+•
+What possibilities and special features you have when 
+selecting data 
+•
+How to create and assign selections 
+•
+Which events exist in the export area and how they are 
+used 
+•
+How the data is processed during export 
+
+=====PAGE 100=====
+Selections – Overview
+03.02.2020
+100
+TC*
+(declarative)
+Connection
+Field 
+Selection
+Globale 
+Selection
+[unlimited]
+TC
+(imperative) 
+SQL Expert 
+Mode
+(Open SQL)
+AND
+AND
+AND
+AND
+*Recommended 
+approach
+Maintenance:
+
+Declarative mode with AND link or SQL 
+Expert mode for more complex selections
+
+Values in database format (leading zeros) 
+Global Selections: 
+
+Central creation in the Global area on the Selections tab or 
+alternatively in the Data Objects area directly on the table
+
+Reusable in all tables with a field of the assigned domain (e.g. 
+BUKRS) 
+
+Assignment is made individually for each required table in the 
+export area of the table under Selections or in large quantities 
+via Functions Apply global selections 
+Note: When deleting a global selection, the links to the tables are 
+also deleted 
+Field Selection: 
+
+Applies only to the selected field within the selected table
+
+Cannot be reused 
+
+=====PAGE 101=====
+Selections - Declarative Mode versus SQL Expert Mode
+101
+Type of selection
+Title
+Field 
+name
+Value
+Global Selection
+Selection: Sales 
+Document
+VBELN
+0000005427
+Field Selection
+Field Selection for 
+Sales Doc Type
+AUART
+TA (Standard 
+Order)
+Global Selection
+Selection: Sales 
+Organization
+VKORG
+1000
+Declarative VBAK (Header Table):
+Switch to export mode is possible on table level (Tab: Export)
+Selection mode S (Free Selection) 
+Note: When you switch from the SQL expert mode back to the 
+declarative variant, the assigned selections are lost 
+SELECT *
+FROM VBAK
+WHERE
+VBAK~VBELN IN {sel:sel_vbeln} AND
+VBAK~AUART IN {range:VBAK:AUART}  AND
+VBAK~VKORG IN {sel:sel_vkorg}
+%_HINTS
+ORACLE 'PARALLEL(VBAK,4)'.
+Imperative: SQL Expert Mode
+SQL Preview
+03.02.2020
+VBAK~VBELN IN {sel:SEL_VBELN} AND
+(
+( VBAK~AUART EQ 'TA‘ ) ) AND
+VBAK~VKORG IN {sel:SEL_VKORG} 
+
+=====PAGE 102=====
+Selections - Creating and Filling Global Selections
+03.02.2020
+102
+03.02.2020
+SIGN
+OPTION
+LOW
+HIGH
+I
+EQ
+M-02
+I
+EQ
+M-10
+I
+EQ
+M-14
+I
+EQ
+M-18
+CSV
+CSV Template
+
+=====PAGE 103=====
+Cached Read versus Single Read 
+03.02.2020
+103
+Cached Read
+Single Read   
+Default mode 
+When reading the data for the first time, all values 
+are loaded into the memory 
+Advantage: 
+Fast alternative 
+Disadvantage: 
+Memory problems can occur with large tables 
+Caching does not take place in this mode
+All values are selected individually from the database 
+when they are read 
+Advantage: 
+Can be used when memory problems occur in cached 
+read mode 
+Disadvantage: 
+Cannot be used with complex selections 
+Slow 
+
+=====PAGE 104=====
+Selections – Assign Global Selections
+104
+Example: Assigning a Global Selection to Table VBAK
+Title
+ID
+Domain
+Data type
+Length
+Compatibility
+Selection: VKORG
+SEL_VKORG
+VKORG
+Character String
+4
+Same Domain
+Selection: BUKRS
+SEL_BUKRS
+BUKRS
+Character String
+4
+Same Type
+Selection: WERKS
+SEL_WERKS
+WERKS
+Character String
+4
+Same Type
+Select existing selection
+Create new selection
+Domain
+Domain
+Title
+Title
+VKORG
+Selektion: VKORG
+ID
+ID
+SEL_VKORG2
+Maintain values
+The assignment can also be made using the same type if the functional accuracy is given
+Example: Selecting Field BWKEY in table MBEW via SEL_WERKS 
+Overview of all global selection and field selections used:
+Report /SNP/TE02_SELECTION_OVERVIEW 
+
+=====PAGE 105=====
+Concatenated Selection
+03.02.2020
+105
+Connection:
+stxh-tdobject = ‘MVKE‘
+stxh-tdname = MATNR|VKORG|VTWEG
+MATNR(18)
+VKORG(4)
+VTWEG(2)
+Text object
+[tdobject]
+Text name
+[tdname]
+Text-ID
+Language 
+key
+MVKE
+P-104             100010
+0001
+DE
+MVKE
+P-104             230010
+0001
+DE
+MVKE
+P-104             240010
+0001
+DE
+MVKE
+P-104             250010
+0001
+DE
+MVKE
+P-104             300010
+0001
+DE
+Table: STXH
+MATNR
+VKORG VTWEG VL SM
+P-104
+1000
+10
+1
+P-104
+2300
+10
+1
+P-104
+2400
+10
+1
+P-104
+2500
+10
+1
+P-104
+3000
+10
+1
+Table: MVKE
+tdname
+P-104             100010
+P-104             230010
+P-104             240010
+P-104             250010
+P-104             300010
+…
+Table extension
+Table: STXH
+SELECT *
+FROM STXH
+FOR ALL ENTRIES IN <lt_seltab>
+WHERE
+STXH~TDOBJECT = 'MVKE‘ AND
+STXH~TDNAME = <lt_seltab>-1E26AEB2_tdname}
+%_HINTS
+ORACLE '&prefer_in_itab_opt 1&'
+ORACLE '&prefer_union_all 0&'
+ORACLE '&max_in_blocking_factor 10&'
+ORACLE '&max_blocking_factor 10&'.
+MVKE
+• Table: Sales data per 
+material
+STXH
+• Table: Text-Data 
+Header
+SQL Preview 
+
+=====PAGE 106=====
+03.02.2020
+106
+Concatenated Selection – SQL Expert Mode
+In SQL expert mode, the table extension must be set up and filled by the user
+SELECT *
+FROM STXH
+FOR ALL ENTRIES IN <lt_seltab>
+WHERE
+TDOBJECT EQ 'MVKE‘ AND
+TDNAME EQ {seltab:tdname}
+%_HINTS
+ORACLE '&prefer_in_itab_opt 1&'
+ORACLE '&prefer_union_all 0&'
+ORACLE '&max_in_blocking_factor
+10&'
+ORACLE '&max_blocking_factor 10&'.
+SQL Preview
+Table: MVKE
+STXH: SQL Expert Mode
+Fill table extension
+
+=====PAGE 107=====
+Processing Export/Import Rules
+03.02.2020
+107
+Selection
+Create data definition for export
+Event: Process initialization
+Event: Before table processing
+Event: Before package processing
+Event: Before data record processing
+Create global export rule
+Event: After data record processing
+Event: After package processing
+Glob Event: After package processing
+Event: After table processing
+Data Adjustment
+Create data definition for import
+Event: Process initialization
+Event: Before table processing
+Event: Before package processing
+Event: Before data record processing
+Create field/global import rule
+Event: After data record processing
+Event: After package processing
+Glob. Event: After package processing 
+Event: After table processing
+EV_SKIP X
+Event: Before data object export 
+Event: After data object export 
+Export
+Export
+Import
+Import
+
+=====PAGE 108=====
+Export Rule Interfaces 
+03.02.2020
+108
+Prefix
+Type
+Icon
+Meaning
+I
+Importing
+Incoming. Read only
+C
+Changing
+Incoming and outgoing changeable
+E
+Exporting
+Outgoing and changeable
+Parameter
+Meaning
+EV_SKIP
+Outgoing single value. Empty at the beginning.
+CS_MARA
+Changeable filled table row „CS_MARA-MATNR“
+IV_VALUE
+Not outgoing pre-filled value.
+Prefix
+Structure
+Meaning
+V
+Value
+Single value
+S
+Structure
+Structure (Table row)[Data record]
+T
+Table
+Table
+Examples
+Examples
+Interface type
+Interface type
+Parameter type
+Parameter type
+
+=====PAGE 109=====
+Export Rule Interfaces – Examples 
+03.02.2020
+109
+Type
+Parameter
+Type
+Description
+CS_MARA
+TYPE SOURCE_MARA
+Data rec. MARA (Source)
+EV_SKIP
+TYPE FLAG
+Skip data record?
+Event: Before data record processing
+Type
+Parameter
+Type
+Description
+CS_MARA
+TYPE SOURCE_MARA
+Data rec. MARA (Source)
+EV_SKIP
+TYPE FLAG
+Skip data record?
+Event: After Data record - selection
+The entire record can be checked and 
+changed
+To query the material number, the field 
+is addressed using the coding 
+CS_MARA-MATNR
+With EV_SKIP = 'X' a data set can be 
+deleted
+
+=====PAGE 110=====
+03.02.2020
+110
+Datendefinition VBAK  
+Datendefinition VBAK  
+Prozessinitialisierung 
+Prozessinitialisierung 
+Ereignis: Vor-Tabellen-Verarbeitung 
+Ereignis: Vor-Tabellen-Verarbeitung 
+TYPES: BEGIN OF ls_vbeln,
+vbeln TYPE vbeln,
+posnr TYPE posnr,
+END OF ls_vbeln.
+DATA: lt_vbeln
+TYPE TABLE OF ls_vbeln,
+lt_prctr
+TYPE /snp/cn0x_tab_seltab.
+SELECT vbeln posnr
+FROM vbap
+INTO TABLE lt_vbeln
+WHERE vbap-prctr IN lt_prctr.
+PERFORM api_selection_clear
+USING
+’SEL_VBELN_PRCTR’.
+PERFORM api_selection_get
+USING
+'PRCTR'"iv_selection_id "[TYPE /snp/te0x_tdefinition_id]
+CHANGING
+lt_prctr.
+Ereignis: Nach-Paketverarbeitung  
+Ereignis: Nach-Paketverarbeitung  
+PERFORM api_selection_add
+USING
+‘SEL_VBELN_PRCTR'
+l
+bfk
+b l
+
+=====PAGE 111=====
+Global Export Rule
+Domain
+Data Element
+Table Field
+Global Export Rule – Example for Collecting Data 
+03.02.2020
+111
+Scope
+
+=====PAGE 112=====
+Export: Processing in the Memory
+03.02.2020
+112
+MATNR WERKS
+P-104
+1000
+P-104
+1100
+P-104
+2300
+P-104
+2400
+DB: MARC
+MATNR WERKS
+P-104
+1000
+P-104
+1100
+P-104
+2300
+P-104
+2400
+CS_MARC
+MATNR WERKS
+P-104
+1000
+P-104
+1100
+P-104
+2300
+P-104
+2400
+File: MARC
+Per File (Package): Commit 
+Work
+MATNR
+P-104
+P-104
+P-104
+P-104
+IV_VALUE/
+EV_VALUE
+Event:
+Before table
+selection
+Event:
+Before table
+selection
+Event: 
+After package 
+selection
+Event: 
+After package 
+selection
+MATNR WERKS
+P-104
+1000
+P-104
+1100
+P-104
+2300
+P-104
+2400
+CS_MARC
+Before data 
+record 
+processing
+Before data 
+record 
+processing
+After data record
+selection
+After data record
+selection
+Selection
+Global export
+rules
+Global export
+rules
+Changes to an event are also effective in 
+the subsequent events.
+
+=====PAGE 113=====
+113
+Selection rules 
+Export rules
+Syntax Check
+
+=====PAGE 114=====
+114
+Exercise 5
+Creating and using 
+global selections
+Maintaining and using 
+concatenated selections
+Syntax Check
+
+=====PAGE 115=====
+08 Export Rules 
+03.02.2020
+115
+Summary 
+In this chapter you have learned important functions for 
+selecting and exporting data. 
+You are able to: 
+•
+Distinguish between field selections and global selections 
+and creating them, filling them with values, and assigning 
+them 
+•
+Switch to the SQL expert mode 
+•
+Explain and manage concatenated selections 
+•
+Name events for the export sector and explain their usage  
+•
+Explain how the data is processed during export 
+
+=====PAGE 116=====
+09 Import Rules  
+116
+
+=====PAGE 117=====
+09 Import Rules 
+03.02.2020
+117
+Learning Goals 
+In this chapter you will learn important basics for importing 
+and modifying data during transformation. 
+You will learn: 
+•
+What types of mapping exist and how mappings are 
+created 
+•
+How mappings are integrated using rules and regulations
+•
+Which events exist in the import area and how they are 
+used 
+•
+How to create/deactivate global rules
+•
+What field rules mean and how they are created 
+•
+How the data is processed during import using different 
+rules 
+•
+Which import procedures are available 
+
+=====PAGE 118=====
+Mapping – Basics 
+Mapping
+03.02.2020
+SAP 
+1:1 Mappings
+N:1 Mappings
+118
+File System
+X+N:1 dependent
+Mappings
+1:N Mappings
+MAPPING 1:1
+Source
+Target
+WERKS
+WERKS
+1000
+1001
+2000
+2001
+3000
+3001
+MAPPING N:1
+Source
+Target
+WERKS
+WERKS
+1000
+1001
+2000
+2001
+3000
+2001
+MAPPING 1:N
+Source
+Target
+WERKS
+WERKS
+1000
+1001
+1000
+2001
+1000
+2001
+MAPPING X+N:1
+Source
+Source
+Target
+WEKRS LGORT LGORT
+1000
+0001
+0001
+2000
+0001
+0005
+3000
+0001
+0005
+1:N Mapping error: the 
+corresponding target 
+values will be displayed 
+in the message 
+
+=====PAGE 119=====
+Mapping
+03.02.2020
+119
+Generated mapping table
+TDEF: /SNP/TE_F3E529E8
+Source
+Target
+Mapping
+ID:
+MAP_MATNR
+Title:
+Mapping: Material Number
+Material Number Source
+Material Number Target
+M-02
+M-02-TC
+M-10
+M-10-TC
+M-14
+M-14-TC
+M-18
+M-18-TC
+M-01
+M-01
+M-03
+M-03
+M-04
+M-04
+M-05
+M-05
+M-06
+M-06
+M-07
+M-07
+M-08
+M-08
+M-09
+M-09
+MATNR
+M-02-TC
+M-10-TC
+M-14-TC
+M-18-TC
+M-01
+M-03
+M-04
+M-05
+M-06
+M-07
+M-08
+M-09
+1:1 Entries are added by 
+API call automatically.
+Definition Mapping:
+Definition Mapping:
+Source
+Target
+Report:
+/SNP/TE05_OVERVIEW_TDEF_TABS
+MATNR
+M-02
+M-10
+M-14
+M-18
+M-01
+M-03
+M-04
+M-05
+M-06
+M-07
+M-08
+M-09
+
+=====PAGE 120=====
+Dependent Mapping
+03.02.2020
+120
+Mapping: 
+MAP_WERKS_LGORT
+Source|  Source
+Target
+Plant
+Storage 
+Location
+Storage 
+Location
+1000
+0001
+0005
+1100
+0001
+0005
+1200
+0001
+0002
+1300
+0001
+0003
+1400
+0001
+0001
+2000
+0001
+0001
+2200
+0001
+0001
+2400
+0001
+0001
+2500
+0001
+0001
+2700
+0001
+0001
+2730
+0001
+0001
+2750
+0001
+0001
+Generated Mapping Table
+/SNP/TE_F04D46FD
+Source
+Target
+Plant
+Storage 
+Location
+1000
+0001
+1100
+0001
+1200
+0001
+1300
+0001
+1400
+0001
+2000
+0001
+2200
+0001
+2400
+0001
+2500
+0001
+2700
+0001
+2730
+0001
+2750
+0001
+Storage 
+Location
+0005
+0005
+0002
+0003
+0001
+0001
+0001
+0001
+0001
+0001
+0001
+0001
+
+=====PAGE 121=====
+Mapping – Call 
+03.02.2020
+121
+Mapping
+ID:
+MAP_MATNR
+Title:
+Mapping: Material Master
+Material Master Source
+Material Master Target
+M-02
+M-02-TC
+M-10
+M-10-TC
+M-14
+M-14-TC
+M-18
+M-18-TC
+Global Rule
+API-Call [MAP_MATNR]
+Field Rule
+API-Call [MAP_MATNR]
+Field Mapping
+Global Mapping
+Once created, it affects all fields with the 
+corresponding scope Data consistency 
+Scope: Domain, data element, table field Consider 
+field usages
+Can be deactivated individually via the context menu 
+Only affects the corresponding table field 
+Overrides global rules 
+Global 
+Functions
+
+=====PAGE 122=====
+Mapping - Integration in Global Import Rule
+03.02.2020
+122
+Global Import Rule
+Domain
+Data Element
+Table Field
+Scope
+
+=====PAGE 123=====
+Processing Export/Import Rules
+03.02.2020
+123
+Selection
+Create data definition for export
+Event: Process initialization
+Event: Before table processing
+Event: Before package processing
+Event: Before data record processing
+Create global export rule
+Event: After data record processing
+Event: After package processing
+Glob Event: After package processing
+Event: After table processing
+Data Adjustment
+Create data definition for import
+Event: Process initialization
+Event: Before table processing
+Event: Before package processing
+Event: Before data record processing
+Create field/global import rule
+Event: After data record processing
+Event: After package processing
+Glob. Event: After package processing 
+Event: After table processing
+EV_SKIP X
+Event: Before data object export 
+Event: After data object export 
+Export
+Export
+Import
+Import
+
+=====PAGE 124=====
+Import Rules Interfaces - Examples
+03.02.2020
+124
+Type
+Parameter
+Typing
+Description
+IV_VALUE
+TYPE ANY
+Incoming Value
+EV_VALUE
+TYPE ANY
+Outgoing Value
+EV_SKIP
+TYPE FLAG
+Skip data record?
+Global Rule with Coding
+Type
+Parameter
+Typing
+Description
+IS_MARA
+TYPE SOURCE_MARA
+Data record MARA (Source)
+CV_MATNR
+TYPE TARGET_MARA_MATNR
+Material Number
+EV_SKIP
+TYPE FLAG
+Skip data record?
+Field Rule with Coding
+Data can only be changed for the 
+target field
+
+=====PAGE 125=====
+Rule Interface with Parameter
+03.02.2020
+125
+Type
+Parameter
+Typing
+Description
+IV_VALUE
+TYPE ANY
+Incoming Value
+IV_WERKS
+TYPE ANY
+Source-Plant
+EV_VALUE
+TYPE ANY
+Outgoing Value
+EV_SKIP
+TYPE FLAG
+Skip data record?
+Global Rule with Coding Interface
+Parameter name
+Domain
+Description
+IV_WERKS
+WERKS
+Source-Plant
+Element Type
+Element Name
+Domain 
+LGORT
+Table
+Field
+IV_WERKS
+MARC
+LGFSB
+MARC
+LGPRO
+MARD
+LGORT
+MARDH
+LGORT
+MDIP
+LGPRO
+MKAL
+ALPRO
+MKAL
+ELPRO
+Scope
+Table
+Field
+IV_WERKS
+MARC
+LGFSB
+WERKS
+MARC
+LGPRO
+WERKS
+MARD
+LGORT
+WERKS
+MARDH
+LGORT
+WERKS
+MDIP
+LGPRO
+VPWRK
+MKAL
+ALPRO
+WERKS
+MKAL
+ELPRO
+WERKS
+Maintain field usage
+Parameter definition for rule
+
+=====PAGE 126=====
+Import Rule Interfaces - Examples 
+03.02.2020
+126
+Ereignisse nach Importregel –
+Beispiel 
+Type
+Parameter
+Typing
+Description
+IS_MARA
+TYPE SOURCE_MARA
+Data record MARA (original value source)
+CS_MARA
+TYPE TARGET_MARA
+Data record MARA
+EV_SKIP
+TYPE FLAG
+Skip data record?
+After data record processing
+Type
+Parameter
+Typing
+Description
+CT_MARA
+TYPE TAB_TARGET_MARA
+Package table MARA (target)
+After package processing
+
+=====PAGE 127=====
+Import: Processing in the Memory Global Rule
+03.02.2020
+127
+MATNR WERKS
+P-104
+1000
+P-104
+1100
+P-104
+2300
+P-104
+2400
+File: MARC
+WERKS
+1000
+1100
+2300
+2400
+iv_value
+WERKS
+5000
+5200
+2300
+2400
+Import rule: 
+Plant Mapping:
+1000 => 5000
+1100 => 5200
+ev_value
+MATNR WERKS
+P-104
+5000
+P-104
+5200
+P-104
+2300
+P-104
+2400
+DB: MARC
+1. Data record:
+iv_value => „1000“
+ev_value => „5000“
+Per File (Package): Commit Work
+A field for which no rule 
+is maintained,
+is taking over the field 
+content 1:1 to the target
+
+=====PAGE 128=====
+Import: Processing in the Memory Field Rule
+03.02.2020
+128
+MATNR WERKS
+P-104
+1000
+P-104
+1100
+P-104
+2300
+P-104
+2400
+File: MARC
+MATNR WERKS
+P-104
+1000
+P-104
+1100
+P-104
+2300
+P-104
+2400
+is_marc
+WERKS
+5000
+5200
+2300
+2400
+Import rule: 
+Plant Mapping:
+1000 => 5000
+1100 => 5200
+cv_werks
+MATNR WERKS
+P-104
+5000
+P-104
+5200
+P-104
+2300
+P-104
+2400
+DB: MARC
+1. Data record:
+is_marc-werks => „1000“  
+cv_werks => „5000“ 
+Per File (Package): Commit Work
+
+=====PAGE 129=====
+Import: Processing in the Memory After Data Record Processing
+03.02.2020
+129
+MATNR WERKS
+P-104
+1000
+P-104
+1100
+P-104
+2300
+P-104
+2400
+File: MARC
+MATNR WERKS
+P-104
+1000
+P-104
+1100
+P-104
+2300
+P-104
+2400
+is_marc
+MATNR WERKS
+P-104
+5000
+P-104
+5200
+P-104
+2300
+P-104
+2400
+Import rule: 
+Plant Mapping:
+1000 => 5000
+1100 => 5200
+cs_marc
+MATNR WERKS
+P-104
+5000
+P-104
+5200
+P-104
+2300
+P-104
+2400
+DB: MARC
+1. Data record:
+is_marc-werks => „1000“
+cs_marc-werks => „5000“
+Per File (Package): Commit Work
+
+=====PAGE 130=====
+Import Modes – Overview
+03.02.2020
+130
+Insert
+Insert ADK
+Update
+Delete
+Modify
+Import 
+method
+•
+Record is added 
+if possible
+•
+In case of 
+duplicate keys, 
+the data record 
+will be skipped 
+on the internal 
+table
+•
+Non-key fields 
+of an existing 
+record are 
+updated
+•
+If the key is 
+non-existent, 
+nothing is 
+imported here
+•
+Combines 
+insert and 
+update
+•
+Record is added 
+- if not available
+•
+If a key exists, 
+non-key fields 
+are updated
+Note: All import modes can be used with or without rule base. 
+Special care must be taken when importing with Insert ADK, Modify and Update as well as 
+when deleting. Discuss with customers which datasets should be retained 
+•
+Record is 
+added if 
+possible
+•
+Termination 
+with duplicate 
+keys
+•
+Record is
+removed - if
+present -
+based on the
+key fields
+
+=====PAGE 131=====
+Import Modes – Examples
+03.02.2020
+131
+Import parameter: Simulation, no additional parameters
+Source data record
+Customer
+Name
+1000
+BCD
+6666
+MNO
+1000
+STU
+6666
+BCD
+Target data record before 
+Import
+Customer
+Name
+1000
+BCD
+N/A
+2000
+XYZ
+6666
+XYZ
+Mapping Rule
+Old 
+New
+1000
+2000
+1000
+2000
+1000
+2000
+1000
+2000
+Target data record after Import
+Customer
+Name
+1000
+BCD
+N/A
+2000
+XYZ
+6666
+XYZ
+
+=====PAGE 132=====
+Import Modes – Examples
+03.02.2020
+132
+Import parameter: Insert with rule base
+Source data record
+Customer
+Name
+1000
+BCD
+6666
+MNO
+1000
+STU
+6666
+BCD
+Target data record before
+import
+Customer
+Name
+1000
+BCD
+N/A
+2000
+STU
+6666
+XYZ
+Mapping Rule
+Old
+New
+1000
+2000
+1000
+2000
+1000
+2000
+1000
+2000
+Target data record after import
+Customer
+Name
+1000
+2000
+BCD
+BCD
+6666
+MNO
+2000
+Duprec-Error
+STU
+6666
+Duprec-Error
+XYZ
+
+=====PAGE 133=====
+Import Modes – Examples
+03.02.2020
+133
+Import parameter: Insert without rule base
+Source data record
+Customer
+Name
+1000
+BCD
+6666
+MNO
+1000
+STU
+6666
+BCD
+Target data record before
+import
+Customer
+Name
+1000
+BCD
+N/A
+2000
+XYZ
+6666
+XYZ
+Mapping Rule
+Old
+New
+1000
+2000
+1000
+2000
+1000
+2000
+1000
+2000
+Target data record after import
+Customer
+Name
+1000
+Duprec-Error
+BCD
+6666
+MNO
+2000
+1000
+XYZ
+STU
+6666
+Duprec-Error
+XYZ
+
+=====PAGE 134=====
+Import Modes – Examples
+03.02.2020
+134
+Import parameter: Update with rule base
+Source data record
+Customer
+Name
+1000
+ABC
+6666
+MNO
+1000
+STU
+6666
+BCD
+Target data record before
+import
+Customer
+Name
+1000
+BCD
+N/A
+2000
+XYZ
+6666
+XYZ
+Mapping Rule
+Old
+New
+1000
+2000
+1000
+2000
+1000
+2000
+1000
+2000
+Target data record after import
+Customer
+Name
+1000
+BCD
+N/A
+2000
+STU
+6666
+BCD
+
+=====PAGE 135=====
+Import Modes – Examples
+03.02.2020
+135
+Import parameter: Modify with rule base
+Source data record
+Customer
+Name
+1000
+BCD
+6666
+MNO
+1000
+STU
+6666
+BCD
+Target data record before
+import
+Customer
+Name
+1000
+BCD
+N/A
+2000
+XYZ
+6666
+XYZ
+Mapping Rule
+Old
+New
+1000
+2000
+1000
+2000
+1000
+2000
+1000
+2000
+Target data record after import
+Customer
+Name
+1000
+2000
+BCD
+BCD
+6666
+MNO
+2000
+STU
+6666
+BCD
+
+=====PAGE 136=====
+Import Modes – Examples
+03.02.2020
+136
+Import parameter: Insert ADK with rule base
+Source data record
+Customer
+Name
+1000
+BCD
+6666
+MNO
+1000
+STU
+6666
+BCD
+Target data record before
+import
+Customer
+Name
+1000
+BCD
+N/A
+2000
+XYZ
+6666
+XYZ
+Mapping Rule
+Old
+New
+1000
+2000
+1000
+2000
+1000
+2000
+1000
+2000
+Target data record after import
+Customer
+Name
+1000
+2000
+BCD
+BCD
+6666
+MNO
+2000
+XYZ
+6666
+XYZ
+
+=====PAGE 137=====
+Import Modes – Examples
+03.02.2020
+137
+Import parameter: Delete with rule base
+Source data record
+Customer
+Name
+1000
+BCD
+6666
+MNO
+1000
+STU
+6666
+BCD
+Target data record before
+import
+Customer
+Name
+1000
+2000
+XYZ
+BCD
+N/A
+1000
+2000
+XYZ
+ABC
+6666
+XYZ
+Mapping Rule
+Old 
+New
+1000
+2000
+1000
+2000
+1000
+2000
+1000
+2000
+Target data record after import
+Customer
+Name
+1000
+XYZ
+N/A
+1000
+XYZ
+
+=====PAGE 138=====
+Import Modes – Examples
+03.02.2020
+138
+Import parameter: Delete without rule base
+Source data record
+Customer
+Name
+1000
+BCD
+1000
+MNO
+1000
+STU
+6666
+BCD
+Target data record before
+import
+Customer
+Name
+1000
+BCD
+1000
+2000
+MNO
+XYZ
+1000
+2000
+XYZ
+BCD
+6666
+XYZ
+Mapping Rule
+Old
+New
+1000
+2000
+1000
+2000
+1000
+2000
+1000
+2000
+Target data record after import
+Customer
+Name
+2000
+XYZ
+2000
+BCD
+
+=====PAGE 139=====
+139
+Creating Mappings
+Creating Global Import Rules
+Defining Field Rules
+Syntax Check 
+
+=====PAGE 140=====
+140
+Exercise 6
+Creating Mappings
+Creating Global Rules
+Defining Field Rules
+Syntax Check
+
+=====PAGE 141=====
+09 Import Rules 
+03.02.2020
+141
+Summary 
+In this chapter you have learned important basics for 
+importing and modifying data during transformation. 
+You are able to: 
+•
+Describe types of mappings 
+•
+Create and fill mappings  
+•
+Integrate mappings using global rules 
+•
+Define and deactivate global rules
+•
+Create field rules 
+•
+Designate and apply import modes 
+
+=====PAGE 142=====
+10 Programming
+142
+
+=====PAGE 143=====
+10 Programming
+03.02.2020
+143
+Learning Goals 
+In this chapter, you will learn the important basics of 
+programming and debugging within the Transformation 
+Cockpit.
+You will learn: 
+•
+What an API call is, which API calls exist, and how they 
+are used 
+•
+Which functions simplify your work with the coding
+•
+Which defined breakpoints make debugging within the 
+Transformation Cockpit easier for you
+
+=====PAGE 144=====
+System
+Selection
+03.02.2020
+144
+API Calls – Intro
+API Call
+Global import rule MATNR
+
+=====PAGE 145=====
+03.02.2020
+145
+API Calls – Listing  
+Function Name
+Description
+Category
+API_MAPPING_ADD
+Adds an entry to a Mapping. 
+Mapping
+API_MAPPING_CLEAR 
+Clears a mapping.
+Mapping
+API_MAPPING_GET
+Returns the entries of a Mapping.
+Mapping
+API_MAPPING_SET
+Adds an entry to a Mapping or overwrites it. 
+Mapping
+API_MESSAGE_ADD
+Adds a message. 
+Message
+API_SELECTION_ADD
+Adds an entry to a global selection.
+Selection
+API_SELECTION_EXISTS
+Is there a certain entry in the selection table for a certain 
+selection ID?
+Selection
+API_SELECTION_GET
+Returns the entries of a global selection.
+Selection
+API_SELECTION_CLEAR
+Clears a global selection.
+Selection
+API_LOCK
+Requests any lock.
+Utilities
+API_UNLOCK
+Releases a previously requested lock.
+Utilities 
+
+=====PAGE 146=====
+API-Calls
+03.02.2020
+146
+Function name
+Description
+Category
+API_MAPPING_ADD
+Adds an entry to a Mapping.
+Mapping
+Mapping
+ID
+MAP_MATNR
+Title
+Mapping: Material Master
+MATNR Source
+MATNR Target
+M-02
+M-02-TC
+M-10
+M-10-TC
+M-14
+M-14-TC
+M-18
+M-18
+autom.
+Data object
+Table
+M-18
+M-18
+
+MARA
+MARC
+A short dump will occur 
+if the entry exists 
+already!
+
+=====PAGE 147=====
+API-Calls
+03.02.2020
+147
+Function name
+Description
+Category
+API_MAPPING_CLEAR
+Clears a mapping.
+Mapping
+Mapping
+ID
+MAP_CK_KALNR
+Title
+Calculation Number
+CK_KALNR Source
+CK_KALNR Target
+100012082
+100000100
+100012083
+100000101
+100012080
+100000102
+CK_KALNR Source
+CK_KALNR Target
+100012082
+100000100
+
+VRLFR
+MBEW
+100012083
+100000101
+
+VRLFR
+MBEW
+100012080
+100000102
+
+VRLFR
+MBEW
+CK_KALNR Source
+CK_KALNR Target
+
+
+
+autom.
+Data object
+Table
+sy-subrc = 0  
+sy-dbcnt = 3  
+Deletes automatically added 
+entries, only!
+
+=====PAGE 148=====
+API-Calls
+03.02.2020
+148
+M-14
+M-14
+M-14-TC
+M-14-TC
+=
+sy-subrc = 0  
+Mapping
+ID
+MAP_MATNR
+Title
+Mapping: Material Master
+Material Master Source
+Material Master Target
+M-02
+M-02-TC
+M-10
+M-10-TC
+M-14
+M-14-TC
+M-14-TC
+M-14
+If no matching value is found (sy-subrc = 4), the output value equals the input 
+value (iv_value = ev_value).
+Function name
+Description
+Category
+API_MAPPING_GET
+Returns the entries of a Mapping. 
+Mapping
+
+=====PAGE 149=====
+API-Calls
+03.02.2020
+149
+Function name
+Description
+Category
+API_MAPPING_SET
+Adds an entry to a Mapping or 
+overwrites it.
+Mapping
+If an entry does already 
+exist, target value will 
+be overwritten!
+Mapping
+ID
+MAP_MATNR
+Title
+Mapping: Material Master
+Material Master Source
+Material Master Target
+M-02
+M-02-TC
+M-10
+M-10-TC
+M-14
+M-14-TC
+M-18
+M-18-TE
+M-18
+M-18-TC
+autom.
+Data object
+Table
+M-18
+M-18-TC
+
+MARA
+MARC
+
+=====PAGE 150=====
+API-Calls
+03.02.2020
+150
+Log:
+Message……
+W.. MAP_MATNR: No 
+mapping found. Source 
+value: M19 Table: MARC
+[200 digits]
+Message type:
+•
+S 
+Success
+•
+E 
+Error
+•
+W 
+Warning
+•
+I 
+Info
+•
+A 
+Abort
+•
+X
+Shortdump
+Message type:
+•
+S 
+Success
+•
+E 
+Error
+•
+W 
+Warning
+•
+I 
+Info
+•
+A 
+Abort
+•
+X
+Shortdump
+Function name
+Description
+Category
+API_MESSAGE_ADD
+Adds a message
+Message
+The maximum number of messages, which are displayed can be set in 
+the run parameter of the scenario: „Max. number log entries“ for 
+the types X and A the message is also written if the max. number of 
+log entries is exceeded.
+
+=====PAGE 151=====
+API-Calls
+03.02.2020
+151
+Global Selection
+ID
+SEL_ADRNR
+Title
+Collect Address data [collect addresses]
+Domain
+AD_ADDRNUM
+0000002261
+0000002262
+0000006854
+0000007287
+Modify
+Function name
+Description
+Category
+API_SELECTION_ADD
+Adds an entry to a global selection.
+Selection
+autom.
+Data object
+Table
+Prerequisite:
+The selection exists 
+and has been 
+generated.
+The entry is visible in the table on 
+the source system only
+
+=====PAGE 152=====
+API-Calls
+03.02.2020
+152
+0000002262
+0000002262
+sy-subrc = 0  
+Global Selection
+ID
+SEL_ADRNR
+Title
+Collect Addresses [collect addresses]
+Domain
+AD_ADDRNUM
+0000002261
+0000002262
+0000006854
+0000002262
+Function name
+Description
+Category
+API_SELECTION_EXISTS
+Is there a certain entry in the 
+selection table for a certain selection 
+ID?
+Selection
+
+=====PAGE 153=====
+API-Calls
+03.02.2020
+153
+sy-subrc = 0  
+Row
+SIGN
+OPTION
+LOW
+HIGH
+1
+I
+EQ
+0000002261
+2
+I
+EQ
+0000002262
+3
+I
+EQ
+0000006854
+Global Seletion
+ID
+SEL_ADRNR
+Title
+Collect Addresses [collect addresses]
+Domäne
+AD_ADDRNUM
+0000002261
+0000002262
+0000006854
+Function name
+Description
+Category
+API_SELECTION_GET
+Returns the entry of a global selection.
+Selection
+LT_ADRNR
+LT_ADRNR
+
+=====PAGE 154=====
+API-Calls
+03.02.2020
+154
+.
+sy-subrc = 0 
+sy-dbcnt = 3 
+Global Selection
+ID
+SEL_ADRNR
+Title
+Collect Addresses [collect addresses]
+Domain
+AD_ADDRNUM
+0000002261
+0000002262
+0000006854
+Funciton name
+Description
+Category
+API_SELECTION_CLEAR
+Clears a global selection
+Selection
+Deletes automatically 
+added entries, only!
+
+=====PAGE 155=====
+Client
+User Name Date/Time Lock Mpde Table Name
+Lock Argument
+Counter Dialog Counter Update
+800
+CTHIELE
+09:06:59
+E
+/SNP/TE00_STR_PROC_DIA 80000505691B2FB1ED791D86881BA25B6F1
+0
+1
+800
+Selected lock entries 
+1
+API-Calls
+03.02.2020
+155
+.
+PERFORM api_lock
+USING
+'TRAINING_LOG'.
+sy-subrc = 0  
+Function name
+Description
+Category
+API_LOCK
+Requests any lock.
+Utilities
+If sy-subrc <> 0 another process has created the lock already 
+The locks are also visible during processing in SM12 
+Client
+User Name Date/Time Lock Mpde Table Name
+Lock Argument
+Counter Dialog Counter Update
+800
+CTHIELE
+09:06:59
+E
+/SNP/TE00_STR_PROC_DIA 80000505691B2FB1ED791D86881BA25B6F1
+0
+1
+800
+RFC_DIA
+14:10:15
+X
+/SNP/TE05_STR_API_LOCK
+TRAINING_LOG
+0
+1
+Selected lock entries 
+2
+
+=====PAGE 156=====
+API-Calls
+03.02.2020
+156
+PERFORM api_unlock
+USING
+'TRAINING_LOG'.
+Function name
+Description
+Category
+API_UNLOCK
+Releases a previously requested lock. 
+Utilities
+The locks are also visible during processing in SM12 
+Client
+User Name Date/Time Lock Mpde Table Name
+Lock Argument
+Counter Dialog Counter Update
+800
+CTHIELE
+09:06:59
+E
+/SNP/TE00_STR_PROC_DIA 80000505691B2FB1ED791D86881BA25B6F1
+0
+1
+800
+Selected lock entries 
+1
+Client
+User Name Date/Time Lock Mpde Table Name
+Lock Argument
+Counter Dialog Counter Update
+800
+CTHIELE
+09:06:59
+E
+/SNP/TE00_STR_PROC_DIA 80000505691B2FB1ED791D86881BA25B6F1
+0
+1
+800
+RFC_DIA
+14:10:15
+X
+/SNP/TE05_STR_API_LOCK
+TRAINING_LOG
+0
+1
+Selected lock entries 
+2
+Client
+User Name Date/Time Lock Mpde Table Name
+Lock Argument
+Counter Dialog Counter Update
+800
+CTHIELE
+09:06:59
+E
+/SNP/TE00_STR_PROC_DIA 80000505691B2FB1ED791D86881BA25B6F1
+0
+1
+800
+Selected lock entries 
+1
+
+=====PAGE 157=====
+03.02.2020
+157
+Coding – Tips
+Sample Feature
+Supports the creation of coding
+Code samples for corresponding selection are 
+generated (API call, global function, global rules) 
+The template code is inserted on cursor position 
+Definitions must be added and coding must be 
+adapted
+Useful information is included as a comment
+Further assistance
+CTRL + Space for auto completion  
+F1 Help in the rule editor 
+Environment variables
+Shortcuts
+Selected by F4-Help
+PERFORM api_mapping_get
+USING
+"iv_mapping_id "[TYPE /snp/te0x_tdefinition_id]
+"iv_source_value "[TYPE any]
+CHANGING
+"cv_target_value. "[TYPE any]
+IF sy-subrc <> 0.
+PERFORM api_message_add
+USING
+"iv_msg_type "[TYPE bapi_mtype]
+"iv_msg_text. "[TYPE any]
+ENDIF.
+Example
+
+=====PAGE 158=====
+03.02.2020
+158
+Coding – Version Management 
+Versions for rule coding and corresponding parameters
+•
+Create
+•
+Compare [2]
+•
+Restore
+•
+Delete
+Different
+missing
+Empty by default
+
+=====PAGE 159=====
+Debugging Events – Predefined debugging points Export/Import 
+The Transformation Cockpit 
+delivers predefined debugging 
+points for import and export for 
+error analysis/correction 
+Debugging takes place in dialog 
+mode 
+Note: Dialog operations can 
+only be executed with one 
+process 
+Import 
+Selection (start table)
+Selection (data package)
+Event: Before data record
+Transformation rules
+Event: After data record
+Event: After package
+Event: Before table
+Event: After table
+Event: Before object
+Event: After object
+Event: Before table
+Events and rules
+Event: After table
+Write data in DB
+Export
+Event: Before package
+03.02.2020
+159
+
+=====PAGE 160=====
+160
+API Calls and documentation
+Use samples 
+Version Management
+
+=====PAGE 161=====
+10 Programming
+03.02.2020
+161
+Summary 
+In this chapter you have learned important basics of 
+programming and debugging within the Transformation 
+Cockpit.
+You are able to: 
+•
+Name API calls and include them depending on their 
+usage 
+•
+Use the sample function and version management  
+•
+Navigate to defined breakpoints and use your own 
+breakpoints within the code 
+
+=====PAGE 162=====
+11 Creating and Executing Transformation
+162
+
+=====PAGE 163=====
+11 Creating and Executing Transformation
+03.02.2020
+163
+Learning Goals 
+In this chapter you will get to know functionalities for 
+creating, controlling and monitoring your transformation.
+You will learn: 
+•
+What the characteristic of the address object is
+•
+How the transformation is structured in the 
+transformation tree 
+•
+Which functionalities you can use within the 
+transformation tree for run steering
+•
+How to view export files  
+•
+Which information you can use to monitor the 
+transformation  
+
+=====PAGE 164=====
+Address Object
+03.02.2020
+164
+Mdt
+AD_ADDRNUM
+Object
+Object ID Table
+Table name
+Added automatically
+800
+0000002261 0050568F000B1EE696943CA7527313E5
+VTDE
+0050568F000B1EE696943CA75275D3E5
+KNVK
+X
+800
+0000002262 0050568F000B1EE696943CA7527313E5
+VTDE
+0050568F000B1EE696943CA75275D3E5
+KNVK
+X
+800
+0000006854 0050568F000B1EE696943CA7524CD3E5
+DEBI
+0050568F000B1EE696943CA7524DD3E5
+KNA1
+X
+800
+0000007287 0050568F000B1EE696943CA7527313E5
+VTDE
+0050568F000B1EE696943CA75275D3E5
+KNVK
+X
+Source 
+system
+Global Selection: SEL_ADRNR
+1
+Source 
+System
+A
+D
+R
+A
+D
+R
+A
+D
+R
+A
+D
+R A
+D
+R
+A
+D
+R
+A
+D
+R
+A
+D
+R
+A
+D
+R
+A
+D
+R
+A
+D
+R
+A
+D
+R
+Global Selection:
+SEL_ADRNR
+2
+Target 
+system
+A
+D
+R
+A
+D
+R
+A
+D
+R
+A
+D
+R
+A
+D
+R
+A
+D
+R
+A
+D
+R
+A
+D
+R
+A
+D
+R
+A
+D
+R
+3
+Target 
+system
+4
+Address numbers are collected by global export rules for the domains ADRNR, AD_ADDRNUM, 
+AD_PERSNUM, AD_SO_KEY and CADRNR.
+Export object ADR last and  import first
+
+=====PAGE 165=====
+03.02.2020
+165
+Transformation – Create Blocks and Assign Data Objects
+Only active objects can be assigned to the blocks 
+It is possible to remove tables from the objects without changing the 
+object itself
+Import blocks can be directly created from export/upload blocks using 
+the context menu
+Run
+Edit Transformation Block: 
+Name
+All Objects1
+Trans. block type
+EXP, FOR, IMP, UPL
+Number of processes
+
+Block mode Import
+INSERT, INSERT_ADK, UPDATE, MODIFY, DELETE
+Table mode Import
+FROM_BLOCK, INSERT, UPDATE, MODIFY 
+INSERT_ADK, DELETE, NO_IMPORT, FROM_TABLE
+Without rule base? 
+
+Alias of the system
+SOURCE_2 (Block: Required for 2+ systems only)
+Process restarts
+-
+Import
+IMP System
+Export
+EXP System
+Pred.
+FOR System
+Delete
+IMP System
+
+=====PAGE 166=====
+03.02.2020
+166
+Transformation – Maintain Dependencies
+The order of processing within the 
+transformation area can be determined 
+for blocks and data objects
+The dependencies of the objects are 
+represented by predecessors 
+Dependencies that are not maintained 
+can lead to problems/terminations 
+ID 
+Ex.-Import-Objects 
+Predecessors
+Status
+1
+MARA_TRAINING
+Unprocessed
+2
+DEBI_TRAINING
+Unprocessed
+3
+VBAU_TRAINING
+Unprocessed
+4
+VTDE_TRAINING
+Unprocessed
+0
+1
+2
+2
+ID 
+Ex.-Import-Blocks
+Predecessors
+Status
+1
+START
+Unprocessed
+2
+ALL OBJECTS EXPORT
+Unprocessed
+3
+ADDRESSES 
+Unprocessed
+4
+PREDECESSORS
+Unprocessed
+5
+ADDRESSES IMPORT
+Unprocessed
+6
+ALL OBJECTS IMPORT
+Unprocessed
+0
+1
+2
+3
+4
+5
+
+=====PAGE 167=====
+03.02.2020
+167
+Transformation – Run Steering 
+Execution of the transformation under 
+consideration of all dependencies
+Alternatively, tables, blocks etc. can be manually 
+selected and started together
+
+=====PAGE 168=====
+Transformation – Further Functionalities in the Area of Run Steering
+03.02.2020
+168
+Stop
+Restart
+Reset
+Refresh
+Run
+Duplicate
+Block
+Data Object
+Table
+
+=====PAGE 169=====
+03.02.2020
+169
+Transformation – Daemon
+Background process that monitors all running 
+executions (collects information such as status of 
+entities, number of records, log entries from 
+satellite systems)
+Only affects the timeliness of the data displayed 
+in the cockpit, not the actual execution 
+Exceptions are entities with dependencies 
+(blocks, tables, etc.); here the daemon also 
+serves for starting
+SM50: SLEEP process that executes report 
+/SNP/TE01_DAEMON; standard runtime up to 5 
+seconds 
+Control System 
+Daemon
+Daemon
+1
+Satellite Systems 
+1
+2
+3
+4
+BTC
+monitors
+collects log data
+starts waiting entities
+
+=====PAGE 170=====
+Transformation – Data Export 
+03.02.2020
+170
+Rules
+File System
+RFC
+RFC
+RFC
+Sales document with dependent 
+material, addresses and customers
+DIA
+DIA
+
+=====PAGE 171=====
+03.02.2020
+171
+Transformation – Displaying/Downloading Export Files
+Export data can be 
+downloaded to the client/ 
+server on all levels (runs, 
+blocks, etc.): 
+Further Functions 
+Download export files
+Client
+Material Number
+Max. Number of data record
+500
+Start Search
+Configure Fields
+800
+M-02
+Key field
+Field 
+name
+Domain
+Description
+On selection
+screen?
+In result list?
+
+MANDT
+MANDT
+Clients
+
+
+
+MATNR
+MATNR
+Material number
+
+
+
+ERSDA
+DATUM
+Creation date
+
+
+
+MANDT
+MATNR
+ERSDA
+800
+M-02
+21.12.1995
+MARA
+MARA
+
+=====PAGE 172=====
+03.02.2020
+172
+Transformation – Reading Files
+Files are created for each export; 
+not overwritten 
+If you delete a block, the 
+associated files will also be 
+deleted
+By default, the import is based 
+on the last exported file 
+The context menu can be used 
+to assign export files during the 
+run
+Mass test 1
+(01/01/2019 13:00)
+Export 1
+EXP
+MARA
+Target 
+System
+Single execution
+(01/01/2019 17:00)
+Export 2
+EXP
+MARA
+MARA
+MARC
+MARA
+
+=====PAGE 173=====
+Transformation – Data Import 
+03.02.2020
+173
+Sales document with dependent 
+material, addresses and customers
+Rules
+File System
+RFC
+RFC
+RFC
+DIA
+DIA
+
+=====PAGE 174=====
+03.02.2020
+174
+Transformation – Assign Export Files
+Different exports of the same table can be assigned to one import manually, also for other systems 
+which are assigned to the scenario
+For scenarios with several source systems the import block has to be assigned manually to the export 
+block
+
+=====PAGE 175=====
+03.02.2020
+175
+Transformation – Process Overview
+The number of active 
+processes is displayed per 
+table
+A mini-system monitor in the 
+transformation area shows 
+users additional KPIs (e.g. 
+available/used background 
+processes, used memory)
+
+=====PAGE 176=====
+03.02.2020
+176
+Transformation – Log
+Transaction /SNP/TCPROT or transformation Log
+Filter option after opening the log
+Detailed information about current and entire executions/filter options
+Option of outputting/downloading log (HTML/CSV)
+When deleting and resetting transformation tables the log will be archived and marked respectively
+The Notes column allows you to manually enter comments for the table. 
+Microsoft 
+Excel-CSV-Datei
+
+=====PAGE 177=====
+03.02.2020
+177
+Transformation – Log II
+Button „Not migrated tables“ shows the status of exported and imported tables
+Current status of the migration is shown in percent as a notification in the status bar after each update 
+of the log
+Progress and number of data records are displayed package-based per table Better runtime 
+forecasts 
+
+=====PAGE 178=====
+Transformation – Log III
+03.02.2020
+178
+
+=====PAGE 179=====
+03.02.2020
+Transformation – Progress 
+Percentual progress of the transformation based on all objects within the transformation
+Calculation of progress begins when starting a table
+Filters enable additional focus
+Block type
+Module
+Object 
+Run
+System 
+Double-clicking triggers a jump to 
+the transformation protocol. In the 
+protocol, a filter is automatically 
+applied to the according object.
+
+=====PAGE 180=====
+180
+Transformation – Duplicate Keys
+Possible duplicate keys are displayed during import/simulation
+The maximum number of data records with duplicate keys displayed will be set in the run 
+parameter of the scenario: „Max. number log entries“ 
+03.02.2020
+180
+
+=====PAGE 181=====
+03.02.2020
+181
+Transformation – Compare Transformations
+Transformations out of one or different scenarios can be compared with the aid of different filters 
+Transformation area 
+Comparison on table (number of records and runtime) or data object level (runtime) possible
+When selecting multiple transformations, a leading one must be determined to serve as a basis for 
+comparison 
+CSV upload and download possible
+
+=====PAGE 182=====
+182
+Create run
+Create blocks
+Execute data export and import
+Checking protocols and logs
+
+=====PAGE 183=====
+183
+Exercise 7
+Create runs and blocks
+Execute data export 
+and import
+Checking protocols and 
+logs
+
+=====PAGE 184=====
+11 Creating and Executing Transformation
+03.02.2020
+184
+Summary 
+In this chapter, you have learned functionalities for creating, 
+controlling and monitoring your transformation.
+You are able to: 
+•
+Name the characteristics of the address object and include 
+it in the transformation
+•
+Create transformations in the transformation tree  
+•
+Use functionalities for run steering 
+•
+View export files   
+•
+Obtain information from the transformation log and the 
+progress indicators
+
+=====PAGE 185=====
+12 Data Validation
+185
+
+=====PAGE 186=====
+12 Data Validation
+03.02.2020
+186
+Learning Goals 
+In this chapter you will get to know the options of data 
+validation.
+You will learn: 
+•
+How to compare contents from the export files with the 
+destination 
+•
+What test units are and how they are used 
+•
+How Data Consistency Verification is applied 
+•
+How to use Automated Testing only for the scope of your 
+transformation 
+
+=====PAGE 187=====
+03.02.2020
+187
+Data Validation – Compare Export to Content in Target
+After data import a function is available to compare the contents of the export file with the target table
+Attention: Key fields must be identical 
+The following fields of the VBAK header table of the sales document were changed using rules:
+Sales organization was mapped
+Sales group was mapped
+Sales offices were mapped
+The number of the document condition was incremented
+
+=====PAGE 188=====
+03.02.2020
+188
+Data Validation – Test Units 
+Data validation using stored reports and transactions
+Jump directly from the transformation to the functionality of the target system 
+
+=====PAGE 189=====
+03.02.2020
+189
+Data Consistency Verification
+ABAP-based check report
+Invoking the Data Consistency Verification
+In the areas Data Objects and Transformation via SAP menu Functions SNP Foreign Key 
+Check (Jump to target system)
+Transaction /n/SNP/FKC (in the target system)
+Suitable for SAP ERP, HCM systems and S/4 HANA
+Contains the following check types
+Domain fixed value check (table DD07L)
+Foreign key & value table check
+(SE16 column check table, Remote SE16 button 
+check table)
+
+=====PAGE 190=====
+03.02.2020
+190
+Data Consistency Verification
+Prerequisites
+Migration should be finished
+Check tables should be filled
+Assign a status to table fields
+You can categorize the status for individual fields of the Foreign Key Check in order to prevent 
+irrelevant checks
+Assign a context to tables
+You can assign a context to tables in order to allocate classifications such as priority, 
+responsibility, ownership etc.
+
+=====PAGE 191=====
+03.02.2020
+191
+Data Consistency Verification
+Message Output via
+Worklist
+Tables
+Domains 
+
+Aggregated view by checks
+
+Detailed view (field value 
+view for domain)
+
+Detailed view of a checked 
+data record 
+
+Aggregated view by tables
+
+Aggregated view by checks
+
+Detailed view (field value view 
+for domain)
+
+Detailed view of a checked 
+data record 
+
+Simple navigation using double-clicks
+Comparison of Messages
+
+Comparison of two „transactions“, that were created at different points in time 
+
+Before and after a conversion
+
+Before and after a cross-release migration
+
+Source and target system
+Exclusion  of ‘new’ fields for a real comparison
+Exclusion of  ‘old‘ errors for an analysis of the transformation
+
+Aggregated view by 
+domains
+
+General field value view for 
+domain
+
+=====PAGE 192=====
+Automated Testing for the Transformation Scope
+03.02.2020
+192
+Database
+Testing on application level
+SAP GUI
+Read mode
+Change mode
+y
+System check
+Individual check
+Selected test
+data
+Result
+Selection
+Check
+Evaluation
+Result
+TC
+Transformation
+(Import)
+Random 
+selection
+
+=====PAGE 193=====
+193
+Compare export to content in 
+target 
+Test units
+Use of Data Consistency 
+Verification 
+Automated Testing with 
+Transformation Scope
+
+=====PAGE 194=====
+194
+Exercise 8
+Compare export to 
+content in target  
+Test units
+Use of Data Consistency 
+Verification 
+Automated Testing with 
+Transformation Scope
+
+=====PAGE 195=====
+12 Data Validation 
+03.02.2020
+195
+Summary 
+In this chapter you have learned about the possibilities of 
+data validation.
+You are able to: 
+•
+Compare contents from the export files with the 
+destination 
+•
+Create and use test units 
+•
+Use Data Consistency Verification and interpret results  
+•
+Perform automated testing for the scope of your 
+transformation and interpret results 
+
+=====PAGE 196=====
+13 Tools and Additional Features
+196
+
+=====PAGE 197=====
+13 Tools and Additional Features
+03.02.2020
+197
+Learning Goal 
+In this chapter you will learn about additional tools and 
+functions that make working with the Transformation 
+Cockpit easier.
+You will learn: 
+•
+What possibilities the system monitor offers you
+•
+Which functions are stored in the menu option functions 
+and how to use them   
+
+=====PAGE 198=====
+System Monitor
+03.02.2020
+198
+The system 
+monitor shows 
+all systems 
+assigned to the 
+selected scenario
+For each system 
+it shows the 
+same monitoring 
+options
+
+=====PAGE 199=====
+03.02.2020
+199
+System Monitor – File System 
+Remote file explorer for cleaning files and directories 
+Checking writing authorizations
+Navigation via 
+double-click
+Name of the
+scenario
+
+=====PAGE 200=====
+03.02.2020
+200
+System Monitor – Lock Entries/Logged-On Users
+-
+Lock entries can be deleted and logged-on users can be signed out
+-
+Multiple selections possible
+
+=====PAGE 201=====
+03.02.2020
+201
+System Monitor – Process Overview
+Termination/debugging of processes for foreign systems
+Unique identification of process with scenario/run/block possible
+Overview of memory, CPU and process usage
+Double clicking process enables jump to process detail view
+Mini System Monitor available in transformation area 
+
+=====PAGE 202=====
+03.02.2020
+202
+Remote SE16
+Data of an external system can be displayed without logging on
+Transaction /SNP/CN_SE16
+Also used in the Transformation Cockpit under:
+Selections/Mapping Table content in source system/table content in target system
+Area transformation with right-click on table Table contents of the source system/table contents
+of the target system
+Additional functionalities can be used (e.g. Excel Export, data quality)
+Remote SE16
+RFC Connection
+Table 
+SNP_TB_TAR_900
+MARA
+Contents of MARA on SNP_TB_TAR_900  
+Display data             Export for .xlsx                   Count data sets             Adjust fields              Technical field names         Data quality 
+Material number
+Display maximal amount
+500
+With regard to the authorization concept this 
+information should always be handled with care
+
+=====PAGE 203=====
+03.02.2020
+203
+E-Mail Dispatch for Transformation Status
+This functionality enables you to dispatch status mails concerning the transformation progress and 
+the mini system monitor information from the Transformation Cockpit
+Activation on scenario level (run parameters) 
+Option to configure dispatch interval
+Depositing of multiple e-mail recipients possible
+Note: The use of this function requires the SAP system to be configured for the general dispatch of
+e-mails
+Alias of the system
+Max. batch 
+processes
+Available batch 
+processes
+Used batch processes
+Batch processes 
+percentage
+Max. memory in 
+byte
+Total memory in 
+byte
+Time remaining
+CONTROL
+15
+13
+2
+13
+0
+15
+0
+SOURCE
+15
+15
+0
+0
+0
+18
+0
+TARGET
+15
+15
+0
+0
+0
+18
+0
+Object
+Block Type
+Module
+Source System
+Target System
+Start Date
+Start Time
+End Time
+Status
+Running?
+Runtime 
+Sec. 
+Progress in %
+Remaining 
+TIme
+MARA_TRAINING
+EXP
+MM
+SOURCE
+04.02.2019
+13:11:31
+13:11:42
+CO
+10
+100.00
+0
+Information Mini System Monitor   
+Transformation Progress
+
+=====PAGE 204=====
+03.02.2020
+204
+Adding Global Selections to Start Tables (Mass Mode)
+Mass assignment of existing global selections to tables 
+Accessible via SAP Menu Functions Apply Global Selections 
+Note: If a global selection is already assigned to a table, no further selections can be added, the existing 
+one would have to be removed first 
+Apply Global Selection
+Scenario
+SNP_SALES_ORDER
+Module
+SD
+Objects
+VBAU_TRAINING
+Table
+Delivery class
+Selection
+VKORG
+
+
+Requires SQL Expert Mode
+
+=====PAGE 205=====
+205
+Domain Usage with Content
+
+Checks whether table fields have certain values of a 
+domain 
+
+Search also in cross-client tables 
+
+Accessible via SAP Menu Functions Domain 
+usage with content 
+Selection for optimal runtime 
+•
+"Search all values at once"
+•
+"Complete rows"
+•
+Max. Number of hits = 1
+Result list domain BUKRS
+
+=====PAGE 206=====
+03.02.2020
+206
+Domain Usage
+Locates table fields with selected domains and 
+indicates whether they are already in the scenario 
+Accessible via SAP Menu Functions Domain 
+Usage
+Color code:
+
+Table is missing
+
+Table is inactive
+
+Table is active
+
+=====PAGE 207=====
+Content – SNP_MIG
+03.02.2020
+207
+
+=====PAGE 208=====
+Content – Procedure
+Transformation
+1. 
+Object
+2. Tables
+3. 
+Rules
+Adjust to systems & scope
+Allign within SNP-Team
+
+=====PAGE 209=====
+209
+System Monitor
+Massive adding of global 
+selections 
+E-mail dispatch in TC 
+Domain usage 
+Domain usage with content 
+
+=====PAGE 210=====
+Tools and Additional Features
+03.02.2020
+210
+Summary 
+In this chapter you have learned about additional tools and 
+functions that make working with the Transformation 
+Cockpit easier.
+You are able to: 
+•
+Use the System Monitor 
+•
+Assign global selections to tables massively
+•
+Run domain usage with content 
+•
+Run the domain usage 
+
+=====PAGE 211=====
+14 Certification
+211
+
+=====PAGE 212=====
+14 Certification
+03.02.2020
+212
+https://service.snp-
+ag.com/ilias
+1. Log in to ILIAS using the login data provided by your 
+SNP trainer.
+2. Select the certification and start the test.
+Duration:  60 Minutes
+
+=====PAGE 213=====
+Follow us
+Thank you.
+SNP Schneider-Neureither & Partner SE 
+Dossenheimer Landstr. 100 
+69121 Heidelberg
++49 6221 64 25 - 0
++49 6221 64 25 - 20
+info@snpgroup.com
+www.snpgroup.com
+
+=====PAGE 214=====
+© 2019 SNP SE or an SNP affiliate company. All rights reserved. No part of this publication 
+may be reproduced or transmitted in any form or for any purpose without the express 
+permission of SNP SE or an SNP affiliate company.
+The information contained herein may be changed at any time without notice. Some 
+software products marketed by SNP SE and its distributors contain proprietary software 
+components of other software vendors.
+This document is a preliminary version and not subject to your license agreement or any 
+other agreement with SNP. This document contains only intended strategies, developments, 
+and functionalities of the SNP product and is not intended to be binding upon SNP to any 
+particular course of business, product strategy, and/or development.
+SNP assumes no responsibility for errors or omissions in this document. SNP does not 
+warrant the accuracy or completeness of the information, text, graphics, links, or other items 
+contained within this material. This document is provided without a warranty of any kind, 
+either express or implied, including but not limited to the implied warranties of 
+merchantability, fitness for a particular purpose, or non-infringement.
+SNP shall have no liability for damages of any kind including without limitation direct, 
+special, indirect, or consequential damages that may result from the use of these materials. 
+This limitation shall not apply in cases of intent or gross negligence.
+SAP and other SAP products and services mentioned herein as well as their respective logos 
+are trademarks or registered trademarks of SAP SE (or an SAP affiliate company) in 
+Germany and in several other countries.
+All other product and service names mentioned are the trademarks of their respective 
+companies.
+Heidelberg, Germany 2019
+Disclaimer
+

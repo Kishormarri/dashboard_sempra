@@ -1892,7 +1892,7 @@ function exportXLS(rows,sheetName,filename){
   var wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([EI_HDRS].concat(rowsToCols(rows))),sheetName);
   XLSX.writeFile(wb,filename);
-}],filename); }
+}
 document.getElementById('btnS1CSV').addEventListener('click',function(){ exportCSV(filterSet(_s1Data,'s1Filter','s1Search'),'dm3_set1_in_ref.csv'); });
 document.getElementById('btnS1XLS').addEventListener('click',function(){ exportXLS(filterSet(_s1Data,'s1Filter','s1Search'),'Set1-InRef','dm3_set1_in_ref.xlsx'); });
 document.getElementById('btnS2CSV').addEventListener('click',function(){ exportCSV(filterSet(_s2Data,'s2Filter','s2Search'),'dm3_set2_not_in_ref.csv'); });

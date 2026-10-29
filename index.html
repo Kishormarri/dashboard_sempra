@@ -4072,7 +4072,9 @@ function _arTick(){
   _arRemaining--;
   if(_arRemaining<=0){
     _arRemaining=_arInterval;
-    /* only auto-sync if user is logged in (session exists) */
+    /* GitHub Pages: always auto-sync (no session needed — auto-logged in) */
+    if(_IS_GITHUB_PAGES){ startBgAutomation(); return; }
+    /* Local: only auto-sync if user is logged in */
     try{
       var s=sessionStorage.getItem('gbl_dm_session');
       if(s){ startBgAutomation(); }

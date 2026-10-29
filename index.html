@@ -5367,6 +5367,13 @@ function gblLogout(){
 
 /* ── AUTO-RESTORE SESSION on page load ── */
 (function(){
+  /* GitHub Pages: auto-login as viewer — no password needed for public demo */
+  if(window.location.hostname.indexOf('github.io')!==-1){
+    gblApplySession('Sempra Viewer','viewer',Date.now());
+    _bgSeedBakedData();
+    loadAll();
+    return;
+  }
   try{
     var s=sessionStorage.getItem(_SESSION_KEY);
     if(s){

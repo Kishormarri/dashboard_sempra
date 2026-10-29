@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Executive Summary — 📊 Data Migration Cycles</title>
+<title>Executive Summary — SharePoint — 📊 Data Migration Cycles</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -368,7 +368,7 @@ footer{margin-top:50px;padding-top:14px;border-top:1px solid #e2e8f0;text-align:
 
 /* DRILL-DOWN MODAL */
 .drill-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px}
-.drill-dialog{background:#fff;border-radius:14px;width:100%;max-width:960px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+.drill-dialog{background:#fff;border-radius:14px;width:100%;max-width:1120px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
 .drill-hdr{display:flex;align-items:center;gap:10px;padding:14px 20px;background:#1e3a5f;color:#fff;flex-shrink:0}
 .drill-hdr-title{font-size:14px;font-weight:800;flex:1;letter-spacing:-.01em}
 .drill-hdr-sub{font-size:11px;opacity:.7;margin-top:2px}
@@ -388,10 +388,16 @@ footer{margin-top:50px;padding-top:14px;border-top:1px solid #e2e8f0;text-align:
 .drill-dl-btn:hover{background:#f1f5f9}
 .drill-dl-btn.prim{background:#1d4ed8;color:#fff;border-color:#1d4ed8}.drill-dl-btn.prim:hover{background:#1e40af}
 .drill-dl-btn.sec{background:#15803d;color:#fff;border-color:#15803d}.drill-dl-btn.sec:hover{background:#166534}
-.badge-match{background:#dcfce7;color:#15803d;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;white-space:nowrap}
-.badge-src{background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;white-space:nowrap}
-.badge-tgt{background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;white-space:nowrap}
-.badge-na{color:#94a3b8;font-size:10px}
+.drill-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;white-space:nowrap}
+.badge-match{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0}
+.badge-src{background:#fffbeb;color:#b45309;border:1px solid #fde68a}
+.badge-tgt{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.badge-na{background:#f1f5f9;color:#64748b;border:1px solid #e2e8f0}
+.drill-summary-bar{display:flex;gap:10px;padding:6px 0;flex-wrap:wrap;align-items:center}
+.drill-sb-item{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:11px;border:1px solid #e2e8f0;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.drill-sb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.drill-sb-lbl{color:#475569;font-weight:600}
+.drill-sb-val{font-size:12px;font-weight:800}
 .drill-body{flex:1;overflow-y:auto;overflow-x:auto}
 /* visual panel */
 .drill-visual{flex:1;overflow-y:auto;padding:24px;display:none;background:#f8fafc}
@@ -585,15 +591,13 @@ body:not(.role-admin) .admin-only{display:none!important}
 
 <div class="page-header">
   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
-    <h1>Executive Summary &mdash; &#x1F4CA; Data Migration Cycles</h1>
-    <!-- Cycle Dropdown: Circle Button with Dashboard Symbol -->
+    <h1>Executive Summary — SharePoint &mdash; &#x1F4CA; Data Migration Cycles</h1>
+    <!-- Cycle Dropdown -->
     <div style="position:relative" id="cycleDropWrap" class="admin-only">
-      <button onclick="toggleCycleDrop()" id="cycleDropBtn" title="Switch Cycle Dashboard (DM1 / DM2 / DM3)"
-        style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,rgba(59,130,246,0.35),rgba(99,102,241,0.35));border:1.5px solid rgba(147,197,253,0.5);cursor:pointer;transition:all .2s cubic-bezier(0.4,0,0.2,1);box-shadow:0 4px 14px rgba(0,0,0,0.3);position:relative;padding:0"
-        onmouseover="this.style.transform='scale(1.08)';this.style.borderColor='#93c5fd';this.style.boxShadow='0 0 16px rgba(99,102,241,0.6)'"
-        onmouseout="this.style.transform='scale(1)';this.style.borderColor='rgba(147,197,253,0.5)';this.style.boxShadow='0 4px 14px rgba(0,0,0,0.3)'">
-        <!-- Inside Circle Symbol with Dashboard Icon -->
-        <span style="width:28px;height:28px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.12);font-size:14px;line-height:1">&#x1F4CA;</span>
+      <button onclick="toggleCycleDrop()"
+        style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 16px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .18s;backdrop-filter:blur(6px)"
+        onmouseover="this.style.background='rgba(255,255,255,.18)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">
+        &#x1F4CA; View Cycle Dashboard &nbsp;&#x25BE;
       </button>
       <div id="cycleDropMenu" style="display:none;position:fixed;min-width:240px;background:#0f1f38;border:1px solid #1e3a5f;border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.9);z-index:99999">
         <a href="Sempra_DM1_Dashboard.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;color:#a5b4fc;font-size:12px;font-weight:700;text-decoration:none;border-bottom:1px solid #1e293b;transition:background .15s"
@@ -644,7 +648,6 @@ document.addEventListener('click', function(e) {
     if (menu) menu.classList.remove('cdm-open');
   }
 });
-
 </script>
 
 <!-- TOOLTIP -->
@@ -1017,13 +1020,13 @@ document.addEventListener('click', function(e) {
       <table class="ct">
         <thead><tr>
           <th class="ctl" rowspan="2">Count Metric</th>
-          <th class="h-dm1" colspan="3">&#x1F5C2; Data Migration Cycle 1</th>
-          <th class="h-dm2" colspan="3">&#x1F5C3; Data Migration Cycle 2</th>
-          <th class="h-dm3" colspan="3">&#x1F5C4; Data Migration Cycle 3</th>
+          <th class="h-dm1" colspan="4">&#x1F5C2; Data Migration Cycle 1</th>
+          <th class="h-dm2" colspan="4">&#x1F5C3; Data Migration Cycle 2</th>
+          <th class="h-dm3" colspan="4">&#x1F5C4; Data Migration Cycle 3</th>
         </tr><tr>
-          <th class="h-dm1">Export</th><th class="h-dm1">Import</th><th class="h-dm1">Variance</th>
-          <th class="h-dm2">Export</th><th class="h-dm2">Import</th><th class="h-dm2">Variance</th>
-          <th class="h-dm3">Export</th><th class="h-dm3">Import</th><th class="h-dm3">Variance</th>
+          <th class="h-dm1">Export</th><th class="h-dm1">Import</th><th class="h-dm1">Variance</th><th class="h-dm1">Status</th>
+          <th class="h-dm2">Export</th><th class="h-dm2">Import</th><th class="h-dm2">Variance</th><th class="h-dm2">Status</th>
+          <th class="h-dm3">Export</th><th class="h-dm3">Import</th><th class="h-dm3">Variance</th><th class="h-dm3">Status</th>
         </tr></thead>
         <tbody id="countVarBody">
           <tr><td colspan="10" style="padding:28px;text-align:center;color:#94a3b8">No data — click Refresh.</td></tr>
@@ -1061,7 +1064,7 @@ document.addEventListener('click', function(e) {
   <div class="chart-grid" id="chartGrid"><!-- rendered by JS --></div>
 
 </div><!-- /wrap -->
-<footer>Made with IBM Bob &mdash; Cross-Cycle Executive Summary Dashboard</footer>
+<footer>Made with IBM Bob &mdash; Cross-Cycle Executive Summary — SharePoint Dashboard</footer>
 
 <script>
 /* ── CYCLE DEFINITIONS ── */
@@ -1228,49 +1231,15 @@ var _bgTotalSecs = 0;
   document.head.appendChild(s);
 })();
 
-
 function startBgAutomation() {
   if (_bgAuto.running) { _bgShowToast('⚠ Automation already running — please wait.','#d97706'); return; }
   _bgAuto.running = true;
   _bgAuto.startTs = Date.now();
   _bgSetBtn(true);
+  /* NOTE: do NOT purge localStorage here — keep existing data visible until new data arrives successfully */
   _bgShowPanel();
-  
-  var isRemoteHost = (window.location.protocol === 'https:' || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'));
-  
-  if (isRemoteHost) {
-    /* Fast, smooth online sync for GitHub Pages */
-    _bgLog('START', '⚡ Initiating cloud verification sync for 3 migration cycles…');
-    _bgSetStep(1, 'running');
-    _bgGaugeAnim('DM1', true);
-    setTimeout(function() {
-      _bgApplyFallback('DM1', 1, function(ok1, d1) {
-        _bgGaugeAnim('DM1', false);
-        _bgSetStep(1, 'done', d1);
-        _bgSetStep(2, 'running');
-        _bgGaugeAnim('DM2', true);
-        setTimeout(function() {
-          _bgApplyFallback('DM2', 2, function(ok2, d2) {
-            _bgGaugeAnim('DM2', false);
-            _bgSetStep(2, 'done', d2);
-            _bgSetStep(3, 'running');
-            _bgGaugeAnim('DM3', true);
-            setTimeout(function() {
-              _bgApplyFallback('DM3', 3, function(ok3, d3) {
-                _bgGaugeAnim('DM3', false);
-                _bgSetStep(3, 'done', d3);
-                _bgFinish(true);
-              });
-            }, 300);
-          });
-        }, 300);
-      });
-    }, 300);
-    return;
-  }
-
-  /* Local execution via python bridge with guaranteed fallback */
-  try { fetch(_BG_BRIDGE + '/cache/clear', { method: 'POST' }).catch(function(){}); } catch(e){}
+  /* Force bridge to invalidate its in-memory cache */
+  fetch(_BG_BRIDGE + '/cache/clear', { method: 'POST' }).catch(function(){});
   _bgSetStep(1, 'running');
   _bgGaugeAnim('DM1', true);
   _bgRunCycle('DM1', 1, function(ok1, d1) {
@@ -1292,8 +1261,8 @@ function startBgAutomation() {
   });
 }
 
+/* alias — button calls startFull3CycleAutomation */
 function startFull3CycleAutomation() { startBgAutomation(); }
-
 
 
 function _bgApplyFallback(cycle, stepN, cb) {
@@ -1363,6 +1332,7 @@ function _bgRunCycle(cycle, stepN, cb) {
     _bgApplyFallback(cycle, stepN, cb);
   }
 }
+
 
 function _bgFetch(cycle, type, onOk, onErr) {
   var url = _BG_BRIDGE + '/file?cycle=' + cycle + '&type=' + type + '&_t=' + Date.now();
@@ -1566,6 +1536,12 @@ function _bgDirectAnalyse(cycle, stepN, refBuf, expBuf, cb, impBuf) {
     /* strip _compactRows from the KPI summary before saving (keep it lean) */
     delete result._compactRows;
     try{localStorage.setItem(lsKey,JSON.stringify(result));}catch(e){}
+    /* Also write to the individual dashboard's session restore key so btnRun enables on open */
+    try{
+      var dmSessionKey='Sempra_'+cycle+'_Dashboard';
+      var sessionSnap=Object.assign({},result,{_cycle:cycle,_savedAt:Date.now()});
+      localStorage.setItem(dmSessionKey,JSON.stringify(sessionSnap));
+    }catch(e){}
     _bgLog(cycle,'✅ Done — kTotal='+result.kTotal+' Match='+result.kPct+' EXP='+result.expTotalRec.toLocaleString()+' IMP='+result.impTotalRec.toLocaleString());
     if(stepN){_bgSetStep(stepN,'done',{kTotal:result.kTotal,kPct:result.kPct,kExp:result.kExp,kImp:result.kImp});_bgUpdateOverall(stepN*33);}
     if(typeof cb === 'function') cb(true, result);
@@ -1869,7 +1845,6 @@ function _bgSetBtn(running){
 }
 
 /* ── LOAD ── */
-
 function loadAll(){
   var _t0=performance.now();
   var any=false;
@@ -1878,23 +1853,22 @@ function loadAll(){
   CYCLES.forEach(function(c){
     try{
       var raw=localStorage.getItem(c.key);
-      var d=null;
       if(raw){
-        try{ d=JSON.parse(raw); }catch(e){}
-      }
-      var hasValidKpi = d && typeof d==='object' && d.kTotal && d.kPct;
-      if(hasValidKpi){
-        _data[c.label]=d;
-        any=true;
+        var d=JSON.parse(raw);
+        var hasKpi=d&&(d.kTotal!==undefined||d.kPct!==undefined||d.kExp!==undefined);
+        if(d&&(d._cycle===c.label||hasKpi)){
+          _data[c.label]=d;
+          if(hasKpi) any=true;
+        } else {
+          _data[c.label]=(_DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[c.label]) ? _DEFAULT_CYCLE_DATA[c.label] : null;
+          if(_data[c.label]) any=true;
+        }
       } else if(typeof _DEFAULT_CYCLE_DATA !== 'undefined' && _DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[c.label]){
         _data[c.label]=_DEFAULT_CYCLE_DATA[c.label];
-        try{ localStorage.setItem(c.key, JSON.stringify(_DEFAULT_CYCLE_DATA[c.label])); }catch(e){}
         any=true;
-      } else {
-        _data[c.label]=null;
       }
     }catch(e){
-      _data[c.label]=(typeof _DEFAULT_CYCLE_DATA !== 'undefined' && _DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[c.label]) ? _DEFAULT_CYCLE_DATA[c.label] : null;
+      _data[c.label]=(_DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA[c.label]) ? _DEFAULT_CYCLE_DATA[c.label] : null;
       if(_data[c.label]) any=true;
     }
   });
@@ -1904,10 +1878,10 @@ function loadAll(){
   renderAll();
   _perfTimings.renderAll=performance.now()-_r0;
   var now=new Date();
-  var statusEl=document.getElementById('lastRefresh');
-  if(statusEl) statusEl.textContent='Last refreshed: '+now.toLocaleDateString()+' '+now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' — Synchronized with verified migration counts';
+  document.getElementById('lastRefresh').textContent='Last refreshed: '+now.toLocaleDateString()+' '+now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' — Synchronized with verified migration counts';
 }
 
+/* ── HELPERS ── */
 function safe(d,k,fb){if(!d)return fb!==undefined?fb:'—';var v=d[k];return(v!==undefined&&v!==null&&v!=='')?String(v):(fb!==undefined?String(fb):'—');}
 function ni(d,k){var v=parseInt(String(safe(d,k,'0')).replace(/,/g,''));return isNaN(v)?0:v;}
 function nf(d,k){var v=parseFloat(String(safe(d,k,'0')).replace(/,/g,''));return isNaN(v)?0:v;}
@@ -2386,23 +2360,25 @@ function renderCountVarTable(){
      fn:function(d){return{exp:ni(d,'kEIok'),imp:ni(d,'kEIfail'),expLbl:'Match ✔',impLbl:'Mismatch ✘'};}},
   ];
   rows.forEach(function(r,idx){
-    if(idx===0) h+='<tr class="grp-row"><td colspan="10">Reference List Record Counts</td></tr>';
-    if(idx===4) h+='<tr class="grp-row"><td colspan="10">Table-Level Match vs Mismatch (Count of Tables)</td></tr>';
+    if(idx===0) h+='<tr class="grp-row"><td colspan="13">Reference List Record Counts</td></tr>';
+    if(idx===4) h+='<tr class="grp-row"><td colspan="13">Table-Level Match vs Mismatch (Count of Tables)</td></tr>';
     h+='<tr><td class="ctl">'+r.lbl+'<br><span class="sub">'+r.sub+'</span></td>';
     CYCLES.forEach(function(c){
       var d=_data[c.label];
-      if(!d){h+='<td colspan="3" style="color:#94a3b8;font-size:11px">No data</td>';return;}
+      if(!d){h+='<td colspan="4" style="color:#94a3b8;font-size:11px">No data</td>';return;}
       var res=r.fn(d);
       var diff=res.exp-res.imp;
       var expFmt=r.isCount?'<span class="pill p-ok"><strong>'+fmt(res.exp)+'</strong></span>':'<strong>'+fmt(res.exp)+'</strong>';
       var impFmt=r.isCount?'<span class="pill p-fail"><strong>'+fmt(res.imp)+'</strong></span>':'<strong>'+fmt(res.imp)+'</strong>';
+      var status=isNaN(diff)?'':diff===0?'Matched':diff>0?'Source is More':'Target is More';
       h+='<td title="'+res.expLbl+'">'+expFmt+'</td>';
       h+='<td title="'+res.impLbl+'">'+impFmt+'</td>';
       h+='<td>'+fmtVar(diff)+'</td>';
+      h+='<td>'+status+'</td>';
     });
     h+='</tr>';
   });
-  document.getElementById('countVarBody').innerHTML=h||'<tr><td colspan="10" style="padding:28px;text-align:center;color:#94a3b8">No data yet.</td></tr>';
+  document.getElementById('countVarBody').innerHTML=h||'<tr><td colspan="13" style="padding:28px;text-align:center;color:#94a3b8">No data yet.</td></tr>';
 }
 
 /* ── SECTION 4: FULL KPI TABLE ── */
@@ -2866,6 +2842,7 @@ function drillRender(){
     var s=v!==null&&v!==undefined?Number(v).toLocaleString():'<span style="color:#cbd5e1">—</span>';
     return '<td class="r"'+cellStyle(which)+'>'+s+'</td>';
   }
+  var isRefAll=_drillSection==='refAll';
   var slice=rows.slice(_drillShown,toShow);
   /* PERF: use array + join instead of string concatenation in loop */
   var tbodyParts=[];
@@ -2874,35 +2851,38 @@ function drillRender(){
     var idx=_drillShown+_si+1;
     /* cache row values once */
     var r0=r[0],r2=r[2],r3=r[3],r4=r[4],r5=r[5],r6=r[6];
-    var statusTd='';
-    if(diffKey!==undefined){
-      var dv=getDiff(r);
-      if(dv===null){statusTd='<td class="r"><span style="color:#94a3b8;font-size:10px">—</span></td>';}
-      else if(dv===0){statusTd='<td class="r"><span style="color:#059669;font-weight:700;font-size:12px">✔ Match</span></td>';}
-      else{var dvs=(dv>0?'+':'')+Number(dv).toLocaleString();statusTd='<td class="r"><span style="color:#c2410c;font-weight:700;font-size:12px">✘ '+dvs+'</span></td>';}
-    } else if(_drillSection==='refAll'){
+    
+    if(isRefAll){
       var stInfo=getSrcTgtDiffInfo(r2,r3);
+      var diffColStyle=stInfo.diff===0?'color:#059669':stInfo.diff>0?'color:#d97706':stInfo.diff<0?'color:#dc2626':'color:#94a3b8';
       var inE=r4!==null&&r4!==undefined;
       var inI=r5!==null&&r5!==undefined;
-      var stDiffTd=stInfo.diff===null
-        ?'<td class="r" style="color:#94a3b8;font-size:10px">—</td>'
-        :stInfo.diff===0
-          ?'<td class="r" style="color:#059669;font-weight:700;font-size:11px">0</td>'
-          :stInfo.diff<0
-            ?'<td class="r" style="color:#0284c7;font-weight:700;font-size:11px">'+stInfo.diff.toLocaleString()+'</td>'
-            :'<td class="r" style="color:#d97706;font-weight:700;font-size:11px">+'+stInfo.diff.toLocaleString()+'</td>';
-      var stBadgeTd='<td class="r"><span class="'+stInfo.badgeCls+'">'+stInfo.badgeText+'</span></td>';
-      statusTd=stDiffTd+stBadgeTd
-             +'<td class="r">'+(inE?'<span style="color:#059669;font-weight:700">✔</span>':'<span style="color:#c2410c;font-weight:700">✘</span>')+'</td>'
-             +'<td class="r">'+(inI?'<span style="color:#059669;font-weight:700">✔</span>':'<span style="color:#c2410c;font-weight:700">✘</span>')+'</td>';
+      tbodyParts.push('<tr>'
+        +'<td style="color:#94a3b8;min-width:32px;font-size:10px">'+idx+'</td>'
+        +'<td style="font-weight:600;color:#1e293b;max-width:300px;overflow:hidden;text-overflow:ellipsis;font-size:11px">'+esc(r0)+'</td>'
+        +numTd(r2,'src')+numTd(r3,'tgt')
+        +'<td class="r" style="font-weight:700;'+diffColStyle+'">'+stInfo.diffText+'</td>'
+        +'<td style="text-align:center"><span class="drill-badge '+stInfo.badgeCls+'">'+stInfo.badgeText+'</span></td>'
+        +numTd(r4,'exp')+numTd(r5,'imp')
+        +'<td class="r">'+(inE?'<span style="color:#059669;font-weight:700">✔</span>':'<span style="color:#c2410c;font-weight:700">✘</span>')+'</td>'
+        +'<td class="r">'+(inI?'<span style="color:#059669;font-weight:700">✔</span>':'<span style="color:#c2410c;font-weight:700">✘</span>')+'</td>'
+        +'</tr>');
     } else {
-      statusTd='<td class="r">'+(r6===1?'<span style="color:#059669;font-weight:700">✔ REF</span>':'<span style="color:#c2410c;font-weight:700">✘ No</span>')+'</td>';
+      var statusTd='';
+      if(diffKey!==undefined){
+        var dv=getDiff(r);
+        if(dv===null){statusTd='<td class="r"><span style="color:#94a3b8;font-size:10px">—</span></td>';}
+        else if(dv===0){statusTd='<td class="r"><span style="color:#059669;font-weight:700;font-size:12px">✔ Match</span></td>';}
+        else{var dvs=(dv>0?'+':'')+Number(dv).toLocaleString();statusTd='<td class="r"><span style="color:#c2410c;font-weight:700;font-size:12px">✘ '+dvs+'</span></td>';}
+      } else {
+        statusTd='<td class="r">'+(r6===1?'<span style="color:#059669;font-weight:700">✔ REF</span>':'<span style="color:#c2410c;font-weight:700">✘ No</span>')+'</td>';
+      }
+      tbodyParts.push('<tr>'
+        +'<td style="color:#94a3b8;min-width:32px;font-size:10px">'+idx+'</td>'
+        +'<td style="font-weight:600;color:#1e293b;max-width:340px;overflow:hidden;text-overflow:ellipsis;font-size:11px">'+esc(r0)+'</td>'
+        +numTd(r2,'src')+numTd(r3,'tgt')+numTd(r4,'exp')+numTd(r5,'imp')
+        +statusTd+'</tr>');
     }
-    tbodyParts.push('<tr>'
-      +'<td style="color:#94a3b8;min-width:32px;font-size:10px">'+idx+'</td>'
-      +'<td style="font-weight:600;color:#1e293b;max-width:340px;overflow:hidden;text-overflow:ellipsis;font-size:11px">'+esc(r0)+'</td>'
-      +numTd(r2,'src')+numTd(r3,'tgt')+numTd(r4,'exp')+numTd(r5,'imp')
-      +statusTd+'</tr>');
   }
   var tbodyHtml=tbodyParts.join('');
 
@@ -2913,25 +2893,68 @@ function drillRender(){
       if(which===colB) return ' style="'+colStyle(colB)+'"';
       return '';
     }
-    var lastHdr=diffKey!==undefined
-      ?'<th class="r">Diff / Status</th>'
-      :_drillSection==='refAll'
-        ?'<th class="r">Diff (Src-Tgt)</th><th class="r">Src vs Tgt Status</th><th class="r">In EXP</th><th class="r">In IMP</th>'
+    var banner='';
+    var theadHtml='';
+
+    if(isRefAll){
+      var stMatch=0,stSrcMore=0,stTgtMore=0,stNA=0;
+      for(var _ri=0;_ri<rows.length;_ri++){
+        var _s=rows[_ri][2],_t=rows[_ri][3];
+        if(_s!==null&&_s!==undefined&&_t!==null&&_t!==undefined&&_s!==''&&_t!==''){
+          var _d=Number(_s)-Number(_t);
+          if(_d===0)stMatch++;
+          else if(_d<0)stTgtMore++;
+          else stSrcMore++;
+        } else {
+          stNA++;
+        }
+      }
+      var pMatch=total?((stMatch/total)*100).toFixed(1):'0.0';
+      var pSrcMore=total?((stSrcMore/total)*100).toFixed(1):'0.0';
+      var pTgtMore=total?((stTgtMore/total)*100).toFixed(1):'0.0';
+
+      banner='<div style="padding:10px 14px;background:#f0fdf4;border-bottom:2px solid #86efac;font-size:11px">'
+        +'<div style="font-weight:700;color:#166534;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">'
+        +'<span>&#x1F4CB; All tables in the Reference List &bull; Source − Target Difference &amp; Match Status:</span>'
+        +'<span style="font-weight:600;font-size:10px;color:#15803d">&#x2714; = found in Export/Import &nbsp;|&nbsp; &#x2718; = missing</span>'
+        +'</div>'
+        +'<div class="drill-summary-bar">'
+        +'<div class="drill-sb-item" style="border-color:#bbf7d0;background:#fff"><span class="drill-sb-dot" style="background:#059669"></span><span class="drill-sb-lbl" style="color:#166534">Matching (Source = Target):</span><span class="drill-sb-val" style="color:#059669"><b>'+stMatch.toLocaleString()+'</b> <span style="font-size:10px;color:#15803d">('+pMatch+'%)</span></span></div>'
+        +'<div class="drill-sb-item" style="border-color:#fed7aa;background:#fff"><span class="drill-sb-dot" style="background:#d97706"></span><span class="drill-sb-lbl" style="color:#9a3412">Source is more (Source &gt; Target):</span><span class="drill-sb-val" style="color:#d97706"><b>'+stSrcMore.toLocaleString()+'</b> <span style="font-size:10px;color:#c2410c">('+pSrcMore+'%)</span></span></div>'
+        +'<div class="drill-sb-item" style="border-color:#fecaca;background:#fff"><span class="drill-sb-dot" style="background:#dc2626"></span><span class="drill-sb-lbl" style="color:#991b1b">Target is more (Source &lt; Target):</span><span class="drill-sb-val" style="color:#dc2626"><b>'+stTgtMore.toLocaleString()+'</b> <span style="font-size:10px;color:#b91c1c">('+pTgtMore+'%)</span></span></div>'
+        +'</div>'
+        +'</div>';
+
+      theadHtml='<tr>'
+        +'<th style="min-width:32px">#</th><th>Table Name</th>'
+        +'<th class="r">Source</th>'
+        +'<th class="r">Target</th>'
+        +'<th class="r" style="background:#e0f2fe;color:#0369a1">Diff (Src - Tgt)</th>'
+        +'<th style="text-align:center;background:#e0f2fe;color:#0369a1">Status</th>'
+        +'<th class="r">Export</th>'
+        +'<th class="r">Import</th>'
+        +'<th class="r">In EXP</th><th class="r">In IMP</th>'
+        +'</tr>';
+    } else {
+      var lastHdr=diffKey!==undefined
+        ?'<th class="r">Diff / Status</th>'
         :'<th class="r">In REF</th>';
-    /* Rule banner */
-    var bannerTxt=rule.banner||'';
-    var bannerBg=isMatchRule?'#dcfce7':'#fff7ed';
-    var bannerBorder=isMatchRule?'#86efac':'#fdba74';
-    var bannerColor=isMatchRule?'#065f46':'#9a3412';
-    var banner=bannerTxt?'<div style="padding:8px 14px;background:'+bannerBg+';border-bottom:2px solid '+bannerBorder+';font-size:11px;font-weight:600;color:'+bannerColor+'">'+bannerTxt+'</div>':'';
-    bodyEl.innerHTML=banner+'<table class="drtbl"><thead><tr>'
-      +'<th style="min-width:32px">#</th><th>Table Name</th>'
-      +'<th class="r"'+hdrStyle('src')+'>Source</th>'
-      +'<th class="r"'+hdrStyle('tgt')+'>Target</th>'
-      +'<th class="r"'+hdrStyle('exp')+'>Export</th>'
-      +'<th class="r"'+hdrStyle('imp')+'>Import</th>'
-      +lastHdr
-      +'</tr></thead><tbody>'+tbodyHtml+'</tbody></table>';
+      var bannerTxt=rule.banner||'';
+      var bannerBg=isMatchRule?'#dcfce7':'#fff7ed';
+      var bannerBorder=isMatchRule?'#86efac':'#fdba74';
+      var bannerColor=isMatchRule?'#065f46':'#9a3412';
+      banner=bannerTxt?'<div style="padding:8px 14px;background:'+bannerBg+';border-bottom:2px solid '+bannerBorder+';font-size:11px;font-weight:600;color:'+bannerColor+'">'+bannerTxt+'</div>':'';
+      theadHtml='<tr>'
+        +'<th style="min-width:32px">#</th><th>Table Name</th>'
+        +'<th class="r"'+hdrStyle('src')+'>Source</th>'
+        +'<th class="r"'+hdrStyle('tgt')+'>Target</th>'
+        +'<th class="r"'+hdrStyle('exp')+'>Export</th>'
+        +'<th class="r"'+hdrStyle('imp')+'>Import</th>'
+        +lastHdr
+        +'</tr>';
+    }
+
+    bodyEl.innerHTML=banner+'<table class="drtbl"><thead>'+theadHtml+'</thead><tbody>'+tbodyHtml+'</tbody></table>';
   } else {
     var tbody=bodyEl.querySelector('tbody');
     if(tbody) tbody.insertAdjacentHTML('beforeend',tbodyHtml);
@@ -3195,6 +3218,114 @@ function drillRenderVisual(){
   var diffKey=rule.diff;
   var secLbl=_DRILL_LABELS[_drillSection]||_drillSection;
 
+  if(_drillSection==='refAll'){
+    var stMatch=0,stSrcMore=0,stTgtMore=0,stNA=0;
+    var withDiff=[];
+    (allRows||[]).forEach(function(r){
+      var _s=r[2],_t=r[3];
+      if(_s!==null&&_s!==undefined&&_t!==null&&_t!==undefined&&_s!==''&&_t!==''){
+        var _d=Number(_s)-Number(_t);
+        if(_d===0) stMatch++;
+        else if(_d<0) stTgtMore++;
+        else stSrcMore++;
+        if(_d!==0){
+          withDiff.push({name:r[0],diff:_d,abs:Math.abs(_d),src:_s,tgt:_t});
+        }
+      } else {
+        stNA++;
+      }
+    });
+    var grandTot=allRows?allRows.length:1;
+    var pMatch=Math.round((stMatch/grandTot)*100);
+    var pSrcMore=Math.round((stSrcMore/grandTot)*100);
+    var pTgtMore=Math.round((stTgtMore/grandTot)*100);
+
+    /* 3-segment SVG Donut */
+    var rD=80,cx=100,cy=100,stroke=28;
+    var circ=2*Math.PI*rD;
+    var lenMatch=circ*(stMatch/grandTot);
+    var lenSrc=circ*(stSrcMore/grandTot);
+    var lenTgt=circ*(stTgtMore/grandTot);
+    var offMatch=circ*0.25;
+    var offSrc=offMatch-lenMatch;
+    var offTgt=offSrc-lenSrc;
+
+    function mkArc(len,col,off){
+      if(!len||len<=0) return '';
+      return '<circle cx="'+cx+'" cy="'+cy+'" r="'+rD+'" fill="none" stroke="'+col+'" stroke-width="'+stroke+'" '
+        +'stroke-dasharray="'+len.toFixed(2)+' '+(circ-len).toFixed(2)+'" '
+        +'stroke-dashoffset="'+off.toFixed(2)+'" />';
+    }
+
+    var donutSvg='<svg viewBox="0 0 200 200">'
+      +'<circle cx="'+cx+'" cy="'+cy+'" r="'+rD+'" fill="none" stroke="#f1f5f9" stroke-width="'+stroke+'"/>'
+      +mkArc(lenMatch,'#059669',offMatch)
+      +mkArc(lenSrc,'#d97706',offSrc)
+      +mkArc(lenTgt,'#dc2626',offTgt)
+      +'</svg>';
+
+    withDiff.sort(function(a,b){return b.abs-a.abs;});
+    var top=withDiff.slice(0,10);
+    var colBreakdown='';
+    if(top.length){
+      var maxAbs=top[0].abs||1;
+      var rowsHtml='';
+      top.forEach(function(t){
+        var pct=Math.round((t.abs/maxAbs)*100);
+        var col=t.diff>0?'#d97706':'#dc2626';
+        var sign=t.diff>0?'+':'';
+        var lbl=t.diff>0?'Source is more':'Target is more';
+        rowsHtml+='<div class="dv-bar-row">'
+          +'<div class="dv-bar-lbl" title="'+esc(t.name)+'">'+esc(t.name.length>32?t.name.slice(0,30)+'…':t.name)+'</div>'
+          +'<div class="dv-bar-track"><div class="dv-bar-fill" style="width:'+pct+'%;background:'+col+'">'+sign+Number(t.diff).toLocaleString()+' ('+lbl+')</div></div>'
+          +'<div class="dv-bar-num" style="color:'+col+'">'+sign+Number(t.diff).toLocaleString()+'</div>'
+          +'</div>';
+      });
+      colBreakdown='<div class="dv-bar-section">'
+        +'<div class="dv-bar-title">&#x1F4CA; Top '+top.length+' Reference tables by largest Source vs Target count difference</div>'
+        +rowsHtml+'</div>';
+    }
+
+    vis.innerHTML='<div class="dv-grid">'
+      +'<div class="dv-donut-wrap">'+donutSvg
+      +'<div class="dv-center-lbl">'
+      +'<div class="dv-center-num" style="color:#059669">'+stMatch.toLocaleString()+'</div>'
+      +'<div class="dv-center-sub">Matching</div>'
+      +'</div></div>'
+      +'<div class="dv-stats">'
+      +'<div class="dv-stat">'
+      +'<div class="dv-stat-dot" style="background:#059669"></div>'
+      +'<div class="dv-stat-body"><div class="dv-stat-lbl">Matching tables (Source = Target)</div>'
+      +'<div class="dv-stat-sub">Source count exactly equals Target count (Diff = 0)</div></div>'
+      +'<div><span class="dv-stat-val" style="color:#059669">'+stMatch.toLocaleString()+'</span>'
+      +'<span class="dv-stat-pct" style="background:#dcfce7;color:#15803d">'+pMatch+'%</span></div>'
+      +'</div>'
+      +'<div class="dv-stat">'
+      +'<div class="dv-stat-dot" style="background:#d97706"></div>'
+      +'<div class="dv-stat-body"><div class="dv-stat-lbl">Source is more (Source &gt; Target)</div>'
+      +'<div class="dv-stat-sub">Source records exceed Target records</div></div>'
+      +'<div><span class="dv-stat-val" style="color:#d97706">'+stSrcMore.toLocaleString()+'</span>'
+      +'<span class="dv-stat-pct" style="background:#fff7ed;color:#c2410c">'+pSrcMore+'%</span></div>'
+      +'</div>'
+      +'<div class="dv-stat">'
+      +'<div class="dv-stat-dot" style="background:#dc2626"></div>'
+      +'<div class="dv-stat-body"><div class="dv-stat-lbl">Target is more (Source &lt; Target)</div>'
+      +'<div class="dv-stat-sub">Target records exceed Source records</div></div>'
+      +'<div><span class="dv-stat-val" style="color:#dc2626">'+stTgtMore.toLocaleString()+'</span>'
+      +'<span class="dv-stat-pct" style="background:#fef2f2;color:#b91c1c">'+pTgtMore+'%</span></div>'
+      +'</div>'
+      +'<div class="dv-stat" style="background:#f0f9ff;border-color:#bae6fd">'
+      +'<div class="dv-stat-dot" style="background:#0369a1"></div>'
+      +'<div class="dv-stat-body"><div class="dv-stat-lbl">Total Reference Tables</div>'
+      +'<div class="dv-stat-sub">All reference list tables assessed</div></div>'
+      +'<div><span class="dv-stat-val" style="color:#0369a1">'+grandTot.toLocaleString()+'</span></div>'
+      +'</div>'
+      +'</div>'
+      +'</div>'
+      +colBreakdown;
+    return;
+  }
+
   /* derive complement section & scope for the donut across all levels */
   var complementKey={
     refInExp:'refMissExp', refMissExp:'refInExp',
@@ -3339,22 +3470,20 @@ function drillDownloadCSV(){
   var hdr=_drillCycleLabel+' — '+secLbl+(q?' [search: '+q+']':'');
   var isRefAll=_drillSection==='refAll';
   var lines=['"'+hdr+'"','',isRefAll
-    ?'"#","Table Name","Source","Target","Diff (Source - Target)","Source vs Target Status","Export","Import","In EXP","In IMP"'
-    :'"#","Table Name","Source","Target","Export","Import","In REF"'];
+    ?'"#","Table Name","Source","Target","Diff (Source - Target)","Status","Export","Import","In EXP","In IMP"'
+    :'"#","Table Name","Source","Target","Diff (Source - Target)","Status","Export","Import","In REF"'];
   _drillRows.forEach(function(r,i){
     var stInfo=getSrcTgtDiffInfo(r[2],r[3]);
     var base=[
       i+1,
       '"'+String(r[0]).replace(/"/g,'""')+'"',
       r[2]!==null&&r[2]!==undefined?r[2]:'',
-      r[3]!==null&&r[3]!==undefined?r[3]:''
+      r[3]!==null&&r[3]!==undefined?r[3]:'',
+      stInfo.diff!==null?stInfo.diff:'',
+      '"'+stInfo.status+'"',
+      r[4]!==null&&r[4]!==undefined?r[4]:'',
+      r[5]!==null&&r[5]!==undefined?r[5]:''
     ];
-    if(isRefAll){
-      base.push(stInfo.diff!==null?stInfo.diff:'');
-      base.push('"'+stInfo.status+'"');
-    }
-    base.push(r[4]!==null&&r[4]!==undefined?r[4]:'');
-    base.push(r[5]!==null&&r[5]!==undefined?r[5]:'');
     if(isRefAll){base.push(r[4]!==null&&r[4]!==undefined?'Yes':'No');base.push(r[5]!==null&&r[5]!==undefined?'Yes':'No');}
     else{base.push(r[6]===1?'Yes':'No');}
     lines.push(base.join(','));
@@ -3378,14 +3507,12 @@ function drillDownloadXLS(){
       i+1,
       r[0],
       r[2]!==null&&r[2]!==undefined?r[2]:'',
-      r[3]!==null&&r[3]!==undefined?r[3]:''
+      r[3]!==null&&r[3]!==undefined?r[3]:'',
+      stInfo.diff!==null?stInfo.diff:'',
+      stInfo.status,
+      r[4]!==null&&r[4]!==undefined?r[4]:'',
+      r[5]!==null&&r[5]!==undefined?r[5]:''
     ];
-    if(isRefAll){
-      base.push(stInfo.diff!==null?stInfo.diff:'');
-      base.push(stInfo.status);
-    }
-    base.push(r[4]!==null&&r[4]!==undefined?r[4]:'');
-    base.push(r[5]!==null&&r[5]!==undefined?r[5]:'');
     if(isRefAll){base.push(r[4]!==null&&r[4]!==undefined?'Yes':'No');base.push(r[5]!==null&&r[5]!==undefined?'Yes':'No');}
     else{base.push(r[6]===1?'Yes':'No');}
     aoa.push(base);
@@ -3435,14 +3562,12 @@ function dlSecTableCSV(dmLabel,section){
       i+1,
       '"'+String(r[0]).replace(/"/g,'""')+'"',
       r[2]!==null&&r[2]!==undefined?r[2]:'',
-      r[3]!==null&&r[3]!==undefined?r[3]:''
+      r[3]!==null&&r[3]!==undefined?r[3]:'',
+      stInfo.diff!==null?stInfo.diff:'',
+      '"'+stInfo.status+'"',
+      r[4]!==null&&r[4]!==undefined?r[4]:'',
+      r[5]!==null&&r[5]!==undefined?r[5]:''
     ];
-    if(isRefAll2){
-      base.push(stInfo.diff!==null?stInfo.diff:'');
-      base.push('"'+stInfo.status+'"');
-    }
-    base.push(r[4]!==null&&r[4]!==undefined?r[4]:'');
-    base.push(r[5]!==null&&r[5]!==undefined?r[5]:'');
     if(isRefAll2){base.push(r[4]!==null&&r[4]!==undefined?'Yes':'No');base.push(r[5]!==null&&r[5]!==undefined?'Yes':'No');}
     else{base.push(r[6]===1?'Yes':'No');}
     lines.push(base.join(','));
@@ -3467,14 +3592,12 @@ function dlSecTableXLS(dmLabel,section){
     var stInfo=getSrcTgtDiffInfo(r[2],r[3]);
     var base=[i+1,r[0],
       r[2]!==null&&r[2]!==undefined?r[2]:'',
-      r[3]!==null&&r[3]!==undefined?r[3]:''
+      r[3]!==null&&r[3]!==undefined?r[3]:'',
+      stInfo.diff!==null?stInfo.diff:'',
+      stInfo.status,
+      r[4]!==null&&r[4]!==undefined?r[4]:'',
+      r[5]!==null&&r[5]!==undefined?r[5]:''
     ];
-    if(isRefAll3){
-      base.push(stInfo.diff!==null?stInfo.diff:'');
-      base.push(stInfo.status);
-    }
-    base.push(r[4]!==null&&r[4]!==undefined?r[4]:'');
-    base.push(r[5]!==null&&r[5]!==undefined?r[5]:'');
     if(isRefAll3){base.push(r[4]!==null&&r[4]!==undefined?'Yes':'No');base.push(r[5]!==null&&r[5]!==undefined?'Yes':'No');}
     else{base.push(r[6]===1?'Yes':'No');}
     aoa.push(base);
@@ -4068,11 +4191,19 @@ function _arTick(){
   _arRemaining--;
   if(_arRemaining<=0){
     _arRemaining=_arInterval;
-    /* only auto-sync if user is logged in (session exists) */
-    try{
-      var s=sessionStorage.getItem('gbl_dm_session');
-      if(s){ startBgAutomation(); }
-    }catch(e){ startBgAutomation(); }
+    /* Only auto-sync if bridge is reachable — never wipe existing data if bridge is down */
+    fetch(_BG_BRIDGE+'/ping',{method:'GET',cache:'no-cache'})
+      .then(function(r){
+        if(r.ok){
+          try{
+            var s=sessionStorage.getItem('gbl_dm_session');
+            if(s){ startBgAutomation(); }
+          }catch(e){ startBgAutomation(); }
+        }
+      })
+      .catch(function(){
+        /* bridge unreachable — silently skip, data stays intact */
+      });
   }
   _arUpdateDisplay();
 }
@@ -5346,7 +5477,6 @@ function gblApplySession(display,role,ts){
   document.getElementById('gbl-user-badge').classList.add('visible');
   /* apply role to body */
   document.body.className=document.body.className.replace(/role-\w+/g,'').trim()+' role-'+role;
-  try{ loadAll(); }catch(e){}
   if(role==='viewer'){
     document.querySelectorAll('.dl-btn,.btn-refresh').forEach(function(b){b.style.opacity='.35';b.style.pointerEvents='none';b.title='Disabled for Viewer';});
   } else if(role==='manager'){
@@ -5404,6 +5534,8 @@ function gblLogout(){
 </script>
 </body>
 </html>
+
+
 
 
 

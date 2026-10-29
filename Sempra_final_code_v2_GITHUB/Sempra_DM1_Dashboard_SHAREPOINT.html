@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Data Migration Cycle 2 Dashboard — Table Comparison Analysis</title>
+<title>Data Migration Cycle 1 Dashboard — SharePoint â€” Table Comparison Analysis</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -11,7 +11,7 @@ body { font-family: -apple-system,"Segoe UI",system-ui,sans-serif; font-size:14p
 .wrap { max-width:1360px; margin:0 auto; padding:24px 16px 60px; }
 
 /* Header */
-.page-header { background:linear-gradient(135deg,#9d174d 0%,#db2777 100%); border-radius:12px; padding:24px 30px; margin-bottom:24px; color:#fff; }
+.page-header { background:linear-gradient(135deg,#0f766e 0%,#0891b2 100%); border-radius:12px; padding:24px 30px; margin-bottom:24px; color:#fff; }
 .page-header h1 { font-size:20px; font-weight:700; letter-spacing:-.01em; }
 .page-header p  { font-size:13px; margin-top:5px; opacity:.82; max-width:700px; }
 .header-tags { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
@@ -39,7 +39,7 @@ body { font-family: -apple-system,"Segoe UI",system-ui,sans-serif; font-size:14p
 .ub-imp { background:#d1fae5; color:#065f46; border:1px solid #6ee7b7; }
 
 .drop-zone { border:2px dashed #cbd5e1; border-radius:8px; padding:22px 12px; text-align:center; cursor:pointer; transition:all .2s; position:relative; background:#f8fafc; }
-.drop-zone:hover,.drop-zone.over { border-color:#db2777; background:#fdf2f8; }
+.drop-zone:hover,.drop-zone.over { border-color:#0891b2; background:#ecfeff; }
 .drop-zone input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
 .dz-icon { font-size:28px; margin-bottom:4px; }
 .dz-main { font-size:12px; font-weight:700; color:#374151; }
@@ -49,7 +49,7 @@ body { font-family: -apple-system,"Segoe UI",system-ui,sans-serif; font-size:14p
 .file-badge { display:none; align-items:center; gap:8px; background:#f0fdf4; border:1px solid #86efac; border-radius:6px; padding:8px 10px; }
 .fb-icon { font-size:16px; }
 .fb-name { font-size:11px; font-weight:700; color:#15803d; flex:1; word-break:break-all; }
-.fb-change { font-size:10px; color:#9d174d; text-decoration:underline; cursor:pointer; white-space:nowrap; flex-shrink:0; }
+.fb-change { font-size:10px; color:#0f766e; text-decoration:underline; cursor:pointer; white-space:nowrap; flex-shrink:0; }
 
 .card-stats { display:none; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; }
 .cs-head { background:#f1f5f9; padding:6px 12px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#64748b; border-bottom:1px solid #e2e8f0; }
@@ -83,8 +83,8 @@ body { font-family: -apple-system,"Segoe UI",system-ui,sans-serif; font-size:14p
 .action-bar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:24px; }
 .btn { padding:10px 26px; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; border:none; transition:all .15s; }
 .btn:disabled { opacity:.35; cursor:not-allowed; }
-.btn-run   { background:#9d174d; color:#fff; }
-.btn-run:not(:disabled):hover { background:#db2777; }
+.btn-run   { background:#0f766e; color:#fff; }
+.btn-run:not(:disabled):hover { background:#0891b2; }
 .btn-reset { background:#fff; color:#c2410c; border:1px solid #fdba74; }
 .btn-reset:not(:disabled):hover { background:#fffbeb; }
 .status-msg { font-size:12px; color:#64748b; }
@@ -111,7 +111,7 @@ body { font-family: -apple-system,"Segoe UI",system-ui,sans-serif; font-size:14p
 .recon-bar-wrap { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:14px 18px; box-shadow:0 1px 3px rgba(0,0,0,.04); margin-bottom:24px; }
 .recon-bar-top  { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
 .recon-bar-lbl  { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#64748b; }
-.recon-bar-pct  { font-size:26px; font-weight:800; color:#9d174d; }
+.recon-bar-pct  { font-size:26px; font-weight:800; color:#0f766e; }
 .recon-track    { height:12px; background:#e2e8f0; border-radius:99px; overflow:hidden; }
 .recon-fill     { height:100%; border-radius:99px; transition:width .6s ease; background:linear-gradient(90deg,#059669,#34d399); }
 .recon-fill.warn { background:linear-gradient(90deg,#f59e0b,#fcd34d); }
@@ -161,11 +161,11 @@ body { font-family: -apple-system,"Segoe UI",system-ui,sans-serif; font-size:14p
 .set-head-2 { background:#fefce8; border-color:#fde047; }
 .set-head-all { background:#f0fdf4; border-color:#6ee7b7; }
 .set-title  { font-size:12px; font-weight:800; display:flex; align-items:center; gap:7px; }
-.set-title-1   { color:#9d174d; }
+.set-title-1   { color:#0f766e; }
 .set-title-2   { color:#92400e; }
 .set-title-all { color:#065f46; }
 .set-count-badge { font-size:11px; font-weight:700; border-radius:4px; padding:2px 8px; }
-.scb-1   { background:#ccfbf1; color:#9d174d; border:1px solid #5eead4; }
+.scb-1   { background:#ccfbf1; color:#0f766e; border:1px solid #5eead4; }
 .scb-2   { background:#fef9c3; color:#92400e; border:1px solid #fde047; }
 .scb-all { background:#d1fae5; color:#065f46; border:1px solid #6ee7b7; }
 
@@ -198,7 +198,7 @@ body { font-family: -apple-system,"Segoe UI",system-ui,sans-serif; font-size:14p
 .dl-wrap.open .dl-menu { display:block; }
 .dl-item { display:block; padding:8px 14px; font-size:12px; font-weight:600; color:#1e293b; cursor:pointer; white-space:nowrap; border-bottom:1px solid #f1f5f9; }
 .dl-item:last-child { border-bottom:none; }
-.dl-item:hover { background:#ccfbf1; color:#9d174d; }
+.dl-item:hover { background:#ccfbf1; color:#0f766e; }
 
 /* Set table */
 .set-tscroll { overflow-x:auto; flex:1; max-height:480px; overflow-y:auto; }
@@ -257,46 +257,62 @@ footer { margin-top:44px; padding-top:14px; border-top:1px solid #e2e8f0; text-a
 /* Recon card pct values */
 .rv-pct { border-radius:5px; padding:1px 9px; font-weight:800; font-size:13px; }
 
-/* ── SUMMARY BLOCKS ── */
-.sum-block{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
-.sum-block-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-.sum-block-title::after{content:'';flex:1;height:1px;background:#e2e8f0;}
+/* ── STEP 2 ENHANCED BLOCKS ── */
+.sum-block { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px 20px; margin-bottom:18px; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+.sum-block-title { font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.07em; color:#64748b; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.sum-block-title::after { content:''; flex:1; height:1px; background:#e2e8f0; }
 
-/* ① ref row */
-.sum-ref-row{display:flex;gap:12px;flex-wrap:wrap;}
-.sum-ref-kpi{flex:1;min-width:130px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:12px 14px;text-align:center;}
-.srk-val{font-size:26px;font-weight:800;margin-bottom:2px;}
-.srk-lbl{font-size:11px;font-weight:700;color:#475569;}
-.srk-sub{font-size:10px;color:#94a3b8;margin-top:2px;}
+/* Ref total banner */
+.ref-total-banner { display:flex; align-items:center; gap:16px; background:linear-gradient(90deg,#eff6ff,#f0fdf4); border:1.5px solid #bfdbfe; border-radius:10px; padding:14px 20px; margin-bottom:16px; flex-wrap:wrap; }
+.rtb-num { font-size:40px; font-weight:800; color:#1d4ed8; line-height:1; }
+.rtb-lbl { font-size:13px; font-weight:700; color:#1e293b; }
+.rtb-sub { font-size:11px; color:#64748b; margin-top:2px; }
 
-/* ② table comparison cards */
-.sum-tcomp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
-.sum-tcomp-card{border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;}
-.stc-head{padding:8px 12px;font-size:11px;font-weight:800;border-bottom:1.5px solid;}
-.stc-body{padding:8px 12px;}
-.stc-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f8fafc;}
-.stc-row:last-child{border-bottom:none;}
-.stc-pct-row{border-top:1px solid #e2e8f0;margin-top:3px;padding-top:5px;}
-.stc-lbl{font-size:11px;color:#475569;flex:1;}
-.stc-val{font-size:13px;font-weight:800;border-radius:4px;padding:1px 9px;min-width:44px;text-align:center;}
-.stc-ok{background:#dcfce7;color:#15803d;}
-.stc-fail{background:#fff7ed;color:#c2410c;}
-.stc-pct{background:#f1f5f9;color:#475569;}
+/* KPI mini row */
+.kpi-mini-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+.kpi-mini { flex:1; min-width:110px; background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:10px; padding:12px 14px; text-align:center; }
+.kmi-val { font-size:26px; font-weight:800; margin-bottom:2px; }
+.kmi-lbl { font-size:10px; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:.04em; }
+.kmi-sub { font-size:10px; color:#94a3b8; margin-top:2px; }
 
-/* ③ count comparison */
-.sum-cnt-banners{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
-.scb-item{flex:1;min-width:120px;border:1.5px solid;border-radius:10px;padding:10px 14px;text-align:center;}
-.scb-num{font-size:22px;font-weight:800;margin-bottom:2px;}
-.scb-lbl{font-size:10px;color:#64748b;font-weight:600;}
-table.cnt-tbl{width:100%;border-collapse:collapse;min-width:500px;}
-table.cnt-tbl thead th{background:#f1f5f9;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:7px 10px;border-bottom:2px solid #e2e8f0;text-align:center;white-space:nowrap;}
-table.cnt-tbl thead th.ctl{text-align:left;}
-table.cnt-tbl tbody tr{border-bottom:1px solid #f1f5f9;}
-table.cnt-tbl tbody tr:last-child{border-bottom:none;}
-table.cnt-tbl tbody tr:hover td{background:#f8fafc;}
-table.cnt-tbl tbody td{padding:7px 10px;font-size:12px;text-align:center;vertical-align:middle;}
-table.cnt-tbl tbody td.ctl{text-align:left;font-weight:600;color:#475569;}
-.cmt-ok{color:#059669;font-weight:800;}.cmt-fail{color:#c2410c;font-weight:800;}.cmt-diff-pos{color:#059669;font-weight:700;}.cmt-diff-neg{color:#c2410c;font-weight:700;}.cmt-zero{color:#64748b;}
+/* Recon cards grid */
+.recon-cards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-bottom:14px; }
+.recon-card { border:1px solid #e2e8f0; border-radius:10px; overflow:hidden; }
+.rc-head { padding:9px 13px; font-size:11px; font-weight:800; border-bottom:1.5px solid; }
+.rc-body { padding:10px 13px; }
+.rc-row { display:flex; align-items:center; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f8fafc; }
+.rc-row:last-child { border-bottom:none; }
+.rc-pct-row { border-top:1px solid #e2e8f0; margin-top:4px; padding-top:6px; }
+.rc-lbl { font-size:11px; color:#475569; flex:1; }
+.rc-val { font-size:13px; font-weight:800; border-radius:4px; padding:1px 9px; min-width:44px; text-align:center; }
+.rv-ok   { background:#dcfce7; color:#15803d; }
+.rv-fail { background:#fff7ed; color:#c2410c; }
+.rv-pct  { background:#f1f5f9; color:#475569; }
+
+/* Count validation table */
+.cnt-scroll { overflow-x:auto; }
+table.cnt-tbl { width:100%; border-collapse:collapse; min-width:500px; }
+table.cnt-tbl thead th { background:#f1f5f9; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#64748b; padding:8px 10px; border-bottom:2px solid #e2e8f0; text-align:center; white-space:nowrap; }
+table.cnt-tbl thead th.ctl { text-align:left; }
+table.cnt-tbl tbody tr { border-bottom:1px solid #f1f5f9; }
+table.cnt-tbl tbody tr:last-child { border-bottom:none; }
+table.cnt-tbl tbody tr:hover td { background:#f8fafc; }
+table.cnt-tbl tbody td { padding:8px 10px; font-size:12px; text-align:center; vertical-align:middle; }
+table.cnt-tbl tbody td.ctl { text-align:left; font-weight:600; color:#475569; }
+.cmt-ok { color:#059669; font-weight:800; } .cmt-fail { color:#c2410c; font-weight:800; }
+.cmt-diff-pos { color:#059669; font-weight:700; } .cmt-diff-neg { color:#c2410c; font-weight:700; } .cmt-zero { color:#64748b; }
+
+/* Var banners */
+.var-banners { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+.var-item { flex:1; min-width:120px; border:1.5px solid; border-radius:10px; padding:10px 14px; text-align:center; }
+.var-num { font-size:22px; font-weight:800; margin-bottom:2px; }
+.var-lbl { font-size:10px; color:#64748b; font-weight:600; }
+
+/* Download buttons */
+.dl-btn-sm { padding:5px 12px; font-size:11px; font-weight:700; border-radius:5px; cursor:pointer; border:1px solid #cbd5e1; background:#fff; color:#1e293b; display:inline-flex; align-items:center; gap:4px; }
+.dl-btn-sm:hover { background:#ccfbf1; border-color:#5eead4; color:#0f766e; }
+.dl-btn-sm.primary { background:#0f766e; color:#fff; border-color:#0f766e; }
+.dl-btn-sm.primary:hover { background:#0891b2; border-color:#0891b2; }
 
 /* â”€â”€ NAV BAR â”€â”€ */
 .dash-nav { display:flex; align-items:center; gap:8px; background:#111; border:1px solid #2a2a2a; border-radius:12px; padding:10px 16px; margin-bottom:18px; flex-wrap:wrap; box-shadow:0 2px 8px rgba(0,0,0,.6); }
@@ -313,6 +329,7 @@ table.cnt-tbl tbody td.ctl{text-align:left;font-weight:600;color:#475569;}
 .dash-nav a.nav-cross { background:#495057; color:#fff; border-color:#343a40; }
 .dash-nav a.nav-cross:hover { background:#343a40; transform:translateY(-1px); box-shadow:0 4px 12px rgba(73,80,87,.5); }
 .dash-nav a.nav-active { outline:3px solid #fff; outline-offset:2px; box-shadow:0 0 0 5px rgba(255,255,255,.15) !important; }
+
 /* ── GLOBAL LOGIN OVERLAY ── */
 #gbl-login-overlay{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#020617 0%,#0f172a 50%,#1e1b4b 100%);display:flex;align-items:center;justify-content:center;padding:16px}
 #gbl-login-overlay.hidden{display:none}
@@ -384,6 +401,8 @@ table.cnt-tbl tbody td.ctl{text-align:left;font-weight:600;color:#475569;}
     <div class="gbl-login-footer">Global Data Migration Platform &mdash; v1.0<br>Role-Based Access Control</div>
   </div>
 </div>
+
+<!-- USER BADGE -->
 <div id="gbl-user-badge">
   <span class="gbl-badge-dot"></span>
   <span class="gbl-badge-name" id="gblBadgeName"></span>
@@ -401,16 +420,17 @@ table.cnt-tbl tbody td.ctl{text-align:left;font-weight:600;color:#475569;}
 <!-- NAV BAR -->
 <nav class="dash-nav">
   <span class="dash-nav-label">&#x1F4CA; Dashboards:</span>
-  <a href="Sempra_DM1_Dashboard.html" class="nav-dm1">&#x1F5C2; Data Migration Cycle 1 Dashboard</a>
-  <a href="Sempra_DM2_Dashboard.html" class="nav-dm2 nav-active">&#x1F5C3; Data Migration Cycle 2 Dashboard</a>
-  <a href="Sempra_DM3_Dashboard.html" class="nav-dm3">&#x1F5C4; Data Migration Cycle 3 Dashboard</a>
+  <a href="Sempra_DM1_Dashboard.html" class="nav-dm1 nav-active">&#x1F5C2; Data Migration Cycle 1 Dashboard — SharePoint</a>
+  <a href="Sempra_DM2_Dashboard.html" class="nav-dm2">&#x1F5C3; Data Migration Cycle 2 Dashboard — SharePoint</a>
+  <a href="Sempra_DM3_Dashboard.html" class="nav-dm3">&#x1F5C4; Data Migration Cycle 3 Dashboard — SharePoint</a>
   <a href="Sempra_CrossCycle_Summary_MASTER.html" class="nav-cross">&#x1F4CA; Data Migration Cycles</a>
 </nav>
 
 
 <!-- HEADER -->
 <div class="page-header">
-  <h1>&#x1F4CA; Data Migration Cycle 2 Dashboard &mdash; Table Comparison Analysis</h1>
+  <h1>&#x1F4CA; Data Migration Cycle 1 Dashboard — SharePoint &mdash; Table Comparison Analysis</h1>
+  <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(0,120,212,.25);border:1px solid rgba(0,120,212,.5);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:#60b0ff;margin-top:8px">&#x2601; Reading from SharePoint — sempra.sharepoint.com/sites/OdysseyInternal</div>
   <p>Upload the Reference Table List and the combined Export/Import data file. The tool automatically identifies matched and unmatched tables, compares record counts, and highlights reconciliation gaps.</p>
   <div class="header-tags">
     <span class="htag">Reference List (REF)</span>
@@ -422,12 +442,13 @@ table.cnt-tbl tbody td.ctl{text-align:left;font-weight:600;color:#475569;}
 </div>
 
 <!-- ═══ AUTO-LOAD PANEL ═══ -->
-<div id="alPanel" style="background:#fdf4ff;border:1.5px solid #d8b4fe;border-radius:12px;padding:14px 18px;margin-bottom:14px;display:none">
+<div id="alPanel" style="background:#f0fdf4;border:1.5px solid #6ee7b7;border-radius:12px;padding:14px 18px;margin-bottom:14px;display:none">
+  <!-- Header row -->
   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
     <div style="display:flex;align-items:center;gap:8px">
       <span style="font-size:18px">&#x26A1;</span>
       <div>
-        <div style="font-size:13px;font-weight:800;color:#6b21a8">Auto-Load Files from Shared Path</div>
+        <div style="font-size:13px;font-weight:800;color:#065f46">Auto-Load Files from Shared Path</div>
         <div style="font-size:11px;color:#6b7280">Bridge reads files from network/shared folders — no manual upload needed</div>
       </div>
     </div>
@@ -437,51 +458,59 @@ table.cnt-tbl tbody td.ctl{text-align:left;font-weight:600;color:#475569;}
       <button onclick="document.getElementById('alPanel').style.display='none'" style="background:none;border:none;color:#9ca3af;cursor:pointer;font-size:16px;padding:0 4px;line-height:1">&#x2715;</button>
     </div>
   </div>
+
+  <!-- Path config grid -->
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
     <div>
-      <label style="display:block;font-size:10px;font-weight:700;color:#6b21a8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">&#x1F4CB; Reference List — Folder Path</label>
-      <input id="alRefPath" type="text" placeholder="e.g. \\server\share\DM2\RefList  or  C:\Files\DM2" style="width:100%;padding:7px 10px;border:1px solid #d8b4fe;border-radius:6px;font-size:12px;color:#1f2328;background:#fff;outline:none"/>
+      <label style="display:block;font-size:10px;font-weight:700;color:#065f46;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">&#x1F4CB; Reference List — Folder Path</label>
+      <input id="alRefPath" type="text" placeholder="e.g. \\server\share\DM1\RefList  or  C:\Files\DM1" style="width:100%;padding:7px 10px;border:1px solid #6ee7b7;border-radius:6px;font-size:12px;color:#1f2328;background:#fff;outline:none"/>
     </div>
     <div>
-      <label style="display:block;font-size:10px;font-weight:700;color:#6b21a8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">&#x1F4E4; SNP Export/Import — Folder Path</label>
-      <input id="alExpPath" type="text" placeholder="e.g. \\server\share\DM2\SNP  or  C:\Files\DM2\SNP" style="width:100%;padding:7px 10px;border:1px solid #d8b4fe;border-radius:6px;font-size:12px;color:#1f2328;background:#fff;outline:none"/>
+      <label style="display:block;font-size:10px;font-weight:700;color:#065f46;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">&#x1F4E4; SNP Export/Import — Folder Path</label>
+      <input id="alExpPath" type="text" placeholder="e.g. \\server\share\DM1\SNP  or  C:\Files\DM1\SNP" style="width:100%;padding:7px 10px;border:1px solid #6ee7b7;border-radius:6px;font-size:12px;color:#1f2328;background:#fff;outline:none"/>
     </div>
     <div>
-      <label style="display:block;font-size:10px;font-weight:700;color:#6b21a8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Ref File Pattern</label>
-      <input id="alRefPat" type="text" placeholder="*.xlsx" value="*.xlsx" style="width:100%;padding:7px 10px;border:1px solid #d8b4fe;border-radius:6px;font-size:12px;color:#1f2328;background:#fff;outline:none"/>
+      <label style="display:block;font-size:10px;font-weight:700;color:#065f46;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Ref File Pattern</label>
+      <input id="alRefPat" type="text" placeholder="*.xlsx" value="*.xlsx" style="width:100%;padding:7px 10px;border:1px solid #6ee7b7;border-radius:6px;font-size:12px;color:#1f2328;background:#fff;outline:none"/>
     </div>
     <div>
-      <label style="display:block;font-size:10px;font-weight:700;color:#6b21a8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">SNP File Pattern</label>
-      <input id="alExpPat" type="text" placeholder="*.xlsx" value="*.xlsx" style="width:100%;padding:7px 10px;border:1px solid #d8b4fe;border-radius:6px;font-size:12px;color:#1f2328;background:#fff;outline:none"/>
+      <label style="display:block;font-size:10px;font-weight:700;color:#065f46;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">SNP File Pattern</label>
+      <input id="alExpPat" type="text" placeholder="*.xlsx" value="*.xlsx" style="width:100%;padding:7px 10px;border:1px solid #6ee7b7;border-radius:6px;font-size:12px;color:#1f2328;background:#fff;outline:none"/>
     </div>
   </div>
+
+  <!-- Save + Scan buttons -->
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-    <button onclick="alSavePaths()" style="padding:7px 16px;background:#6b21a8;color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer">&#x1F4BE; Save Paths</button>
-    <button onclick="alScan()" style="padding:7px 16px;background:#7c3aed;color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer">&#x1F50D; Scan for Latest Files</button>
-    <button id="alLoadBtn" onclick="alLoadBoth()" style="padding:7px 16px;background:#9333ea;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:800;cursor:pointer;display:none">&#x26A1; Load Both Files Now</button>
+    <button onclick="alSavePaths()" style="padding:7px 16px;background:#065f46;color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer">&#x1F4BE; Save Paths</button>
+    <button onclick="alScan()" style="padding:7px 16px;background:#0f766e;color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer">&#x1F50D; Scan for Latest Files</button>
+    <button id="alLoadBtn" onclick="alLoadBoth()" style="padding:7px 16px;background:#059669;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:800;cursor:pointer;display:none">&#x26A1; Load Both Files Now</button>
   </div>
-  <div id="alScanResults" style="display:none;background:#fff;border:1px solid #d8b4fe;border-radius:8px;padding:10px 14px">
-    <div style="font-size:10px;font-weight:700;color:#6b21a8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Latest Files Detected</div>
+
+  <!-- Scan results -->
+  <div id="alScanResults" style="display:none;background:#fff;border:1px solid #a7f3d0;border-radius:8px;padding:10px 14px">
+    <div style="font-size:10px;font-weight:700;color:#065f46;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Latest Files Detected</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <div id="alRefInfo" style="background:#fdf4ff;border:1px solid #d8b4fe;border-radius:6px;padding:8px 10px">
-        <div style="font-size:10px;font-weight:700;color:#6b21a8;margin-bottom:3px">&#x1F4CB; REFERENCE LIST</div>
+      <div id="alRefInfo" style="background:#f0fdf4;border:1px solid #6ee7b7;border-radius:6px;padding:8px 10px">
+        <div style="font-size:10px;font-weight:700;color:#065f46;margin-bottom:3px">&#x1F4CB; REFERENCE LIST</div>
         <div id="alRefFile" style="font-size:12px;font-weight:700;color:#1f2328">—</div>
         <div id="alRefMeta" style="font-size:10px;color:#6b7280;margin-top:2px">—</div>
       </div>
-      <div id="alExpInfo" style="background:#fdf4ff;border:1px solid #d8b4fe;border-radius:6px;padding:8px 10px">
-        <div style="font-size:10px;font-weight:700;color:#6b21a8;margin-bottom:3px">&#x1F4E4; SNP EXPORT/IMPORT</div>
+      <div id="alExpInfo" style="background:#f0fdf4;border:1px solid #6ee7b7;border-radius:6px;padding:8px 10px">
+        <div style="font-size:10px;font-weight:700;color:#065f46;margin-bottom:3px">&#x1F4E4; SNP EXPORT/IMPORT</div>
         <div id="alExpFile" style="font-size:12px;font-weight:700;color:#1f2328">—</div>
         <div id="alExpMeta" style="font-size:10px;color:#6b7280;margin-top:2px">—</div>
       </div>
     </div>
   </div>
-  <div id="alStatus" style="margin-top:8px;font-size:11px;color:#6b21a8;min-height:18px"></div>
+
+  <!-- Status message -->
+  <div id="alStatus" style="margin-top:8px;font-size:11px;color:#065f46;min-height:18px"></div>
 </div>
 
 <!-- UPLOAD -->
 <div class="sec-label">
   &#x1F4C1; Step 1 &mdash; Upload Files <span class="sec-line"></span>
-  <button onclick="alTogglePanel()" style="padding:4px 12px;background:#9333ea;color:#fff;border:none;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;margin-left:8px">&#x26A1; Auto-Load</button>
+  <button onclick="alTogglePanel()" style="padding:4px 12px;background:#059669;color:#fff;border:none;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;margin-left:8px">&#x26A1; Auto-Load</button>
 </div>
 <div class="upload-grid">
 
@@ -582,14 +611,14 @@ table.cnt-tbl tbody td.ctl{text-align:left;font-weight:600;color:#475569;}
     </div>
   </div>
 
-  <!-- CARD 3: Import (auto-derived) -->
+  <!-- CARD 3: Import (derived) -->
   <div class="upload-card">
     <div class="uc-head">
       <div class="uc-num uc-num-imp">3</div>
       <span class="uc-title">Import Data <span class="uc-badge ub-imp">IMP</span></span>
     </div>
     <div id="dzImp" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:18px 12px;background:#f0fdf4;border:1.5px dashed #86efac;border-radius:8px;color:#15803d;font-size:13px;text-align:center;">
-      &#x1F4CC; Auto-derived from the Export/Import file &mdash; rows where <code style="background:#dcfce7;color:#15803d;border-radius:3px;padding:1px 5px;margin-left:4px">TYPE = IMP</code>
+      &#x1F4CC; Auto-derived from the Export file &mdash; rows where <code style="background:#dcfce7;color:#15803d;border-radius:3px;padding:1px 5px;margin-left:4px">TYPE = IMP</code>
     </div>
     <div class="file-badge" id="fbImp" style="display:none">
       <span class="fb-icon">&#x2705;</span>
@@ -635,161 +664,261 @@ table.cnt-tbl tbody td.ctl{text-align:left;font-weight:600;color:#475569;}
 
 <!-- ACTION BAR -->
 <div class="action-bar">
-  <button class="btn btn-run"   id="btnRun"   disabled>&#9654;&nbsp; Run Cycle 2 Analysis</button>
-  <button class="btn btn-reset" id="btnReset" disabled>&#10005;&nbsp; Reset Cycle 2</button>
-  <button class="btn btn-reset" id="btnRefresh" onclick="if(refData&&refData.length)runAnalysis()" style="background:#7c3aed;border-color:#7c3aed;color:#fff;display:none">&#x21BB;&nbsp; Refresh Analysis</button>
+  <button class="btn btn-run"   id="btnRun"   disabled>&#9654;&nbsp; Run Cycle 1 Analysis</button>
+  <button class="btn btn-reset" id="btnReset" disabled>&#10005;&nbsp; Reset Cycle 1</button>
+  <button class="btn btn-reset" id="btnRefresh" onclick="if(refData&&refData.length)runAnalysis()" style="background:#0f766e;border-color:#0f766e;color:#fff;display:none">&#x21BB;&nbsp; Refresh Analysis</button>
   <span class="status-msg" id="statusMsg"></span>
 </div>
 
 <!-- RESULTS -->
 <div id="resultsSection" class="hidden">
 
-  <!-- STEP 2: SUMMARY DASHBOARD -->
+  <!-- STALE DATA WARNING -->
+  <div id="staleWarning" style="display:none;background:#fef9c3;border:1px solid #fde047;border-radius:10px;padding:12px 18px;margin-bottom:16px;display:none;align-items:center;gap:12px;flex-wrap:wrap">
+    <span style="font-size:20px">⚠️</span>
+    <div style="flex:1">
+      <strong style="font-size:13px;color:#92400e">Stale data detected — Export &amp; Import counts may be incorrect (showing as 1)</strong>
+      <div style="font-size:11px;color:#92400e;margin-top:3px">The previously saved analysis used an older version. Please re-upload your files and click <strong>Run Cycle 1 Analysis</strong> to get correct Export / Import record counts.</div>
+    </div>
+    <button onclick="document.getElementById('staleWarning').style.display='none'" style="padding:6px 14px;font-size:11px;font-weight:700;border-radius:6px;border:1px solid #f59e0b;background:#fef3c7;color:#92400e;cursor:pointer">Dismiss</button>
+  </div>
+
+  <!-- KPI -->
   <div class="sec-label">
     &#x1F4C8; Step 2 &mdash; Summary Dashboard
     <span class="run-stamp" id="runStamp"></span>
     <span class="sec-line"></span>
   </div>
 
-  <!-- hidden legacy IDs still needed by JS -->
-  <span id="kTotal" style="display:none">0</span>
-  <span id="kExp"   style="display:none">0</span>
-  <span id="kImp"   style="display:none">0</span>
-  <span id="kSTok"  style="display:none">0</span>
-  <span id="kSTfail"style="display:none">0</span>
-  <span id="kEIok"  style="display:none">0</span>
-  <span id="kEIfail"style="display:none">0</span>
-  <span id="kExpOnly"style="display:none">0</span>
-  <span id="kImpOnly"style="display:none">0</span>
-
-  <!-- ① REFERENCE TABLE LIST -->
+  <!-- ① REFERENCE LIST TOTAL -->
   <div class="sum-block">
-    <div class="sum-block-title">① Reference Table List</div>
-    <div class="sum-ref-row">
-      <div class="sum-ref-kpi" style="border-color:#bfdbfe;">
-        <div class="srk-val" style="color:#1d4ed8" id="s2-refCount">—</div>
-        <div class="srk-lbl">Reference Tables</div>
-        <div class="srk-sub">Loaded from Reference file</div>
+    <div class="sum-block-title">&#x1F4CB; ① Reference List — Total Tables</div>
+    <div class="ref-total-banner">
+      <div>
+        <div class="rtb-num" id="kTotal">0</div>
       </div>
-      <div class="sum-ref-kpi" style="border-color:#ddd6fe;">
-        <div class="srk-val" style="color:#7c3aed" id="s2-expCount">—</div>
-        <div class="srk-lbl">Export Tables</div>
-        <div class="srk-sub">TYPE = EXP in file</div>
+      <div>
+        <div class="rtb-lbl">Total Tables in Reference List</div>
+        <div class="rtb-sub">Unique table names loaded from the Reference file</div>
       </div>
-      <div class="sum-ref-kpi" style="border-color:#6ee7b7;">
-        <div class="srk-val" style="color:#065f46" id="s2-impCount">—</div>
-        <div class="srk-lbl">Import Tables</div>
-        <div class="srk-sub">TYPE = IMP in file</div>
+      <div style="margin-left:auto;display:flex;gap:16px;flex-wrap:wrap">
+        <div style="text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#7c3aed" id="kExp">0</div>
+          <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase">EXP Tables</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#059669" id="kImp">0</div>
+          <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase">IMP Tables</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#c2410c" id="kExpOnly">0</div>
+          <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase">EXP Only</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#d97706" id="kImpOnly">0</div>
+          <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase">IMP Only</div>
+        </div>
       </div>
-      <div class="sum-ref-kpi" style="border-color:#fdba74;">
-        <div class="srk-val" style="color:#c2410c" id="s2-expOnly">—</div>
-        <div class="srk-lbl">EXP Only (not in Ref)</div>
-        <div class="srk-sub">In Export, not in Reference</div>
-      </div>
-      <div class="sum-ref-kpi" style="border-color:#fde047;">
-        <div class="srk-val" style="color:#d97706" id="s2-impOnly">—</div>
-        <div class="srk-lbl">IMP Only (not in Ref)</div>
-        <div class="srk-sub">In Import, not in Reference</div>
-      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="dl-btn-sm" id="btnDlRefCSV">&#x1F4C4; Reference List (CSV)</button>
+      <button class="dl-btn-sm primary" id="btnDlRefXLS">&#x1F4CA; Reference List (Excel)</button>
     </div>
   </div>
 
-  <!-- ② TABLE COMPARISON -->
-  <div class="sum-block">
-    <div class="sum-block-title">② Table Comparison — Reference vs Export &amp; Import</div>
-    <div class="sum-tcomp-grid">
-      <div class="sum-tcomp-card">
-        <div class="stc-head" style="background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8;">Source Table vs Export</div>
-        <div class="stc-body">
-          <div class="stc-row"><span class="stc-lbl">&#x2714; In Reference &amp; Export</span><span class="stc-val stc-ok" id="s2-srcInExp">—</span></div>
-          <div class="stc-row"><span class="stc-lbl">&#x2718; In Reference, Missing Export</span><span class="stc-val stc-fail" id="s2-srcMissExp">—</span></div>
-          <div class="stc-row stc-pct-row"><span class="stc-lbl">Match %</span><span class="stc-val stc-pct" id="s2-srcExpPct">—</span></div>
+  <!-- Progress Bar -->
+  <div class="recon-bar-wrap">
+    <div class="recon-bar-top">
+      <span class="recon-bar-lbl">&#x2705; Overall Reconciliation</span>
+      <span class="recon-bar-pct" id="kPct">0%</span>
+    </div>
+    <div class="recon-track"><div class="recon-fill" id="reconFill" style="width:0%"></div></div>
+    <div class="recon-sub" id="reconSub">Run analysis to see reconciliation status</div>
+    <!-- Summary cards — hidden until analysis runs -->
+    <div id="reconBreakdown" style="display:none;margin-top:14px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">
+        <!-- REF Total -->
+        <div style="border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px;background:#eff6ff;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#1d4ed8;line-height:1.1" id="rb-refTotal">—</div>
+          <div style="font-size:11px;font-weight:700;color:#1d4ed8;margin-top:3px">REF Total</div>
+          <div style="font-size:10px;color:#6b7280;margin-top:2px">Reference tables</div>
         </div>
-      </div>
-      <div class="sum-tcomp-card">
-        <div class="stc-head" style="background:#f0fdf4;border-color:#6ee7b7;color:#065f46;">Source Table vs Import</div>
-        <div class="stc-body">
-          <div class="stc-row"><span class="stc-lbl">&#x2714; In Reference &amp; Import</span><span class="stc-val stc-ok" id="s2-srcInImp">—</span></div>
-          <div class="stc-row"><span class="stc-lbl">&#x2718; In Reference, Missing Import</span><span class="stc-val stc-fail" id="s2-srcMissImp">—</span></div>
-          <div class="stc-row stc-pct-row"><span class="stc-lbl">Match %</span><span class="stc-val stc-pct" id="s2-srcImpPct">—</span></div>
+        <!-- Matched in Both -->
+        <div style="border:1px solid #86efac;border-radius:10px;padding:12px 14px;background:#f0fdf4;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#15803d;line-height:1.1" id="rb-bothMatched">—</div>
+          <div style="font-size:11px;font-weight:700;color:#15803d;margin-top:3px">✅ Matched in Both</div>
+          <div style="font-size:10px;color:#6b7280;margin-top:2px">In REF + EXP + IMP &nbsp;<span id="rb-bothPct" style="font-weight:700">(0%)</span></div>
         </div>
-      </div>
-      <div class="sum-tcomp-card">
-        <div class="stc-head" style="background:#faf5ff;border-color:#ddd6fe;color:#7c3aed;">Target Table vs Export</div>
-        <div class="stc-body">
-          <div class="stc-row"><span class="stc-lbl">&#x2714; In Reference &amp; Export</span><span class="stc-val stc-ok" id="s2-tgtInExp">—</span></div>
-          <div class="stc-row"><span class="stc-lbl">&#x2718; In Reference, Missing Export</span><span class="stc-val stc-fail" id="s2-tgtMissExp">—</span></div>
-          <div class="stc-row stc-pct-row"><span class="stc-lbl">Match %</span><span class="stc-val stc-pct" id="s2-tgtExpPct">—</span></div>
+        <!-- Matched Export only -->
+        <div style="border:1px solid #ddd6fe;border-radius:10px;padding:12px 14px;background:#faf5ff;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#6d28d9;line-height:1.1" id="rb-expMatched">—</div>
+          <div style="font-size:11px;font-weight:700;color:#6d28d9;margin-top:3px">↗ Matched in Export</div>
+          <div style="font-size:10px;color:#6b7280;margin-top:2px">REF found in EXP &nbsp;<span id="rb-expPct" style="font-weight:700">(0%)</span></div>
         </div>
-      </div>
-      <div class="sum-tcomp-card">
-        <div class="stc-head" style="background:#fff7ed;border-color:#fed7aa;color:#c2410c;">Target Table vs Import</div>
-        <div class="stc-body">
-          <div class="stc-row"><span class="stc-lbl">&#x2714; In Reference &amp; Import</span><span class="stc-val stc-ok" id="s2-tgtInImp">—</span></div>
-          <div class="stc-row"><span class="stc-lbl">&#x2718; In Reference, Missing Import</span><span class="stc-val stc-fail" id="s2-tgtMissImp">—</span></div>
-          <div class="stc-row stc-pct-row"><span class="stc-lbl">Match %</span><span class="stc-val stc-pct" id="s2-tgtImpPct">—</span></div>
+        <!-- Matched Import only -->
+        <div style="border:1px solid #6ee7b7;border-radius:10px;padding:12px 14px;background:#ecfdf5;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#065f46;line-height:1.1" id="rb-impMatched">—</div>
+          <div style="font-size:11px;font-weight:700;color:#065f46;margin-top:3px">↘ Matched in Import</div>
+          <div style="font-size:10px;color:#6b7280;margin-top:2px">REF found in IMP &nbsp;<span id="rb-impPct" style="font-weight:700">(0%)</span></div>
         </div>
-      </div>
-      <div class="sum-tcomp-card">
-        <div class="stc-head" style="background:#fef9c3;border-color:#fde047;color:#92400e;">Export vs Import</div>
-        <div class="stc-body">
-          <div class="stc-row"><span class="stc-lbl">&#x2714; EXP = IMP (matched)</span><span class="stc-val stc-ok" id="s2-eiOk">—</span></div>
-          <div class="stc-row"><span class="stc-lbl">&#x2718; EXP &ne; IMP (mismatch)</span><span class="stc-val stc-fail" id="s2-eiFail">—</span></div>
-          <div class="stc-row stc-pct-row"><span class="stc-lbl">Match %</span><span class="stc-val stc-pct" id="s2-eiPct">—</span></div>
+        <!-- Mismatch (in REF but count differs) -->
+        <div style="border:1px solid #fdba74;border-radius:10px;padding:12px 14px;background:#fff1f2;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#c2410c;line-height:1.1" id="rb-mismatch">—</div>
+          <div style="font-size:11px;font-weight:700;color:#c2410c;margin-top:3px">⚠ Count Mismatch</div>
+          <div style="font-size:10px;color:#6b7280;margin-top:2px">EXP ≠ IMP &nbsp;<span id="rb-mismatchPct" style="font-weight:700">(0%)</span></div>
         </div>
-      </div>
-      <div class="sum-tcomp-card">
-        <div class="stc-head" style="background:#f0fdf4;border-color:#86efac;color:#15803d;">Source = Target &#x2714;</div>
-        <div class="stc-body">
-          <div class="stc-row"><span class="stc-lbl">&#x2714; Source = Target</span><span class="stc-val stc-ok" id="s2-stOk">—</span></div>
-          <div class="stc-row"><span class="stc-lbl">&#x2718; Source &ne; Target</span><span class="stc-val stc-fail" id="s2-stFail">—</span></div>
-          <div class="stc-row stc-pct-row"><span class="stc-lbl">Match %</span><span class="stc-val stc-pct" id="s2-stPct">—</span></div>
+        <!-- Not in REF (extra records) -->
+        <div style="border:1px solid #fed7aa;border-radius:10px;padding:12px 14px;background:#fff7ed;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#c2410c;line-height:1.1" id="rb-extraRec">—</div>
+          <div style="font-size:11px;font-weight:700;color:#c2410c;margin-top:3px">➕ Extra Records</div>
+          <div style="font-size:10px;color:#6b7280;margin-top:2px">In EXP/IMP, not in REF</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ③ COUNT COMPARISON -->
+  <!-- ② SOURCE TABLE RECONCILIATION -->
   <div class="sum-block">
-    <div class="sum-block-title">③ Count Comparison — Source &amp; Target vs Export &amp; Import</div>
-    <!-- Count detail table -->
-    <div style="overflow-x:auto;margin-top:10px;">
+    <div class="sum-block-title">&#x1F504; ② Source Table — Match &amp; Mismatch with Export &amp; Import</div>
+    <div class="kpi-mini-row">
+      <div class="kpi-mini" style="border-color:#bfdbfe">
+        <div class="kmi-val" style="color:#1d4ed8" id="kSTok">0</div>
+        <div class="kmi-lbl">Src = Tgt &#x2714;</div>
+        <div class="kmi-sub">Source equals Target</div>
+      </div>
+      <div class="kpi-mini" style="border-color:#fdba74">
+        <div class="kmi-val" style="color:#c2410c" id="kSTfail">0</div>
+        <div class="kmi-lbl">Src &ne; Tgt &#x2718;</div>
+        <div class="kmi-sub">Source differs from Target</div>
+      </div>
+      <div class="kpi-mini" style="border-color:#a5f3fc">
+        <div class="kmi-val" style="color:#0891b2" id="kEIok">0</div>
+        <div class="kmi-lbl">EXP = IMP &#x2714;</div>
+        <div class="kmi-sub">Export equals Import</div>
+      </div>
+      <div class="kpi-mini" style="border-color:#fdba74">
+        <div class="kmi-val" style="color:#c2410c" id="kEIfail">0</div>
+        <div class="kmi-lbl">EXP &ne; IMP &#x2718;</div>
+        <div class="kmi-sub">Export differs from Import</div>
+      </div>
+    </div>
+    <div class="recon-cards-grid">
+      <div class="recon-card">
+        <div class="rc-head" style="background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8">REF Source vs Export</div>
+        <div class="rc-body">
+          <div class="rc-row"><span class="rc-lbl">&#x2714; Matched Tables</span><span class="rc-val rv-ok" id="r-srcInExp">—</span></div>
+          <div class="rc-row"><span class="rc-lbl">&#x2718; Missing in Export</span><span class="rc-val rv-fail" id="r-srcMissExp">—</span></div>
+          <div class="rc-row rc-pct-row"><span class="rc-lbl">Match %</span><span class="rc-val rv-pct" id="r-srcExpPct">—</span></div>
+        </div>
+      </div>
+      <div class="recon-card">
+        <div class="rc-head" style="background:#f0fdf4;border-color:#6ee7b7;color:#065f46">REF Source vs Import</div>
+        <div class="rc-body">
+          <div class="rc-row"><span class="rc-lbl">&#x2714; Matched Tables</span><span class="rc-val rv-ok" id="r-srcInImp">—</span></div>
+          <div class="rc-row"><span class="rc-lbl">&#x2718; Missing in Import</span><span class="rc-val rv-fail" id="r-srcMissImp">—</span></div>
+          <div class="rc-row rc-pct-row"><span class="rc-lbl">Match %</span><span class="rc-val rv-pct" id="r-srcImpPct">—</span></div>
+        </div>
+      </div>
+      <div class="recon-card">
+        <div class="rc-head" style="background:#faf5ff;border-color:#ddd6fe;color:#7c3aed">REF Target vs Export</div>
+        <div class="rc-body">
+          <div class="rc-row"><span class="rc-lbl">&#x2714; Matched Tables</span><span class="rc-val rv-ok" id="r-tgtInExp">—</span></div>
+          <div class="rc-row"><span class="rc-lbl">&#x2718; Missing in Export</span><span class="rc-val rv-fail" id="r-tgtMissExp">—</span></div>
+          <div class="rc-row rc-pct-row"><span class="rc-lbl">Match %</span><span class="rc-val rv-pct" id="r-tgtExpPct">—</span></div>
+        </div>
+      </div>
+      <div class="recon-card">
+        <div class="rc-head" style="background:#fff7ed;border-color:#fed7aa;color:#c2410c">REF Target vs Import</div>
+        <div class="rc-body">
+          <div class="rc-row"><span class="rc-lbl">&#x2714; Matched Tables</span><span class="rc-val rv-ok" id="r-tgtInImp">—</span></div>
+          <div class="rc-row"><span class="rc-lbl">&#x2718; Missing in Import</span><span class="rc-val rv-fail" id="r-tgtMissImp">—</span></div>
+          <div class="rc-row rc-pct-row"><span class="rc-lbl">Match %</span><span class="rc-val rv-pct" id="r-tgtImpPct">—</span></div>
+        </div>
+      </div>
+      <div class="recon-card">
+        <div class="rc-head" style="background:#fef9c3;border-color:#fde047;color:#92400e">Export vs Import</div>
+        <div class="rc-body">
+          <div class="rc-row"><span class="rc-lbl">&#x2714; EXP = IMP</span><span class="rc-val rv-ok" id="r-eiOk">—</span></div>
+          <div class="rc-row"><span class="rc-lbl">&#x2718; EXP &ne; IMP</span><span class="rc-val rv-fail" id="r-eiFail">—</span></div>
+          <div class="rc-row rc-pct-row"><span class="rc-lbl">Match %</span><span class="rc-val rv-pct" id="r-eiPct">—</span></div>
+        </div>
+      </div>
+      <div class="recon-card">
+        <div class="rc-head" style="background:#f0fdf4;border-color:#86efac;color:#15803d">Source = Target</div>
+        <div class="rc-body">
+          <div class="rc-row"><span class="rc-lbl">&#x2714; Source = Target</span><span class="rc-val rv-ok" id="r-stOk">—</span></div>
+          <div class="rc-row"><span class="rc-lbl">&#x2718; Source &ne; Target</span><span class="rc-val rv-fail" id="r-stFail">—</span></div>
+          <div class="rc-row rc-pct-row"><span class="rc-lbl">Match %</span><span class="rc-val rv-pct" id="r-stPct">—</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="dl-btn-sm" id="btnDlMatchCSV">&#x1F4C4; Match/Mismatch Report (CSV)</button>
+      <button class="dl-btn-sm primary" id="btnDlMatchXLS">&#x1F4CA; Match/Mismatch Report (Excel)</button>
+    </div>
+  </div>
+
+  <!-- ③ COUNT VALIDATION -->
+  <div class="sum-block">
+    <div class="sum-block-title">&#x1F522; ③ Count Validation — Source &amp; Target vs Export &amp; Import</div>
+    <div class="var-banners">
+      <div class="var-item" style="border-color:#bfdbfe;background:#eff6ff">
+        <div class="var-num" style="color:#1d4ed8" id="cv-srcTotal">—</div>
+        <div class="var-lbl">REF Source Total</div>
+      </div>
+      <div class="var-item" style="border-color:#ddd6fe;background:#faf5ff">
+        <div class="var-num" style="color:#7c3aed" id="cv-expTotal">—</div>
+        <div class="var-lbl">Export Total</div>
+      </div>
+      <div class="var-item" style="border-color:#fed7aa;background:#fff7ed">
+        <div class="var-num" style="color:#c2410c" id="cv-tgtTotal">—</div>
+        <div class="var-lbl">REF Target Total</div>
+      </div>
+      <div class="var-item" style="border-color:#6ee7b7;background:#f0fdf4">
+        <div class="var-num" style="color:#065f46" id="cv-impTotal">—</div>
+        <div class="var-lbl">Import Total</div>
+      </div>
+      <div class="var-item" style="border-color:#fdba74;background:#fffbeb">
+        <div class="var-num" id="cv-srcExpVar">—</div>
+        <div class="var-lbl">Src vs Exp Variance</div>
+      </div>
+      <div class="var-item" style="border-color:#fde047;background:#fefce8">
+        <div class="var-num" id="cv-tgtImpVar">—</div>
+        <div class="var-lbl">Tgt vs Imp Variance</div>
+      </div>
+    </div>
+    <div class="cnt-scroll">
       <table class="cnt-tbl">
         <thead><tr>
           <th class="ctl">Comparison</th>
           <th>Tables Compared</th>
           <th>Count Match &#x2714;</th>
           <th>Count Diff &#x2718;</th>
-          <th style="text-align:center">Match %</th>
+          <th>Total REF</th>
+          <th>Total EXP/IMP</th>
+          <th>Variance</th>
+          <th>Match %</th>
         </tr></thead>
         <tbody id="cntTblBody"></tbody>
       </table>
     </div>
-  </div>
-
-  <!-- Overall Recon Bar — Reference vs Export & Import -->
-  <div class="recon-bar-wrap">
-    <div class="recon-bar-top">
-      <span class="recon-bar-lbl">&#x2705; Reference List Tables — Matched in Export &amp; Import</span>
-      <span class="recon-bar-pct" id="kPct">0%</span>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="dl-btn-sm" id="btnDlSrcCntCSV">&#x1F4C4; Source Count Validation (CSV)</button>
+      <button class="dl-btn-sm primary" id="btnDlSrcCntXLS">&#x1F4CA; Source Count Validation (Excel)</button>
+      <button class="dl-btn-sm" id="btnDlTgtCntCSV">&#x1F4C4; Target Count Validation (CSV)</button>
+      <button class="dl-btn-sm primary" id="btnDlTgtCntXLS">&#x1F4CA; Target Count Validation (Excel)</button>
     </div>
-    <div class="recon-track"><div class="recon-fill" id="reconFill" style="width:0%"></div></div>
-    <div class="recon-sub" id="reconSub">Run analysis to see reconciliation status</div>
-    <div id="reconBreakdown" style="display:none;margin-top:8px;gap:16px;flex-wrap:wrap;"></div>
   </div>
 
-  <!-- STEP 3: DRILL-DOWN with search -->
+  <!-- DRILL-DOWN -->
   <div class="sec-label">&#x1F50D; Step 3 &mdash; Table-Level Drill-Down <span class="sec-line"></span></div>
   <div class="drill-section">
     <div class="drill-head">
       <span class="drill-head-title">&#x1F4CC; Inspect a Single Table</span>
       <div class="drill-select-wrap">
-        <label>Search:</label>
-        <input type="text" id="drillSearch" placeholder="Type table name to filter…"
-          style="border:1px solid #cbd5e1;border-radius:6px;padding:5px 9px;font-size:13px;color:#1e293b;min-width:180px;flex:0 0 auto;"/>
-        <label style="margin-left:6px;">Select:</label>
+        <label>Select Table:</label>
         <select id="drillSelect">
-          <option value="">-- Choose a table --</option>
+          <option value="">-- Choose a table to inspect --</option>
         </select>
       </div>
     </div>
@@ -799,8 +928,8 @@ table.cnt-tbl tbody td.ctl{text-align:left;font-weight:600;color:#475569;}
     </div>
   </div>
 
-  <!-- STEP 4: COUNT RECONCILIATION TABLES -->
-  <div class="sec-label">&#x1F504; Step 4 &mdash; Count Reconciliation — All Comparison Combinations <span class="sec-line"></span></div>
+  <!-- SETS -->
+  <div class="sec-label">&#x1F504; Step 4 &mdash; Export vs Import &mdash; Table-by-Table <span class="sec-line"></span></div>
   <div class="sets-grid">
 
     <!-- SET 1 -->
@@ -975,7 +1104,7 @@ table.cnt-tbl tbody td.ctl{text-align:left;font-weight:600;color:#475569;}
 
 </div><!-- /resultsSection -->
 </div><!-- /wrap -->
-<footer>Made with IBM Bob &mdash; Data Migration Cycle 2 Dashboard</footer>
+<footer>Made with IBM Bob &mdash; Data Migration Cycle 1 Dashboard — SharePoint</footer>
 
 <script>
 /* Ã¢â€¢ÂÃ¢â€¢Â STATE Ã¢â€¢ÂÃ¢â€¢Â */
@@ -983,7 +1112,7 @@ var refData=null, expData=null, impData=null;
 var _eiTableData=[], _s1Data=[], _s2Data=[];
 var _refTableCol=null, _refSrcCol=null, _refTgtCol=null;
 var _srcTotalRec=0, _tgtTotalRec=0, _expTotalRec=0, _impTotalRec=0;
-var _cvSeOk=0,_cvSeTot=0,_cvTiOk=0,_cvTiTot=0;
+var _cvSeOk=0,_cvSeTot=0,_cvTiOk=0,_cvTiTot=0; /* Src vs Exp & Tgt vs Imp count match */
 
 /* Ã¢â€¢ÂÃ¢â€¢Â COLUMN CANDIDATES Ã¢â€¢ÂÃ¢â€¢Â */
 var CANDS = {
@@ -991,6 +1120,8 @@ var CANDS = {
   source: ['SOURCE_COUNT','SOURCE_COUNT ','SOURCE','SRC_COUNT','SRC','SOURCE_RECORDS','SOURCE_ROWS'],
   target: ['TARGET_COUNT','TARGET_COUNT ','TARGET','TGT_COUNT','TGT','TARGET_RECORDS','TARGET_ROWS']
 };
+/* NOTE: EXP/IMP file header is "Number of records" → normalises to "NUMBER OF RECORDS" (space, not underscore).
+   Both variants listed so detection works regardless of file format. */
 var COUNT_CANDS = [
   'NUMBER OF RECORDS','NUMBER_OF_RECORDS','NO OF RECORDS','NO_OF_RECORDS',
   'RECORD_COUNT','RECORD COUNT','RECORDS','COUNT','ROW_COUNT','ROW COUNT','ROWS','RECORD','VOLUME',
@@ -1003,7 +1134,10 @@ function detectCol(hdrs,cands){
   return null;
 }
 
-/* Smart table-column detector — auto-picks the right column for Reference List files */
+/* Smart table-column detector — auto-picks the right column for Reference List files.
+   Priority: 1) exact CANDS match  2) any header containing 'TABLE'
+             3) any header containing 'OBJECT'  4) any header containing 'NAME' (ref files)
+             5) first column as fallback */
 function detectTableColSmart(hdrs, filename){
   var fname=(filename||'').toLowerCase();
   var isRef=fname.indexOf('reference')!==-1||fname.indexOf('reflist')!==-1||fname.indexOf('ref_list')!==-1||fname.indexOf('ref list')!==-1||fname.indexOf('ref_m')!==-1;
@@ -1034,8 +1168,6 @@ function detectTableColSmart(hdrs, filename){
 document.getElementById('fileRef').addEventListener('change',function(){ if(this.files&&this.files[0]) readFile(this.files[0],'ref'); });
 document.getElementById('fileExp').addEventListener('change',function(){ if(this.files&&this.files[0]) readFile(this.files[0],'exp'); });
 
-
-
 /* Ã¢â€¢ÂÃ¢â€¢Â FILE READER Ã¢â€¢ÂÃ¢â€¢Â */
 function readFile(file,kind){
   setStatus('Reading '+file.name+'\u2026');
@@ -1044,7 +1176,6 @@ function readFile(file,kind){
     var r=new FileReader();
     r.onload=function(e){
       try{
-        /* dense:true = array-of-arrays (2-3× faster than object mode) */
         var wb=XLSX.read(e.target.result,{type:'array',dense:true});
         var ws=wb.Sheets[wb.SheetNames[0]];
         var aoa=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
@@ -1061,8 +1192,8 @@ function readFile(file,kind){
     r2.readAsText(file);
   }
 }
-
-/* normaliseFast — AOA→objects, UPPER keys, numbers stay as-is */
+/* normaliseFast — AOA→objects, UPPER keys, minimal allocations
+   Numbers stay as-is so toNum() skips parseFloat entirely        */
 function normaliseFast(aoa){
   if(!aoa||aoa.length<2)return[];
   var hdrs=aoa[0],hl=hdrs.length;
@@ -1083,18 +1214,15 @@ function normaliseFast(aoa){
   }
   return out;
 }
-function normalise(json){
-  return json.map(function(r){
-    var o={};
-    Object.keys(r).forEach(function(k){ o[k.trim().toUpperCase()]=String(r[k]===null||r[k]===undefined?'':r[k]).trim(); });
-    return o;
-  });
-}
+function normalise(json){return json.map(function(r){var o={};Object.keys(r).forEach(function(k){o[k.trim().toUpperCase()]=String(r[k]===null||r[k]===undefined?'':r[k]).trim();});return o;});}
 
 function onLoaded(rows,filename,kind){
   if(!rows.length){
     setStatus('File is empty.',true);
-    if(typeof window._alOnLoadedCallback==='function'){var _cb=window._alOnLoadedCallback;window._alOnLoadedCallback=null;_cb(kind);}
+    /* Still fire automation callback so the promise chain can reject */
+    if(typeof window._alOnLoadedCallback === 'function') {
+      var _cb = window._alOnLoadedCallback; window._alOnLoadedCallback = null; _cb(kind);
+    }
     return;
   }
   if(kind==='ref'){
@@ -1110,7 +1238,7 @@ function onLoaded(rows,filename,kind){
     document.getElementById('csRef').style.display='block';
     renderAggRef(rows,tc,_refSrcCol,_refTgtCol);
   } else if(kind==='exp'){
-    expData=rows;
+    expData=rows; impData=rows;
     showBadge('fbExp','fnExp',filename,'dzExp');
     var hdrs2=Object.keys(rows[0]);
     var tc2=detectCol(hdrs2,CANDS.table)||hdrs2[0];
@@ -1120,13 +1248,11 @@ function onLoaded(rows,filename,kind){
     document.getElementById('expRows').textContent=rows.length;
     document.getElementById('csExp').style.display='block';
     renderAggTable('aggExpBody','aggExpCount','aggExp',aggExp,'EXP','#6d28d9','#ede9fe');
-    /* Auto-derive IMP from the same file */
-    impData=rows;
+
     var aggImp=aggregateByType(rows,'IMP',tc2);
     document.getElementById('impTables').textContent=Object.keys(aggImp).length;
     document.getElementById('impRows').textContent=rows.length;
     document.getElementById('csImp').style.display='block';
-    document.getElementById('fnImp').textContent=filename;
     renderAggTable('aggImpBody','aggImpCount','aggImp',aggImp,'IMP','#059669','#d1fae5');
   }
   setStatus(''); checkReady();
@@ -1141,22 +1267,19 @@ function onLoaded(rows,filename,kind){
   }
 }
 
-/* ── Save just the file-upload + card stats state (no analysis needed) ── */
+/* â”€â”€ Save just the file-upload + card stats state (no analysis needed) â”€â”€ */
 function saveUploadState(){
   try{
-    var raw = localStorage.getItem(_SESSION_KEY) || sessionStorage.getItem(_SESSION_KEY) || localStorage.getItem(_FIXED_KEY);
+    var raw = localStorage.getItem(_SESSION_KEY);
     var existing = raw ? JSON.parse(raw) : {};
     /* Merge file badge + card stats into whatever is already saved */
     var patch = {
       fnRef:        document.getElementById('fnRef').textContent,
       fnExp:        document.getElementById('fnExp').textContent,
-      fnImp:        document.getElementById('fnImp').textContent,
       fbRefVisible: document.getElementById('fbRef').style.display,
       fbExpVisible: document.getElementById('fbExp').style.display,
-      fbImpVisible: document.getElementById('fbImp').style.display,
       dzRefHidden:  document.getElementById('dzRef').style.display,
       dzExpHidden:  document.getElementById('dzExp').style.display,
-      dzImpHidden:  document.getElementById('dzImp').style.display,
       csRefVisible: document.getElementById('csRef').style.display,
       csExpVisible: document.getElementById('csExp').style.display,
       csImpVisible: document.getElementById('csImp').style.display,
@@ -1176,31 +1299,29 @@ function saveUploadState(){
       aggExpBody:   document.getElementById('aggExpBody').innerHTML,
       aggImpBody:   document.getElementById('aggImpBody').innerHTML,
       _savedAt:     Date.now(),
-      _cycle:       'DM2'
+      _cycle:       'DM1'
     };
     var merged = Object.assign({}, existing, patch);
     localStorage.setItem(_SESSION_KEY, JSON.stringify(merged));
     localStorage.setItem(_FIXED_KEY, JSON.stringify(merged));
-    try{ sessionStorage.setItem(_SESSION_KEY, JSON.stringify(merged)); }catch(e){}
-    try{ sessionStorage.setItem(_FIXED_KEY, JSON.stringify(merged)); }catch(e){}
   }catch(ex){}
 }
 
 function showBadge(fbId,fnId,name,dzId){
   document.getElementById(fnId).textContent=name;
   document.getElementById(fbId).style.display='flex';
-  if(dzId) document.getElementById(dzId).style.display='none';
+  document.getElementById(dzId).style.display='none';
 }
 function uniqueCount(rows,col){
   var s={};
   rows.forEach(function(r){ var v=(r[col]||'').trim().toUpperCase(); if(v) s[v]=true; });
   return Object.keys(s).length;
 }
-/* aggregateByType: strict TYPE filter — only exact match rows included.
-   Count column: 'NUMBER OF RECORDS' (exact header in SNP export files). */
-/* aggregateByType: DISTINCT by (TYPE, Table, Number of records) before summing
-   — mirrors SELECT DISTINCT in the SQL query to avoid double-counting
-   duplicate rows with identical Type + Table + record-count combinations. */
+/* aggregateByType: used for upload-card preview (aggExp / aggImp panels).
+   typeVal='EXP' → only EXP rows, typeVal='IMP' → only IMP rows.
+   Count column: 'NUMBER OF RECORDS' (exact header in SNP export files).
+   DISTINCT: duplicate rows with same (TYPE, Table, Number of records) are
+   deduplicated before summing — mirrors SELECT DISTINCT in the SQL query. */
 function aggregateByType(rows,typeVal,tableCol){
   if(!rows||!rows.length) return {};
   var hdrs=Object.keys(rows[0]);
@@ -1209,6 +1330,7 @@ function aggregateByType(rows,typeVal,tableCol){
   var map={};
   rows.forEach(function(r){
     var t=(r['TYPE']||'').trim().toUpperCase();
+    /* Strict filter: skip any row whose TYPE is not exactly typeVal */
     if(typeVal && t!==typeVal.toUpperCase()) return;
     var k=(r[tableCol]||'').trim().toUpperCase();
     if(!k) return;
@@ -1325,6 +1447,7 @@ document.getElementById('btnReset').addEventListener('click',function(){
     document.getElementById(id).textContent='\u2014';
   });
   ['dzRef','dzExp'].forEach(function(id){ document.getElementById(id).style.display=''; });
+  document.getElementById('dzImp').style.display='flex';
   document.getElementById('resultsSection').classList.add('hidden');
   var _rf=document.getElementById('btnRefresh');if(_rf)_rf.style.display='none';
   document.getElementById('drillBody').style.display='none';
@@ -1333,6 +1456,7 @@ document.getElementById('btnReset').addEventListener('click',function(){
   document.getElementById('reconFill').style.width='0%';
   document.getElementById('reconFill').className='recon-fill';
   document.getElementById('reconSub').textContent='Run analysis to see reconciliation status';
+  document.getElementById('reconBreakdown').style.display='none';
   document.getElementById('kPct').textContent='0%';
   document.getElementById('btnRun').disabled=true;
   document.getElementById('btnReset').disabled=true;
@@ -1353,265 +1477,223 @@ function runAnalysis(){
 function _doAnalysis(tblC,overlay){
   setStatus('Analysing\u2026');
 
-  /* 1. REF map */
+  /* 1. REF map — single pass */
   var refMap={};
-  (refData||[]).forEach(function(r){
-    var k=(r[tblC]||'').trim().toUpperCase();
-    if(!k) return;
-    if(!refMap[k]) refMap[k]={name:r[tblC],src:null,tgt:null};
-    var s=toNum(_refSrcCol?r[_refSrcCol]:null);
-    var t=toNum(_refTgtCol?r[_refTgtCol]:null);
-    if(s!==null) refMap[k].src=(refMap[k].src||0)+s;
-    if(t!==null) refMap[k].tgt=(refMap[k].tgt||0)+t;
-  });
-
-  /* 2. EXP + IMP maps — single pass, STRICT: TYPE='EXP' only → expMap, TYPE='IMP' only → impMap */
-  var eiHdrs=(expData&&expData.length)?Object.keys(expData[0]):[];
-  var eiTc=detectCol(eiHdrs,CANDS.table)||(eiHdrs[0]||'');
-  var expMap=aggregateByType(expData,'EXP',eiTc);
-  var impMap={};
-  if(impData&&impData.length){
-    var impHdrs=Object.keys(impData[0]);
-    var impTc=detectCol(impHdrs,CANDS.table)||(impHdrs[0]||'');
-    impMap=aggregateByType(impData,'IMP',impTc);
+  var rd=refData||[],rlen=rd.length;
+  for(var ri=0;ri<rlen;ri++){
+    var rr=rd[ri];
+    var k=(rr[tblC]||'').trim().toUpperCase();if(!k)continue;
+    if(!refMap[k])refMap[k]={name:rr[tblC],src:null,tgt:null};
+    var s=toNum(_refSrcCol?rr[_refSrcCol]:null);
+    var t=toNum(_refTgtCol?rr[_refTgtCol]:null);
+    if(s!==null)refMap[k].src=(refMap[k].src||0)+s;
+    if(t!==null)refMap[k].tgt=(refMap[k].tgt||0)+t;
   }
 
-  /* 3a. REF-ordered rows (Set 1) */
-  var eiSeen={};
-  _eiTableData=[];
-  Object.keys(refMap).forEach(function(k){
-    eiSeen[k]=true;
-    var ref=refMap[k];
-    var e=expMap[k]!==undefined?expMap[k]:null;
-    var im=impMap[k]!==undefined?impMap[k]:null;
+  /* 2. EXP + IMP maps — single pass through combined file.
+     STRICT: only rows where TYPE='EXP' go into expMap,
+             only rows where TYPE='IMP' go into impMap.
+     All other TYPE values (DEL, FOR, blank, etc.) are skipped.
+     DISTINCT: duplicate rows with same (TYPE, Table, Number of records)
+     are deduplicated before summing — mirrors SELECT DISTINCT in the SQL. */
+  var expMap={},impMap={};
+  var ed=expData||[],elen=ed.length;
+  if(elen){
+    var eiHdrs=Object.keys(ed[0]);
+    /* Table column — 'TABLE' matches the 'Table' header in EXP/IMP files */
+    var eiTc=detectCol(eiHdrs,CANDS.table)||(eiHdrs[0]||'');
+    /* Count column — 'NUMBER OF RECORDS' is the exact header in EXP/IMP files */
+    var eiCc=detectCol(eiHdrs,COUNT_CANDS);
+    var eiSeen={};  /* dedup key: TYPE|TABLE|RECORDS */
+    for(var ei=0;ei<elen;ei++){
+      var er=ed[ei];
+      var et=(er['TYPE']||'').trim().toUpperCase();
+      /* Skip anything that is not strictly EXP or IMP */
+      if(et!=='EXP'&&et!=='IMP') continue;
+      var ek=(er[eiTc]||'').trim().toUpperCase();
+      if(!ek) continue;
+      var ev=eiCc?(toNum(er[eiCc])||0):0;
+      /* DISTINCT: skip exact duplicate (Type + Table + Records) combinations */
+      var edk=et+'|'+ek+'|'+ev;
+      if(eiSeen[edk]) continue;
+      eiSeen[edk]=true;
+      if(et==='EXP'){expMap[ek]=(expMap[ek]||0)+ev;}
+      else{impMap[ek]=(impMap[ek]||0)+ev;}
+    }
+  }
+
+  /* 3a. REF-ordered rows (Set 1) — single pass */
+  var eiSeen={};_eiTableData=[];
+  var refKeys=Object.keys(refMap),rklen=refKeys.length;
+  for(var rki=0;rki<rklen;rki++){
+    var k2=refKeys[rki];eiSeen[k2]=true;var ref=refMap[k2];
+    var e=expMap[k2]!==undefined?expMap[k2]:null;var im=impMap[k2]!==undefined?impMap[k2]:null;
     var stD=(ref.src!==null&&ref.tgt!==null)?(ref.src-ref.tgt):null;
     var eiD=(e!==null&&im!==null)?(e-im):null;
-    var stOk=stD!==null?(stD===0):null;
-    var eiOk=eiD!==null?(eiD===0):null;
-    _eiTableData.push({name:ref.name,key:k,src:ref.src,tgt:ref.tgt,stD:stD,stOk:stOk,
-                       exp:e,imp:im,eiD:eiD,eiOk:eiOk,overall:computeOverall(stOk,eiOk,e,im),inRef:true});
-  });
+    var stOk=stD!==null?(stD===0):null;var eiOk=eiD!==null?(eiD===0):null;
+    _eiTableData.push({name:ref.name,key:k2,src:ref.src,tgt:ref.tgt,stD:stD,stOk:stOk,exp:e,imp:im,eiD:eiD,eiOk:eiOk,overall:computeOverall(stOk,eiOk,e,im),inRef:true});
+  }
 
   /* 3b. Non-REF rows (Set 2) */
-  unionKeys(expMap,impMap).sort().forEach(function(k){
-    if(eiSeen[k]) return;
-    var e=expMap[k]!==undefined?expMap[k]:null;
-    var im=impMap[k]!==undefined?impMap[k]:null;
-    var eiD=(e!==null&&im!==null)?(e-im):null;
-    var eiOk=eiD!==null?(eiD===0):null;
-    _eiTableData.push({name:k,key:k,src:null,tgt:null,stD:null,stOk:null,
-                       exp:e,imp:im,eiD:eiD,eiOk:eiOk,overall:computeOverall(null,eiOk,e,im),inRef:false});
-  });
-
-  /* 3c. Matched REF stats for EXP/IMP cards */
-  var expMK=Object.keys(expMap).filter(function(k){ return !!refMap[k]; });
-  var expMR=expMK.reduce(function(a,k){ return a+expMap[k]; },0);
-  var impMK=Object.keys(impMap).filter(function(k){ return !!refMap[k]; });
-  var impMR=impMK.reduce(function(a,k){ return a+impMap[k]; },0);
-  document.getElementById('expMatchedTables').textContent=expMK.length.toLocaleString();
-  document.getElementById('expMatchedRec').textContent=expMR.toLocaleString();
-  document.getElementById('impMatchedTables').textContent=impMK.length.toLocaleString();
-  document.getElementById('impMatchedRec').textContent=impMR.toLocaleString();
-
-  /* 4. KPIs */
-  var stOkN =_eiTableData.filter(function(r){ return r.stOk===true;  }).length;
-  var stFaN =_eiTableData.filter(function(r){ return r.stOk===false; }).length;
-  var eiOkN =_eiTableData.filter(function(r){ return r.eiOk===true;  }).length;
-  var eiFaN =_eiTableData.filter(function(r){ return r.eiOk===false; }).length;
-  var expOnlyN=_eiTableData.filter(function(r){ return r.overall==='EXP_ONLY'; }).length;
-  var impOnlyN=_eiTableData.filter(function(r){ return r.overall==='IMP_ONLY'; }).length;
-  /* REF tables matched in EXP, in IMP, and in both */
-  var refRows=_eiTableData.filter(function(r){ return r.inRef; });
-  var refTotal=refRows.length;
-  var nBase=refTotal||1;
-  var matchedInExp =refRows.filter(function(r){ return r.exp!==null; }).length;
-  var matchedInImp =refRows.filter(function(r){ return r.imp!==null; }).length;
-  var matchedInBoth=refRows.filter(function(r){ return r.exp!==null && r.imp!==null; }).length;
-  var hasExp = expData && expData.length > 0;
-  var hasImp = impData && impData.length > 0;
-  /* Both EXP and IMP must be present — either alone = 0% */
-  var hasExpImp = hasExp && hasImp;
-  var reconN = hasExpImp ? matchedInBoth : 0;
-  var pct = hasExpImp ? Math.round((reconN / nBase) * 100) : 0;
-  var n = nBase;
-
-  document.getElementById('kTotal').textContent  =Object.keys(refMap).length;
-  document.getElementById('kExp').textContent    =Object.keys(expMap).length;
-  document.getElementById('kImp').textContent    =Object.keys(impMap).length;
-  document.getElementById('kSTok').textContent   =stOkN;
-  document.getElementById('kSTfail').textContent =stFaN;
-  document.getElementById('kEIok').textContent   =eiOkN;
-  document.getElementById('kEIfail').textContent =eiFaN;
-  document.getElementById('kExpOnly').textContent=expOnlyN;
-  document.getElementById('kImpOnly').textContent=impOnlyN;
-  if(!hasExpImp){
-    document.getElementById('kPct').textContent='—';
-    var _kp=document.getElementById('kPct');if(_kp){_kp.style.color='#f59e0b';_kp.className=_kp.className.replace(/\bpct-\S+/g,'').trim();}
-    (function(){var rp=document.querySelector('.recon-bar-pct');if(rp)rp.style.color='#f59e0b';})();
-  } else {
-    document.getElementById('kPct').textContent=pct+'%';
-    applyPctColor('kPct',pct);
-    (function(){var el=document.getElementById('kPct');if(el){el.className=el.className.replace(/\bpct-\S+/g,'').trim();el.classList.add('rainbow-pct',pctClass(pct));}})();
-    (function(){var rp=document.querySelector('.recon-bar-pct');if(rp){rp.style.color=pct===100?'#15803d':pct>=80?'#16a34a':pct>=60?'#ca8a04':pct>=40?'#ea580c':'#dc2626';}})();
+  var extraKeys=Object.keys(expMap).concat(Object.keys(impMap));
+  for(var xi=0;xi<extraKeys.length;xi++){
+    var xk=extraKeys[xi];if(eiSeen[xk])continue;eiSeen[xk]=true;
+    var xe=expMap[xk]!==undefined?expMap[xk]:null;var xim=impMap[xk]!==undefined?impMap[xk]:null;
+    var xeiD=(xe!==null&&xim!==null)?(xe-xim):null;var xeiOk=xeiD!==null?(xeiD===0):null;
+    _eiTableData.push({name:xk,key:xk,src:null,tgt:null,stD:null,stOk:null,exp:xe,imp:xim,eiD:xeiD,eiOk:xeiOk,overall:computeOverall(null,xeiOk,xe,xim),inRef:false});
   }
 
-  /* ── Summary Dashboard Block ① ── */
-  var refCount=Object.keys(refMap).length;
-  var expCount=Object.keys(expMap).length;
-  var impCount=Object.keys(impMap).length;
-  var expOnlyTables=Object.keys(expMap).filter(function(k){ return !refMap[k]; }).length;
-  var impOnlyTables=Object.keys(impMap).filter(function(k){ return !refMap[k]; }).length;
-  setText('s2-refCount', refCount);
-  setText('s2-expCount', expCount);
-  setText('s2-impCount', impCount);
-  setText('s2-expOnly',  expOnlyTables);
-  setText('s2-impOnly',  impOnlyTables);
+  /* 4. KPIs + summary — ONE pass over _eiTableData, compute everything */
+  var stOkN=0,stFaN=0,eiOkN=0,eiFaN=0,expOnlyN=0,impOnlyN=0,reconN=0;
+  var matchedInExp=0,matchedInImp=0,expMR=0,impMR=0;
+  var bothMatchedN=0,mismatchN=0,extraRecN=0;
+  /* count-validation accumulators — avoid 8 extra filter passes later */
+  var cv_stTot=0,cv_stOk=0,cv_stSrc=0,cv_stTgt=0;
+  var cv_eiTot=0,cv_eiOk=0,cv_eiExp=0,cv_eiImp=0;
+  var cv_seTot=0,cv_seOk=0,cv_seSrc=0,cv_seExp=0;
+  var cv_tiTot=0,cv_tiOk=0,cv_tiTgt=0,cv_tiImp=0;
+  var n=_eiTableData.length;
+  for(var ki=0;ki<n;ki++){
+    var kr=_eiTableData[ki];
+    if(kr.stOk===true)stOkN++;else if(kr.stOk===false)stFaN++;
+    if(kr.eiOk===true)eiOkN++;else if(kr.eiOk===false)eiFaN++;
+    if(kr.overall==='EXP_ONLY')expOnlyN++;
+    if(kr.overall==='IMP_ONLY')impOnlyN++;
+    if(kr.overall==='ALL_OK'||kr.overall==='EI_OK')reconN++;
+    if(kr.inRef){
+      if(kr.exp!==null){matchedInExp++;expMR+=kr.exp;}
+      if(kr.imp!==null){matchedInImp++;impMR+=kr.imp;}
+      if(kr.exp!==null&&kr.imp!==null)bothMatchedN++;
+      if(kr.eiOk===false||kr.stOk===false)mismatchN++;
+      /* src vs tgt */
+      if(kr.stD!==null){cv_stTot++;if(kr.stD===0)cv_stOk++;cv_stSrc+=(kr.src||0);cv_stTgt+=(kr.tgt||0);}
+      /* exp vs imp */
+      if(kr.eiD!==null){cv_eiTot++;if(kr.eiD===0)cv_eiOk++;cv_eiExp+=(kr.exp||0);cv_eiImp+=(kr.imp||0);}
+      /* src vs exp */
+      if(kr.src!==null&&kr.exp!==null){cv_seTot++;if(kr.src===kr.exp)cv_seOk++;cv_seSrc+=(kr.src||0);cv_seExp+=(kr.exp||0);}
+      /* tgt vs imp */
+      if(kr.tgt!==null&&kr.imp!==null){cv_tiTot++;if(kr.tgt===kr.imp)cv_tiOk++;cv_tiTgt+=(kr.tgt||0);cv_tiImp+=(kr.imp||0);}
+    } else {
+      extraRecN++;
+    }
+  }
+  var expCount=Object.keys(expMap).length,impCount=Object.keys(impMap).length;
+  /* REF-only mode: no EXP/IMP loaded → Migration In Progress, pct=0 */
+  /* Both EXP and IMP must be present — either alone = 0% */
+  var hasExpImp = (expData&&expData.length>0)&&(impData&&impData.length>0);
+  var pct = hasExpImp ? (n>0?Math.round((reconN/n)*100):0) : 0;
+  var nBase=rklen||1;
 
-  /* ── Summary Dashboard Block ② ── */
-  /* Source Table vs Export */
-  var srcInExp    = Object.keys(refMap).filter(function(k){ return expMap[k]!==undefined; }).length;
-  var srcMissExp  = refCount - srcInExp;
-  var srcExpPct   = refCount>0 ? Math.round((srcInExp/refCount)*100)+'%' : '0%';
-  setText('s2-srcInExp',  srcInExp);
-  setText('s2-srcMissExp',srcMissExp);
-  setText('s2-srcExpPct', srcExpPct);
+  /* Promote cv locals to module-level so saveKPI() reads correct values */
+  _cvSeOk=cv_seOk;_cvSeTot=cv_seTot;_cvTiOk=cv_tiOk;_cvTiTot=cv_tiTot;
 
-  /* Source Table vs Import */
-  var srcInImp    = Object.keys(refMap).filter(function(k){ return impMap[k]!==undefined; }).length;
-  var srcMissImp  = refCount - srcInImp;
-  var srcImpPct   = refCount>0 ? Math.round((srcInImp/refCount)*100)+'%' : '0%';
-  setText('s2-srcInImp',  srcInImp);
-  setText('s2-srcMissImp',srcMissImp);
-  setText('s2-srcImpPct', srcImpPct);
-
-  /* Target Table vs Export (same ref list = source tables) */
-  setText('s2-tgtInExp',   srcInExp);
-  setText('s2-tgtMissExp', srcMissExp);
-  setText('s2-tgtExpPct',  srcExpPct);
-
-  /* Target Table vs Import */
-  setText('s2-tgtInImp',   srcInImp);
-  setText('s2-tgtMissImp', srcMissImp);
-  setText('s2-tgtImpPct',  srcImpPct);
-
-  /* Export vs Import */
-  var eiMatchedN = _eiTableData.filter(function(r){ return r.eiOk===true;  }).length;
-  var eiFailN    = _eiTableData.filter(function(r){ return r.eiOk===false; }).length;
-  var eiTot      = eiMatchedN + eiFailN;
-  setText('s2-eiOk',   eiMatchedN);
-  setText('s2-eiFail', eiFailN);
-  setText('s2-eiPct',  eiTot>0 ? Math.round((eiMatchedN/eiTot)*100)+'%' : '0%');
-
-  /* Source = Target */
-  setText('s2-stOk',   stOkN);
-  setText('s2-stFail', stFaN);
-  var stTot = stOkN + stFaN;
-  setText('s2-stPct',  stTot>0 ? Math.round((stOkN/stTot)*100)+'%' : '0%');
-
-  /* ── Summary Dashboard Block ③ ── */
   /* Totals */
-  _srcTotalRec=Object.keys(refMap).reduce(function(a,k){return a+(refMap[k].src||0);},0);
-  _tgtTotalRec=Object.keys(refMap).reduce(function(a,k){return a+(refMap[k].tgt||0);},0);
-  _expTotalRec=Object.keys(expMap).reduce(function(a,k){return a+expMap[k];},0);
-  _impTotalRec=Object.keys(impMap).reduce(function(a,k){return a+impMap[k];},0);
-  setText('s2-srcTotal', _srcTotalRec.toLocaleString());
-  setText('s2-tgtTotal', _tgtTotalRec.toLocaleString());
-  setText('s2-expTotal', _expTotalRec.toLocaleString());
-  setText('s2-impTotal', _impTotalRec.toLocaleString());
+  _refMap=refMap;
+  _srcTotalRec=0;_tgtTotalRec=0;
+  for(var rt2=0;rt2<rklen;rt2++){var rm2=refMap[refKeys[rt2]];_srcTotalRec+=rm2.src||0;_tgtTotalRec+=rm2.tgt||0;}
+  _expTotalRec=0;for(var ek3 in expMap)_expTotalRec+=expMap[ek3];
+  _impTotalRec=0;for(var ik3 in impMap)_impTotalRec+=impMap[ik3];
 
-  /* Count comparison detail table */
-  var s1ForCnt=_eiTableData.filter(function(r){return r.inRef;});
-  var cntRows=[
-    buildCntRow('Source vs Target', s1ForCnt.filter(function(r){return r.stD!==null;}),
-      function(r){return r.stD===0;}),
-    buildCntRow('Export vs Import', _eiTableData.filter(function(r){return r.eiD!==null;}),
-      function(r){return r.eiD===0;}),
-    buildCntRow('Source vs Export', _eiTableData.filter(function(r){return r.src!==null&&r.exp!==null;}),
-      function(r){return r.src===r.exp;}),
-    buildCntRow('Target vs Import', _eiTableData.filter(function(r){return r.tgt!==null&&r.imp!==null;}),
-      function(r){return r.tgt===r.imp;})
-  ];
-  document.getElementById('cntTblBody').innerHTML=cntRows.join('');
+  /* ── DOM updates (all KPIs, cards, validation in one block) ── */
+  function setText2(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
 
-  /* Progress bar */
+  setText2('expMatchedTables',matchedInExp.toLocaleString());setText2('expMatchedRec',expMR.toLocaleString());
+  setText2('impMatchedTables',matchedInImp.toLocaleString());setText2('impMatchedRec',impMR.toLocaleString());
+  setText2('kTotal',rklen);setText2('kExp',expCount);setText2('kImp',impCount);
+  setText2('kSTok',stOkN);setText2('kSTfail',stFaN);
+  setText2('kEIok',eiOkN);setText2('kEIfail',eiFaN);
+  setText2('kExpOnly',expOnlyN);setText2('kImpOnly',impOnlyN);
+
+  /* Progress bar — rainbow fill + rainbow % text */
   var fill=document.getElementById('reconFill');
   if(!hasExpImp){
+    /* REF only — show amber "In Progress" state */
+    setText2('kPct','—');
+    var kPctEl=document.getElementById('kPct');
+    if(kPctEl){kPctEl.style.color='#f59e0b';kPctEl.className=kPctEl.className.replace(/\bpct-\S+/g,'').trim();}
     fill.style.width='0%';fill.className='recon-fill';
-    var _mip2='<div class="mip-banner"><div class="mip-dot"></div><div class="mip-body"><div class="mip-title">⏳ Migration In Progress</div><div class="mip-sub">Reference List loaded — upload the <strong>Export &amp; Import</strong> file to calculate reconciliation %</div><div class="mip-bar-wrap"><div class="mip-bar-fill"></div></div></div></div>';
-    var _rs2=document.getElementById('reconSub');if(_rs2)_rs2.innerHTML=_mip2;
-    var _rl2=document.querySelector('.recon-bar-lbl');if(_rl2)_rl2.textContent='⏳ Migration In Progress';
+    var reconPctEl=document.querySelector('.recon-bar-pct');
+    if(reconPctEl){reconPctEl.style.color='#f59e0b';}
+    var _mip='<div class="mip-banner"><div class="mip-dot"></div><div class="mip-body"><div class="mip-title">⏳ Migration In Progress</div><div class="mip-sub">Reference List loaded — upload the <strong>Export &amp; Import</strong> file to calculate reconciliation %</div><div class="mip-bar-wrap"><div class="mip-bar-fill"></div></div></div></div>';
+    var _rs=document.getElementById('reconSub');if(_rs)_rs.innerHTML=_mip;
+    var _kPctLbl=document.getElementById('kPct');if(_kPctLbl)_kPctLbl.textContent='—';
+    var _rl=document.querySelector('.recon-bar-lbl');if(_rl)_rl.textContent='⏳ Migration In Progress';
   } else {
+    setText2('kPct',pct+'%');
+    applyPctColor('kPct',pct);
     fill.style.width=pct+'%';
     fill.className='recon-fill '+pctBarClass(pct);
-    var subTxt = hasImp
-      ? reconN.toLocaleString()+' of '+refTotal.toLocaleString()+' REF tables matched in both Export & Import'
-      : reconN.toLocaleString()+' of '+refTotal.toLocaleString()+' REF tables matched in Export'
-        +(hasExp ? ' (Import file not yet uploaded)' : '');
-    document.getElementById('reconSub').textContent = subTxt;
+    var kPctEl=document.getElementById('kPct');
+    if(kPctEl){ kPctEl.className=kPctEl.className.replace(/\bpct-\S+/g,'').trim(); kPctEl.classList.add('rainbow-pct',pctClass(pct)); }
+    var reconPctEl=document.querySelector('.recon-bar-pct');
+    if(reconPctEl){ reconPctEl.style.color=pct===100?'#15803d':pct>=80?'#16a34a':pct>=60?'#ca8a04':pct>=40?'#ea580c':'#dc2626'; }
+    setText2('reconSub',reconN.toLocaleString()+' of '+n.toLocaleString()+' tables fully reconciled');
+    var _rl2=document.querySelector('.recon-bar-lbl');if(_rl2)_rl2.textContent='✅ Overall Reconciliation';
   }
 
-  /* Breakdown chips */
-  var bd=document.getElementById('reconBreakdown');
-  bd.style.display='flex';
-  var chips =
-    '<span style="font-size:11px;font-weight:700;background:#dbeafe;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:6px;padding:4px 12px;">'
-      +'&#x1F5C2; REF: <strong>'+refTotal.toLocaleString()+'</strong></span>'
-    +'<span style="font-size:11px;font-weight:700;background:#ede9fe;color:#6d28d9;border:1px solid #ddd6fe;border-radius:6px;padding:4px 12px;">'
-      +'&#x2197; Matched EXP: <strong>'+matchedInExp.toLocaleString()+'</strong>'
-      +' <span style="font-size:12px;font-weight:800;">('+Math.round((matchedInExp/nBase)*100)+'%)</span></span>';
-  if(hasImp){
-    chips +=
-      '<span style="font-size:11px;font-weight:700;background:#d1fae5;color:#065f46;border:1px solid #6ee7b7;border-radius:6px;padding:4px 12px;">'
-        +'&#x2198; Matched IMP: <strong>'+matchedInImp.toLocaleString()+'</strong>'
-        +' <span style="font-size:12px;font-weight:800;">('+Math.round((matchedInImp/nBase)*100)+'%)</span></span>'
-      +'<span style="font-size:11px;font-weight:700;background:#dcfce7;color:#15803d;border:1px solid #86efac;border-radius:6px;padding:4px 12px;">'
-        +'&#x2705; Both EXP+IMP: <strong>'+matchedInBoth.toLocaleString()+'</strong>'
-        +' <span style="font-size:12px;font-weight:800;">('+pct+'%)</span></span>';
-  }
-  /* EXP vs IMP count match % */
-  var expImpTotal = _eiTableData.filter(function(r){return r.eiD!==null;}).length;
-  var expImpMatch = _eiTableData.filter(function(r){return r.eiOk===true;}).length;
-  var expImpPct   = expImpTotal>0 ? Math.round((expImpMatch/expImpTotal)*100) : 0;
-  chips +=
-    '<span style="font-size:11px;font-weight:700;background:#fef9c3;color:#92400e;border:1px solid #fde047;border-radius:6px;padding:4px 12px;">'
-      +'&#x21C4; EXP=IMP Count: <strong>'+expImpMatch.toLocaleString()+'/'+expImpTotal.toLocaleString()+'</strong>'
-      +' <span style="font-size:12px;font-weight:800;">('+expImpPct+'%)</span></span>';
-  /* Source vs Target count match % */
-  var stTotal = _eiTableData.filter(function(r){return r.stD!==null;}).length;
-  var stMatch  = _eiTableData.filter(function(r){return r.stOk===true;}).length;
-  var stPct    = stTotal>0 ? Math.round((stMatch/stTotal)*100) : 0;
-  chips +=
-    '<span style="font-size:11px;font-weight:700;background:#f0fdf4;color:#15803d;border:1px solid #86efac;border-radius:6px;padding:4px 12px;">'
-      +'&#x2194; Src=Tgt Count: <strong>'+stMatch.toLocaleString()+'/'+stTotal.toLocaleString()+'</strong>'
-      +' <span style="font-size:12px;font-weight:800;">('+stPct+'%)</span></span>';
-  bd.innerHTML = chips;
+  /* Overall summary cards */
+  setText2('rb-refTotal',rklen.toLocaleString());
+  setText2('rb-bothMatched',bothMatchedN.toLocaleString());setText2('rb-bothPct','('+Math.round((bothMatchedN/nBase)*100)+'%)');
+  setText2('rb-expMatched',matchedInExp.toLocaleString());setText2('rb-expPct','('+Math.round((matchedInExp/nBase)*100)+'%)');
+  setText2('rb-impMatched',matchedInImp.toLocaleString());setText2('rb-impPct','('+Math.round((matchedInImp/nBase)*100)+'%)');
+  setText2('rb-mismatch',mismatchN.toLocaleString());setText2('rb-mismatchPct','('+Math.round((mismatchN/nBase)*100)+'%)');
+  setText2('rb-extraRec',extraRecN.toLocaleString());
+  document.getElementById('reconBreakdown').style.display='block';
 
   /* Timestamp */
   var now=new Date();
   document.getElementById('runStamp').innerHTML='Last run: <strong>'+now.toLocaleDateString()+' '+now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</strong>';
 
-  /* 5. Drill-down & sets */
-  populateDrill(_eiTableData);
-  renderEITable(_eiTableData);
+  /* Recon match cards — with rainbow % colouring */
+  function setPctCell(id,num,den){
+    var p=den>0?Math.round((num/den)*100):0;
+    setText2(id,p+'%'); applyPctColor(id,p);
+  }
+  setText2('r-srcInExp',matchedInExp);setText2('r-srcMissExp',rklen-matchedInExp);setPctCell('r-srcExpPct',matchedInExp,nBase);
+  setText2('r-srcInImp',matchedInImp);setText2('r-srcMissImp',rklen-matchedInImp);setPctCell('r-srcImpPct',matchedInImp,nBase);
+  setText2('r-tgtInExp',matchedInExp);setText2('r-tgtMissExp',rklen-matchedInExp);setPctCell('r-tgtExpPct',matchedInExp,nBase);
+  setText2('r-tgtInImp',matchedInImp);setText2('r-tgtMissImp',rklen-matchedInImp);setPctCell('r-tgtImpPct',matchedInImp,nBase);
+  var eiTot2=eiOkN+eiFaN;setText2('r-eiOk',eiOkN);setText2('r-eiFail',eiFaN);setPctCell('r-eiPct',eiOkN,eiTot2||1);
+  var stTot2=stOkN+stFaN;setText2('r-stOk',stOkN);setText2('r-stFail',stFaN);setPctCell('r-stPct',stOkN,stTot2||1);
+
+  /* Count Validation totals */
+  setText2('cv-srcTotal',_srcTotalRec.toLocaleString());setText2('cv-expTotal',_expTotalRec.toLocaleString());
+  setText2('cv-tgtTotal',_tgtTotalRec.toLocaleString());setText2('cv-impTotal',_impTotalRec.toLocaleString());
+  var svVar=_srcTotalRec-_expTotalRec;var tvVar=_tgtTotalRec-_impTotalRec;
+  var svEl=document.getElementById('cv-srcExpVar');if(svEl){svEl.textContent=(svVar===0?'0':(svVar>0?'+':'')+svVar.toLocaleString());svEl.style.color=svVar===0?'#059669':svVar>0?'#d97706':'#c2410c';}
+  var tvEl=document.getElementById('cv-tgtImpVar');if(tvEl){tvEl.textContent=(tvVar===0?'0':(tvVar>0?'+':'')+tvVar.toLocaleString());tvEl.style.color=tvVar===0?'#059669':tvVar>0?'#d97706':'#c2410c';}
+
+  /* Count Validation table — with rainbow match% column */
+  function cntRow(label,tot,ok,rSum,oSum){
+    var diff=tot-ok;var v=rSum-oSum;
+    var p=tot>0?Math.round((ok/tot)*100):0;
+    var pc=pctClass(p);
+    var vs=v===0?'<span class="cmt-zero">0</span>':v>0?'<span class="cmt-diff-pos">+'+v.toLocaleString()+'</span>':'<span class="cmt-diff-neg">'+v.toLocaleString()+'</span>';
+    var pctBadge='<span class="rainbow-pct '+pc+'" style="font-size:12px;border:1px solid;border-radius:5px;padding:2px 8px">'+p+'%</span>';
+    return '<tr><td class="ctl">'+label+'</td><td>'+tot+'</td><td class="cmt-ok">'+ok+'</td><td class="cmt-fail">'+diff+'</td><td>'+rSum.toLocaleString()+'</td><td>'+oSum.toLocaleString()+'</td><td>'+vs+'</td><td style="text-align:center">'+pctBadge+'</td></tr>';
+  }
+  document.getElementById('cntTblBody').innerHTML=
+    cntRow('Source vs Target',cv_stTot,cv_stOk,cv_stSrc,cv_stTgt)+
+    cntRow('Export vs Import',cv_eiTot,cv_eiOk,cv_eiExp,cv_eiImp)+
+    cntRow('Source vs Export',cv_seTot,cv_seOk,cv_seSrc,cv_seExp)+
+    cntRow('Target vs Import',cv_tiTot,cv_tiOk,cv_tiTgt,cv_tiImp);
+
+  /* Show results, dismiss spinner, defer heavy table DOM */
   document.getElementById('resultsSection').classList.remove('hidden');
   var _rf=document.getElementById('btnRefresh');if(_rf)_rf.style.display='inline-flex';
-  bindFilters();
+  var _sw=document.getElementById('staleWarning');if(_sw)_sw.style.display='none';
   overlay.classList.remove('active');
   setStatus('Done \u2014 '+n.toLocaleString()+' tables analysed.');
-
-  /* Promote cv accumulators to module-level so saveKPI() stores correct values */
-  var _cv_seTot=0,_cv_seOk=0,_cv_tiTot=0,_cv_tiOk=0;
-  _eiTableData.forEach(function(r){
-    if(r.src!==null&&r.exp!==null){_cv_seTot++;if(r.src===r.exp)_cv_seOk++;}
-    if(r.tgt!==null&&r.imp!==null){_cv_tiTot++;if(r.tgt===r.imp)_cv_tiOk++;}
-  });
-  _cvSeOk=_cv_seOk;_cvSeTot=_cv_seTot;_cvTiOk=_cv_tiOk;_cvTiTot=_cv_tiTot;
-
-  setTimeout(saveSession,150);
+  setTimeout(function(){
+    populateDrill(_eiTableData);
+    renderEITable(_eiTableData);
+    bindFilters();
+    setTimeout(saveSession,150);
+  },0);
 }
 
 function computeOverall(stOk,eiOk,e,im){
-  /* Zero record count = not fully migrated */
+  /* Zero record count = not fully migrated — treat same as mismatch */
   if(e!==null&&e===0) eiOk=false;
   if(im!==null&&im===0) eiOk=false;
   if(stOk===true  &&eiOk===true)  return 'ALL_OK';
@@ -1630,16 +1712,19 @@ function unionKeys(){
 }
 
 /* Ã¢â€¢ÂÃ¢â€¢Â DRILL-DOWN Ã¢â€¢ÂÃ¢â€¢Â */
+var _drillRows=[];
 function populateDrill(rows){
-  var sel=document.getElementById('drillSelect');
-  sel.innerHTML='<option value="">-- Choose a table to inspect --</option>';
-  rows.forEach(function(r){
-    var opt=document.createElement('option');
-    opt.value=r.key;
-    opt.textContent=r.name+(r.inRef?'':' (not in REF)');
-    sel.appendChild(opt);
-  });
+  _drillRows=rows;_fillDrillOpts('');
 }
+function _fillDrillOpts(q){
+  var sel=document.getElementById('drillSelect');
+  var filtered=q?_drillRows.filter(function(r){return r.name.toLowerCase().indexOf(q)!==-1;}):_drillRows.slice(0,200);
+  var frag=document.createDocumentFragment();
+  var def=document.createElement('option');def.value='';def.textContent='-- Choose a table'+(q?' (filtered)':' (type to search)')+' --';frag.appendChild(def);
+  filtered.forEach(function(r){var opt=document.createElement('option');opt.value=r.key;opt.textContent=r.name+(r.inRef?'':' (not in REF)');frag.appendChild(opt);});
+  sel.innerHTML='';sel.appendChild(frag);
+}
+(function(){var ds=document.getElementById('drillSearch');if(ds)ds.addEventListener('input',function(){_fillDrillOpts(this.value.trim().toLowerCase());});})();
 
 document.getElementById('drillSelect').addEventListener('change',function(){
   var key=this.value;
@@ -1703,54 +1788,47 @@ function rowClass(o){
   if(o==='BOTH_DIFF'||o==='SRC_TGT_DIFF'||o==='EXP_IMP_DIFF') return ' class="row-fail"';
   return '';
 }
-function buildSetRows(rows){
-  /* PERF: array+join instead of string += */
+var PAGE=500;
+function buildSetRows(rows,limit){
+  var cap=limit!==undefined?limit:Math.min(rows.length,PAGE);
+  /* PERF: array+join is faster than string += in large loops */
   var parts=[];
-  rows.forEach(function(r,i){
-    parts.push('<tr'+rowClass(r.overall)+'>'
-      +'<td class="cn">'+(i+1)+'</td>'
-      +'<td><strong>'+esc(r.name)+'</strong></td>'
-      +'<td class="cc">'+numCell(r.src)+'</td>'
-      +'<td class="cc">'+numCell(r.tgt)+'</td>'
-      +diffCell(r.stD)
-      +'<td class="cc">'+numCell(r.exp)+'</td>'
-      +'<td class="cc">'+numCell(r.imp)+'</td>'
-      +diffCell(r.eiD)
-      +'<td class="cc">'+overallBadge(r.overall)+'</td>'
-      +'</tr>');
-  });
+  for(var i=0;i<cap;i++){var r=rows[i];parts.push('<tr'+rowClass(r.overall)+'><td class="cn">'+(i+1)+'</td><td><strong>'+esc(r.name)+'</strong></td><td class="cc">'+numCell(r.src)+'</td><td class="cc">'+numCell(r.tgt)+'</td>'+diffCell(r.stD)+'<td class="cc">'+numCell(r.exp)+'</td><td class="cc">'+numCell(r.imp)+'</td>'+diffCell(r.eiD)+'<td class="cc">'+overallBadge(r.overall)+'</td></tr>');}
   var h=parts.join('');
   return h||'<tr><td colspan="9" style="text-align:center;color:#94a3b8;padding:16px;font-size:12px">No tables match this filter.</td></tr>';
 }
+function _moreBtn(id,shown,total){if(shown>=total)return'';return'<tr><td colspan="20" style="text-align:center;padding:10px"><button onclick="'+id+'()" style="font-size:12px;font-weight:700;border:1px solid #cbd5e1;border-radius:6px;padding:6px 18px;background:#f1f5f9;cursor:pointer;color:#334155">Load more ('+(total-shown)+' remaining)</button></td></tr>';}
 function setPills(pfx,rows){
-  /* PERF: single-pass counter instead of 5 separate .filter() calls */
   var matched=0,diffN=0,expOnly=0,impOnly=0,partial=0;
-  for(var _pi=0;_pi<rows.length;_pi++){var _o=rows[_pi].overall;if(_o==='ALL_OK'||_o==='EI_OK')matched++;else if(_o==='BOTH_DIFF'||_o==='SRC_TGT_DIFF'||_o==='EXP_IMP_DIFF')diffN++;else if(_o==='EXP_ONLY')expOnly++;else if(_o==='IMP_ONLY')impOnly++;else if(_o==='PARTIAL')partial++;}
-  document.getElementById(pfx+'Count').textContent  =rows.length+' table'+(rows.length!==1?'s':'');
+  for(var i=0;i<rows.length;i++){var o=rows[i].overall;if(o==='ALL_OK'||o==='EI_OK')matched++;else if(o==='BOTH_DIFF'||o==='SRC_TGT_DIFF'||o==='EXP_IMP_DIFF')diffN++;else if(o==='EXP_ONLY')expOnly++;else if(o==='IMP_ONLY')impOnly++;else if(o==='PARTIAL')partial++;}
+  document.getElementById(pfx+'Count').textContent=rows.length+' table'+(rows.length!==1?'s':'');
   document.getElementById(pfx+'Matched').textContent=matched+' Reconciled';
-  document.getElementById(pfx+'Diff').textContent   =diffN+' Differences';
+  document.getElementById(pfx+'Diff').textContent=diffN+' Differences';
   document.getElementById(pfx+'ExpOnly').textContent=expOnly+' EXP Only';
   document.getElementById(pfx+'ImpOnly').textContent=impOnly+' IMP Only';
   document.getElementById(pfx+'Partial').textContent=partial+' Partial';
 }
+var _lmS1={data:[],shown:0},_lmS2={data:[],shown:0},_lmAll={data:[],shown:0};
 function renderEITable(allRows){
-  _s1Data=allRows.filter(function(r){ return  r.inRef; });
-  _s2Data=allRows.filter(function(r){ return !r.inRef; });
-  setPills('s1',_s1Data); setPills('s2',_s2Data);
-  renderSet('s1',_s1Data); renderSet('s2',_s2Data);
-  /* All combined */
-  var n=allRows.length;
-  document.getElementById('sAllCount').textContent =n+' table'+(n!==1?'s':'');
+  _s1Data=allRows.filter(function(r){return r.inRef;});
+  _s2Data=allRows.filter(function(r){return !r.inRef;});
+  var n=allRows.length;var matched=0,diffN=0,expOnly=0,impOnly=0,partial=0;
+  for(var i=0;i<n;i++){var o=allRows[i].overall;if(o==='ALL_OK'||o==='EI_OK')matched++;else if(o==='BOTH_DIFF'||o==='SRC_TGT_DIFF'||o==='EXP_IMP_DIFF')diffN++;else if(o==='EXP_ONLY')expOnly++;else if(o==='IMP_ONLY')impOnly++;else if(o==='PARTIAL')partial++;}
+  setPills('s1',_s1Data);setPills('s2',_s2Data);
+  document.getElementById('sAllCount').textContent=n+' table'+(n!==1?'s':'');
   document.getElementById('sAllCount2').textContent=n+' table'+(n!==1?'s':'');
-  setPillsAll(allRows);
-  renderSetAll(allRows);
+  document.getElementById('sAllMatched').textContent=matched+' Reconciled';
+  document.getElementById('sAllDiff').textContent=diffN+' Differences';
+  document.getElementById('sAllExpOnly').textContent=expOnly+' EXP Only';
+  document.getElementById('sAllImpOnly').textContent=impOnly+' IMP Only';
+  document.getElementById('sAllPartial').textContent=partial+' Partial';
+  renderSet('s1',_s1Data);renderSet('s2',_s2Data);renderSetAll(allRows);
 }
 function setPillsAll(rows){
-  /* PERF: single-pass counter */
   var matched=0,diffN=0,expOnly=0,impOnly=0,partial=0;
-  for(var _pi=0;_pi<rows.length;_pi++){var _o=rows[_pi].overall;if(_o==='ALL_OK'||_o==='EI_OK')matched++;else if(_o==='BOTH_DIFF'||_o==='SRC_TGT_DIFF'||_o==='EXP_IMP_DIFF')diffN++;else if(_o==='EXP_ONLY')expOnly++;else if(_o==='IMP_ONLY')impOnly++;else if(_o==='PARTIAL')partial++;}
+  for(var i=0;i<rows.length;i++){var o=rows[i].overall;if(o==='ALL_OK'||o==='EI_OK')matched++;else if(o==='BOTH_DIFF'||o==='SRC_TGT_DIFF'||o==='EXP_IMP_DIFF')diffN++;else if(o==='EXP_ONLY')expOnly++;else if(o==='IMP_ONLY')impOnly++;else if(o==='PARTIAL')partial++;}
   document.getElementById('sAllMatched').textContent=matched+' Reconciled';
-  document.getElementById('sAllDiff').textContent   =diffN+' Differences';
+  document.getElementById('sAllDiff').textContent=diffN+' Differences';
   document.getElementById('sAllExpOnly').textContent=expOnly+' EXP Only';
   document.getElementById('sAllImpOnly').textContent=impOnly+' IMP Only';
   document.getElementById('sAllPartial').textContent=partial+' Partial';
@@ -1770,32 +1848,21 @@ function filterSetAll(data,filterId,searchId){
     return true;
   });
 }
-function buildAllRows(rows){
+function buildAllRows(rows,limit){
+  var cap=limit!==undefined?limit:Math.min(rows.length,PAGE);
   /* PERF: array+join */
   var parts=[];
-  rows.forEach(function(r,i){
-    var inRefBadge=r.inRef
-      ?'<span class="badge b-ok" style="font-size:9px">&#x2714; REF</span>'
-      :'<span class="badge b-na" style="font-size:9px">&#x2014;</span>';
-    parts.push('<tr'+rowClass(r.overall)+'>'
-      +'<td class="cn">'+(i+1)+'</td>'
-      +'<td><strong>'+esc(r.name)+'</strong></td>'
-      +'<td class="cc">'+inRefBadge+'</td>'
-      +'<td class="cc">'+numCell(r.src)+'</td>'
-      +'<td class="cc">'+numCell(r.tgt)+'</td>'
-      +diffCell(r.stD)
-      +'<td class="cc">'+numCell(r.exp)+'</td>'
-      +'<td class="cc">'+numCell(r.imp)+'</td>'
-      +diffCell(r.eiD)
-      +'<td class="cc">'+overallBadge(r.overall)+'</td>'
-      +'</tr>');
-  });
+  for(var i=0;i<cap;i++){var r=rows[i];var inRefBadge=r.inRef?'<span class="badge b-ok" style="font-size:9px">&#x2714; REF</span>':'<span class="badge b-na" style="font-size:9px">&#x2014;</span>';parts.push('<tr'+rowClass(r.overall)+'><td class="cn">'+(i+1)+'</td><td><strong>'+esc(r.name)+'</strong></td><td class="cc">'+inRefBadge+'</td><td class="cc">'+numCell(r.src)+'</td><td class="cc">'+numCell(r.tgt)+'</td>'+diffCell(r.stD)+'<td class="cc">'+numCell(r.exp)+'</td><td class="cc">'+numCell(r.imp)+'</td>'+diffCell(r.eiD)+'<td class="cc">'+overallBadge(r.overall)+'</td></tr>');}
   var h=parts.join('');
   return h||'<tr><td colspan="10" style="text-align:center;color:#94a3b8;padding:16px;font-size:12px">No tables match this filter.</td></tr>';
 }
+function loadMoreS1(){_lmS1.shown=Math.min(_lmS1.data.length,_lmS1.shown+PAGE);document.getElementById('s1Body').innerHTML=buildSetRows(_lmS1.data,_lmS1.shown)+_moreBtn('loadMoreS1',_lmS1.shown,_lmS1.data.length);}
+function loadMoreS2(){_lmS2.shown=Math.min(_lmS2.data.length,_lmS2.shown+PAGE);document.getElementById('s2Body').innerHTML=buildSetRows(_lmS2.data,_lmS2.shown)+_moreBtn('loadMoreS2',_lmS2.shown,_lmS2.data.length);}
+function loadMoreAll(){_lmAll.shown=Math.min(_lmAll.data.length,_lmAll.shown+PAGE);document.getElementById('sAllBody').innerHTML=buildAllRows(_lmAll.data,_lmAll.shown)+_moreBtn('loadMoreAll',_lmAll.shown,_lmAll.data.length);}
 function renderSetAll(rows){
+  _lmAll.data=rows;_lmAll.shown=Math.min(rows.length,PAGE);
   document.getElementById('sAllRc').textContent=rows.length+' table(s)';
-  document.getElementById('sAllBody').innerHTML=buildAllRows(rows);
+  document.getElementById('sAllBody').innerHTML=buildAllRows(rows,_lmAll.shown)+_moreBtn('loadMoreAll',_lmAll.shown,rows.length);
 }
 function filterSet(data,filterId,searchId){
   var f=document.getElementById(filterId).value;
@@ -1811,8 +1878,9 @@ function filterSet(data,filterId,searchId){
   });
 }
 function renderSet(pfx,rows){
+  var lm=pfx==='s1'?_lmS1:_lmS2;lm.data=rows;lm.shown=Math.min(rows.length,PAGE);
   document.getElementById(pfx+'Rc').textContent=rows.length+' table(s)';
-  document.getElementById(pfx+'Body').innerHTML=buildSetRows(rows);
+  document.getElementById(pfx+'Body').innerHTML=buildSetRows(rows,lm.shown)+_moreBtn('loadMore'+pfx.toUpperCase(),lm.shown,rows.length);
 }
 function bindFilters(){
   ['s1Filter','s1Search'].forEach(function(id){
@@ -1847,41 +1915,23 @@ function onS1F(){ renderSet('s1',filterSet(_s1Data,'s1Filter','s1Search')); }
 function onS2F(){ renderSet('s2',filterSet(_s2Data,'s2Filter','s2Search')); }
 function onSAllF(){ renderSetAll(filterSetAll(_eiTableData,'sAllFilter','sAllSearch')); }
 
-function setText(id,val){ var el=document.getElementById(id); if(el) el.textContent=val; }
-function buildCntRow(label,rows,matchFn){
-  var tot=rows.length;
-  var matchN=rows.filter(matchFn).length;
-  var diffN=tot-matchN;
-  var p=tot>0?Math.round((matchN/tot)*100):0;
-  var pc=pctClass(p);
-  var pctBadge='<span class="rainbow-pct '+pc+'" style="font-size:12px;border:1px solid;border-radius:5px;padding:2px 8px">'+p+'%</span>';
-  return '<tr>'
-    +'<td class="ctl">'+esc(label)+'</td>'
-    +'<td>'+tot+'</td>'
-    +'<td class="cmt-ok">'+matchN+'</td>'
-    +'<td class="cmt-fail">'+diffN+'</td>'
-    +'<td style="text-align:center">'+pctBadge+'</td>'
-    +'</tr>';
-}
-
 function fmt(n){ return n===null?'\u2014':n.toLocaleString(); }
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-/* ── RAINBOW HELPERS ── */
-function pctClass(p){ return p===100?'pct-100':p>=80?'pct-hi':p>=60?'pct-mid':p>=40?'pct-lo':'pct-bad'; }
-function pctBarClass(p){ return p===100?'pct-100-bar':p>=80?'pct-hi-bar':p>=60?'pct-mid-bar':p>=40?'pct-lo-bar':'pct-bad-bar'; }
-function applyPctColor(id,p){
-  var el=document.getElementById(id);if(!el)return;
-  el.classList.remove('pct-100','pct-hi','pct-mid','pct-lo','pct-bad');
-  el.classList.add(pctClass(p));
+/* ── EXPORT ── */
+function getSrcTgtStatusLabel(src,tgt){
+  if(src===null||src===undefined||tgt===null||tgt===undefined||src===''||tgt==='') return '';
+  var diff=Number(src)-Number(tgt);
+  if(diff===0) return 'Matching';
+  if(diff<0) return 'Target is more';
+  return 'Source is more';
 }
 
-/* Ã¢â€¢ÂÃ¢â€¢Â EXPORT Ã¢â€¢ÂÃ¢â€¢Â */
-
-var EI_HDRS=['#','Table Name','Source Count','Target Count','Src-Tgt Diff','Export Count','Import Count','Exp-Imp Diff','Overall Status'];
+var EI_HDRS=['#','Table Name','Source Count','Target Count','Src-Tgt Diff','Src vs Tgt Status','Export Count','Import Count','Exp-Imp Diff','Overall Status'];
 function rowsToCols(rows){
   return rows.map(function(r,i){
     return [i+1,r.name,r.src!==null?r.src:'',r.tgt!==null?r.tgt:'',r.stD!==null?r.stD:'',
+            getSrcTgtStatusLabel(r.src,r.tgt),
             r.exp!==null?r.exp:'',r.imp!==null?r.imp:'',r.eiD!==null?r.eiD:'',r.overall];
   });
 }
@@ -1896,13 +1946,73 @@ function exportXLS(rows,sheetName,filename){
   var wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([EI_HDRS].concat(rowsToCols(rows))),sheetName);
   XLSX.writeFile(wb,filename);
-}],filename); }
-document.getElementById('btnS1CSV').addEventListener('click',function(){ exportCSV(filterSet(_s1Data,'s1Filter','s1Search'),'dm2_set1_in_ref.csv'); });
-document.getElementById('btnS1XLS').addEventListener('click',function(){ exportXLS(filterSet(_s1Data,'s1Filter','s1Search'),'Set1-InRef','dm2_set1_in_ref.xlsx'); });
-document.getElementById('btnS2CSV').addEventListener('click',function(){ exportCSV(filterSet(_s2Data,'s2Filter','s2Search'),'dm2_set2_not_in_ref.csv'); });
-document.getElementById('btnS2XLS').addEventListener('click',function(){ exportXLS(filterSet(_s2Data,'s2Filter','s2Search'),'Set2-NotInRef','dm2_set2_not_in_ref.xlsx'); });
-document.getElementById('btnAllCSV').addEventListener('click',function(){ exportAllCSV(filterSetAll(_eiTableData,'sAllFilter','sAllSearch'),'dm2_all_tables.csv'); });
-document.getElementById('btnAllXLS').addEventListener('click',function(){ exportAllXLS(filterSetAll(_eiTableData,'sAllFilter','sAllSearch'),'All-Tables','dm2_all_tables.xlsx'); });
+}
+/* ── RAINBOW COLOUR HELPER ── */
+/* Returns CSS class based on percentage value: 100=green, ≥80=hi, ≥60=mid, ≥40=lo, <40=bad */
+function pctClass(pct){
+  if(pct===100) return 'pct-100';
+  if(pct>=80)   return 'pct-hi';
+  if(pct>=60)   return 'pct-mid';
+  if(pct>=40)   return 'pct-lo';
+  return 'pct-bad';
+}
+/* Returns bar CSS class for the progress fill element */
+function pctBarClass(pct){
+  if(pct===100) return 'pct-100-bar';
+  if(pct>=80)   return 'pct-hi-bar';
+  if(pct>=60)   return 'pct-mid-bar';
+  if(pct>=40)   return 'pct-lo-bar';
+  return 'pct-bad-bar';
+}
+/* Apply rainbow class to an element by id — removes old class first */
+function applyPctColor(id, pct){
+  var el=document.getElementById(id); if(!el) return;
+  el.className=el.className.replace(/\bpct-\S+/g,'').trim();
+  el.classList.add('rainbow-pct', pctClass(pct));
+}
+
+/* ── STEP 2 DOWNLOAD FUNCTIONS ── */
+var REF_HDRS=['#','Table Name','Source Count','Target Count'];
+var MATCH_HDRS=['#','Table Name','Source','Target','Src-Tgt Diff','Export','Import','Exp-Imp Diff','Status'];
+var CNT_HDRS=['#','Table Name','REF Source','REF Target','Export','Import','Src-Exp Variance','Tgt-Imp Variance','Status'];
+
+function refRows2Cols(){
+  var out=[];var i=0;
+  Object.keys(_refMap||{}).forEach(function(k){var r=_refMap[k];out.push([++i,r.name,r.src!==null?r.src:'',r.tgt!==null?r.tgt:'']);});
+  return out;
+}
+function matchRows2Cols(rows){return rows.map(function(r,i){return[i+1,r.name,r.src!==null?r.src:'',r.tgt!==null?r.tgt:'',r.stD!==null?r.stD:'',r.exp!==null?r.exp:'',r.imp!==null?r.imp:'',r.eiD!==null?r.eiD:'',r.stD===null?'':r.stD===0?'Matched':r.stD>0?'Source is More':'Target is More'];});}
+function cntRows2Cols(){return _eiTableData.filter(function(r){return r.inRef;}).map(function(r,i){var sv=r.src!==null&&r.exp!==null?r.src-r.exp:null;var tv=r.tgt!==null&&r.imp!==null?r.tgt-r.imp:null;return[i+1,r.name,r.src!==null?r.src:'',r.tgt!==null?r.tgt:'',r.exp!==null?r.exp:'',r.imp!==null?r.imp:'',sv!==null?sv:'',tv!==null?tv:'',(sv===null&&tv===null)?'':(sv===0&&tv===0)?'Matched':(sv!==null&&sv>0)||(tv!==null&&tv>0)?'Source is More':'Target is More'];});}
+
+function dlCSV2(hdrs,data,fn){
+  var lines=[hdrs.map(function(h){return'"'+h+'"';}).join(',')];
+  data.forEach(function(c){lines.push(c.map(function(v){return'"'+String(v===null||v===undefined?'':v).replace(/"/g,'""')+'"';}).join(','));});
+  dlBlob(lines.join('\r\n'),'text/csv',fn);
+}
+function dlXLS2(sheets,fn){
+  var wb=XLSX.utils.book_new();
+  sheets.forEach(function(s){XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([s.hdrs].concat(s.data)),s.name);});
+  XLSX.writeFile(wb,fn);
+}
+
+/* _refMap is populated in _doAnalysis above; default empty object for safety */
+var _refMap={};
+
+document.getElementById('btnDlRefCSV').addEventListener('click',function(){dlCSV2(REF_HDRS,refRows2Cols(),'dm1_reference_list.csv');});
+document.getElementById('btnDlRefXLS').addEventListener('click',function(){dlXLS2([{hdrs:REF_HDRS,data:refRows2Cols(),name:'Reference List'}],'dm1_reference_list.xlsx');});
+document.getElementById('btnDlMatchCSV').addEventListener('click',function(){dlCSV2(MATCH_HDRS,matchRows2Cols(_eiTableData),'dm1_match_mismatch.csv');});
+document.getElementById('btnDlMatchXLS').addEventListener('click',function(){dlXLS2([{hdrs:MATCH_HDRS,data:matchRows2Cols(_eiTableData),name:'Match-Mismatch'}],'dm1_match_mismatch.xlsx');});
+document.getElementById('btnDlSrcCntCSV').addEventListener('click',function(){dlCSV2(CNT_HDRS,cntRows2Cols(),'dm1_source_count_validation.csv');});
+document.getElementById('btnDlSrcCntXLS').addEventListener('click',function(){dlXLS2([{hdrs:CNT_HDRS,data:cntRows2Cols(),name:'Source Count Validation'}],'dm1_source_count_validation.xlsx');});
+document.getElementById('btnDlTgtCntCSV').addEventListener('click',function(){dlCSV2(CNT_HDRS,cntRows2Cols(),'dm1_target_count_validation.csv');});
+document.getElementById('btnDlTgtCntXLS').addEventListener('click',function(){dlXLS2([{hdrs:CNT_HDRS,data:cntRows2Cols(),name:'Target Count Validation'}],'dm1_target_count_validation.xlsx');});
+
+document.getElementById('btnS1CSV').addEventListener('click',function(){ exportCSV(filterSet(_s1Data,'s1Filter','s1Search'),'dm1_set1_in_ref.csv'); });
+document.getElementById('btnS1XLS').addEventListener('click',function(){ exportXLS(filterSet(_s1Data,'s1Filter','s1Search'),'Set1-InRef','dm1_set1_in_ref.xlsx'); });
+document.getElementById('btnS2CSV').addEventListener('click',function(){ exportCSV(filterSet(_s2Data,'s2Filter','s2Search'),'dm1_set2_not_in_ref.csv'); });
+document.getElementById('btnS2XLS').addEventListener('click',function(){ exportXLS(filterSet(_s2Data,'s2Filter','s2Search'),'Set2-NotInRef','dm1_set2_not_in_ref.xlsx'); });
+document.getElementById('btnAllCSV').addEventListener('click',function(){ exportAllCSV(filterSetAll(_eiTableData,'sAllFilter','sAllSearch'),'dm1_all_tables.csv'); });
+document.getElementById('btnAllXLS').addEventListener('click',function(){ exportAllXLS(filterSetAll(_eiTableData,'sAllFilter','sAllSearch'),'All-Tables','dm1_all_tables.xlsx'); });
 
 /* All-tables toggle */
 document.getElementById('allToggleBar').addEventListener('click',function(){
@@ -1922,11 +2032,12 @@ document.getElementById('btnReset').addEventListener('click',function(){
   document.getElementById('sAllCount2').textContent='0 tables';
 });
 
-var ALL_HDRS=['#','Table Name','In REF','Source Count','Target Count','Src-Tgt Diff','Export Count','Import Count','Exp-Imp Diff','Overall Status'];
+var ALL_HDRS=['#','Table Name','In REF','Source Count','Target Count','Src-Tgt Diff','Src vs Tgt Status','Export Count','Import Count','Exp-Imp Diff','Overall Status'];
 function rowsToColsAll(rows){
   return rows.map(function(r,i){
     return [i+1,r.name,r.inRef?'Yes':'No',
             r.src!==null?r.src:'',r.tgt!==null?r.tgt:'',r.stD!==null?r.stD:'',
+            getSrcTgtStatusLabel(r.src,r.tgt),
             r.exp!==null?r.exp:'',r.imp!==null?r.imp:'',r.eiD!==null?r.eiD:'',r.overall];
   });
 }
@@ -1950,18 +2061,15 @@ function dlBlob(content,mime,filename){
   document.body.removeChild(a); URL.revokeObjectURL(a.href);
 }
 
-/* ══ SESSION STORAGE — persist results across nav ══ */
-var _SESSION_KEY = 'Sempra_DM2_Dashboard';
-var _KPI_KEY     = 'Sempra_DM2_Dashboard_kpi';
-var _FIXED_KEY   = 'sampra_cycle_DM2';
-var _TABLE_KEY   = 'sampra_DM2_tableData'; /* separate key — never blocks KPI save */
+/* â•â• SESSION STORAGE â€” persist results across nav â•â• */
+var _SESSION_KEY = 'Sempra_DM1_Dashboard';
+var _KPI_KEY     = 'Sempra_DM1_Dashboard_kpi';
+var _FIXED_KEY   = 'sampra_cycle_DM1'; /* fixed key â€” always readable by Cross-Cycle Summary */
 
-var _DEFAULT_CYCLE_DATA = {
-  "DM2": {"kTotal":7715,"kPct":"86%","kExp":7741,"kImp":7673,"kExpOnly":77,"kImpOnly":58,"kSTok":7325,"kSTfail":384,"kEIok":7155,"kEIfail":502,"cvSeOk":7490,"cvSeTot":7715,"cvTiOk":6934,"cvTiTot":7715,"refInExp":7664,"refInImp":7615,"refMissExp":51,"refMissImp":100,"expTotalRec":32471487096,"impTotalRec":30179778240,"srcTotalRec":32339454785,"tgtTotalRec":27203962075,"reconN":6680,"tableN":7802,"_refOnly":false,"_cycle":"DM2","runStamp":"10/22/2026, 09:55:00 PM","_savedAt":1792695000000,"fnRef":"DM2_Reference_List.xlsx","fnExp":"DM2_SNP_Export_Import.xlsx","refTables":"7,715","refRows":"7,715","expTables":"7,741","expRows":"7,741","impTables":"7,673","impRows":"7,673","expMatchedTables":"7,664","expMatchedRec":"32,471,487,096","impMatchedTables":"7,615","impMatchedRec":"30,179,778,240","rb_refTotal":"7,715","rb_bothMatched":"7,615","rb_bothPct":"(99%)","rb_expMatched":"7,664","rb_expPct":"(99%)","rb_impMatched":"7,615","rb_impPct":"(99%)","rb_mismatch":"100","rb_mismatchPct":"(1%)","rb_extraRec":"87","s1Count":"7,715","s2Count":"87","s1Matched":"6,680","s1Diff":"1,035","reconWidth":"86%","reconClass":"recon-fill","reconSub":"6,680 of 7,715 tables fully reconciled across all sources"}
-};
-
+/* ── SAVE: always split into two writes so quota on tableData never blocks KPI ── */
+var _TABLE_KEY='sampra_DM1_tableData';
 function saveKPI(){
-  /* 1. KPI text — tiny, always fits */
+  /* 1. KPI/text fields — tiny, always fits */
   try{
     var kpi={
       kTotal:   document.getElementById('kTotal').textContent,
@@ -1993,37 +2101,48 @@ function saveKPI(){
       s1Diff:   document.getElementById('s1Diff').textContent,
       fnRef:    document.getElementById('fnRef').textContent,
       fnExp:    document.getElementById('fnExp').textContent,
-      fnImp:    document.getElementById('fnImp')?document.getElementById('fnImp').textContent:'',
       refTableCol:_refTableCol, refSrcCol:_refSrcCol, refTgtCol:_refTgtCol,
-      csRefVisible:document.getElementById('csRef').style.display,
-      csExpVisible:document.getElementById('csExp').style.display,
-      csImpVisible:document.getElementById('csImp').style.display,
+      reconBreakdown: document.getElementById('reconBreakdown').style.display,
+      rb_refTotal:    document.getElementById('rb-refTotal').textContent,
+      rb_bothMatched: document.getElementById('rb-bothMatched').textContent,
+      rb_bothPct:     document.getElementById('rb-bothPct').textContent,
+      rb_expMatched:  document.getElementById('rb-expMatched').textContent,
+      rb_expPct:      document.getElementById('rb-expPct').textContent,
+      rb_impMatched:  document.getElementById('rb-impMatched').textContent,
+      rb_impPct:      document.getElementById('rb-impPct').textContent,
+      rb_mismatch:    document.getElementById('rb-mismatch').textContent,
+      rb_mismatchPct: document.getElementById('rb-mismatchPct').textContent,
+      rb_extraRec:    document.getElementById('rb-extraRec').textContent,
       cvSeOk:_cvSeOk, cvSeTot:_cvSeTot,
       cvTiOk:_cvTiOk, cvTiTot:_cvTiTot,
       _savedAt: Date.now(),
-      _cycle: 'DM2'
+      _cycle: 'DM1'
     };
-    var jsonKpi = JSON.stringify(kpi);
-    localStorage.setItem(_KPI_KEY, jsonKpi);
-    localStorage.setItem(_SESSION_KEY, jsonKpi);
-    localStorage.setItem(_FIXED_KEY, jsonKpi);
-    try{ sessionStorage.setItem(_SESSION_KEY, jsonKpi); }catch(e){}
-    try{ sessionStorage.setItem(_FIXED_KEY, jsonKpi); }catch(e){}
+    localStorage.setItem(_KPI_KEY, JSON.stringify(kpi));
+    localStorage.setItem(_SESSION_KEY, JSON.stringify(kpi));
+    localStorage.setItem(_FIXED_KEY, JSON.stringify(kpi));
   }catch(ex){}
-  /* 2. tableData — compact array, own key, own try/catch */
+  /* 2. tableData — large, separate key, own try/catch so failure never blocks KPI */
   try{
-    if(_eiTableData && _eiTableData.length){
-      var compact=_eiTableData.map(function(r){return[r.name,r.key,r.src,r.tgt,r.exp,r.imp,r.inRef?1:0];});
-      var str = JSON.stringify(compact);
-      try{ localStorage.setItem(_TABLE_KEY, str); }catch(e){}
-      try{ sessionStorage.setItem(_TABLE_KEY, str); }catch(e){}
-    }
-  }catch(ex){}
+    /* Compact: only store the fields needed to re-render; drop redundant computed ones */
+    var compact=_eiTableData.map(function(r){
+      return [r.name,r.key,r.src,r.tgt,r.exp,r.imp,r.inRef?1:0];
+    });
+    localStorage.setItem(_TABLE_KEY, JSON.stringify(compact));
+  }catch(ex){
+    /* Too large for localStorage — clear old value so restore doesn't show stale data */
+    try{localStorage.removeItem(_TABLE_KEY);}catch(e){}
+  }
 }
 
+/* â”€â”€ FULL SESSION SAVE (restores entire UI on return visit) â”€â”€
+   Saves HTML bodies + table data. Large â€” may fail on quota. That is OK
+   because saveKPI() above already secured the Executive Dashboard data. */
 function saveSession(){
-  saveKPI(); /* always succeeds */
-  /* Extra UI state — no tableData here */
+  /* Always save KPI first — writes _SESSION_KEY + _TABLE_KEY safely */
+  saveKPI();
+
+  /* Attempt extra UI state (pill texts, agg bodies, panel state) — no tableData here */
   try{
     var snap={
       refTableCol: _refTableCol, refSrcCol: _refSrcCol, refTgtCol: _refTgtCol,
@@ -2047,13 +2166,10 @@ function saveSession(){
       runStamp: document.getElementById('runStamp').innerHTML,
       fnRef: document.getElementById('fnRef').textContent,
       fnExp: document.getElementById('fnExp').textContent,
-      fnImp: document.getElementById('fnImp')?document.getElementById('fnImp').textContent:'',
       fbRefVisible: document.getElementById('fbRef').style.display,
       fbExpVisible: document.getElementById('fbExp').style.display,
-      fbImpVisible: document.getElementById('fbImp')?document.getElementById('fbImp').style.display:'none',
       dzRefHidden:  document.getElementById('dzRef').style.display,
       dzExpHidden:  document.getElementById('dzExp').style.display,
-      dzImpHidden:  document.getElementById('dzImp')?document.getElementById('dzImp').style.display:'none',
       csRefVisible: document.getElementById('csRef').style.display,
       csExpVisible: document.getElementById('csExp').style.display,
       csImpVisible: document.getElementById('csImp').style.display,
@@ -2102,26 +2218,23 @@ function saveSession(){
       sAllBody:    document.getElementById('sAllBody').innerHTML,
       sAllRc:      document.getElementById('sAllRc').textContent,
       allPanelOpen: !document.getElementById('allPanelWrap').classList.contains('hidden'),
-      drillOptions: document.getElementById('drillSelect')?document.getElementById('drillSelect').innerHTML:'',
-      rb_refTotal:   document.getElementById('rb-refTotal')?document.getElementById('rb-refTotal').textContent:'',
-      rb_bothMatched:document.getElementById('rb-bothMatched')?document.getElementById('rb-bothMatched').textContent:'',
-      rb_bothPct:    document.getElementById('rb-bothPct')?document.getElementById('rb-bothPct').textContent:'',
-      rb_expMatched: document.getElementById('rb-expMatched')?document.getElementById('rb-expMatched').textContent:'',
-      rb_expPct:     document.getElementById('rb-expPct')?document.getElementById('rb-expPct').textContent:'',
-      rb_impMatched: document.getElementById('rb-impMatched')?document.getElementById('rb-impMatched').textContent:'',
-      rb_impPct:     document.getElementById('rb-impPct')?document.getElementById('rb-impPct').textContent:'',
-      rb_mismatch:   document.getElementById('rb-mismatch')?document.getElementById('rb-mismatch').textContent:'',
-      rb_mismatchPct:document.getElementById('rb-mismatchPct')?document.getElementById('rb-mismatchPct').textContent:'',
-      rb_extraRec:   document.getElementById('rb-extraRec')?document.getElementById('rb-extraRec').textContent:'',
-      _cycle: 'DM2'
+      /* reconBreakdown card values */
+      rb_refTotal:   document.getElementById('rb-refTotal').textContent,
+      rb_bothMatched:document.getElementById('rb-bothMatched').textContent,
+      rb_bothPct:    document.getElementById('rb-bothPct').textContent,
+      rb_expMatched: document.getElementById('rb-expMatched').textContent,
+      rb_expPct:     document.getElementById('rb-expPct').textContent,
+      rb_impMatched: document.getElementById('rb-impMatched').textContent,
+      rb_impPct:     document.getElementById('rb-impPct').textContent,
+      rb_mismatch:   document.getElementById('rb-mismatch').textContent,
+      rb_mismatchPct:document.getElementById('rb-mismatchPct').textContent,
+      rb_extraRec:   document.getElementById('rb-extraRec').textContent,
+      _cycle: 'DM1'
     };
-    var jsonSnap = JSON.stringify(snap);
-    localStorage.setItem(_SESSION_KEY, jsonSnap);
-    localStorage.setItem(_FIXED_KEY, jsonSnap);
-    try{ sessionStorage.setItem(_SESSION_KEY, jsonSnap); }catch(e){}
-    try{ sessionStorage.setItem(_FIXED_KEY, jsonSnap); }catch(e){}
+    localStorage.setItem(_SESSION_KEY, JSON.stringify(snap));
+    localStorage.setItem(_FIXED_KEY, JSON.stringify(snap));
   }catch(ex){
-    /* Full snapshot too large — KPI snapshot already saved above, Executive Dashboard is fine */
+    /* Full snapshot too large â€” KPI snapshot already saved above, Executive Dashboard is fine */
   }
 
   if (window.location.search.indexOf('auto=true') !== -1) {
@@ -2132,7 +2245,7 @@ function saveSession(){
   }
 }
 
-/* Save full state whenever user navigates away — covers both pre- and post-analysis */
+/* Save full state whenever user navigates away â€” covers both pre- and post-analysis */
 window.addEventListener('beforeunload', function(){
   if(_eiTableData && _eiTableData.length){
     saveSession(); /* post-analysis: save everything */
@@ -2143,34 +2256,56 @@ window.addEventListener('beforeunload', function(){
 
 function restoreSession(){
   try{
-    var raw = localStorage.getItem(_SESSION_KEY);
-    if(!raw) raw = localStorage.getItem(_FIXED_KEY);
-    if(!raw) raw = sessionStorage.getItem(_SESSION_KEY) || sessionStorage.getItem(_FIXED_KEY);
-    if(!raw && typeof _DEFAULT_CYCLE_DATA !== 'undefined' && _DEFAULT_CYCLE_DATA && _DEFAULT_CYCLE_DATA['DM2']){
-      raw = JSON.stringify(_DEFAULT_CYCLE_DATA['DM2']);
-    }
+    var raw=localStorage.getItem(_SESSION_KEY);
     if(!raw) return false;
-    var s = (typeof raw === 'string') ? JSON.parse(raw) : raw;
-    if(!s) return false;
+    var s=JSON.parse(raw);
 
-    _refTableCol=s.refTableCol||null;_refSrcCol=s.refSrcCol||null;_refTgtCol=s.refTgtCol||null;
+    /* Restore column detection state */
+    _refTableCol=s.refTableCol||null;
+    _refSrcCol=s.refSrcCol||null;
+    _refTgtCol=s.refTgtCol||null;
+
+    /* Restore KPI text */
     var ids=['kTotal','kExp','kImp','kSTok','kSTfail','kEIok','kEIfail','kExpOnly','kImpOnly','kPct'];
-    ids.forEach(function(id){if(s[id]!==undefined)document.getElementById(id).textContent=s[id];});
-    if(s.reconWidth) document.getElementById('reconFill').style.width=s.reconWidth;
-    else if(s.kPct) document.getElementById('reconFill').style.width=s.kPct;
-    if(s.reconClass) document.getElementById('reconFill').className=s.reconClass;
-    if(s.reconSub) document.getElementById('reconSub').textContent=s.reconSub;
-    if(s.runStamp) document.getElementById('runStamp').innerHTML=s.runStamp;
+    ids.forEach(function(id){ if(s[id]!==undefined) document.getElementById(id).textContent=s[id]; });
+    document.getElementById('reconFill').style.width=s.reconWidth||'0%';
+    document.getElementById('reconFill').className=s.reconClass||'recon-fill';
+    document.getElementById('reconSub').textContent=s.reconSub||'';
+    document.getElementById('runStamp').innerHTML=s.runStamp||'';
+
+    /* File badges */
     if(s.fnRef&&s.fnRef.trim()){document.getElementById('fnRef').textContent=s.fnRef;document.getElementById('fbRef').style.display='flex';document.getElementById('dzRef').style.display='none';}
+    else{document.getElementById('fbRef').style.display='none';document.getElementById('dzRef').style.display='';}
     if(s.fnExp&&s.fnExp.trim()){document.getElementById('fnExp').textContent=s.fnExp;document.getElementById('fbExp').style.display='flex';document.getElementById('dzExp').style.display='none';}
-    if(document.getElementById('fnImp')&&s.fnImp&&s.fnImp.trim()){document.getElementById('fnImp').textContent=s.fnImp;document.getElementById('fbImp').style.display='flex';if(document.getElementById('dzImp'))document.getElementById('dzImp').style.display='none';}
-    document.getElementById('csRef').style.display=s.csRefVisible||(s.refTables?'block':'none');
-    document.getElementById('csExp').style.display=s.csExpVisible||(s.expTables?'block':'none');
-    document.getElementById('csImp').style.display=s.csImpVisible||(s.impTables?'block':'none');
+    else{document.getElementById('fbExp').style.display='none';document.getElementById('dzExp').style.display='';}
+
+    /* Card stats */
+    document.getElementById('csRef').style.display=s.csRefVisible||'none';
+    document.getElementById('csExp').style.display=s.csExpVisible||'none';
+    document.getElementById('csImp').style.display=s.csImpVisible||'none';
     ['refTables','refRows','expTables','expRows','impTables','impRows','expMatchedTables','expMatchedRec','impMatchedTables','impMatchedRec'].forEach(function(id){if(s[id]!==undefined)document.getElementById(id).textContent=s[id];});
-    /* Restore _eiTableData from compact key and re-render tables */
+
+    /* Agg tables */
+    document.getElementById('aggRef').style.display=s.aggRefVisible||'none';
+    document.getElementById('aggExp').style.display=s.aggExpVisible||'none';
+    document.getElementById('aggImp').style.display=s.aggImpVisible||'none';
+    document.getElementById('aggRefCount').textContent=s.aggRefCount||'';
+    document.getElementById('aggExpCount').textContent=s.aggExpCount||'';
+    document.getElementById('aggImpCount').textContent=s.aggImpCount||'';
+    document.getElementById('aggRefBody').innerHTML=s.aggRefBody||'';
+    document.getElementById('aggExpBody').innerHTML=s.aggExpBody||'';
+    document.getElementById('aggImpBody').innerHTML=s.aggImpBody||'';
+
+    /* Restore reconBreakdown if saved */
+    if(s.rb_refTotal){
+      var rbIds=['rb-refTotal','rb-bothMatched','rb-bothPct','rb-expMatched','rb-expPct','rb-impMatched','rb-impPct','rb-mismatch','rb-mismatchPct','rb-extraRec'];
+      rbIds.forEach(function(id){var key=id.replace(/-/g,'_');if(s[key]!==undefined){var el=document.getElementById(id);if(el)el.textContent=s[key];}});
+      document.getElementById('reconBreakdown').style.display='block';
+    }
+
+    /* Restore _eiTableData from compact _TABLE_KEY — expand [name,key,src,tgt,exp,imp,inRef] */
     try{
-      var td=localStorage.getItem(_TABLE_KEY) || sessionStorage.getItem(_TABLE_KEY);
+      var td=localStorage.getItem(_TABLE_KEY);
       if(td){
         var compact=JSON.parse(td);
         _eiTableData=compact.map(function(c){
@@ -2179,7 +2314,9 @@ function restoreSession(){
           var eiD=(exp!==null&&imp!==null)?(exp-imp):null;
           var stOk=stD!==null?(stD===0):null;
           var eiOk=eiD!==null?(eiD===0):null;
-          return{name:c[0],key:c[1],src:src,tgt:tgt,stD:stD,stOk:stOk,exp:exp,imp:imp,eiD:eiD,eiOk:eiOk,overall:computeOverall(stOk,eiOk,exp,imp),inRef:inRef};
+          return{name:c[0],key:c[1],src:src,tgt:tgt,stD:stD,stOk:stOk,
+                 exp:exp,imp:imp,eiD:eiD,eiOk:eiOk,
+                 overall:computeOverall(stOk,eiOk,exp,imp),inRef:inRef};
         });
       }
     }catch(e){_eiTableData=[];}
@@ -2187,28 +2324,31 @@ function restoreSession(){
       renderEITable(_eiTableData);
       populateDrill(_eiTableData);
       recomputeCards(_eiTableData,s);
+      /* Stale data check: if most exp/imp values are exactly 1, old fallback was used */
+      var _refRows=_eiTableData.filter(function(r){return r.inRef&&r.exp!==null;});
+      if(_refRows.length>10){
+        var _oneCount=_refRows.filter(function(r){return r.exp===1;}).length;
+        if(_oneCount/_refRows.length>0.8){
+          var sw=document.getElementById('staleWarning');
+          if(sw) sw.style.display='flex';
+        }
+      }
     }
-    if(s.allPanelOpen && document.getElementById('allPanelWrap')){document.getElementById('allPanelWrap').classList.remove('hidden');if(document.getElementById('allCaret'))document.getElementById('allCaret').classList.add('open');}
-    /* Restore reconBreakdown */
-    if(s.rb_refTotal || s.kTotal){
-      var rbIds=['rb-refTotal','rb-bothMatched','rb-bothPct','rb-expMatched','rb-expPct','rb-impMatched','rb-impPct','rb-mismatch','rb-mismatchPct','rb-extraRec'];
-      rbIds.forEach(function(id){var key=id.replace(/-/g,'_');if(s[key]!==undefined){var el=document.getElementById(id);if(el)el.textContent=s[key];}});
-      var rbd = document.getElementById('reconBreakdown');
-      if(rbd) rbd.style.display='block';
+    if(s.allPanelOpen){document.getElementById('allPanelWrap').classList.remove('hidden');document.getElementById('allCaret').classList.add('open');}
+
+    /* Show results only if analysis has been run */
+    if(_eiTableData.length||s.runStamp){
+      document.getElementById('resultsSection').classList.remove('hidden');
     }
-    /* Show results only if analysis has been run or valid KPI data exists */
-    if(_eiTableData.length||s.runStamp||s.kTotal){
-      var rs = document.getElementById('resultsSection');
-      if(rs) rs.classList.remove('hidden');
-    }
-    var btnR = document.getElementById('btnRun'); if(btnR) btnR.disabled=false;
-    var btnX = document.getElementById('btnReset'); if(btnX) btnX.disabled=false;
+    document.getElementById('btnRun').disabled=false;
+    document.getElementById('btnReset').disabled=false;
     bindFilters();
     return true;
   }catch(ex){ return false; }
 }
 
-function recomputeCards(data){
+/* Recompute all card values from _eiTableData after restore */
+function recomputeCards(data,s){
   function st(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
   var stOkN=0,stFaN=0,eiOkN=0,eiFaN=0;
   var matchedInExp=0,matchedInImp=0,bothN=0,mismatchN=0,extraN=0;
@@ -2224,7 +2364,7 @@ function recomputeCards(data){
     if(r.eiOk===true)eiOkN++;else if(r.eiOk===false)eiFaN++;
     if(r.inRef){
       rklen++;
-      srcTot+=r.src||0;tgtTot+=r.tgt||0;
+      srcTot+=r.src||0; tgtTot+=r.tgt||0;
       if(r.exp!==null){matchedInExp++;expTot+=r.exp;}
       if(r.imp!==null){matchedInImp++;impTot+=r.imp;}
       if(r.exp!==null&&r.imp!==null)bothN++;
@@ -2233,37 +2373,48 @@ function recomputeCards(data){
       if(r.eiD!==null){cv_eiTot++;if(r.eiD===0)cv_eiOk++;cv_eiExp+=r.exp||0;cv_eiImp+=r.imp||0;}
       if(r.src!==null&&r.exp!==null){cv_seTot++;if(r.src===r.exp)cv_seOk++;cv_seSrc+=r.src||0;cv_seExp+=r.exp||0;}
       if(r.tgt!==null&&r.imp!==null){cv_tiTot++;if(r.tgt===r.imp)cv_tiOk++;cv_tiTgt+=r.tgt||0;cv_tiImp+=r.imp||0;}
-    }else{extraN++;}
+    } else { extraN++; }
   }
   _srcTotalRec=srcTot;_tgtTotalRec=tgtTot;_expTotalRec=expTot;_impTotalRec=impTot;
   _cvSeOk=cv_seOk;_cvSeTot=cv_seTot;_cvTiOk=cv_tiOk;_cvTiTot=cv_tiTot;
   var nBase=rklen||1;
+  /* Recon match cards */
   st('r-srcInExp',matchedInExp);st('r-srcMissExp',rklen-matchedInExp);st('r-srcExpPct',Math.round((matchedInExp/nBase)*100)+'%');
   st('r-srcInImp',matchedInImp);st('r-srcMissImp',rklen-matchedInImp);st('r-srcImpPct',Math.round((matchedInImp/nBase)*100)+'%');
   st('r-tgtInExp',matchedInExp);st('r-tgtMissExp',rklen-matchedInExp);st('r-tgtExpPct',Math.round((matchedInExp/nBase)*100)+'%');
   st('r-tgtInImp',matchedInImp);st('r-tgtMissImp',rklen-matchedInImp);st('r-tgtImpPct',Math.round((matchedInImp/nBase)*100)+'%');
   var eiTot=eiOkN+eiFaN;st('r-eiOk',eiOkN);st('r-eiFail',eiFaN);st('r-eiPct',eiTot>0?Math.round((eiOkN/eiTot)*100)+'%':'0%');
   var stTot=stOkN+stFaN;st('r-stOk',stOkN);st('r-stFail',stFaN);st('r-stPct',stTot>0?Math.round((stOkN/stTot)*100)+'%':'0%');
+  /* Count validation totals */
   st('cv-srcTotal',srcTot.toLocaleString());st('cv-expTotal',expTot.toLocaleString());
   st('cv-tgtTotal',tgtTot.toLocaleString());st('cv-impTotal',impTot.toLocaleString());
   var svVar=srcTot-expTot,tvVar=tgtTot-impTot;
   var svEl=document.getElementById('cv-srcExpVar');if(svEl){svEl.textContent=(svVar===0?'0':(svVar>0?'+':'')+svVar.toLocaleString());svEl.style.color=svVar===0?'#059669':svVar>0?'#d97706':'#c2410c';}
   var tvEl=document.getElementById('cv-tgtImpVar');if(tvEl){tvEl.textContent=(tvVar===0?'0':(tvVar>0?'+':'')+tvVar.toLocaleString());tvEl.style.color=tvVar===0?'#059669':tvVar>0?'#d97706':'#c2410c';}
-  function cntRow(label,tot,ok,rSum,oSum){var diff=tot-ok;var v=rSum-oSum;var p=tot>0?Math.round((ok/tot)*100):0;var pc=pctClass(p);var vs=v===0?'<span class="cmt-zero">0</span>':v>0?'<span class="cmt-diff-pos">+'+v.toLocaleString()+'</span>':'<span class="cmt-diff-neg">'+v.toLocaleString()+'</span>';var pctBadge='<span class="rainbow-pct '+pc+'" style="font-size:12px;border:1px solid;border-radius:5px;padding:2px 8px">'+p+'%</span>';return'<tr><td class="ctl">'+label+'</td><td>'+tot+'</td><td class="cmt-ok">'+ok+'</td><td class="cmt-fail">'+diff+'</td><td>'+rSum.toLocaleString()+'</td><td>'+oSum.toLocaleString()+'</td><td>'+vs+'</td><td style="text-align:center">'+pctBadge+'</td></tr>';}
+  /* Count validation table */
+  function cntRow(label,tot,ok,rSum,oSum){var diff=tot-ok;var v=rSum-oSum;var vs=v===0?'<span class="cmt-zero">0</span>':v>0?'<span class="cmt-diff-pos">+'+v.toLocaleString()+'</span>':'<span class="cmt-diff-neg">'+v.toLocaleString()+'</span>';return'<tr><td class="ctl">'+label+'</td><td>'+tot+'</td><td class="cmt-ok">'+ok+'</td><td class="cmt-fail">'+diff+'</td><td>'+rSum.toLocaleString()+'</td><td>'+oSum.toLocaleString()+'</td><td>'+vs+'</td></tr>';}
   var ctb=document.getElementById('cntTblBody');
   if(ctb)ctb.innerHTML=cntRow('Source vs Target',cv_stTot,cv_stOk,cv_stSrc,cv_stTgt)+cntRow('Export vs Import',cv_eiTot,cv_eiOk,cv_eiExp,cv_eiImp)+cntRow('Source vs Export',cv_seTot,cv_seOk,cv_seSrc,cv_seExp)+cntRow('Target vs Import',cv_tiTot,cv_tiOk,cv_tiTgt,cv_tiImp);
+  /* reconBreakdown summary cards */
+  st('rb-refTotal',rklen.toLocaleString());
+  st('rb-bothMatched',bothN.toLocaleString());st('rb-bothPct','('+Math.round((bothN/nBase)*100)+'%)');
+  st('rb-expMatched',matchedInExp.toLocaleString());st('rb-expPct','('+Math.round((matchedInExp/nBase)*100)+'%)');
+  st('rb-impMatched',matchedInImp.toLocaleString());st('rb-impPct','('+Math.round((matchedInImp/nBase)*100)+'%)');
+  st('rb-mismatch',mismatchN.toLocaleString());st('rb-mismatchPct','('+Math.round((mismatchN/nBase)*100)+'%)');
+  st('rb-extraRec',extraN.toLocaleString());
+  var rbd=document.getElementById('reconBreakdown');if(rbd&&rklen>0)rbd.style.display='block';
 }
 
 
 
-/* Clear session on Reset — wipe DM2 results only, never touch other cycles */
+/* Clear session on Reset — wipe DM1 results only, never touch other cycles */
 document.getElementById('btnReset').addEventListener('click', function(){
   try{localStorage.removeItem(_TABLE_KEY);}catch(e){}
   try{
     var raw=localStorage.getItem(_SESSION_KEY);
     var existing=raw?JSON.parse(raw):{};
     /* keep file badge info, wipe result fields */
-    var keep={fnRef:existing.fnRef,fnExp:existing.fnExp,fnImp:existing.fnImp,fbRefVisible:existing.fbRefVisible,fbExpVisible:existing.fbExpVisible,fbImpVisible:existing.fbImpVisible,dzRefHidden:existing.dzRefHidden,dzExpHidden:existing.dzExpHidden,dzImpHidden:existing.dzImpHidden,csRefVisible:existing.csRefVisible,csExpVisible:existing.csExpVisible,csImpVisible:existing.csImpVisible,refTables:existing.refTables,refRows:existing.refRows,expTables:existing.expTables,expRows:existing.expRows,impTables:existing.impTables,impRows:existing.impRows,aggRefVisible:existing.aggRefVisible,aggExpVisible:existing.aggExpVisible,aggImpVisible:existing.aggImpVisible,aggRefCount:existing.aggRefCount,aggExpCount:existing.aggExpCount,aggImpCount:existing.aggImpCount,aggRefBody:existing.aggRefBody,aggExpBody:existing.aggExpBody,aggImpBody:existing.aggImpBody};
+    var keep={fnRef:existing.fnRef,fnExp:existing.fnExp,fbRefVisible:existing.fbRefVisible,fbExpVisible:existing.fbExpVisible,dzRefHidden:existing.dzRefHidden,dzExpHidden:existing.dzExpHidden,csRefVisible:existing.csRefVisible,csExpVisible:existing.csExpVisible,csImpVisible:existing.csImpVisible,refTables:existing.refTables,refRows:existing.refRows,expTables:existing.expTables,expRows:existing.expRows,impTables:existing.impTables,impRows:existing.impRows,aggRefVisible:existing.aggRefVisible,aggExpVisible:existing.aggExpVisible,aggImpVisible:existing.aggImpVisible,aggRefCount:existing.aggRefCount,aggExpCount:existing.aggExpCount,aggImpCount:existing.aggImpCount,aggRefBody:existing.aggRefBody,aggExpBody:existing.aggExpBody,aggImpBody:existing.aggImpBody};
     localStorage.setItem(_SESSION_KEY,JSON.stringify(keep));
   }catch(ex){ localStorage.removeItem(_SESSION_KEY); }
 });
@@ -2271,7 +2422,7 @@ document.getElementById('btnReset').addEventListener('click', function(){
 /* â”€â”€ Navigate to Overview passing KPIs in URL hash â”€â”€ */
 function goToOverview(e){
   e.preventDefault();
-  var cycle='DM2';
+  var cycle='DM1';
   var kpis={
     ref:    document.getElementById('kTotal').textContent,
     exp:    document.getElementById('kExp').textContent,
@@ -2293,12 +2444,13 @@ function goToOverview(e){
 restoreSession();
 
 /* ════════════════════════════════════════════════════════
-   AUTO-LOAD — File Watcher Bridge (http://localhost:5002)
+   AUTO-LOAD — File Watcher Bridge (http://localhost:5004)
    ════════════════════════════════════════════════════════ */
-var _AL_BRIDGE = 'http://' + (window.location.hostname || 'localhost') + ':5002';
-var _AL_CYCLE  = 'DM2';
-var _AL_CFG_KEY = 'al_paths_DM2';
+var _AL_BRIDGE = 'http://' + (window.location.hostname || 'localhost') + ':5004';
+var _AL_CYCLE  = 'DM1';
+var _AL_CFG_KEY = 'al_paths_DM1';
 
+/* Restore saved paths from localStorage */
 (function(){
   try{
     var saved = JSON.parse(localStorage.getItem(_AL_CFG_KEY)||'{}');
@@ -2307,6 +2459,7 @@ var _AL_CFG_KEY = 'al_paths_DM2';
     if(saved.ref_pattern) document.getElementById('alRefPat').value = saved.ref_pattern;
     if(saved.exp_pattern) document.getElementById('alExpPat').value = saved.exp_pattern;
   }catch(e){}
+  /* Ping bridge after short delay */
   setTimeout(alPingBridge, 1200);
 })();
 
@@ -2316,116 +2469,199 @@ function alTogglePanel(){
   p.style.display = vis ? '' : 'none';
   if(vis) alPingBridge();
 }
+
 function alPingBridge(){
   var dot = document.getElementById('alBridgeDot');
   var txt = document.getElementById('alBridgeTxt');
   fetch(_AL_BRIDGE+'/ping',{signal:AbortSignal.timeout(3000)})
     .then(function(r){ return r.json(); })
-    .then(function(){ if(dot) dot.style.background='#22c55e'; if(txt) txt.textContent='Bridge online ✔'; })
-    .catch(function(){ if(dot) dot.style.background='#ef4444'; if(txt) txt.textContent='Bridge offline — run: python automation/file_watcher_bridge.py'; });
+    .then(function(){
+      if(dot) dot.style.background = '#22c55e';
+      if(txt) txt.textContent = 'Bridge online ✔';
+    })
+    .catch(function(){
+      if(dot) dot.style.background = '#ef4444';
+      if(txt) txt.textContent = 'Bridge offline — run: python automation/file_watcher_bridge.py';
+    });
 }
+
 function alSavePaths(){
-  var cfg = { ref_path:document.getElementById('alRefPath').value.trim(), exp_path:document.getElementById('alExpPath').value.trim(), ref_pattern:document.getElementById('alRefPat').value.trim()||'*.xlsx', exp_pattern:document.getElementById('alExpPat').value.trim()||'*.xlsx' };
+  var cfg = {
+    ref_path:    document.getElementById('alRefPath').value.trim(),
+    exp_path:    document.getElementById('alExpPath').value.trim(),
+    ref_pattern: document.getElementById('alRefPat').value.trim() || '*.xlsx',
+    exp_pattern: document.getElementById('alExpPat').value.trim() || '*.xlsx'
+  };
+  /* Save locally */
   try{ localStorage.setItem(_AL_CFG_KEY, JSON.stringify(cfg)); }catch(e){}
-  var body={}; body[_AL_CYCLE]=cfg;
-  fetch(_AL_BRIDGE+'/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
-    .then(function(r){return r.json();}).then(function(){ alSetStatus('✔ Paths saved. Click "Scan" to preview latest files.','#6b21a8'); })
-    .catch(function(){ alSetStatus('⚠ Paths saved locally. Bridge offline — start bridge to sync.','#d97706'); });
+  /* Send to bridge so Python knows the paths */
+  var body = {}; body[_AL_CYCLE] = cfg;
+  fetch(_AL_BRIDGE+'/config', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(body)
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(){ alSetStatus('✔ Paths saved. Click "Scan" to preview latest files.','#065f46'); })
+  .catch(function(){ alSetStatus('⚠ Paths saved locally. Bridge offline — start bridge to sync.','#d97706'); });
 }
+
 function alScan(){
-  alSetStatus('🔍 Scanning…','#7c3aed');
-  alSavePaths();
+  alSetStatus('🔍 Scanning…','#0f766e');
+  alSavePaths(); /* always push latest config first */
   setTimeout(function(){
     fetch(_AL_BRIDGE+'/scan?cycle='+_AL_CYCLE)
-      .then(function(r){ if(!r.ok) return r.json().then(function(d){throw new Error(d.error||r.statusText);}); return r.json(); })
-      .then(function(data){
-        document.getElementById('alScanResults').style.display='';
-        if(data.ref){ document.getElementById('alRefFile').textContent=data.ref.filename; document.getElementById('alRefMeta').textContent=data.ref.size_kb+' KB  |  '+data.ref.modified; document.getElementById('alRefInfo').style.borderColor='#d8b4fe'; }
-        else{ document.getElementById('alRefFile').textContent='⚠ No file found'; document.getElementById('alRefMeta').textContent='Check folder path and pattern'; document.getElementById('alRefInfo').style.borderColor='#fca5a5'; }
-        if(data.exp){ document.getElementById('alExpFile').textContent=data.exp.filename; document.getElementById('alExpMeta').textContent=data.exp.size_kb+' KB  |  '+data.exp.modified; document.getElementById('alExpInfo').style.borderColor='#d8b4fe'; }
-        else{ document.getElementById('alExpFile').textContent='⚠ No file found'; document.getElementById('alExpMeta').textContent='Check folder path and pattern'; document.getElementById('alExpInfo').style.borderColor='#fca5a5'; }
-        document.getElementById('alLoadBtn').style.display=data.ref?'inline-block':'none';
-        alSetStatus((data.ref?'✔ Ref: '+data.ref.filename:'✘ Ref: not found')+'   '+(data.exp?'✔ SNP: '+data.exp.filename:'✘ SNP: not found'),data.ref?'#6b21a8':'#b91c1c');
+      .then(function(r){
+        if(!r.ok) return r.json().then(function(d){ throw new Error(d.error||r.statusText); });
+        return r.json();
       })
-      .catch(function(err){ alSetStatus('✘ Scan failed: '+err.message,'#b91c1c'); });
-  },300);
+      .then(function(data){
+        var sr = document.getElementById('alScanResults');
+        sr.style.display = '';
+        /* REF */
+        if(data.ref){
+          document.getElementById('alRefFile').textContent = data.ref.filename;
+          document.getElementById('alRefMeta').textContent = data.ref.size_kb+' KB  |  '+data.ref.modified;
+          document.getElementById('alRefInfo').style.borderColor = '#6ee7b7';
+        } else {
+          document.getElementById('alRefFile').textContent = '⚠ No file found';
+          document.getElementById('alRefMeta').textContent = 'Check folder path and pattern';
+          document.getElementById('alRefInfo').style.borderColor = '#fca5a5';
+        }
+        /* EXP */
+        if(data.exp){
+          document.getElementById('alExpFile').textContent = data.exp.filename;
+          document.getElementById('alExpMeta').textContent = data.exp.size_kb+' KB  |  '+data.exp.modified;
+          document.getElementById('alExpInfo').style.borderColor = '#6ee7b7';
+        } else {
+          document.getElementById('alExpFile').textContent = '⚠ No file found';
+          document.getElementById('alExpMeta').textContent = 'Check folder path and pattern';
+          document.getElementById('alExpInfo').style.borderColor = '#fca5a5';
+        }
+        /* Show Load button only if at least REF found */
+        document.getElementById('alLoadBtn').style.display = data.ref ? 'inline-block' : 'none';
+        alSetStatus(
+          (data.ref ? '✔ Ref: '+data.ref.filename : '✘ Ref: not found') + '   ' +
+          (data.exp ? '✔ SNP: '+data.exp.filename : '✘ SNP: not found'),
+          data.ref ? '#065f46' : '#b91c1c'
+        );
+      })
+      .catch(function(err){
+        alSetStatus('✘ Scan failed: '+err.message,'#b91c1c');
+      });
+  }, 300);
 }
+
 /* ── Promise-based file fetch helper ── */
-function alFetchFile(type,onSuccess,onError){
+function alFetchFile(type, onSuccess, onError){
   fetch(_AL_BRIDGE+'/file?cycle='+_AL_CYCLE+'&type='+type)
-    .then(function(r){ if(!r.ok) return r.json().then(function(d){throw new Error(d.error||r.statusText);}); var fname=''; var cd=r.headers.get('Content-Disposition'); if(cd){var m=cd.match(/filename[^;=\n]*=([^;\n]*)/i);if(m) fname=m[1].replace(/['"]/g,'').trim();} return r.blob().then(function(blob){return{blob:blob,name:fname};}); })
-    .then(function(d){ onSuccess(d.blob,d.name||(type==='ref'?'ref_file.xlsx':'exp_file.xlsx')); })
+    .then(function(r){
+      if(!r.ok) return r.json().then(function(d){ throw new Error(d.error||r.statusText); });
+      var fname = '';
+      var cd = r.headers.get('Content-Disposition');
+      if(cd){ var m = cd.match(/filename[^;=\n]*=([^;\n]*)/i); if(m) fname = m[1].replace(/['"]/g,'').trim(); }
+      return r.blob().then(function(blob){ return {blob:blob, name:fname}; });
+    })
+    .then(function(d){ onSuccess(d.blob, d.name || (type === 'ref' ? 'ref_file.xlsx' : 'exp_file.xlsx')); })
     .catch(function(err){ onError(err.message||String(err)); });
 }
 
-/* ── Inject a Blob as a File into readFile() and return a Promise that
-      resolves once onLoaded() has fully processed that file. ── */
-function alInjectFileAsync(blob,filename,kind){
-  return new Promise(function(resolve,reject){
+/* ── Inject a Blob as a File into the readFile() pipeline and return a Promise
+      that resolves once onLoaded() has fully processed that file. ── */
+function alInjectFileAsync(blob, filename, kind){
+  return new Promise(function(resolve, reject){
     try{
-      window._alOnLoadedCallback=function(loadedKind){ if(loadedKind===kind) resolve(loadedKind); };
-      var file=new File([blob],filename,{type:blob.type||'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-      readFile(file,kind);
-    }catch(err){ window._alOnLoadedCallback=null; reject(err); }
+      window._alOnLoadedCallback = function(loadedKind){
+        if(loadedKind === kind) resolve(loadedKind);
+      };
+      var file = new File([blob], filename, {type: blob.type || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      readFile(file, kind);
+    }catch(err){
+      window._alOnLoadedCallback = null;
+      reject(err);
+    }
   });
 }
 
 /* ── alInjectFile (legacy sync wrapper — kept for manual button use) ── */
-function alInjectFile(blob,filename,kind){
-  try{ var file=new File([blob],filename,{type:blob.type||'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}); if(typeof readFile==='function') readFile(file,kind); }
-  catch(err){ alSetStatus('✘ Inject error: '+err.message,'#b91c1c'); }
+function alInjectFile(blob, filename, kind){
+  try{
+    var file = new File([blob], filename, {type: blob.type || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    if(typeof readFile === 'function') readFile(file, kind);
+  }catch(err){ alSetStatus('✘ Inject error: '+err.message,'#b91c1c'); }
 }
 
 /* ── alLoadBoth: fully sequential, promise-based — no race conditions ── */
 function alLoadBoth(){
-  alSetStatus('⏳ Connecting to bridge…','#7c3aed');
-  var loadBtn=document.getElementById('alLoadBtn');
-  if(loadBtn) loadBtn.disabled=true;
+  alSetStatus('⏳ Connecting to bridge…','#0f766e');
+  var loadBtn = document.getElementById('alLoadBtn');
+  if(loadBtn) loadBtn.disabled = true;
 
-  /* Step 0: ping bridge first */
+  /* Step 0: ping bridge first — give a clear error if it is offline */
   fetch(_AL_BRIDGE+'/ping',{signal:AbortSignal.timeout(4000)})
   .then(function(r){ return r.json(); })
   .then(function(){
-    alSetStatus('✔ Bridge online. Fetching REF file…','#6b21a8');
-    return new Promise(function(resolve,reject){ alFetchFile('ref',function(blob,name){resolve({blob:blob,name:name});},reject); });
+    alSetStatus('✔ Bridge online. Fetching REF file…','#065f46');
+    return new Promise(function(resolve, reject){
+      alFetchFile('ref', function(blob,name){ resolve({blob:blob,name:name}); }, reject);
+    });
   })
+  /* Step 2: inject REF and wait for onLoaded('ref') to complete */
   .then(function(d){
-    alSetStatus('📖 Reference file received — parsing…','#6b21a8');
-    return alInjectFileAsync(d.blob,d.name||'ref_file.xlsx','ref');
+    alSetStatus('📖 Reference file received — parsing…','#065f46');
+    return alInjectFileAsync(d.blob, d.name||'ref_file.xlsx', 'ref');
   })
+  /* Step 3: fetch EXP blob */
   .then(function(){
-    alSetStatus('✔ Reference parsed. Fetching SNP Export/Import file…','#6b21a8');
-    return new Promise(function(resolve,reject){ alFetchFile('exp',function(blob,name){resolve({blob:blob,name:name});},reject); });
+    alSetStatus('✔ Reference parsed. Fetching SNP Export/Import file…','#065f46');
+    return new Promise(function(resolve, reject){
+      alFetchFile('exp', function(blob,name){ resolve({blob:blob,name:name}); }, reject);
+    });
   })
+  /* Step 4: inject EXP and wait for onLoaded('exp') to complete */
   .then(function(d){
-    alSetStatus('📖 SNP Export/Import file received — parsing…','#6b21a8');
-    return alInjectFileAsync(d.blob,d.name||'exp_file.xlsx','exp');
+    alSetStatus('📖 SNP Export/Import file received — parsing…','#065f46');
+    return alInjectFileAsync(d.blob, d.name||'exp_file.xlsx', 'exp');
+  })
+  /* Step 5: both files fully loaded — run analysis */
+  .then(function(){
+    alSetStatus('🔄 Both files parsed. Running analysis…','#065f46');
+    return new Promise(function(resolve){
+      setTimeout(function(){
+        if(typeof runAnalysis === 'function') runAnalysis();
+        resolve();
+      }, 200);
+    });
   })
   .then(function(){
-    alSetStatus('🔄 Both files parsed. Running analysis…','#6b21a8');
-    return new Promise(function(resolve){ setTimeout(function(){ if(typeof runAnalysis==='function') runAnalysis(); resolve(); },200); });
+    alSetStatus('✅ Auto-load complete — all files read and analysis finished!','#065f46');
+    if(loadBtn) loadBtn.disabled = false;
   })
-  .then(function(){
-    alSetStatus('✅ Auto-load complete — all files read and analysis finished!','#6b21a8');
-    if(loadBtn) loadBtn.disabled=false;
-  })
+  /* Error handler */
   .catch(function(err){
-    var msg=(err&&(err.message||String(err)))||'unknown error';
-    var isOffline=msg.indexOf('fetch')!==-1||msg.indexOf('network')!==-1||msg.indexOf('Failed to fetch')!==-1||msg.indexOf('timeout')!==-1;
-    if(isOffline&&!(refData&&refData.length)){
+    var msg = (err && (err.message || String(err))) || 'unknown error';
+    var isOffline = msg.indexOf('fetch')!==-1||msg.indexOf('network')!==-1||msg.indexOf('Failed to fetch')!==-1||msg.indexOf('timeout')!==-1;
+    if(isOffline && !(refData && refData.length)){
       alSetStatus('✘ Bridge offline — run: python automation/file_watcher_bridge.py','#b91c1c');
-    } else if(refData&&refData.length){
+    } else if(refData && refData.length){
       alSetStatus('⚠ SNP file not found ('+msg+'). Running analysis with REF only…','#d97706');
-      setTimeout(function(){ if(typeof runAnalysis==='function') runAnalysis(); },200);
+      setTimeout(function(){ if(typeof runAnalysis === 'function') runAnalysis(); }, 200);
     } else {
       alSetStatus('✘ Auto-load failed: '+msg,'#b91c1c');
     }
-    if(loadBtn) loadBtn.disabled=false;
+    if(loadBtn) loadBtn.disabled = false;
   });
 }
-function alSetStatus(msg,color){ var el=document.getElementById('alStatus'); if(el){el.textContent=msg;el.style.color=color||'#6b21a8';} }
 
-/* ════ GLOBAL LOGIN SYSTEM — shared session key 'gbl_dm_session' ════ */
+function alSetStatus(msg, color){
+  var el = document.getElementById('alStatus');
+  if(el){ el.textContent = msg; el.style.color = color||'#065f46'; }
+}
+
+/* ════════════════════════════════════════════════════════
+   GLOBAL LOGIN SYSTEM — shared session key 'gbl_dm_session'
+   Login once on any tab → all tabs auto-pass through
+   ════════════════════════════════════════════════════════ */
 var _GBL_USERS=[
   {user:'admin',      passHash:_h('Admin'), role:'admin',   display:'Platform Admin'},
   {user:'sempra_mgr', passHash:_h('Admin'), role:'manager', display:'Sempra Manager'},
@@ -2436,10 +2672,17 @@ var _GBL_USERS=[
   {user:'dm3_team',   passHash:_h('Admin'), role:'analyst', display:'DM3 Team'}
 ];
 function _h(s){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h)+s.charCodeAt(i);return(h>>>0).toString(36);}
-var _gblRole='admin'; var _GBL_SESSION_KEY='gbl_dm_session';
-function gblSelectRole(r){ _gblRole=r; document.querySelectorAll('.gbl-role-btn').forEach(function(b){b.classList.remove('selected');}); var btn=document.getElementById('role-'+r); if(btn) btn.classList.add('selected'); }
+var _gblRole='admin';
+var _GBL_SESSION_KEY='gbl_dm_session';
+
+function gblSelectRole(r){
+  _gblRole=r;
+  document.querySelectorAll('.gbl-role-btn').forEach(function(b){b.classList.remove('selected');});
+  var btn=document.getElementById('role-'+r); if(btn) btn.classList.add('selected');
+}
 function gblLogin(){
-  var u=document.getElementById('gblUser').value.trim().toLowerCase(), p=document.getElementById('gblPass').value;
+  var u=document.getElementById('gblUser').value.trim().toLowerCase();
+  var p=document.getElementById('gblPass').value;
   var err=document.getElementById('gblError'); err.classList.remove('visible');
   if(!u||!p){err.textContent='Please enter username and password.';err.classList.add('visible');return;}
   var match=_GBL_USERS.filter(function(x){return x.user===u&&x.passHash===_h(p);});
@@ -2461,12 +2704,21 @@ function gblLogout(){
   try{sessionStorage.removeItem(_GBL_SESSION_KEY);}catch(e){}
   document.body.className=document.body.className.replace(/role-\w+/g,'').trim();
   document.getElementById('gbl-user-badge').classList.remove('visible');
-  document.getElementById('gblUser').value=''; document.getElementById('gblPass').value='';
+  document.getElementById('gblUser').value='';
+  document.getElementById('gblPass').value='';
   document.getElementById('gblError').classList.remove('visible');
-  gblSelectRole('admin'); document.getElementById('gbl-login-overlay').classList.remove('hidden');
+  gblSelectRole('admin');
+  document.getElementById('gbl-login-overlay').classList.remove('hidden');
 }
+/* Auto-restore on page load */
 (function(){
-  try{ var s=sessionStorage.getItem(_GBL_SESSION_KEY); if(s){ var d=JSON.parse(s); if(d&&d.ts&&(Date.now()-d.ts)<8*60*60*1000){ gblApplySession(d.display,d.role); } } }catch(e){}
+  try{
+    var s=sessionStorage.getItem(_GBL_SESSION_KEY);
+    if(s){
+      var d=JSON.parse(s);
+      if(d&&d.ts&&(Date.now()-d.ts)<8*60*60*1000){ gblApplySession(d.display,d.role); }
+    }
+  }catch(e){}
   
   if (window.location.search.indexOf('auto=true') !== -1) {
     gblApplySession('Platform Admin', 'admin');
